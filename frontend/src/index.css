@@ -1,11 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Mulish&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mulish&display=swap");
 
 * {
   box-sizing: border-box;
 }
 
 html {
-  font-family: 'Muli-bold';
+  font-family: "Muli-bold";
 }
 
 body {
@@ -20,7 +20,12 @@ body {
   align-items: center;
 }
 
+.error {
+  text-align: center;
+  color: white;
+}
+
 @font-face {
-  font-family: 'Muli-bold';
-  src: url(./fonts/Muli-Bold.ttf) format('truetype');
+  font-family: "Muli-bold";
+  src: url(./fonts/Muli-Bold.ttf) format("truetype");
 }
