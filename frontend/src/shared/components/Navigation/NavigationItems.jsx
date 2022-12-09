@@ -5,8 +5,6 @@ import classes from "./NavigationItems.module.css";
 
 //CUSTOM
 import NavigationItem from "./NavigationItem";
-import Search from "./Search";
-
 
 function NavigationItems(props) {
   const [authState, setAuthState] = useState(true);
@@ -34,7 +32,6 @@ function NavigationItems(props) {
         show={authState}
         element="LogOut"
       />
-      <Search />
     </ul>
   );
 }

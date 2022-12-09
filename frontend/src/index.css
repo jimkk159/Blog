@@ -10,7 +10,7 @@ html {
 
 body {
   margin: 0;
-  /* background: black; */
+  background: black;
 }
 
 .center {
@@ -22,7 +22,7 @@ body {
 
 .error {
   text-align: center;
-  /* color: white; */
+  color: white;
 }
 
 @font-face {

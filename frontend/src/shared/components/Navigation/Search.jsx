@@ -6,11 +6,11 @@ import classes from "./Search.module.css";
 
 function Search(props) {
   return (
-    <div className={classes.wrapper}>
+    <div className={`${props.className} ${classes.wrapper}`}>
       <div className={classes.icon}>
         <SearchIcon />
       </div>
-      <input type="text" className={classes.input} placeholder="Search..."/>
+      <input type="text" className={classes.input} placeholder="Search..." />
     </div>
   );
 }

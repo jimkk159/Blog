@@ -1,10 +1,12 @@
-/* .navigation__title {
-  color: white;
-} */
+.navigation__title {
+  display: flex;
+  align-items: flex-end;
+}
 
 .navigation__icon {
   margin-left: 1rem;
-  margin-right: 2rem;
+  margin-right: auto;
+  margin-bottom: 0;
 }
 
 .navigation__icon a {
@@ -14,10 +16,14 @@
 
 .navigation__pc__nav-items {
   display: none;
-  margin-right: auto;
 }
 
-.navigation__pc__btn{
+.navigation__search{
+  margin-right: 0rem;
+  margin-bottom: 0.75rem;
+}
+
+.navigation__pc__btn {
   cursor: pointer;
   border: 1px solid transparent;
   color: #292929;
@@ -25,7 +31,6 @@
   font: inherit;
   margin: 1rem;
 }
-
 
 @media (min-width: 768px) {
   .main-navigation__menu-btn {
@@ -40,5 +45,4 @@
     color: white;
     background: transparent;
   }
-
 }

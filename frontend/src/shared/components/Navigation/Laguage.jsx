@@ -4,7 +4,7 @@ import React from "react";
 import classes from './Laguage.module.css';
 
 function Languae(props) {
-  return <button className={`${classes['laguage-setting']} ${props.className}`}>{props.children}</button>;
+  return <button className={`${classes['language-setting']} ${props.className}`}>{props.children}</button>;
 }
 
 export default Languae;

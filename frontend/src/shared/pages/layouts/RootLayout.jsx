@@ -5,13 +5,12 @@ import { Outlet } from "react-router-dom";
 import Navigation from "../../components/Navigation/Navigation";
 
 function RootLayout() {
-
   return (
     <>
       <Navigation />
-      <main>
+      {/* <main>
         <Outlet />
-      </main>
+      </main> */}
     </>
   );
 }
