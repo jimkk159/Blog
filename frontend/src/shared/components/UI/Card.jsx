@@ -1,10 +1,15 @@
 import React from "react";
 
 //CSS
-import styles from "./Card.module.css";
+import classes from "./Card.module.css";
 
+//For Card UI CSS
 function Card(props) {
-  return <div className={styles.card}>{props.children}</div>;
+  return (
+    <div className={`${classes.card} ${classes.className}`} style={props.style}>
+      {props.children}
+    </div>
+  );
 }
 
 export default Card;

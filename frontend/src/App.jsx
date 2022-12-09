@@ -1,16 +1,20 @@
 import React from "react";
 
-// CSS
-
 //Custom component
 import Card from "./shared/components/UI/Card";
+import Navigation from "./shared/components/Navigation/Navigation";
+
+import './APP.module.css';
 
 function App() {
   return (
     <div>
-      <Card>
-        <h1>Hello world</h1>
-      </Card>
+      <Navigation />
+      <main>
+        <Card>
+          <h1>Hello world2</h1>
+        </Card>
+      </main>
     </div>
   );
 }
