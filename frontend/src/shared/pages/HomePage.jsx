@@ -1,7 +1,7 @@
 import React from "react";
 
 //CUSTOM
-import Card from "../shared/components/UI/Card";
+import Card from "../components/UI/Card";
 
 function HomePage() {
   return (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 //CSS
 import classes from "./NavigationItems.module.css";
@@ -7,25 +7,33 @@ import classes from "./NavigationItems.module.css";
 import NavigationItem from "./NavigationItem";
 import Search from "./Search";
 
+
 function NavigationItems(props) {
-  // const authSubmitHandler = (event) => {
-  //   event.target && event.target.active();
-  //   console.log('I got click');
-  // };
+  const [authState, setAuthState] = useState(true);
+
+  const authSubmitHandler = useCallback((event) => {
+    console.log("I got click");
+    setAuthState(false);
+  }, []);
+
   return (
     <ul className={classes["nav-links"]}>
-      <NavigationItem key="home" to="/">
-        HOME
-      </NavigationItem>
-      <NavigationItem key="about" to="/about">
-        ABOUT
-      </NavigationItem>
-      <NavigationItem key="blog" to="/blog">
-        BLOG
-      </NavigationItem>
-      <NavigationItem key="auth" type="button" onClick={authSubmitHandler}>
-        LogIn
-      </NavigationItem>
+      <NavigationItem key="home" to="/" element="HOME" />
+      <NavigationItem key="about" to="/about" element="ABOUT" />
+      <NavigationItem key="blog" to="/blog" element="BLOG" />
+      <NavigationItem
+        key="login"
+        to="/auth"
+        show={!authState}
+        element="LogIn"
+      />
+      <NavigationItem
+        key="logout"
+        type="button"
+        onClick={authSubmitHandler}
+        show={authState}
+        element="LogOut"
+      />
       <Search />
     </ul>
   );

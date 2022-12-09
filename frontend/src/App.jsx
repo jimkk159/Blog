@@ -11,15 +11,15 @@ import {
 import "./APP.module.css";
 
 //PAGE
-import RootLayout from "./pages/layouts/RootLayout";
-import BlogLayout from "./pages/layouts/RootLayout";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import ErrorPage from "./pages/ErrorPage";
-import AuthPage from "./pages/AuthPage";
-import NewPostPage from "./pages/NewPostPage";
-import PostPage from "./pages/PostPage";
-import PostsPage from "./pages/PostsPage";
+import RootLayout from "./shared/pages/layouts/RootLayout";
+import BlogLayout from "./shared/pages/layouts/RootLayout";
+import HomePage from "./shared/pages/HomePage";
+import AboutPage from "./shared/pages/AboutPage";
+import ErrorPage from "./shared/pages/ErrorPage";
+import AuthPage from "./shared/pages/AuthPage";
+import NewPostPage from "./blogs/pages/NewPostPage";
+import PostPage from "./blogs/pages/PostPage";
+import PostsPage from "./blogs/pages/PostsPage";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

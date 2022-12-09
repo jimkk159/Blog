@@ -2,7 +2,43 @@
   color: white;
 } */
 
-.navigation__title a {
+.navigation__icon {
+  margin-left: 1rem;
+  margin-right: 2rem;
+}
+
+.navigation__icon a {
   color: white;
   text-decoration: none;
+}
+
+.navigation__pc__nav-items {
+  display: none;
+  margin-right: auto;
+}
+
+.navigation__pc__btn{
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: #292929;
+  background: transparent;
+  font: inherit;
+  margin: 1rem;
+}
+
+
+@media (min-width: 768px) {
+  .main-navigation__menu-btn {
+    display: none;
+  }
+
+  .navigation__pc__nav-items {
+    display: block;
+  }
+
+  .navigation__pc__btn {
+    color: white;
+    background: transparent;
+  }
+
 }
