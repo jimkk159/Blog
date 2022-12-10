@@ -1,21 +1,21 @@
 .nav-link {
   margin: 1rem;
+  padding: 0.5rem 1rem;
+  border-right: 2px solid white;
 }
 
 .nav-link a {
   display: inline-block;
-  border: 1px solid transparent;
   color: #292929;
   text-decoration: none;
-  padding: 0.5rem;
+  padding: 3px;
 }
 
 .nav-link a:hover,
 .nav-link a:active,
 .nav-link a.active {
-  background: #f8df00;
-  border-color: #292929;
-  color: #292929;
+  padding-bottom: 1px;
+  border-bottom: 2px solid white;
 }
 
 .nav-link button {
@@ -23,7 +23,6 @@
   border: 1px solid transparent;
   color: #292929;
   background: transparent;
-  padding: 0.5rem;
   font: inherit;
 }
 
@@ -33,8 +32,8 @@
 
 .nav-link button:hover,
 .nav-link button:active {
-  background: #292929;
-  border: 1px solid #292929;
+  /* background: #292929;
+  border: 1px solid #292929; */
   color: white;
 }
 
@@ -45,17 +44,15 @@
 
   .nav-link a {
     color: white;
-    text-decoration: none;
   }
 
   .nav-link button {
     color: white;
-    background: transparent;
   }
 
   .nav-link button:hover,
   .nav-link button:active {
-    background: #f8df00;
-    color: #292929;
+    padding-bottom: 1px;
+    border-bottom: 2px solid white;
   }
 }

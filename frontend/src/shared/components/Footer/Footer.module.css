@@ -1,0 +1,13 @@
+/* Foot Container */
+.foot-container {
+  background-color: #d65a31;
+  text-align: center;
+  padding: 2% 15%;
+  margin-top: 2rem;
+  min-height: 4rem;
+}
+
+.foot-container p {
+  font-size: 10px;
+  color: #fff;
+}

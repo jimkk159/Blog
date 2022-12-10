@@ -6,7 +6,7 @@ import classes from "./Search.module.css";
 
 function Search(props) {
   return (
-    <div className={`${props.className} ${classes.wrapper}`}>
+    <div className={`${classes.wrapper} ${props.className} `}>
       <div className={classes.icon}>
         <SearchIcon />
       </div>

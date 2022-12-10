@@ -3,14 +3,16 @@ import { Outlet } from "react-router-dom";
 
 //CUSTOM
 import Navigation from "../../components/Navigation/Navigation";
+import Footer from "../../components/Footer/Footer";
 
 function RootLayout() {
   return (
     <>
       <Navigation />
-      {/* <main>
+      <main>
         <Outlet />
-      </main> */}
+      </main>
+      <Footer />
     </>
   );
 }

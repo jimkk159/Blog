@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 
 //CSS
-import "./APP.module.css";
+import "./App.module.css";
 
 //PAGE
 import RootLayout from "./shared/pages/layouts/RootLayout";

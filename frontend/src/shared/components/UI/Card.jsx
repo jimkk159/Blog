@@ -6,7 +6,7 @@ import classes from "./Card.module.css";
 //For Card UI CSS
 function Card(props) {
   return (
-    <div className={`${classes.card} ${classes.className}`} style={props.style}>
+    <div className={`${classes.card} ${props.className}`} style={props.style}>
       {props.children}
     </div>
   );

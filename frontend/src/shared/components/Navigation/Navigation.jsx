@@ -27,6 +27,7 @@ function Navigation(props) {
         <nav className={classes["navigation__pc__nav-items"]}>
           <NavigationItems />
         </nav>
+        <hr />
       </NavigationHeader>
     </>
   );
