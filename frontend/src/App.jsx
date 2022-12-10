@@ -10,6 +10,9 @@ import {
 //CSS
 import "./App.module.css";
 
+//Context
+import AuthContextProvider from "./shared/context/auth-contex";
+
 //PAGE
 import RootLayout from "./shared/pages/layouts/RootLayout";
 import BlogLayout from "./shared/pages/layouts/RootLayout";
@@ -20,6 +23,7 @@ import AuthPage from "./shared/pages/AuthPage";
 import NewPostPage from "./blogs/pages/NewPostPage";
 import PostPage from "./blogs/pages/PostPage";
 import PostsPage from "./blogs/pages/PostsPage";
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -38,7 +42,11 @@ const router = createBrowserRouter(
 );
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
+  );
 }
 
 export default App;
