@@ -1,18 +1,14 @@
-import React, { useCallback, useState } from "react";
+import React, { useContext } from "react";
 
 //CSS
 import classes from "./NavigationItems.module.css";
 
 //CUSTOM Component
 import NavigationItem from "./NavigationItem";
+import { AuthContext } from "../../context/auth-contex";
 
 function NavigationItems(props) {
-  const [authState, setAuthState] = useState(true);
-
-  const authSubmitHandler = useCallback((event) => {
-    console.log("I got click");
-    setAuthState(false);
-  }, []);
+  const auth = useContext(AuthContext);
 
   return (
     <ul className={classes["nav-links"]}>
@@ -22,14 +18,14 @@ function NavigationItems(props) {
       <NavigationItem
         key="login"
         to="/auth"
-        show={!authState}
+        show={!auth.isLoggedIn}
         element="LogIn"
       />
       <NavigationItem
         key="logout"
         type="button"
-        onClick={authSubmitHandler}
-        show={authState}
+        onClick={auth.logout}
+        show={auth.isLoggedIn}
         element="LogOut"
       />
     </ul>
