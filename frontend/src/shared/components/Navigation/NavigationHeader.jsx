@@ -1,6 +1,6 @@
 import React from "react";
 
-//CUSTOM
+//CUSTOM Component
 import classes from "./NavigationHeader.module.css";
 
 function NavigationHeader(props) {

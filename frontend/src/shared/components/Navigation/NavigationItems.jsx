@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react";
 //CSS
 import classes from "./NavigationItems.module.css";
 
-//CUSTOM
+//CUSTOM Component
 import NavigationItem from "./NavigationItem";
 
 function NavigationItems(props) {
