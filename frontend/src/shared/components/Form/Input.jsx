@@ -1,43 +1,56 @@
 import React, { useReducer, useState } from "react";
 
+//CSS
 import classes from "./Input.module.css";
 
-// const inputReducer = (state, action) => {
-//   switch (action.type) {
-//   }
-// };
+//Input Reducer
+const inputReducer = (state, action) => {
+  switch (action.type) {
+    case "CHANGE":
+      return {
+        ...state,
+        value: action.value,
+        isValid: action.value.length >= 6 ? true : false,
+      };
+    case "TOUCH":
+      return { ...state, isTouched: true };
+    default:
+      return state;
+  }
+};
 
 function Input(props) {
-  //   const [inputState, dispatch] = useReducer(inputReducer, {
-  //     value: "",
-  //     isTouched: false, //Check the user touch the input or not
-  //     isValid: false, //Check the the input is valid after user has touched
-  //   });
-  const [value, setValue] = useState("");
-  const [isToudched, setIsTouched] = useState(false);
-  const [isValid, setIsValid] = useState(false);
+  //Input Reducer Behavior
+  const [inputState, dispatch] = useReducer(inputReducer, {
+    value: "",
+    isTouched: false, //Check the user touch the input or not
+    isValid: false, //Check the the input is valid after user has touched
+  });
   const changeHandler = (event) => {
-    setValue(event.target.value);
-    if (event.target.value.length >= 6) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    dispatch({ type: "CHANGE", value: event.target.value });
   };
   const blurHandler = () => {
-    setIsTouched(true);
+    dispatch({ type: "TOUCH" });
   };
+
   return (
-    <div className={`${classes["input-control"]} ${!isValid && isToudched && classes["input-invalid"]}`}>
+    <div
+      className={`${classes["input-control"]} ${
+        !inputState.isValid && inputState.isTouched && classes["input-invalid"]
+      }`}
+    >
       <label htmlFor={props.id}>{props.label}</label>
       <input
         id={props.id}
         type={props.type}
+        placeholder={props.placeholder}
         onChange={changeHandler}
         onBlur={blurHandler}
-        value={value}
+        value={inputState.value}
       />
-      {!isValid && isToudched && <p>{props.errorMessage}</p>}
+      {!inputState.isValid && inputState.isTouched && (
+        <p>{props.errorMessage}</p>
+      )}
     </div>
   );
 }
