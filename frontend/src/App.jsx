@@ -19,7 +19,7 @@ import BlogLayout from "./shared/pages/layouts/RootLayout";
 import HomePage from "./shared/pages/HomePage";
 import AboutPage from "./shared/pages/AboutPage";
 import ErrorPage from "./shared/pages/ErrorPage";
-import AuthPage from "./shared/pages/AuthPage";
+import AuthPage from "./users/pages/AuthPage";
 import NewPostPage from "./blogs/pages/NewPostPage";
 import PostPage from "./blogs/pages/PostPage";
 import PostsPage from "./blogs/pages/PostsPage";

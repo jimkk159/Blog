@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 //CSS
 import classes from "./Navigation.module.css";
 
-//CUSTOM Component
+//Custom Component
 import NavigationHeader from "./NavigationHeader";
 import NavigationItems from "./NavigationItems";
 import UserItem from "../../../users/components/UserItem";
@@ -16,6 +16,7 @@ import useScroll from "../../hooks/scorll-hook";
 
 function Navigation(props) {
   const { scrollPosition, isScrollingUp } = useScroll();
+  //If Scroll Position less than 40 pixel or Scroll up then...
   const showNavItems = scrollPosition < 40 || isScrollingUp;
   return (
     <>

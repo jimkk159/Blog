@@ -3,7 +3,7 @@ import React from "react";
 //CSS
 import "../../App.module.css";
 
-//CUSTOM Component
+//Custom Component
 import Card from "../components/UI/Card";
 
 function HomePage() {

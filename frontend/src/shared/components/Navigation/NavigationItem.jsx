@@ -3,7 +3,7 @@
 //CSS
 import { NavLink } from "react-router-dom";
 
-//CUSTOM Component
+//Custom Component
 import classes from "./NavigationItem.module.css";
 
 /**

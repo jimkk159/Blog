@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 //CSS
 import classes from "./NavigationItems.module.css";
 
-//CUSTOM Component
+//Custom Component
 import NavigationItem from "./NavigationItem";
 import { AuthContext } from "../../context/auth-contex";
 
