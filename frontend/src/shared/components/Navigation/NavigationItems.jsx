@@ -12,21 +12,21 @@ function NavigationItems(props) {
 
   return (
     <ul className={classes["nav-links"]}>
-      <NavigationItem key="home" to="/" element="HOME" />
-      <NavigationItem key="about" to="/about" element="ABOUT" />
-      <NavigationItem key="blog" to="/blog" element="BLOG" />
+      <NavigationItem key="home" to="/" content="HOME" />
+      <NavigationItem key="about" to="/about" content="ABOUT" />
+      <NavigationItem key="blog" to="/blog" content="BLOG" />
       <NavigationItem
         key="login"
         to="/auth"
         show={!auth.isLoggedIn}
-        element="LogIn"
+        content="LogIn"
       />
       <NavigationItem
         key="logout"
         type="button"
         onClick={auth.logout}
         show={auth.isLoggedIn}
-        element="LogOut"
+        content="LogOut"
       />
     </ul>
   );

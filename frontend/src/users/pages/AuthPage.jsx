@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 
 //CSS
 import classes from "./AuthPage.module.css";
@@ -13,39 +13,48 @@ import Button from "../../shared/components/Form/Button";
 
 function AuthPage() {
   const auth = useContext(AuthContext);
+  const [isLoginMode, setIsLoginMode] = useState(true);
 
-  const authSubmitHandler = () => {};
+  const switchModeHandler = () => {
+    setIsLoginMode((prevMode) => !prevMode);
+  };
+  const authSubmitHandler = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
       <Card className={classes.authentication}>
-        <h1>Login Required</h1>
+        <h1>{`${isLoginMode ? "Login" : "SingUp"}`}</h1>
         <hr />
         <form onSubmit={authSubmitHandler}>
           <Input
-          key="username"
+            key="username"
             id="username"
             type="text"
             label="Name"
             errorMessage="Please enter your name."
           />
           <Input
-          key="email"
+            key="email"
             id="email"
             type="text"
             label="E-Mail"
             errorMessage="Please enter a valid email."
           />
           <Input
-           key="password"
+            key="password"
             id="password"
             type="password"
             label="Password"
             errorMessage="Enter at least 6 characters."
           />
-          <Button type="submit" disabled={false}>
-            Login
-          </Button>
+          <Button type="submit" disabled={false} content="Submit" />
         </form>
+        <Button
+          onClick={switchModeHandler}
+          content={`Switch to ${isLoginMode ? "SingUp" : "Login"}`}
+        />
       </Card>
     </>
   );

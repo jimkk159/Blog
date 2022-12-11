@@ -12,10 +12,10 @@ import classes from "./NavigationItem.module.css";
  * @param type the Item type e.g. button, anchor.
  * @param to the Item redirect link.
  * @param onClick if the type is button, onClick will triger when the button been clcik
- * @param element if exist the input element will be element, otherwise it will be children
+ * @param content if exist the input content will be content, otherwise it will be children
  */
 function NavigationItem(props) {
-  const inputElement = props.element ? props.element : props.children;
+  const inputContent = props.content ? props.content : props.children;
 
   // Show Item or not
   if (props.show === false) {
@@ -27,7 +27,7 @@ function NavigationItem(props) {
     return (
       <li className={`${props.className} ${classes["nav-link"]}`}>
         <button onClick={props.onClick} onBlur={props.onBlur}>
-          {inputElement}
+          {inputContent}
         </button>
       </li>
     );
@@ -40,7 +40,7 @@ function NavigationItem(props) {
         to={props.to}
         className={({ isActive }) => (isActive ? classes.active : null)}
       >
-        {inputElement}
+        {inputContent}
       </NavLink>
     </li>
   );

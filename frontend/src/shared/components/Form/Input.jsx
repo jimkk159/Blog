@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer } from "react";
 
 //CSS
 import classes from "./Input.module.css";
