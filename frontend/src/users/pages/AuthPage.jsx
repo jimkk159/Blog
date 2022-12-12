@@ -25,13 +25,16 @@ import {
 const emailId = "email";
 const passwordId = "password";
 
+//Test Data
+const Fake_User =[{userId:"1",name:"Tom"},{userId:"2",name:"Amy"}]
+
 function AuthPage() {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { formState, inputHandler, setFormData } = useForm(
     {
-      emailId: { value: "", isValid: false },
-      passwordId: { value: "", isValid: false },
+      [emailId]: { value: "", isValid: false },
+      [passwordId]: { value: "", isValid: false },
     },
     false
   );
@@ -58,6 +61,12 @@ function AuthPage() {
   //Auth Form Submit
   const authSubmitHandler = (event) => {
     event.preventDefault();
+    
+    if (isLoginMode) {
+      auth.login(Fake_User[0].userId);
+    } else {
+      auth.login(Fake_User[1].userId);
+    }
   };
 
   return (
