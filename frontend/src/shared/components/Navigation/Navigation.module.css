@@ -23,7 +23,6 @@
   margin-bottom: 0.75rem;
 }
 
-.navigation__pc__btn,
 .navigation__pc__language {
   cursor: pointer;
   border: 1px solid transparent;
@@ -32,24 +31,13 @@
   margin: 1rem;
 }
 
-.navigation__pc__btn {
-  color: #292929;
-}
 .navigation__pc__language {
   color: white;
 }
 
 @media (min-width: 768px) {
-  .main-navigation__menu-btn {
-    display: none;
-  }
 
   .navigation__pc__nav-items {
     display: block;
-  }
-
-  .navigation__pc__btn {
-    color: white;
-    background: transparent;
   }
 }

@@ -59,7 +59,6 @@ function AuthModal() {
   //const openModalHandler=()=>setShowModal(true)
   const closeModalHandler = () => {
     setShowModal(false);
-    console.log("close");
   };
 
   //Switch Auth Form

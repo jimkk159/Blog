@@ -1,0 +1,27 @@
+.hamburger {
+  height: 3rem;
+  background: pink;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  display: block;
+  width: 3rem;
+  height: 3px;
+  border-radius: 1px;
+  background: white;
+}
+
+@media (min-width: 768px) {
+  .hamburger {
+    display: none;
+  }
+}
