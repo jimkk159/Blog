@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 
 //CSS
-import classes from "./AuthPage.module.css";
+import classes from "./AuthModal.module.css";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-contex";
@@ -21,6 +21,7 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+import useMediaQuery from "../../shared/hooks/media-query-hook";
 
 //Constant Variable
 const emailId = "email";
@@ -32,10 +33,12 @@ const Fake_User = [
   { userId: "2", name: "Amy" },
 ];
 
-function AuthPage() {
+function AuthModal() {
   const auth = useContext(AuthContext);
   const [showModal, setShowModal] = useState(true);
   const [isLoginMode, setIsLoginMode] = useState(true);
+
+  const { matches } = useMediaQuery("min", "768");
   const { formState, inputHandler, setFormData } = useForm(
     {
       [emailId]: { value: "", isValid: false },
@@ -44,9 +47,20 @@ function AuthPage() {
     false
   );
 
+  //Custom Modal Style
+  const customModalStyle = matches
+    ? {
+        left: "calc(50% - 12.5rem)",
+        width: "25rem",
+      }
+    : {};
+
   //Toggle Modal
-  // const openModalHandler=()=>setShowModal(true)
-  const closeModalHandler = () => setShowModal(false);
+  //const openModalHandler=()=>setShowModal(true)
+  const closeModalHandler = () => {
+    setShowModal(false);
+    console.log("close");
+  };
 
   //Switch Auth Form
   const switchModeHandler = () => {
@@ -82,7 +96,11 @@ function AuthPage() {
   };
 
   return (
-    <Modal show={showModal} onCancel={closeModalHandler}>
+    <Modal
+      show={showModal}
+      onCancel={closeModalHandler}
+      style={customModalStyle}
+    >
       <Card className={classes.authentication}>
         <h2>{`${isLoginMode ? "Login" : "SingUp"}`}</h2>
         <hr />
@@ -132,4 +150,4 @@ function AuthPage() {
   );
 }
 
-export default AuthPage;
+export default AuthModal;
