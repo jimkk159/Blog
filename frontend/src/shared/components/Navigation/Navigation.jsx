@@ -26,7 +26,7 @@ function Navigation(props) {
             <Link to="/">Blog</Link>
           </h1>
           <Search className={classes["navigation__search"]} />
-          <Languae className={classes["navigation__pc__btn"]}>EN/CH</Languae>
+          <Languae className={classes["navigation__pc__language"]}>EN/CH</Languae>
           <UserItem />
         </div>
         <hr />
@@ -35,7 +35,7 @@ function Navigation(props) {
             <nav className={classes["navigation__pc__nav-items"]}>
               <NavigationItems />
             </nav>
-            <hr />
+            <hr className={classes["navigation__pc__nav-items"]} />
           </>
         )}
       </NavigationHeader>

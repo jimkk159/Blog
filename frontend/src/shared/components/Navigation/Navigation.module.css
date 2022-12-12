@@ -23,13 +23,20 @@
   margin-bottom: 0.75rem;
 }
 
-.navigation__pc__btn {
+.navigation__pc__btn,
+.navigation__pc__language {
   cursor: pointer;
   border: 1px solid transparent;
-  color: #292929;
   background: transparent;
   font: inherit;
   margin: 1rem;
+}
+
+.navigation__pc__btn {
+  color: #292929;
+}
+.navigation__pc__language {
+  color: white;
 }
 
 @media (min-width: 768px) {
