@@ -12,6 +12,7 @@ import Languae from "./Laguage";
 import Search from "./Search";
 import Backdrop from "../UI/Backdrop";
 import Hamburger from "../UI/Hamburger";
+import SideDrawer from "../UI/SideDrawer";
 
 //Custom Hook
 import useScroll from "../../hooks/scorll-hook";
@@ -36,10 +37,16 @@ function Navigation(props) {
   return (
     <>
       {isDrawer && <Backdrop onClick={closeDrawerHandler} />}
-
+      {isDrawer && (
+        <SideDrawer onClick={closeDrawerHandler}>
+          <nav className={classes["navigation__drawer"]}>
+            <NavigationItems />
+          </nav>
+        </SideDrawer>
+      )}
       <NavigationHeader>
         <div className={classes.navigation__title}>
-          <Hamburger />
+          <Hamburger onClick={openDrawerHandler} />
           <h1 className={classes.navigation__icon}>
             <Link to="/">Blog</Link>
           </h1>

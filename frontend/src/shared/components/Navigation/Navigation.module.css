@@ -6,7 +6,7 @@
 .navigation__icon {
   margin-left: 1rem;
   margin-right: auto;
-  margin-bottom: 0;
+  margin-bottom: 0.25rem;
 }
 
 .navigation__icon a {
@@ -35,7 +35,15 @@
   color: white;
 }
 
+.navigation__drawer {
+  height: 100%;
+}
+
 @media (min-width: 768px) {
+
+  .navigation__icon {
+    margin-bottom: 0;
+  }
 
   .navigation__pc__nav-items {
     display: block;
