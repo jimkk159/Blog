@@ -10,6 +10,7 @@ import { AuthContext } from "../../shared/context/auth-contex";
 import Card from "../../shared/components/UI/Card";
 import Input from "../../shared/components/Form/Input";
 import Button from "../../shared/components/Form/Button";
+import Modal from "../../shared/components/UI/Modal";
 
 //Custom Hook
 import useForm from "../../shared/hooks/form-hook";
@@ -26,10 +27,14 @@ const emailId = "email";
 const passwordId = "password";
 
 //Test Data
-const Fake_User =[{userId:"1",name:"Tom"},{userId:"2",name:"Amy"}]
+const Fake_User = [
+  { userId: "1", name: "Tom" },
+  { userId: "2", name: "Amy" },
+];
 
 function AuthPage() {
   const auth = useContext(AuthContext);
+  const [showModal, setShowModal] = useState(true);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { formState, inputHandler, setFormData } = useForm(
     {
@@ -39,6 +44,11 @@ function AuthPage() {
     false
   );
 
+  //Toggle Modal
+  // const openModalHandler=()=>setShowModal(true)
+  const closeModalHandler = () => setShowModal(false);
+
+  //Switch Auth Form
   const switchModeHandler = () => {
     //[LoginMode] => [SignupMode]
     if (isLoginMode) {
@@ -61,16 +71,18 @@ function AuthPage() {
   //Auth Form Submit
   const authSubmitHandler = (event) => {
     event.preventDefault();
-    
+
     if (isLoginMode) {
       auth.login(Fake_User[0].userId);
     } else {
       auth.login(Fake_User[1].userId);
     }
+
+    setShowModal(false);
   };
 
   return (
-    <>
+    <Modal show={showModal} onCancel={closeModalHandler}>
       <Card className={classes.authentication}>
         <h2>{`${isLoginMode ? "Login" : "SingUp"}`}</h2>
         <hr />
@@ -116,7 +128,7 @@ function AuthPage() {
           content={`Switch to ${isLoginMode ? "SingUp" : "Login"}`}
         />
       </Card>
-    </>
+    </Modal>
   );
 }
 

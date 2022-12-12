@@ -91,7 +91,6 @@ function useInput(initalValue, initalIsValid, validators) {
   };
 
   const blurHandler = () => {
-    console.log("onBlur");
     dispatch({ type: "TOUCH" });
   };
 
