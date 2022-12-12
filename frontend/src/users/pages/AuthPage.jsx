@@ -1,4 +1,4 @@
-import React, { useState, useContext, useReducer, useCallback } from "react";
+import React, { useState, useContext } from "react";
 
 //CSS
 import classes from "./AuthPage.module.css";
@@ -11,6 +11,9 @@ import Card from "../../shared/components/UI/Card";
 import Input from "../../shared/components/Form/Input";
 import Button from "../../shared/components/Form/Button";
 
+//Custom Hook
+import useForm from "../../shared/hooks/form-hook";
+
 //Validator
 import {
   VALIDATOR_MINLENGTH,
@@ -18,65 +21,21 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
 
-const formReducer = (state, action) => {
-  switch (action.type) {
-    case "INPUT_CHANGE":
-      let formIsValid = true;
-      for (const inputId in state.inputs) {
-        if (inputId === action.inputId) {
-          formIsValid = formIsValid && action.isValid;
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid;
-        }
-      }
-
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.inputId]: { value: action.value, isValid: action.isValid },
-        },
-        isValid: formIsValid,
-      };
-    case "SET_DATA":
-      return { inputs: action.inputs, isValid: action.formIsValid };
-    default:
-      return state;
-  }
-};
+//Constant Variable
+const emailId = "email";
+const passwordId = "password";
 
 function AuthPage() {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
-      email: { value: "", isValid: false },
-      password: { value: "", isValid: false },
+  const { formState, inputHandler, setFormData } = useForm(
+    {
+      emailId: { value: "", isValid: false },
+      passwordId: { value: "", isValid: false },
     },
-    isValid: false,
-  });
+    false
+  );
 
-  //Check Form is valid
-  const inputHandler = useCallback((id, value, isValid) => {
-    dispatch({
-      type: "INPUT_CHANGE",
-      inputId: id,
-      value: value,
-      isValid: isValid,
-    });
-  }, []);
-
-  //Set Form data
-  const setFormData = useCallback((inputData, formValidity) => {
-    dispatch({
-      type: "SET_DATA",
-      inputs: inputData,
-      formIsValid: formValidity,
-    });
-  }, []);
-
-  //Switch 「LoginMode」 & 「SignupMode」
   const switchModeHandler = () => {
     //[LoginMode] => [SignupMode]
     if (isLoginMode) {
@@ -87,8 +46,7 @@ function AuthPage() {
     }
     //[SignupMode] => [LoginMode]
     else {
-      //Remove the Form state items
-      const { username, ...restInputs } = formState.inputs;
+      const { username, ...restInputs } = formState.inputs; //Remove the Form state items
       setFormData(
         restInputs,
         formState.inputs.email.isValid && formState.inputs.password.isValid
@@ -122,7 +80,7 @@ function AuthPage() {
           {!isLoginMode && <p>upload Image</p>}
           <Input
             key="email"
-            id="email"
+            id={emailId}
             type="text"
             label="E-Mail"
             onInput={inputHandler}
@@ -131,7 +89,7 @@ function AuthPage() {
           />
           <Input
             key="password"
-            id="password"
+            id={passwordId}
             type="password"
             label="Password"
             onInput={inputHandler}

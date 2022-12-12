@@ -1,54 +1,20 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect } from "react";
 
 //CSS
 import classes from "./Input.module.css";
 
-//Validator
-import { validate } from "../../util/validators";
-
-//Input Reducer
-const inputReducer = (state, action) => {
-  switch (action.type) {
-    case "CHANGE":
-      console.log(
-        action.value,
-        action.validators,
-        validate(action.value, action.validators)
-      );
-      return {
-        ...state,
-        value: action.value,
-        isValid: validate(action.value, action.validators),
-      };
-    case "TOUCH":
-      return { ...state, isTouched: true };
-    default:
-      return state;
-  }
-};
+//Custom Hook
+import { useInput } from "../../hooks/form-hook";
 
 function Input(props) {
-  //Input Reducer Behavior
-  const [inputState, dispatch] = useReducer(inputReducer, {
-    value: props.initalValue || "",
-    isTouched: false, //Check the user touch the input or not
-    isValid: props.initalValid || false, //Check the the input is valid after user has touched
-  });
+  const { initalValue, initalIsValid, validators } = props;
+  const { inputState, changeHandler, blurHandler } = useInput(
+    initalValue,
+    initalIsValid,
+    validators
+  );
 
-  const changeHandler = (event) => {
-    console.log(event.target.value);
-    dispatch({
-      type: "CHANGE",
-      value: event.target.value,
-      validators: props.validators,
-    });
-  };
-
-  const blurHandler = () => {
-    dispatch({ type: "TOUCH" });
-  };
-
-  //Monitor value change to trigger function
+  //Monitor value to trigger function
   const { value, isValid } = inputState; //prevend useEffect change by isTouched
   const { id, onInput } = props; //prevend useEffect change except id and onInput
   useEffect(() => {
