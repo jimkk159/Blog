@@ -4,17 +4,12 @@ function useAuth() {
   const [userId, setUserId] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const login = useCallback(
-    (uid) => {
-      console.log("login");
-      setUserId(uid);
-      setIsLoggedIn(true);
-    },
-    []
-  );
+  const login = useCallback((uid) => {
+    setUserId(uid);
+    setIsLoggedIn(true);
+  }, []);
 
   const logout = useCallback(() => {
-    console.log("logout");
     setUserId(null);
     setIsLoggedIn(false);
   }, []);

@@ -20,6 +20,7 @@ import HomePage from "./shared/pages/HomePage";
 import AboutPage from "./shared/pages/AboutPage";
 import ErrorPage from "./shared/pages/ErrorPage";
 import AuthModal from "./users/components/AuthModal";
+import AuthPage from "./users/pages/AuthPage";
 import NewPostPage from "./blogs/pages/NewPostPage";
 import PostPage from "./blogs/pages/PostPage";
 import PostsPage from "./blogs/pages/PostsPage";
@@ -35,7 +36,7 @@ const router = createBrowserRouter(
         <Route path=":blogId" element={<PostPage />} loader={null} />
       </Route>
       <Route path="/about" element={<AboutPage />} loader={null} />
-      <Route path="/auth" element={<AuthModal />} loader={null} />
+      <Route path="/auth" element={<AuthPage />} loader={null} />
       <Route path="/*" element={<Navigate replace to="/" />} loader={null} />
     </Route>
   )
