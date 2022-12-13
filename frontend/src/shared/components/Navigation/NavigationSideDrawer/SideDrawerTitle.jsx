@@ -1,9 +1,6 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
-//CSS
-import classes from "./SideDrawerTitle.module.css";
-
 //Image
 import crossImage from "../../../../img/x-symbol.png";
 
@@ -14,9 +11,16 @@ import { AuthContext } from "../../../context/auth-contex";
 import NavigationItem from "../NavigationItem";
 import UserAvatar from "../../../../users/components/UserAvatar";
 
+//Custom Hook
+import useUuid from "../../../hooks/uuid-hook";
+
+//CSS
+import classes from "./SideDrawerTitle.module.css";
+
 function SideDrawerTitle(props) {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
+  const uuidKeys = useUuid(2);
 
   const showAuth = () => {
     navigate("/auth");
@@ -35,7 +39,7 @@ function SideDrawerTitle(props) {
           <div className={classes["side-drawer__padding"]}></div>
 
           <NavigationItem
-            key="sideDrawer-login"
+            key={"sideDrawer-login_" + uuidKeys[0]}
             type="link"
             to="/auth"
             show={!auth.isLoggedIn}
@@ -44,7 +48,7 @@ function SideDrawerTitle(props) {
             onClick={props.onCancel}
           />
           <NavigationItem
-            key="sideDrawer-login"
+            key={"sideDrawer-login_" + uuidKeys[1]}
             type="link"
             to="/auth"
             show={!auth.isLoggedIn}

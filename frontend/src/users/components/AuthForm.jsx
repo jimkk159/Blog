@@ -10,6 +10,7 @@ import Button from "../../shared/components/Form/Button";
 
 //Custom Hook
 import useForm from "../../shared/hooks/form-hook";
+import useUuid from "../../shared/hooks/uuid-hook";
 
 //Validator
 import {
@@ -34,6 +35,8 @@ const Fake_User = [
 function AuthForm(props) {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const uuidKeys = useUuid(3);
+
   const { formState, inputHandler, setFormData } = useForm(
     {
       [emailId]: { value: "", isValid: false },
@@ -83,7 +86,7 @@ function AuthForm(props) {
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (
           <Input
-            key="username"
+            key={"username_"+uuidKeys[0]}
             id="username"
             type="text"
             label="Name"
@@ -94,7 +97,7 @@ function AuthForm(props) {
         )}
         {!isLoginMode && <p>upload Image</p>}
         <Input
-          key="email"
+          key={"email_"+uuidKeys[1]}
           id={emailId}
           type="text"
           label="E-Mail"
@@ -103,7 +106,7 @@ function AuthForm(props) {
           errorMessage="Please enter a valid email."
         />
         <Input
-          key="password"
+          key={"password_"+uuidKeys[2]}
           id={passwordId}
           type="password"
           label="Password"
