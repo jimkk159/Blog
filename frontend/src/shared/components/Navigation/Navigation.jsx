@@ -10,9 +10,8 @@ import NavigationItems from "./NavigationItems";
 import UserItem from "../../../users/components/UserItem";
 import Languae from "./Laguage";
 import Search from "./Search";
-import Backdrop from "../UI/Backdrop";
 import Hamburger from "../UI/Hamburger";
-import SideDrawer from "../UI/SideDrawer";
+import NavigationSideDrawer from "./NavigationSideDrawer/SideDrawer";
 
 //Custom Hook
 import useScroll from "../../hooks/scorll-hook";
@@ -36,14 +35,7 @@ function Navigation(props) {
 
   return (
     <>
-      {isDrawer && <Backdrop onClick={closeDrawerHandler} />}
-      {isDrawer && (
-        <SideDrawer onClick={closeDrawerHandler}>
-          <nav className={classes["navigation__drawer"]}>
-            <NavigationItems />
-          </nav>
-        </SideDrawer>
-      )}
+      {isDrawer && <NavigationSideDrawer onClick={closeDrawerHandler}/>}
       <NavigationHeader>
         <div className={classes.navigation__title}>
           <Hamburger onClick={openDrawerHandler} />

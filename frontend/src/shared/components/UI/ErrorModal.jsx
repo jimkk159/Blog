@@ -1,6 +1,6 @@
 import React from 'react';
 
-//Custom component
+//Custom Component
 import Modal from './Modal';
 import Button from '../Form/Button';
 

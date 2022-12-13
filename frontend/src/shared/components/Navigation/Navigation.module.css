@@ -35,10 +35,6 @@
   color: white;
 }
 
-.navigation__drawer {
-  height: 100%;
-}
-
 @media (min-width: 768px) {
 
   .navigation__icon {

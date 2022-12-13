@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 //CSS
 import classes from "./Modal.module.css";
 
-//Custom component
+//Custom Component
 import Backdrop from "./Backdrop";
 
 function Modal(props) {
