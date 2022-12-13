@@ -25,7 +25,7 @@ function NavigationItem(props) {
   // Type Button
   if (props.type === "button") {
     return (
-      <li className={`${props.className} ${classes["nav-link"]}`}>
+      <li className={`${classes["nav-link"]} ${props.className}`}>
         <button onClick={props.onClick} onBlur={props.onBlur}>
           {inputContent}
         </button>
@@ -33,9 +33,26 @@ function NavigationItem(props) {
     );
   }
 
+  //Normal Link
+  if (props.type === "link") {
+    return (
+      <div
+        className={`${props.className} ${classes["nav-link"]} `}
+        onClick={props.onClick}
+      >
+        <NavLink
+          to={props.to}
+          className={({ isActive }) => (isActive ? classes.active : null)}
+        >
+          {inputContent}
+        </NavLink>
+      </div>
+    );
+  }
+
   //Default Type Anchor
   return (
-    <li className={`${props.className} ${classes["nav-link"]}`}>
+    <li className={`${classes["nav-link"]} ${props.className}`}>
       <NavLink
         to={props.to}
         className={({ isActive }) => (isActive ? classes.active : null)}

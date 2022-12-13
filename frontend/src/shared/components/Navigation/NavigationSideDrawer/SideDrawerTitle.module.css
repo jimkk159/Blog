@@ -1,39 +1,63 @@
-.navigation__drawer__auth {
-    display: flex;
-    align-items: center;
-    background-color: purple;
-    height: 6rem;
-    padding: 0 0 0 2rem;
-  }
-  
-  .navigation__top_padding {
-    height: 1rem;
-    background-color: purple;
-    border-bottom: 1px solid white;
-  }
-  
-  .navigation__drawer__avatar {
-    width: 4rem;
-    height: 4rem;
-    margin-right: 2rem;
-    margin-left: 0.5rem;
-  }
-  
-  .navigation__drawer__auth h1 {
-    flex: 2;
-    text-align: center;
-    padding: 0 1rem;
-  }
-  
-  .navigation__drawer__cross{
-    flex: 2;
-    text-align: right;
-    padding-right: 2rem;
-  }
-  
-  .cross-symbol{
-    border-radius: 50%;
-    width: 1.25rem;
-    height: 1.25rem;
-    object-fit: cover;
-  }
+.side-drawer__auth {
+  display: flex;
+  align-items: center;
+  background-color: purple;
+  height: 6rem;
+  padding: 0 0 0 2rem;
+}
+
+.navigation__top_padding {
+  height: 1rem;
+  background-color: purple;
+  border-bottom: 1px solid white;
+}
+
+.side-drawer__avatar {
+  width: 4rem;
+  height: 4rem;
+  margin-right: 2rem;
+  margin-left: 0.5rem;
+}
+
+.side-drawer__login {
+  border-right: 1px solid rgb(240, 235, 233);
+  border-left: 2px solid rgb(240, 235, 233);
+}
+.side-drawer__signup {
+  border-right: none;
+  border-left: 1px solid rgb(240, 235, 233);
+}
+
+.side-drawer__nav-link {
+  margin-right:0;
+  margin-left:0;
+  padding-right: 2rem;
+  padding-left: 2rem;
+}
+
+.side-drawer__nav-link a {
+  color: white;
+  font-size: 20px;
+  border-bottom: none !important;
+}
+
+
+
+.side-drawer__auth h1 {
+  flex: 2;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.side-drawer__cross {
+  flex: 2;
+  text-align: right;
+  padding-right: 2rem;
+}
+
+.cross-symbol {
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: cover;
+}
