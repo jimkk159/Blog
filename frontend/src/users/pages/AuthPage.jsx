@@ -1,10 +1,10 @@
 import React from "react";
 
-//CSS
-import classes from "./AuthPage.module.css";
-
 //Custom Component
 import AuthForm from "../components/AuthForm";
+
+//CSS
+import classes from "./AuthPage.module.css";
 
 function AuthPage(props) {
   const submitHandler = () => {

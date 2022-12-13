@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-//CSS
-import classes from "./SideDrawer.module.css";
-
 //Custom Component
 import Backdrop from "./Backdrop";
+
+//CSS
+import classes from "./SideDrawer.module.css";
 
 function SideDrawer(props) {
   const inputContent = props.content ? props.element : props.children;
@@ -15,10 +15,12 @@ function SideDrawer(props) {
     </aside>,
     document.getElementById("drawer")
   );
-  return <>
-  <Backdrop onClick={props.onCancel}/>
-  { sideDrawerContent }
-  </>;
+  return (
+    <>
+      <Backdrop onClick={props.onCancel} />
+      {sideDrawerContent}
+    </>
+  );
 }
 
 export default SideDrawer;

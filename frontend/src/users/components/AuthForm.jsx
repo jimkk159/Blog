@@ -1,8 +1,5 @@
 import React, { useState, useContext } from "react";
 
-//CSS
-import classes from "./AuthForm.module.css";
-
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-contex";
 
@@ -20,6 +17,9 @@ import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
 } from "../../shared/util/validators";
+
+//CSS
+import classes from "./AuthForm.module.css";
 
 //Constant Variable
 const emailId = "email";

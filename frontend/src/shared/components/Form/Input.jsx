@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 
-//CSS
-import classes from "./Input.module.css";
-
 //Custom Hook
 import { useInput } from "../../hooks/form-hook";
+
+//CSS
+import classes from "./Input.module.css";
 
 function Input(props) {
   const { initalValue, initalIsValid, validators } = props;

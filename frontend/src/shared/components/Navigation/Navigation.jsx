@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-//CSS
-import classes from "./Navigation.module.css";
-
 //Custom Component
 import NavigationHeader from "./NavigationHeader";
 import NavigationItems from "./NavigationItems";
@@ -15,6 +12,9 @@ import NavigationSideDrawer from "./NavigationSideDrawer/SideDrawer";
 
 //Custom Hook
 import useScroll from "../../hooks/scorll-hook";
+
+//CSS
+import classes from "./Navigation.module.css";
 
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);

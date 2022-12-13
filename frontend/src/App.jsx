@@ -7,9 +7,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-//CSS
-import "./App.module.css";
-
 //Context
 import AuthContextProvider from "./shared/context/auth-contex";
 
@@ -19,12 +16,13 @@ import BlogLayout from "./shared/pages/layouts/RootLayout";
 import HomePage from "./shared/pages/HomePage";
 import AboutPage from "./shared/pages/AboutPage";
 import ErrorPage from "./shared/pages/ErrorPage";
-import AuthModal from "./users/components/AuthModal";
 import AuthPage from "./users/pages/AuthPage";
 import NewPostPage from "./blogs/pages/NewPostPage";
 import PostPage from "./blogs/pages/PostPage";
 import PostsPage from "./blogs/pages/PostsPage";
 
+//CSS
+import "./App.module.css";
 
 const router = createBrowserRouter(
   createRoutesFromElements(

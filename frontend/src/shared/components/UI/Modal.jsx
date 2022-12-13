@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-//CSS
-import classes from "./Modal.module.css";
-
 //Custom Component
 import Backdrop from "./Backdrop";
+
+//CSS
+import classes from "./Modal.module.css";
 
 function Modal(props) {
   const inputContent = props.content ? props.content : props.children;

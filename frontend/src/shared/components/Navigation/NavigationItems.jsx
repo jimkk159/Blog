@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 
-//CSS
-import classes from "./NavigationItems.module.css";
-
 //Custom Context
 import { AuthContext } from "../../context/auth-contex";
 
 //Custom Component
 import NavigationItem from "./NavigationItem";
+
+//CSS
+import classes from "./NavigationItems.module.css";
 
 function NavigationItems(props) {
   const auth = useContext(AuthContext);
