@@ -52,7 +52,10 @@ function NavigationItem(props) {
 
   //Default Type Anchor
   return (
-    <li className={`${classes["nav-link"]} ${props.className}`}>
+    <li
+      className={`${classes["nav-link"]} ${props.className}`}
+      onClick={props.onClick}
+    >
       <NavLink
         to={props.to}
         className={({ isActive }) => (isActive ? classes.active : null)}

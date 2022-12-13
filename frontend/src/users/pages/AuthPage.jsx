@@ -10,6 +10,7 @@ function AuthPage(props) {
   const submitHandler = () => {
     console.log("submit");
   };
+
   return (
     <div className={classes.authentication}>
       <AuthForm onSubmit={submitHandler} />

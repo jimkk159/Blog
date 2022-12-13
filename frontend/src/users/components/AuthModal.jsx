@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 //Custom Component
 import AuthForm from "./AuthForm";
@@ -8,8 +8,7 @@ import Modal from "../../shared/components/UI/Modal";
 import useMediaQuery from "../../shared/hooks/media-query-hook";
 
 function AuthModal(props) {
-  const [showModal, setShowModal] = useState(true);
-
+  const { showModal, setShowModal } = props;
   const { matches } = useMediaQuery("min", "768");
 
   //Custom Modal Style

@@ -2,9 +2,9 @@ import React from "react";
 import Avatar from "../../shared/components/UI/Avatar";
 
 //CSS
-import classes from "./UserItem.module.css";
+import classes from "./UserAvatar.module.css";
 
-function UserItem(props) {
+function UserAvatar(props) {
   return (
     <div
       className={`${classes["user-item__image"]} ${props.className}`}
@@ -20,4 +20,4 @@ function UserItem(props) {
   );
 }
 
-export default UserItem;
+export default UserAvatar;

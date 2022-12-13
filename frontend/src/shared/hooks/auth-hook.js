@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 
 function useAuth() {
   const [userId, setUserId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const login = useCallback((uid) => {
@@ -15,7 +14,7 @@ function useAuth() {
     setIsLoggedIn(false);
   }, []);
 
-  return { userId, isLoggedIn, login, logout, showModal, setShowModal };
+  return { userId, isLoggedIn, login, logout };
 }
 
 export default useAuth;
