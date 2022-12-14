@@ -5,12 +5,13 @@ import { RouterProvider } from "react-router-dom";
 import AuthContextProvider from "./shared/context/auth-contex";
 
 //Route
-import router from "./route/route";
+import RouteCreate from "./route/route";
 
 //CSS
 import "./App.module.css";
 
 function App() {
+  const router = RouteCreate();
   return (
     <AuthContextProvider>
       <RouterProvider router={router} />

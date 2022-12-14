@@ -16,6 +16,7 @@ import AuthModal from "../../../users/components/AuthModal";
 
 //Custom Hook
 import useScroll from "../../hooks/scorll-hook";
+import useMediaQuery from "../../hooks/media-query-hook";
 
 //CSS
 import classes from "./Navigation.module.css";
@@ -24,7 +25,9 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
+
   const { scrollPosition, isScrollingUp } = useScroll();
+  const { matches } = useMediaQuery("min", "768");
 
   //If Scroll Position less than 40 pixel or Scroll up then...
   const showNavItems = scrollPosition < 40 || isScrollingUp;
@@ -46,7 +49,7 @@ function Navigation(props) {
   return (
     <>
       {isDrawer && <NavigationSideDrawer onClick={closeDrawerHandler} />}
-      {!isLoggedIn && showModal && (
+      {!isLoggedIn && showModal && matches && (
         <AuthModal showModal={showModal} setShowModal={setShowModal} />
       )}
       <NavigationHeader>
@@ -59,7 +62,7 @@ function Navigation(props) {
           <Languae className={classes["navigation__pc__language"]}>
             EN/CH
           </Languae>
-          <UserAvatar onClick={showAuth} />
+          {matches && <UserAvatar onClick={showAuth} />}
         </div>
         <hr />
         {showNavItems && (
