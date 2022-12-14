@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-contex";
@@ -45,6 +45,13 @@ function AuthForm(props) {
     false
   );
 
+  const { toLogin } = props;
+  useEffect(() => {
+    if (toLogin !== undefined) {
+      setIsLoginMode(!!toLogin);
+    }
+  }, [toLogin]);
+
   //Switch Auth Form
   const switchModeHandler = () => {
     //[LoginMode] => [SignupMode]
@@ -86,7 +93,7 @@ function AuthForm(props) {
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (
           <Input
-            key={"username_"+uuidKeys[0]}
+            key={"username_" + uuidKeys[0]}
             id="username"
             type="text"
             label="Name"
@@ -97,7 +104,7 @@ function AuthForm(props) {
         )}
         {!isLoginMode && <p>upload Image</p>}
         <Input
-          key={"email_"+uuidKeys[1]}
+          key={"email_" + uuidKeys[1]}
           id={emailId}
           type="text"
           label="E-Mail"
@@ -106,7 +113,7 @@ function AuthForm(props) {
           errorMessage="Please enter a valid email."
         />
         <Input
-          key={"password_"+uuidKeys[2]}
+          key={"password_" + uuidKeys[2]}
           id={passwordId}
           type="password"
           label="Password"

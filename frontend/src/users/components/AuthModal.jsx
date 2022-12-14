@@ -36,7 +36,7 @@ function AuthModal(props) {
       onCancel={closeModalHandler}
       style={customModalStyle}
     >
-      <AuthForm onSubmit={submitHandler} />
+      <AuthForm onSubmit={submitHandler} isLogin={props.isLogin}/>
     </Modal>
   );
 }

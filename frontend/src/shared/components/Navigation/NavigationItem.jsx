@@ -1,9 +1,7 @@
-// import { NavLink } from "react-router-dom";
-
-//CSS
+//Custom Component
 import { NavLink } from "react-router-dom";
 
-//Custom Component
+//CSS
 import classes from "./NavigationItem.module.css";
 
 /**
@@ -11,6 +9,7 @@ import classes from "./NavigationItem.module.css";
  * @param show show the Item or not.
  * @param type the Item type e.g. button, anchor.
  * @param to the Item redirect link.
+ * @param navInitialState initial state pass to the NavLink
  * @param onClick if the type is button, onClick will triger when the button been clcik
  * @param content if exist the input content will be content, otherwise it will be children
  */
@@ -42,6 +41,7 @@ function NavigationItem(props) {
       >
         <NavLink
           to={props.to}
+          state={props.navInitialState}
           className={({ isActive }) => (isActive ? classes.active : null)}
         >
           {inputContent}
@@ -58,6 +58,7 @@ function NavigationItem(props) {
     >
       <NavLink
         to={props.to}
+        state={props.navInitialState}
         className={({ isActive }) => (isActive ? classes.active : null)}
       >
         {inputContent}

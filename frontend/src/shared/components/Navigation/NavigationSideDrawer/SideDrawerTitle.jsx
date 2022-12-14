@@ -22,8 +22,9 @@ function SideDrawerTitle(props) {
   const navigate = useNavigate();
   const uuidKeys = useUuid(2);
 
+  //Auth
   const showAuth = () => {
-    navigate("/auth");
+    navigate("/auth", { state: { toLogin: true } });
     props.onCancel();
   };
 
@@ -45,15 +46,17 @@ function SideDrawerTitle(props) {
             show={!auth.isLoggedIn}
             content="LogIn"
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
+            navInitialState={{ toLogin: true }}
             onClick={props.onCancel}
           />
           <NavigationItem
-            key={"sideDrawer-login_" + uuidKeys[1]}
+            key={"sideDrawer-signup_" + uuidKeys[1]}
             type="link"
             to="/auth"
             show={!auth.isLoggedIn}
             content="Signup"
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
+            navInitialState={{ toLogin: false }}
             onClick={props.onCancel}
           />
           <div
