@@ -11,7 +11,6 @@ function AuthPage(props) {
   const location = useLocation();
   const toLogin = location.state ? location.state.toLogin : true;
   const submitHandler = () => {
-    console.log("submit");
   };
 
   return (
