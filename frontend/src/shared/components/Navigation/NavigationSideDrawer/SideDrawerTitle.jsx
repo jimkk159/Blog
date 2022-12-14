@@ -18,14 +18,16 @@ import useUuid from "../../../hooks/uuid-hook";
 import classes from "./SideDrawerTitle.module.css";
 
 function SideDrawerTitle(props) {
-  const auth = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const uuidKeys = useUuid(2);
 
   //Auth
   const showAuth = () => {
-    navigate("/auth", { state: { toLogin: true } });
-    props.onCancel();
+    if (!isLoggedIn) {
+      navigate("/auth", { state: { toLogin: true } });
+      props.onCancel();
+    }
   };
 
   return (
@@ -43,7 +45,7 @@ function SideDrawerTitle(props) {
             key={"sideDrawer-login_" + uuidKeys[0]}
             type="link"
             to="/auth"
-            show={!auth.isLoggedIn}
+            show={!isLoggedIn}
             content="LogIn"
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
             navInitialState={{ toLogin: true }}
@@ -53,7 +55,7 @@ function SideDrawerTitle(props) {
             key={"sideDrawer-signup_" + uuidKeys[1]}
             type="link"
             to="/auth"
-            show={!auth.isLoggedIn}
+            show={!isLoggedIn}
             content="Signup"
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
             navInitialState={{ toLogin: false }}

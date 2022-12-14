@@ -43,7 +43,9 @@ function Navigation(props) {
 
   //Show Auth Modal
   const showAuth = () => {
-    setShowModal(true);
+    if(!isLoggedIn){
+      setShowModal(true);
+    }
   };
 
   return (
