@@ -1,5 +1,8 @@
-//Custom Component
+import React from "react";
 import { NavLink } from "react-router-dom";
+
+//Custom Component
+import NavIcon from "./NavIcon";
 
 //CSS
 import classes from "./NavigationItem.module.css";
@@ -24,7 +27,26 @@ function NavigationItem(props) {
   // Type Button
   if (props.type === "button") {
     return (
-      <li className={`${classes["nav-link"]} ${props.className}`}>
+      <div className={`${props.className} ${classes["nav-link"]} `}>
+        <NavIcon
+          icon={props.icon}
+          className={`${classes["nav-icon"]} ${props.iconClassName} `}
+        />
+        <button onClick={props.onClick} onBlur={props.onBlur}>
+          {inputContent}
+        </button>
+      </div>
+    );
+  }
+
+  // Type Button
+  if (props.type === "li-button") {
+    return (
+      <li className={`${props.className} ${classes["nav-link"]}`}>
+        <NavIcon
+          icon={props.icon}
+          className={`${classes["nav-icon"]} ${props.iconClassName} `}
+        />
         <button onClick={props.onClick} onBlur={props.onBlur}>
           {inputContent}
         </button>
@@ -39,6 +61,10 @@ function NavigationItem(props) {
         className={`${props.className} ${classes["nav-link"]} `}
         onClick={props.onClick}
       >
+        <NavIcon
+          icon={props.icon}
+          className={`${classes["nav-icon"]} ${props.iconClassName} `}
+        />
         <NavLink
           to={props.to}
           state={props.navInitialState}
@@ -56,6 +82,10 @@ function NavigationItem(props) {
       className={`${classes["nav-link"]} ${props.className}`}
       onClick={props.onClick}
     >
+      <NavIcon
+        icon={props.icon}
+        className={`${classes["nav-icon"]} ${props.iconClassName} `}
+      />
       <NavLink
         to={props.to}
         state={props.navInitialState}

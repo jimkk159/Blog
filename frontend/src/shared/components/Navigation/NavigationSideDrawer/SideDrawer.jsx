@@ -15,7 +15,7 @@ function NavigationSideDrawer(props) {
       <nav
         className={`${classes.navigation__drawer} ${classes.navigation__drawer}`}
       >
-        <NavigationItems />
+        <NavigationItems iconClassName={classes["navigation__drawer-icon"]} />
       </nav>
     </SideDrawer>
   );

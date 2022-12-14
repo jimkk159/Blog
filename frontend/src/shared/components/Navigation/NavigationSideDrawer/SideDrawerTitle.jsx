@@ -1,6 +1,10 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+//Icon
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
+
 //Image
 import crossImage from "../../../../img/x-symbol.png";
 
@@ -18,9 +22,9 @@ import useUuid from "../../../hooks/uuid-hook";
 import classes from "./SideDrawerTitle.module.css";
 
 function SideDrawerTitle(props) {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-  const uuidKeys = useUuid(2);
+  const uuidKeys = useUuid(3);
 
   //Auth
   const showAuth = () => {
@@ -34,7 +38,10 @@ function SideDrawerTitle(props) {
     <>
       <div className={classes["side-drawer__title"]}>
         <div className={classes["navigation__top_padding"]} />
-        <div className={classes["side-drawer__auth"]}>
+        <div
+          className={classes["side-drawer__auth"]}
+          style={isLoggedIn ? { justifyContent: "space-between" } : null}
+        >
           <UserAvatar
             className={classes["side-drawer__avatar"]}
             onClick={showAuth}
@@ -50,6 +57,8 @@ function SideDrawerTitle(props) {
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
             navInitialState={{ toLogin: true }}
             onClick={props.onCancel}
+            icon={<LoginIcon />}
+            iconClassName={classes["side-drawer__nav-icon"]}
           />
           <NavigationItem
             key={"sideDrawer-signup_" + uuidKeys[1]}
@@ -60,9 +69,22 @@ function SideDrawerTitle(props) {
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
             navInitialState={{ toLogin: false }}
             onClick={props.onCancel}
+            icon={<LogoutIcon />}
+            iconClassName={classes["side-drawer__nav-icon"]}
+          />
+          <NavigationItem
+            key={"sideDrawer-logout_" + uuidKeys[2]}
+            type="button"
+            onClick={logout}
+            show={isLoggedIn}
+            content="LogOut"
+            className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}
+            icon={<LogoutIcon />}
+            iconClassName={classes["side-drawer__nav-icon"]}
           />
           <div
             className={classes["side-drawer__cross"]}
+            style={isLoggedIn ? { flex: 1 } : { flex: 2 }}
             onClick={props.onCancel}
           >
             <img

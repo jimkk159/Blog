@@ -2,6 +2,8 @@
   margin: 1rem;
   padding: 0.5rem 1rem;
   border-right: 2px solid white;
+  display: flex;
+  align-items: flex-end;
 }
 
 .nav-link a {
@@ -34,6 +36,12 @@
 .nav-link button:active {
   /* background: #292929;
   border: 1px solid #292929; */
+  color: white;
+}
+
+.nav-icon {
+  bottom: 0;
+  padding-bottom: 3px;
   color: white;
 }
 

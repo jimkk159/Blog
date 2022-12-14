@@ -8,3 +8,20 @@
   background-color: #ff0055;
 }
 
+.navigation__drawer ul {
+  align-items: flex-start;
+}
+
+.navigation__drawer li {
+  font-size: 25px;
+  margin-left: 2rem;
+  align-items: center;
+}
+
+.navigation__drawer-icon {
+  bottom: 0;
+  margin-top: 3px;
+  margin-right: 1rem;
+  transform: scale(1.5);
+  color: purple;
+}
