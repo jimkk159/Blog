@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 //Icon
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 
 //Image
 import crossImage from "../../../../img/x-symbol.png";
@@ -33,7 +34,7 @@ function SideDrawerTitle(props) {
       props.onCancel();
     }
   };
-
+  console.log(classes["side-drawer__anonymous-avatar"]);
   return (
     <>
       <div className={classes["side-drawer__title"]}>
@@ -43,7 +44,11 @@ function SideDrawerTitle(props) {
           style={isLoggedIn ? { justifyContent: "space-between" } : null}
         >
           <UserAvatar
-            className={classes["side-drawer__avatar"]}
+            className={
+              isLoggedIn
+                ? classes["side-drawer__avatar"]
+                : classes["side-drawer__anonymous-avatar"]
+            }
             onClick={showAuth}
           />
           <div className={classes["side-drawer__padding"]}></div>
@@ -69,7 +74,7 @@ function SideDrawerTitle(props) {
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
             navInitialState={{ toLogin: false }}
             onClick={props.onCancel}
-            icon={<LogoutIcon />}
+            icon={<HistoryEduIcon />}
             iconClassName={classes["side-drawer__nav-icon"]}
           />
           <NavigationItem

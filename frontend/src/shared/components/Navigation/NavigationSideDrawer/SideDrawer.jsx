@@ -13,7 +13,7 @@ function NavigationSideDrawer(props) {
     <SideDrawer onCancel={props.onClick}>
       <SideDrawerTitle onCancel={props.onClick} />
       <nav
-        className={`${classes.navigation__drawer} ${classes.navigation__drawer}`}
+        className={`${props.className} ${classes.navigation__drawer}`}
       >
         <NavigationItems iconClassName={classes["navigation__drawer-icon"]} />
       </nav>

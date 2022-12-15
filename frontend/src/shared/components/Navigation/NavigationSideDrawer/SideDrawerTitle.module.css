@@ -15,31 +15,19 @@
 .side-drawer__avatar {
   width: 4rem;
   height: 4rem;
+}
+
+.side-drawer__anonymous-avatar {
+  width: 3.5rem;
+  height: 3.5rem;
   margin-right: 2rem;
-  margin-left: 0.5rem;
-}
-
-.side-drawer__login {
-  border-right: 1px solid rgb(240, 235, 233);
-  border-left: 2px solid rgb(240, 235, 233);
-}
-
-.side-drawer__logout {
-  border-right: none;
-  flex: 2 1;
-  justify-content: center;
-}
-
-.side-drawer__signup {
-  border-right: none;
-  border-left: 1px solid rgb(240, 235, 233);
 }
 
 .side-drawer__nav-link {
   margin-right: 0;
   margin-left: 0;
-  padding-right: 2rem;
-  padding-left: 2rem;
+  padding-right: 4rem;
+  padding-left: 4rem;
 }
 
 .side-drawer__nav-link a,
@@ -47,6 +35,26 @@
   color: white;
   font-size: 20px;
   border-bottom: none !important;
+}
+
+.side-drawer__login {
+  padding-right: 2rem;
+  padding-left: 1rem;
+  border-right: 1px solid rgb(240, 235, 233);
+  border-left: 2px solid rgb(240, 235, 233);
+}
+
+.side-drawer__signup {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  border-right: none;
+  border-left: 1px solid rgb(240, 235, 233);
+}
+
+.side-drawer__logout {
+  border-right: none;
+  flex: 2 1;
+  justify-content: center;
 }
 
 .side-drawer__nav-icon {

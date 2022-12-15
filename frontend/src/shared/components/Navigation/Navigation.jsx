@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 //Custom Context
 import { AuthContext } from "../../context/auth-contex";
@@ -25,6 +25,7 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const { scrollPosition, isScrollingUp } = useScroll();
   const { matches } = useMediaQuery("min", "768");
@@ -43,10 +44,15 @@ function Navigation(props) {
 
   //Show Auth Modal
   const showAuth = () => {
-    if(!isLoggedIn){
+    if (!isLoggedIn) {
       setShowModal(true);
     }
   };
+
+  //Window Size Change
+  useEffect(() => {
+    setIsDrawer(false);
+  }, [matches, navigate]);
 
   return (
     <>
