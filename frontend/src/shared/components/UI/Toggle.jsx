@@ -1,25 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CSSTransition } from "react-transition-group";
 
 //CSS
 import classes from "./Toggle.module.css";
 
 function Toggle(props) {
-  const [isToggle, setIsToggle] = useState(false);
-  const toggleTime = props.toggleTime ? props.toggleTime : 2000;
-
-  //Toggle State
-  const toggleHandler = () => {
-    setIsToggle((prev) => !prev);
-  };
-
-  //Initial Toggle State
-  const { isToggle: initToggleState } = props;
-  useEffect(() => {
-    if (initToggleState) {
-      setIsToggle(initToggleState);
-    }
-  }, [initToggleState]);
+  const toggleTime = props.toggleTime ? props.toggleTime : 400;
 
   //Type
   let area_class;
@@ -36,13 +22,14 @@ function Toggle(props) {
     <label className={`${classes["switch"]}`}>
       <input
         type="checkbox"
-        defaultChecked={isToggle}
-        onClick={toggleHandler}
+        defaultChecked={props.isToggle}
+        onClick={props.onToggle}
       />
       <CSSTransition
-        in={isToggle}
+        in={props.show}
         timeout={toggleTime}
         classNames={{
+          enter: classes["area-enter"],
           enterActive: classes["area-enter-active"],
           enterDone: classes["area-enter-done"],
           exit: classes["area-exit"],
@@ -53,9 +40,10 @@ function Toggle(props) {
         <span className={`${area_class} `}>{props.children}</span>
       </CSSTransition>
       <CSSTransition
-        in={isToggle}
+        in={props.show}
         timeout={toggleTime}
         classNames={{
+          enter: classes["slider-enter"],
           enterActive: classes["slider-enter-active"],
           enterDone: classes["slider-enter-done"],
           exit: classes["slider-exit"],

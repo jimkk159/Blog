@@ -25,7 +25,8 @@ import classes from "./Navigation.module.css";
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const { isLoggedIn } = useContext(AuthContext);
+  const [isEnglish, setIsEnglish] = useState(true);
+  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
   const [isSearch, setIsSearch] = useState(true);
   const navigate = useNavigate();
 
@@ -60,10 +61,17 @@ function Navigation(props) {
     setIsSearch(false);
   };
 
+  //Toggle Language
+  const toggleLanguageHandler = () => {
+    setIsEnglish((prev) => !prev);
+    setIsLoggedIn((prev) => !prev);
+  };
+
   //Window Size Change
   useEffect(() => {
     setIsDrawer(false);
   }, [matches, navigate]);
+
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
@@ -83,8 +91,13 @@ function Navigation(props) {
             showSearch={isSearch}
           />
           <Theme className={classes["navigation__theme"]}>Theme</Theme>
-          <Languae className={classes["navigation__pc__language"]}>
-            EN CH
+          <Languae
+            className={classes["navigation__pc__language"]}
+            show={isEnglish}
+            onToggle={toggleLanguageHandler}
+          >
+            <p>EN</p>
+            <p className={classes.ch}>CH</p>
           </Languae>
           {matches && <UserAvatar onClick={showAuthHandler} />}
         </div>

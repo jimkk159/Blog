@@ -10,11 +10,12 @@ export const AuthContext = createContext({
   token: null,
   login: () => {},
   logout: () => {},
+  setIsLoggedIn: () => {},
   setShowModal: () => {},
 });
 
 const AuthContextProvider = (props) => {
-  const { userId, isLoggedIn, login, logout, showModal, setShowModal } =
+  const { userId, isLoggedIn, setIsLoggedIn ,login, logout, showModal, setShowModal } =
     useAuth();
   return (
     <AuthContext.Provider
@@ -25,6 +26,7 @@ const AuthContextProvider = (props) => {
         token: null,
         login: login,
         logout: logout,
+        setIsLoggedIn: setIsLoggedIn,
         setShowModal: setShowModal,
       }}
     >

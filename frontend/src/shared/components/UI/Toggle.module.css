@@ -30,14 +30,17 @@
   transition: 2s;
   color: white;
   border: 2px solid pink;
+  background-color: #2196f3;
 }
 .area-ch {
   justify-content: flex-end;
 }
+.area-enter {
+  background-color: #a4be7b;
+}
 .area-enter-active {
   background-color: #2196f3;
 }
-
 .area-enter-done {
   background-color: #2196f3;
 }
@@ -56,29 +59,31 @@
   content: "";
   height: 26px;
   width: 26px;
-  left: 4px;
+  left: 32px;
   bottom: 4px;
   background-color: white;
   border-radius: 6px;
 }
-
+.slider-enter {
+  transform: translateX(-26px);
+}
 .slider-enter-active {
-  transform: translateX(26px);
+  transform: translateX(0);
   transition: all 400ms;
 }
 
 .slider-enter-done {
-  transform: translateX(26px);
+  transform: translateX(0);
 }
 .slider-exit {
-  transform: translateX(26px);
+  transform: translateX(0);
 }
 .slider-exit-active {
-  transform: translateX(0);
+  transform: translateX(-26px);
   transition: all 400ms;
 }
 .slider-exit-done {
-  transform: translateX(0);
+  transform: translateX(-26px);
 }
 
 /* Rounded sliders */

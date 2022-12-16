@@ -14,7 +14,7 @@ function useAuth() {
     setIsLoggedIn(false);
   }, []);
 
-  return { userId, isLoggedIn, login, logout };
+  return { userId, isLoggedIn, setIsLoggedIn, login, logout };
 }
 
 export default useAuth;

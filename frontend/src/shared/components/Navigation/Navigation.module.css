@@ -37,8 +37,9 @@
   font: inherit;
   margin: 0 1.25rem 0.5rem;
 }
-
-
+.ch{
+  margin-left: 6px;
+}
 @media (min-width: 768px) {
   .navigation__icon {
     margin-bottom: 0;

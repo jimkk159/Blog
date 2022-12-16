@@ -1,6 +1,31 @@
-.user-item__image {
-    width: 3rem;
-    height: 3rem;
-    margin-right: 1rem;
-    margin-bottom: 0.25rem;
-  }
+.user-avatar {
+  width: 3rem;
+  height: 3rem;
+  margin-right: 1rem;
+  margin-bottom: 0.25rem;
+  position: relative;
+}
+.user-img {
+  position:absolute;
+}
+.user-img-enter {
+  opacity: 0;
+}
+
+.user-img-enter-active {
+  opacity: 1;
+  transition: all 2s;
+}
+
+.user-img-exit {
+  opacity: 1;
+}
+
+.user-img-exit-active {
+  opacity: 0;
+  transition: all 2s;
+}
+
+.user-img-exit-done {
+  opacity: 0;
+}
