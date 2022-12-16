@@ -5,14 +5,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/auth-contex";
 
 //Custom Component
+import Theme from "./Theme";
+import Search from "./Search";
+import Languae from "./Laguage";
 import NavigationHeader from "./NavigationHeader";
 import NavigationItems from "./NavigationItems";
-import UserAvatar from "../../../users/components/UserAvatar";
-import Languae from "./Laguage";
-import Search from "./Search";
 import Hamburger from "../UI/Hamburger";
 import NavigationSideDrawer from "./NavigationSideDrawer/SideDrawer";
 import AuthModal from "../../../users/components/AuthModal";
+import UserAvatar from "../../../users/components/UserAvatar";
 
 //Custom Hook
 import useScroll from "../../hooks/scorll-hook";
@@ -25,6 +26,7 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
+  const [isSearch, setIsSearch] = useState(true);
   const navigate = useNavigate();
 
   const { scrollPosition, isScrollingUp } = useScroll();
@@ -43,20 +45,28 @@ function Navigation(props) {
   };
 
   //Show Auth Modal
-  const showAuth = () => {
+  const showAuthHandler = () => {
     if (!isLoggedIn) {
       setShowModal(true);
     }
+  };
+
+  //Show Search Bar
+  const toggleSearchHandler = () => {
+    setIsSearch((prev) => !prev);
+  };
+
+  const closeSearchHandler = () => {
+    setIsSearch(false);
   };
 
   //Window Size Change
   useEffect(() => {
     setIsDrawer(false);
   }, [matches, navigate]);
-
   return (
     <>
-      {isDrawer && <NavigationSideDrawer onClick={closeDrawerHandler} />}
+      <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
       {!isLoggedIn && showModal && matches && (
         <AuthModal showModal={showModal} setShowModal={setShowModal} />
       )}
@@ -66,11 +76,17 @@ function Navigation(props) {
           <h1 className={classes.navigation__icon}>
             <Link to="/">Blog</Link>
           </h1>
-          <Search className={classes["navigation__search"]} />
+          <Search
+            className={`${classes["navigation__search"]} ${classes["navigation__search-input"]}`}
+            onToggle={toggleSearchHandler}
+            onCancel={closeSearchHandler}
+            showSearch={isSearch}
+          />
+          <Theme className={classes["navigation__theme"]}>Theme</Theme>
           <Languae className={classes["navigation__pc__language"]}>
-            EN/CH
+            EN CH
           </Languae>
-          {matches && <UserAvatar onClick={showAuth} />}
+          {matches && <UserAvatar onClick={showAuthHandler} />}
         </div>
         <hr />
         {showNavItems && (

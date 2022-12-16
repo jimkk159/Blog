@@ -1,10 +1,17 @@
 import React from "react";
 
+//Custom Component
+import Toggle from "../UI/Toggle";
+
 //CSS
-import classes from './Laguage.module.css';
+import classes from "./Laguage.module.css";
 
 function Languae(props) {
-  return <button className={`${classes['language-setting']} ${props.className}`}>{props.children}</button>;
+  return (
+    <div className={props.className}>
+      <Toggle className={`${props.className}`}>{props.children}</Toggle>
+    </div>
+  );
 }
 
 export default Languae;

@@ -20,23 +20,26 @@
 
 .navigation__search {
   margin-right: 0rem;
-  margin-bottom: 0.75rem;
+}
+
+.navigation__search-input {
+  margin-top: 0.5rem;
+  margin-right: 0.75rem;
+}
+
+.navigation__theme {
+  margin-top: 0.5rem;
 }
 
 .navigation__pc__language {
   cursor: pointer;
-  border: 1px solid transparent;
   background: transparent;
   font: inherit;
-  margin: 1rem;
+  margin: 0 1.25rem 0.5rem;
 }
 
-.navigation__pc__language {
-  color: white;
-}
 
 @media (min-width: 768px) {
-
   .navigation__icon {
     margin-bottom: 0;
   }

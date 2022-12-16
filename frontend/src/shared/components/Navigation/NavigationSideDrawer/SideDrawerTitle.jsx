@@ -34,7 +34,6 @@ function SideDrawerTitle(props) {
       props.onCancel();
     }
   };
-  console.log(classes["side-drawer__anonymous-avatar"]);
   return (
     <>
       <div className={classes["side-drawer__title"]}>
