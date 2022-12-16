@@ -26,7 +26,7 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isEnglish, setIsEnglish] = useState(true);
-  const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [isSearch, setIsSearch] = useState(true);
   const navigate = useNavigate();
 
@@ -50,6 +50,8 @@ function Navigation(props) {
     if (!isLoggedIn) {
       setShowModal(true);
     }
+    console.log(123);
+    console.log(!isLoggedIn && showModal && matches);
   };
 
   //Show Search Bar
@@ -64,7 +66,6 @@ function Navigation(props) {
   //Toggle Language
   const toggleLanguageHandler = () => {
     setIsEnglish((prev) => !prev);
-    setIsLoggedIn((prev) => !prev);
   };
 
   //Window Size Change
@@ -75,9 +76,12 @@ function Navigation(props) {
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
-      {!isLoggedIn && showModal && matches && (
-        <AuthModal showModal={showModal} setShowModal={setShowModal} />
-      )}
+
+      <AuthModal
+        show={!isLoggedIn && showModal && matches}
+        setShowModal={setShowModal}
+      />
+
       <NavigationHeader>
         <div className={classes.navigation__title}>
           <Hamburger onClick={openDrawerHandler} />

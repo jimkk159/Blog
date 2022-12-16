@@ -10,7 +10,6 @@ export const AuthContext = createContext({
   token: null,
   login: () => {},
   logout: () => {},
-  setIsLoggedIn: () => {},
   setShowModal: () => {},
 });
 
@@ -26,7 +25,6 @@ const AuthContextProvider = (props) => {
         token: null,
         login: login,
         logout: logout,
-        setIsLoggedIn: setIsLoggedIn,
         setShowModal: setShowModal,
       }}
     >

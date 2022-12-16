@@ -8,7 +8,7 @@ import Modal from "../../shared/components/UI/Modal";
 import useMediaQuery from "../../shared/hooks/media-query-hook";
 
 function AuthModal(props) {
-  const { showModal, setShowModal } = props;
+  const { show, setShowModal } = props;
   const { matches } = useMediaQuery("min", "768");
 
   //Custom Modal Style
@@ -31,11 +31,7 @@ function AuthModal(props) {
   };
 
   return (
-    <Modal
-      show={showModal}
-      onCancel={closeModalHandler}
-      style={customModalStyle}
-    >
+    <Modal show={show} onCancel={closeModalHandler} style={customModalStyle}>
       <AuthForm onSubmit={submitHandler} isLogin={props.isLogin} />
     </Modal>
   );
