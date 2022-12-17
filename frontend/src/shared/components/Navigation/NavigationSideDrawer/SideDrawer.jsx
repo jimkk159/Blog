@@ -7,7 +7,6 @@ import SideDrawerTitle from "./SideDrawerTitle";
 
 //CSS
 import classes from "./SideDrawer.module.css";
-// import "./SideDrawer.css";
 
 function NavigationSideDrawer(props) {
   return (

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
 //Custom Context
-import { AuthContext } from "../../shared/context/auth-contex";
+import { AuthContext } from "../../shared/context/auth-context";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";

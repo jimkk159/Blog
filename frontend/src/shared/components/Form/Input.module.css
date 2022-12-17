@@ -23,7 +23,7 @@
   width: 100%;
   font: inherit;
   border: 1px solid #ccc;
-  background: #f8f8f8;
+  background-color: #f8f8f8;
   padding: 0.15rem 0.25rem;
 }
 
@@ -31,7 +31,7 @@
 .input-control input:focus,
 .input-control textarea:focus {
   outline: none;
-  background: #ebebeb;
+  background-color: #ebebeb;
   border-color: #510077;
 }
 
@@ -47,5 +47,5 @@
 .form-invalid input,
 .form-invalid textarea {
   border-color: red;
-  background: #ffd1d1;
+  background-color: #ffd1d1;
 }

@@ -10,7 +10,8 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import crossImage from "../../../../img/x-symbol.png";
 
 //Custom Context
-import { AuthContext } from "../../../context/auth-contex";
+import { AuthContext } from "../../../context/auth-context";
+import { ThemeContext } from "../../../context/theme-context";
 
 //Custom Component
 import NavigationItem from "../NavigationItem";
@@ -23,6 +24,7 @@ import useUuid from "../../../hooks/uuid-hook";
 import classes from "./SideDrawerTitle.module.css";
 
 function SideDrawerTitle(props) {
+  const { isDarkMode } = useContext(ThemeContext);
   const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const uuidKeys = useUuid(3);
@@ -36,10 +38,19 @@ function SideDrawerTitle(props) {
   };
   return (
     <>
-      <div className={classes["side-drawer__title"]}>
-        <div className={classes["navigation__top_padding"]} />
+      <div
+        className={`${classes["side-drawer__title"]} 
+        `}
+      >
         <div
-          className={classes["side-drawer__auth"]}
+          className={`${classes["navigation__top_padding"]} ${
+            isDarkMode ? classes["dark"] : classes["light"]
+          }`}
+        />
+        <div
+          className={`${classes["side-drawer__auth"]} ${
+            isDarkMode ? classes["dark"] : classes["light"]
+          }`}
           style={isLoggedIn ? { justifyContent: "space-between" } : null}
         >
           <UserAvatar

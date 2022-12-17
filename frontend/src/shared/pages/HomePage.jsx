@@ -5,7 +5,7 @@ import Card from "../components/UI/Card";
 
 function HomePage() {
   return (
-    <Card className={"page"}>
+    <Card>
       <h1>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Nunc consequat

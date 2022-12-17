@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { BsFillMoonFill } from "react-icons/bs";
 import { BsSunFill } from "react-icons/bs";
+
+//Custom Context
+import { ThemeContext } from "../../context/theme-context";
 
 //Custom Component
 import Circle from "../UI/Circle";
@@ -9,32 +12,18 @@ import Circle from "../UI/Circle";
 import classes from "./Theme.module.css";
 
 function Theme(props) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const switchThemeHandler = () => {
-    setIsDarkMode((prevMode) => !prevMode);
-    if (props.onClick) {
-      props.onClick();
-    }
-  };
-
-  //Initial Theme
-  const { isDarkMode: initialThemeMode } = props;
-  useEffect(() => {
-    if (initialThemeMode) {
-      setIsDarkMode(true);
-    }
-  }, [initialThemeMode]);
+  const {isDarkMode, switchMode} = useContext(ThemeContext);
 
   return (
     <Circle
-      className={`${props.className} ${classes.theme}`}
+      className={`${props.className} ${classes.theme} ${isDarkMode? classes["dark"]:classes["light"]}`}
       styles={`${props.styles}`}
-      onClick={switchThemeHandler}
+      onClick={switchMode}
     >
       {isDarkMode ? (
-        <BsFillMoonFill className={classes.icon} />
+        <BsFillMoonFill className={`${classes.icon}`} />
       ) : (
-        <BsSunFill className={classes.icon} />
+        <BsSunFill className={`${classes.icon} ${isDarkMode? null:classes["icon-light"]}`} />
       )}
       {props.children}
     </Circle>

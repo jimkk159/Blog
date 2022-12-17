@@ -1,19 +1,24 @@
 import React, { useContext } from "react";
-import Avatar from "../../shared/components/UI/Avatar";
+import { CSSTransition } from "react-transition-group";
 
 //Image
 import anonymousUser from "../../img/anonymous_user.png";
 
 //Custom Context
-import { AuthContext } from "../../shared/context/auth-contex";
+import { AuthContext } from "../../shared/context/auth-context";
+import { ThemeContext } from "../../shared/context/theme-context";
+
+//Custom Component
+import Avatar from "../../shared/components/UI/Avatar";
 
 //CSS
 import classes from "./UserAvatar.module.css";
-import { CSSTransition } from "react-transition-group";
 
 function UserAvatar(props) {
   const auth = useContext(AuthContext);
-  const userImage = "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
+  const { isDarkMode } = useContext(ThemeContext);
+  const userImage =
+    "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
   return (
     <div
       className={`${classes["user-avatar"]} ${props.className}`}
@@ -37,7 +42,9 @@ function UserAvatar(props) {
         unmountOnExit
       >
         <Avatar
-          className={classes["user-img"]}
+          className={`${classes["user-img"]} ${
+            isDarkMode ? classes["avatar-dark"] : classes["avatar-light"]
+          }`}
           image={userImage}
           alt="beauty"
         />

@@ -7,7 +7,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 //Custom Context
-import { AuthContext } from "../../context/auth-contex";
+import { AuthContext } from "../../context/auth-context";
 
 //Custom Component
 import NavigationItem from "./NavigationItem";

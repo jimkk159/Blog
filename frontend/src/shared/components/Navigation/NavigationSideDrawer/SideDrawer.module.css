@@ -3,11 +3,6 @@
   padding-top: 2rem;
 }
 
-.navigation__drawer__title {
-  position: relative;
-  background-color: #ff0055;
-}
-
 .navigation__drawer ul {
   align-items: flex-start;
 }
@@ -23,5 +18,4 @@
   margin-top: 3px;
   margin-right: 1rem;
   transform: scale(1.5);
-  color: purple;
 }

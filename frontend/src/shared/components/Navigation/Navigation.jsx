@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 //Custom Context
-import { AuthContext } from "../../context/auth-contex";
+import { AuthContext } from "../../context/auth-context";
 
 //Custom Component
 import Theme from "./Theme";
@@ -26,8 +26,8 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isEnglish, setIsEnglish] = useState(true);
-  const { isLoggedIn } = useContext(AuthContext);
   const [isSearch, setIsSearch] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const { scrollPosition, isScrollingUp } = useScroll();
@@ -50,8 +50,6 @@ function Navigation(props) {
     if (!isLoggedIn) {
       setShowModal(true);
     }
-    console.log(123);
-    console.log(!isLoggedIn && showModal && matches);
   };
 
   //Show Search Bar

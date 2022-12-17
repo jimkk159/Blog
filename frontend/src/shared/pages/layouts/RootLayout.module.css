@@ -1,0 +1,10 @@
+.root{
+    padding-top: 10rem;
+}
+
+.light{
+    background-color: #868a85;
+}
+.dark{
+    background-color: black;
+}

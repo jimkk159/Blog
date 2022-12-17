@@ -5,12 +5,9 @@
   margin-bottom: 0.25rem;
   position: relative;
 }
+
 .user-img {
   position: absolute;
-}
-
-.user-img img {
-  border: 2px solid pink;
 }
 
 .user-img-enter {
@@ -33,4 +30,12 @@
 
 .user-img-exit-done {
   opacity: 0;
+}
+
+.avatar-light img {
+  border: 2px solid pink;
+}
+
+.avatar-dark img {
+  border: 2px solid #ebebeb;
 }

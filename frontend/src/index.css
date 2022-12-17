@@ -10,11 +10,10 @@ html {
 
 body {
   margin: 0;
-  background: white;
+  background-color: white;
 }
 
 main {
-  margin-top: 10rem;
   min-height: 80vh;
   max-width: 1024px;
 }
@@ -41,11 +40,6 @@ footer {
 .error {
   text-align: center;
   color: white;
-}
-
-.page {
-  min-height: calc(100vh - 10rem);
-  color: red;
 }
 
 @font-face {

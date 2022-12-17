@@ -24,7 +24,7 @@
   cursor: pointer;
   border: 1px solid transparent;
   color: #292929;
-  background: transparent;
+  background-color: transparent;
   font: inherit;
 }
 
@@ -42,7 +42,6 @@
 .nav-icon {
   bottom: 0;
   padding-bottom: 3px;
-  color: white;
 }
 
 @media (min-width: 768px) {

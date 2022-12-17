@@ -5,5 +5,11 @@
   border-radius: 6px;
   padding: 1rem;
   overflow: hidden;
-  background: white;
+}
+.dark {
+  background-color: #444;
+  color: white;
+}
+.light {
+  background-color: white;
 }

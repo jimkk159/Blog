@@ -20,6 +20,7 @@
 
 .navigation__search {
   margin-right: 0rem;
+  align-self: center;
 }
 
 .navigation__search-input {
@@ -29,17 +30,23 @@
 
 .navigation__theme {
   margin-top: 0.5rem;
+  margin-right: 0.5rem;
+  margin-left: 0.5rem;
+  align-self: center;
 }
 
 .navigation__pc__language {
   cursor: pointer;
-  background: transparent;
+  background-color: transparent;
   font: inherit;
-  margin: 0 1.25rem 0.5rem;
+  margin: 0.5rem 3rem 0 0.75rem;
+  align-self: center;
 }
+
 .ch{
   margin-left: 6px;
 }
+
 @media (min-width: 768px) {
   .navigation__icon {
     margin-bottom: 0;

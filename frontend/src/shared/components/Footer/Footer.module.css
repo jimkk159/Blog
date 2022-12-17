@@ -1,7 +1,6 @@
 /* Foot Container */
 
 .foot-container {
-  background-color: #d65a31;
   text-align: center;
   padding: 2% 0;
   margin-top: 2rem;
@@ -11,4 +10,11 @@
 .foot-container p {
   font-size: 10px;
   color: #fff;
+}
+
+.light {
+  background-color: #d65a31;
+}
+.dark {
+  background-color: #1E1E1E;
 }

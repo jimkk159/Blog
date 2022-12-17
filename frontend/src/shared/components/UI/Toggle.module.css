@@ -3,7 +3,7 @@
   position: relative;
   display: inline-block;
   width: 64px;
-  height: 34px;
+  height: 32px;
 }
 
 /* Hide default HTML checkbox */
@@ -28,10 +28,20 @@
   overflow: hidden;
   -webkit-transition: 2s;
   transition: 2s;
+}
+
+.area-light{
   color: white;
   border: 2px solid pink;
+}
+
+.area-light-ch{
+  background-color: #a4be7b;
+}
+.area-light-en{
   background-color: #2196f3;
 }
+
 .area-ch {
   justify-content: flex-end;
 }
@@ -54,10 +64,16 @@
   background-color: #a4be7b;
 }
 
+.area-dark{
+  color: #ababab;
+  border: 2px solid #ebebeb;
+  background-color: #232323;
+}
+
 .slider {
   position: absolute;
   content: "";
-  height: 26px;
+  height: 24px;
   width: 26px;
   left: 32px;
   bottom: 4px;

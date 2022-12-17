@@ -1,6 +1,6 @@
 .hamburger {
   height: 3rem;
-  background: pink;
+  
   border: none;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,15 @@
   width: 3rem;
   height: 3px;
   border-radius: 1px;
-  background: white;
+  background-color: white;
+}
+
+.dark{
+  background-color: #1E1E1E;
+}
+
+.light{
+  background-color: #d8678d;
 }
 
 @media (min-width: 768px) {
