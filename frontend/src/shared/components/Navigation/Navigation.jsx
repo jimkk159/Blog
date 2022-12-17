@@ -27,7 +27,7 @@ function Navigation(props) {
   const [showModal, setShowModal] = useState(false);
   const [isEnglish, setIsEnglish] = useState(true);
   const { isLoggedIn } = useContext(AuthContext);
-  const [isSearch, setIsSearch] = useState(true);
+  const [isSearch, setIsSearch] = useState(false);
   const navigate = useNavigate();
 
   const { scrollPosition, isScrollingUp } = useScroll();

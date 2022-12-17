@@ -7,7 +7,7 @@ import {
 
 //PAGE
 import RootLayout from "../shared/pages/layouts/RootLayout";
-import BlogLayout from "../shared/pages/layouts/RootLayout";
+import BlogLayout from "../shared/pages/layouts/BlogLayout";
 import HomePage from "../shared/pages/HomePage";
 import AboutPage from "../shared/pages/AboutPage";
 import ErrorPage from "../shared/pages/ErrorPage";
