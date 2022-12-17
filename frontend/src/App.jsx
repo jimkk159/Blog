@@ -7,9 +7,6 @@ import AuthContextProvider from "./shared/context/auth-contex";
 //Route
 import RouteCreate from "./route/route";
 
-//CSS
-import "./App.module.css";
-
 function App() {
   const router = RouteCreate();
   return (

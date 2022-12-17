@@ -6,8 +6,13 @@
   position: relative;
 }
 .user-img {
-  position:absolute;
+  position: absolute;
 }
+
+.user-img img {
+  border: 2px solid pink;
+}
+
 .user-img-enter {
   opacity: 0;
 }

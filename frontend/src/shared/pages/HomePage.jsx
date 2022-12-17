@@ -3,9 +3,6 @@ import React from "react";
 //Custom Component
 import Card from "../components/UI/Card";
 
-//CSS
-import "../../App.module.css";
-
 function HomePage() {
   return (
     <Card className={"page"}>

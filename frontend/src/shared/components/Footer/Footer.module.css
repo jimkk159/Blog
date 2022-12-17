@@ -1,9 +1,6 @@
 /* Foot Container */
 
 .foot-container {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
   background-color: #d65a31;
   text-align: center;
   padding: 2% 0;
