@@ -11,10 +11,6 @@ html {
 body {
   margin: 0;
   background: white;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 5px;
-  padding-right: 5px;
   max-width: 1024px;
 }
 
@@ -33,13 +29,6 @@ body {
 .page {
   min-height: calc(100vh - 10rem);
   color: red;
-}
-
-@media screen and (min-width: 768px) {
-  body {
-    padding-right: 20px !important;
-    padding-left: 20px !important;
-  }
 }
 
 @font-face {
