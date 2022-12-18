@@ -64,8 +64,6 @@ function SideDrawerTitle(props) {
             }
             onClick={showAuth}
           />
-          <div className={classes["side-drawer__padding"]}></div>
-
           <NavigationItem
             key={"sideDrawer-login_" + uuidKeys[0]}
             type="link"
