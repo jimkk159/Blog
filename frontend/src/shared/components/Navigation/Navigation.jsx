@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 
 //Custom Context
 import { AuthContext } from "../../context/auth-context";
+import { ThemeContext } from "../../context/theme-context";
+import { LanguageContext } from "../../context/language-context";
 
 //Custom Component
 import Theme from "./Theme";
@@ -25,11 +27,12 @@ import classes from "./Navigation.module.css";
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isEnglish, setIsEnglish] = useState(true);
   const [isSearch, setIsSearch] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
+  const { isEnglish, language, toggleLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
-
+  console.log(isEnglish, language.login);
   const { scrollPosition, isScrollingUp } = useScroll();
   const { matches } = useMediaQuery("min", "768");
 
@@ -61,11 +64,6 @@ function Navigation(props) {
     setIsSearch(false);
   };
 
-  //Toggle Language
-  const toggleLanguageHandler = () => {
-    setIsEnglish((prev) => !prev);
-  };
-
   //Window Size Change
   useEffect(() => {
     setIsDrawer(false);
@@ -92,11 +90,13 @@ function Navigation(props) {
             onCancel={closeSearchHandler}
             showSearch={isSearch}
           />
-          <Theme className={classes["navigation__theme"]}>Theme</Theme>
+          <Theme className={classes["navigation__theme"]}>
+            {isDarkMode ? language.darkMode : language.normalMode}
+          </Theme>
           <Languae
             className={classes["navigation__pc__language"]}
             show={isEnglish}
-            onToggle={toggleLanguageHandler}
+            onToggle={toggleLanguage}
           >
             <p>EN</p>
             <p className={classes.ch}>CH</p>

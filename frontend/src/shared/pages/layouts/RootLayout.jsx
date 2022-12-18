@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Outlet } from "react-router-dom";
 
 //Image
-import cubesImage from "../../../img/cubes.png";
+import cubesImage from "../../../assets/img/cubes.png";
 
 //Custom Context
 import { ThemeContext } from "../../context/theme-context.js";

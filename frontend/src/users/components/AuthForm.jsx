@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-context";
+import { LanguageContext } from "../../shared/context/language-context";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";
@@ -34,9 +35,10 @@ const Fake_User = [
 
 function AuthForm(props) {
   const auth = useContext(AuthContext);
+  const language = useContext(LanguageContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const uuidKeys = useUuid(3);
 
+  const uuidKeys = useUuid(3);
   const { formState, inputHandler, setFormData } = useForm(
     {
       [emailId]: { value: "", isValid: false },
@@ -88,7 +90,7 @@ function AuthForm(props) {
 
   return (
     <Card className={classes.authentication}>
-      <h2>{`${isLoginMode ? "Login" : "SingUp"}`}</h2>
+      <h2>{`${isLoginMode ? language.login : language.signup}`}</h2>
       <hr />
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (
@@ -96,36 +98,42 @@ function AuthForm(props) {
             key={"username_" + uuidKeys[0]}
             id="username"
             type="text"
-            label="Name"
+            label={language.name}
             onInput={inputHandler}
             validators={[VALIDATOR_REQUIRE()]}
-            errorMessage="Please enter your name."
+            errorMessage={language.validName}
           />
         )}
-        {!isLoginMode && <p>upload Image</p>}
+        {!isLoginMode && <p>{language.uploadImage}</p>}
         <Input
           key={"email_" + uuidKeys[1]}
           id={emailId}
           type="text"
-          label="E-Mail"
+          label={language.email}
           onInput={inputHandler}
           validators={[VALIDATOR_EMAIL()]}
-          errorMessage="Please enter a valid email."
+          errorMessage={language.validEmail}
         />
         <Input
           key={"password_" + uuidKeys[2]}
           id={passwordId}
           type="password"
-          label="Password"
+          label={language.password}
           onInput={inputHandler}
           validators={[VALIDATOR_MINLENGTH(6)]}
-          errorMessage="Enter at least 6 characters."
+          errorMessage={language.validPassword}
         />
-        <Button type="submit" disabled={!formState.isValid} content="Submit" />
+        <Button
+          type="submit"
+          disabled={!formState.isValid}
+          content={language.submit}
+        />
       </form>
       <Button
         onClick={switchModeHandler}
-        content={`Switch to ${isLoginMode ? "SingUp" : "Login"}`}
+        content={`${language.switchTo}${
+          isLoginMode ? language.login : language.signup
+        }${language.loginSuffix}`}
       />
     </Card>
   );

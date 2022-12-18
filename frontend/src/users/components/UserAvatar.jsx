@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { CSSTransition } from "react-transition-group";
 
 //Image
-import anonymousUser from "../../img/anonymous_user.png";
+import anonymousUser from "../../assets/img/anonymous_user.png";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-context";

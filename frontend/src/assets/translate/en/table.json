@@ -1,0 +1,20 @@
+{
+  "home": "HOME",
+  "about": "ABOUT",
+  "blog": "BLOG",
+  "login": "LOGIN",
+  "logout": "LOGOUT",
+  "signup": "SIGNUP",
+  "switchTo": "Switch to ",
+  "loginSuffix": "",
+  "normalMode": "Theme",
+  "darkMode": "Theme",
+  "name": "Name",
+  "email": "E-Mail",
+  "password": "Password",
+  "uploadImage":"upload Image",
+  "submit":"Submit",
+  "validName":"Please enter your name.",
+  "validEmail":"Please enter a valid email.",
+  "validPassword":"Enter at least 6 characters."
+}

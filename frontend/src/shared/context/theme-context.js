@@ -1,7 +1,7 @@
 import React, { createContext, useCallback, useState } from "react";
 
 export const ThemeContext = createContext({
-  darkMode: false,
+  isDarkMode: false,
   switch: () => {},
 });
 

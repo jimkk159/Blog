@@ -7,11 +7,12 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 
 //Image
-import crossImage from "../../../../img/x-symbol.png";
+import crossImage from "../../../../assets/img/x-symbol.png";
 
 //Custom Context
 import { AuthContext } from "../../../context/auth-context";
 import { ThemeContext } from "../../../context/theme-context";
+import { LanguageContext } from "../../../context/language-context";
 
 //Custom Component
 import NavigationItem from "../NavigationItem";
@@ -25,8 +26,10 @@ import classes from "./SideDrawerTitle.module.css";
 
 function SideDrawerTitle(props) {
   const { isDarkMode } = useContext(ThemeContext);
+  const { language } = useContext(LanguageContext);
   const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
   const uuidKeys = useUuid(3);
 
   //Auth
@@ -68,7 +71,7 @@ function SideDrawerTitle(props) {
             type="link"
             to="/auth"
             show={!isLoggedIn}
-            content="LogIn"
+            content={language.login}
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
             navInitialState={{ toLogin: true }}
             onClick={props.onCancel}
@@ -80,7 +83,7 @@ function SideDrawerTitle(props) {
             type="link"
             to="/auth"
             show={!isLoggedIn}
-            content="Signup"
+            content={language.signup}
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
             navInitialState={{ toLogin: false }}
             onClick={props.onCancel}
@@ -92,7 +95,7 @@ function SideDrawerTitle(props) {
             type="button"
             onClick={logout}
             show={isLoggedIn}
-            content="LogOut"
+            content={language.logout}
             className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}
             icon={<LogoutIcon />}
             iconClassName={classes["side-drawer__nav-icon"]}

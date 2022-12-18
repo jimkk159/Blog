@@ -42,6 +42,10 @@ footer {
   color: white;
 }
 
+.page {
+  /* min-height: 100vh; */
+}
+
 @font-face {
   font-family: "Muli-bold";
   src: url(./shared/fonts/Muli-Bold.ttf) format("truetype");
