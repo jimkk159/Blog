@@ -9,7 +9,11 @@ import Toggle from "../UI/Toggle";
 function Languae(props) {
   return (
     <div className={props.className}>
-      <Toggle show={props.show} onToggle={props.onToggle}>
+      <Toggle
+        show={props.show}
+        onToggle={props.onToggle}
+        isDarkMode={props.isDarkMode}
+      >
         {props.children}
       </Toggle>
     </div>

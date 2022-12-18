@@ -1,10 +1,7 @@
 .button {
   font: inherit;
   padding: 0.5rem 1.5rem;
-  border: 1px solid #ff0055;
   border-radius: 4px;
-  background-color: #ff0055;
-  color: white;
   cursor: pointer;
   text-decoration: none;
   display: inline-block;
@@ -21,4 +18,17 @@
   color: #979797;
   border-color: #ccc;
   cursor: not-allowed;
+}
+
+.light{
+  border: 1px solid #ff0055;
+  background-color: #ff0055;
+  color: white;
+}
+
+.dark{
+  border: 1px solid #C38FFF;
+  background-color: #C38FFF;
+  color: black;
+  font-weight: bold;
 }

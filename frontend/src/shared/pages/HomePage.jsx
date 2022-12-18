@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
+
+//Custom Context
+import { ThemeContext } from "../context/theme-context";
 
 //Custom Component
 import Card from "../components/UI/Card";
 
 function HomePage() {
+  const { isDarkMode } = useContext(ThemeContext);
   return (
-    <Card className="Page">
+    <Card className="Page" isDarkMode={isDarkMode}>
       <h1>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Nunc consequat

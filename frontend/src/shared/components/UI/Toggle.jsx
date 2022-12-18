@@ -1,14 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CSSTransition } from "react-transition-group";
-
-//Custom Context
-import { ThemeContext } from "../../context/theme-context";
 
 //CSS
 import classes from "./Toggle.module.css";
 
 function Toggle(props) {
-  const { isDarkMode } = useContext(ThemeContext);
   const toggleTime = props.toggleTime ? props.toggleTime : 400;
 
   //Type
@@ -52,7 +48,7 @@ function Toggle(props) {
       >
         <span
           className={`${area_class} ${
-            isDarkMode ? classes["area-dark"] : classes["area-light"]
+            props.isDarkMode ? classes["area-dark"] : classes["area-light"]
           }`}
         >
           {props.children}

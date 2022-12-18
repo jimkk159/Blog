@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-context";
+import { ThemeContext } from "../../shared/context/theme-context";
 import { LanguageContext } from "../../shared/context/language-context";
 
 //Custom Component
@@ -35,6 +36,7 @@ const Fake_User = [
 
 function AuthForm(props) {
   const auth = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -89,7 +91,7 @@ function AuthForm(props) {
   };
 
   return (
-    <Card className={classes.authentication}>
+    <Card className={classes.authentication} isDarkMode={isDarkMode}>
       <h2>{`${isLoginMode ? language.login : language.signup}`}</h2>
       <hr />
       <form onSubmit={authSubmitHandler}>
@@ -127,6 +129,7 @@ function AuthForm(props) {
           type="submit"
           disabled={!formState.isValid}
           content={language.submit}
+          isDarkMode={isDarkMode}
         />
       </form>
       <Button
@@ -134,6 +137,7 @@ function AuthForm(props) {
         content={`${language.switchTo}${
           isLoginMode ? language.login : language.signup
         }${language.loginSuffix}`}
+        isDarkMode={isDarkMode}
       />
     </Card>
   );

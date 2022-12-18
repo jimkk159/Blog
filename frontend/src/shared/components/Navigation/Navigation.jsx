@@ -29,7 +29,7 @@ function Navigation(props) {
   const [showModal, setShowModal] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
-  const { isDarkMode } = useContext(ThemeContext);
+  const { isDarkMode, switchMode } = useContext(ThemeContext);
   const { isEnglish, language, toggleLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
   const { scrollPosition, isScrollingUp } = useScroll();
@@ -77,9 +77,9 @@ function Navigation(props) {
         setShowModal={setShowModal}
       />
 
-      <NavigationHeader>
+      <NavigationHeader isDarkMode={isDarkMode}>
         <div className={classes.navigation__title}>
-          <Hamburger onClick={openDrawerHandler} />
+          <Hamburger onClick={openDrawerHandler} isDarkMode={isDarkMode} />
           <h1 className={classes.navigation__icon}>
             <Link to="/">Blog</Link>
           </h1>
@@ -88,19 +88,27 @@ function Navigation(props) {
             onToggle={toggleSearchHandler}
             onCancel={closeSearchHandler}
             showSearch={isSearch}
+            isDarkMode={isDarkMode}
           />
-          <Theme className={classes["navigation__theme"]}>
+          <Theme
+            className={classes["navigation__theme"]}
+            isDarkMode={isDarkMode}
+            onSwitch={switchMode}
+          >
             {isDarkMode ? language.darkMode : language.normalMode}
           </Theme>
           <Languae
             className={classes["navigation__pc__language"]}
             show={isEnglish}
             onToggle={toggleLanguage}
+            isDarkMode={isDarkMode}
           >
             <p>EN</p>
             <p className={classes.ch}>CH</p>
           </Languae>
-          {matches && <UserAvatar onClick={showAuthHandler} />}
+          {matches && (
+            <UserAvatar onClick={showAuthHandler} isDarkMode={isDarkMode} />
+          )}
         </div>
         <hr />
         {showNavItems && (

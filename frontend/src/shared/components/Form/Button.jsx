@@ -8,7 +8,7 @@ function Button(props) {
 
   return (
     <button
-      className={`${classes.button} ${props.className}`}
+      className={`${classes.button} ${props.isDarkMode?classes.dark:classes.light} ${props.className}`}
       type={props.type}
       onClick={props.onClick}
       disabled={props.disabled}

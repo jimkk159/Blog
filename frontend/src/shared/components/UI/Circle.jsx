@@ -3,7 +3,7 @@ import React from "react";
 //CSS
 import classes from "./Circle.module.css";
 
-//For Card UI
+//For Circle UI
 function Circle(props) {
   if (props.content)
     return (

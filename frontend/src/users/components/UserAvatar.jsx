@@ -6,7 +6,6 @@ import anonymousUser from "../../assets/img/anonymous_user.png";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-context";
-import { ThemeContext } from "../../shared/context/theme-context";
 
 //Custom Component
 import Avatar from "../../shared/components/UI/Avatar";
@@ -16,7 +15,6 @@ import classes from "./UserAvatar.module.css";
 
 function UserAvatar(props) {
   const auth = useContext(AuthContext);
-  const { isDarkMode } = useContext(ThemeContext);
   const userImage =
     "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
   return (
@@ -42,7 +40,7 @@ function UserAvatar(props) {
         >
           <Avatar
             className={`${classes["user-img"]} ${
-              isDarkMode ? classes["avatar-dark"] : classes["avatar-light"]
+              props.isDarkMode ? classes["avatar-dark"] : classes["avatar-light"]
             }`}
             image={userImage}
             alt="beauty"
@@ -54,3 +52,5 @@ function UserAvatar(props) {
 }
 
 export default UserAvatar;
+
+//reference:https://stackoverflow.com/questions/5445491/height-equal-to-dynamic-width-css-fluid-layout

@@ -1,9 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BsFillMoonFill } from "react-icons/bs";
 import { BsSunFill } from "react-icons/bs";
-
-//Custom Context
-import { ThemeContext } from "../../context/theme-context";
 
 //Custom Component
 import Circle from "../UI/Circle";
@@ -12,18 +9,17 @@ import Circle from "../UI/Circle";
 import classes from "./Theme.module.css";
 
 function Theme(props) {
-  const {isDarkMode, switchMode} = useContext(ThemeContext);
 
   return (
     <Circle
-      className={`${props.className} ${classes.theme} ${isDarkMode? classes["dark"]:classes["light"]}`}
+      className={`${props.className} ${classes.theme} ${props.isDarkMode? classes["dark"]:classes["light"]}`}
       styles={`${props.styles}`}
-      onClick={switchMode}
+      onClick={props.onSwitch}
     >
-      {isDarkMode ? (
+      {props.isDarkMode ? (
         <BsFillMoonFill className={`${classes.icon}`} />
       ) : (
-        <BsSunFill className={`${classes.icon} ${isDarkMode? null:classes["icon-light"]}`} />
+        <BsSunFill className={`${classes.icon} ${props.isDarkMode? null:classes["icon-light"]}`} />
       )}
       {props.children}
     </Circle>
