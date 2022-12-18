@@ -18,7 +18,6 @@ import classes from "./NavigationItem.module.css";
  */
 function NavigationItem(props) {
   const inputContent = props.content ? props.content : props.children;
-
   // Show Item or not
   if (props.show === false) {
     return;
@@ -27,7 +26,13 @@ function NavigationItem(props) {
   // Type Button
   if (props.type === "button") {
     return (
-      <div className={`${props.className} ${classes["nav-link"]} `}>
+      <div
+        className={`${props.className} ${classes["nav-link"]} ${
+          props.isDarkMode
+            ? classes["nav-link-dark"]
+            : classes["nav-link-light"]
+        }`}
+      >
         <NavIcon
           icon={props.icon}
           className={`${classes["nav-icon"]} ${props.iconClassName} `}
@@ -42,7 +47,13 @@ function NavigationItem(props) {
   // Type Button
   if (props.type === "li-button") {
     return (
-      <li className={`${props.className} ${classes["nav-link"]}`}>
+      <li
+        className={`${props.className} ${classes["nav-link"]} ${
+          props.isDarkMode
+            ? classes["nav-link-dark"]
+            : classes["nav-link-light"]
+        }`}
+      >
         <NavIcon
           icon={props.icon}
           className={`${classes["nav-icon"]} ${props.iconClassName} `}
@@ -58,7 +69,11 @@ function NavigationItem(props) {
   if (props.type === "link") {
     return (
       <div
-        className={`${props.className} ${classes["nav-link"]} `}
+        className={`${props.className} ${classes["nav-link"]} ${
+          props.isDarkMode
+            ? classes["nav-link-dark"]
+            : classes["nav-link-light"]
+        }`}
         onClick={props.onClick}
       >
         <NavIcon
@@ -79,7 +94,9 @@ function NavigationItem(props) {
   //Default Type Anchor
   return (
     <li
-      className={`${classes["nav-link"]} ${props.className}`}
+      className={`${classes["nav-link"]} ${props.className} ${
+        props.isDarkMode ? classes["nav-link-dark"] : classes["nav-link-light"]
+      }`}
       onClick={props.onClick}
     >
       <NavIcon

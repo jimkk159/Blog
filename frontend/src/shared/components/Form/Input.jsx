@@ -27,7 +27,12 @@ function Input(props) {
         !inputState.isValid && inputState.isTouched && classes["input-invalid"]
       }`}
     >
-      <label htmlFor={props.id}>{props.label}</label>
+      <label
+        htmlFor={props.id}
+        className={`${props.isDarkMode ? classes.dark : classes.light}`}
+      >
+        {props.label}
+      </label>
       <input
         id={props.id}
         type={props.type}

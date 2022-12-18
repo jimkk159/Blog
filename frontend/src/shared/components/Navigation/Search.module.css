@@ -52,8 +52,8 @@
 }
 
 .dark {
-  border-color: white;
+  border-color: #E4E4E4;
   background-color: #232323;
   caret-color: #ababab;
-  color: white;
+  color: #E4E4E4;
 }

@@ -49,3 +49,10 @@
   border-color: red;
   background-color: #ffd1d1;
 }
+
+.light {
+  color: black;
+}
+.dark {
+  color: white;
+}

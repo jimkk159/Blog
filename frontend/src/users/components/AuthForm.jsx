@@ -92,7 +92,7 @@ function AuthForm(props) {
 
   return (
     <Card className={classes.authentication} isDarkMode={isDarkMode}>
-      <h2>{`${isLoginMode ? language.login : language.signup}`}</h2>
+      <h2 className={`${isDarkMode?classes.dark:classes.light}`}>{`${isLoginMode ? language.login : language.signup}`}</h2>
       <hr />
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (
@@ -104,6 +104,7 @@ function AuthForm(props) {
             onInput={inputHandler}
             validators={[VALIDATOR_REQUIRE()]}
             errorMessage={language.validName}
+            isDarkMode={isDarkMode}
           />
         )}
         {!isLoginMode && <p>{language.uploadImage}</p>}
@@ -115,6 +116,7 @@ function AuthForm(props) {
           onInput={inputHandler}
           validators={[VALIDATOR_EMAIL()]}
           errorMessage={language.validEmail}
+          isDarkMode={isDarkMode}
         />
         <Input
           key={"password_" + uuidKeys[2]}
@@ -124,6 +126,7 @@ function AuthForm(props) {
           onInput={inputHandler}
           validators={[VALIDATOR_MINLENGTH(6)]}
           errorMessage={language.validPassword}
+          isDarkMode={isDarkMode}
         />
         <Button
           type="submit"

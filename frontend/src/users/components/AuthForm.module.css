@@ -9,3 +9,10 @@
 .authentication form {
   margin-bottom: 1rem;
 }
+
+.light {
+  color: black;
+}
+.dark {
+  color: white;
+}

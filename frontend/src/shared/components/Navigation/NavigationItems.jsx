@@ -7,6 +7,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 //Custom Context
+import { ThemeContext } from "../../context/theme-context";
 import { AuthContext } from "../../context/auth-context";
 import { LanguageContext } from "../../context/language-context";
 
@@ -21,6 +22,7 @@ import classes from "./NavigationItems.module.css";
 
 function NavigationItems(props) {
   const auth = useContext(AuthContext);
+  const { isDarkMode } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
 
   const uuidKeys = useUuid(4);
@@ -33,6 +35,7 @@ function NavigationItems(props) {
         content={language.home}
         icon={<HomeIcon />}
         iconClassName={props.iconClassName}
+        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"about_" + uuidKeys[1]}
@@ -40,6 +43,7 @@ function NavigationItems(props) {
         content={language.about}
         icon={<ContactSupportIcon />}
         iconClassName={props.iconClassName}
+        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"blog_" + uuidKeys[2]}
@@ -47,6 +51,7 @@ function NavigationItems(props) {
         content={language.blog}
         icon={<CreateIcon />}
         iconClassName={props.iconClassName}
+        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"logout_" + uuidKeys[3]}
@@ -55,7 +60,8 @@ function NavigationItems(props) {
         show={auth.isLoggedIn}
         content={language.logout}
         icon={<LogoutIcon />}
-        iconClassName={props.iconClassName}
+        iconClassName={`${props.iconClassName} ${props.logout}`}
+        isDarkMode={isDarkMode}
       />
     </ul>
   );

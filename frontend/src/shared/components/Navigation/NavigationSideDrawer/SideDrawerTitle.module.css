@@ -49,8 +49,6 @@
 
 .side-drawer__logout {
   border-right: none;
-  flex: 2 1;
-  justify-content: center;
 }
 
 .side-drawer__nav-icon {
