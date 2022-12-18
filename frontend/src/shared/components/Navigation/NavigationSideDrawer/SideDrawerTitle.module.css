@@ -1,9 +1,11 @@
 .side-drawer__auth {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: purple;
   height: 6rem;
   padding: 0 0 0 2rem;
+  
 }
 
 .navigation__top_padding {
@@ -17,7 +19,7 @@
 
 .side-drawer__anonymous-avatar {
   max-width: 4rem;
-  margin-right: 4rem;
+  margin-right: 2rem;
 }
 
 .side-drawer__nav-link {
@@ -34,18 +36,15 @@
   border-bottom: none !important;
 }
 
-.side-drawer__login {
-  padding-right: 2rem;
-  padding-left: 1rem;
-  border-right: 1px solid #f0ebe9;
-  border-left: 2px solid #f0ebe9;
-}
-
-.side-drawer__signup {
+.side-drawer__login, .side-drawer__signup {
   padding-right: 1rem;
   padding-left: 1rem;
   border-right: none;
-  border-left: 1px solid #f0ebe9;
+  border-left: 2px solid #f0ebe9;
+}
+
+.side-drawer__signup a, .side-drawer__login a {
+  font-size: 15px;
 }
 
 .side-drawer__logout {

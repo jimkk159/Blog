@@ -42,73 +42,65 @@ function SideDrawerTitle(props) {
   return (
     <>
       <div
-        className={`${classes["side-drawer__title"]} 
-        `}
+        className={`${classes["navigation__top_padding"]} ${
+          isDarkMode ? classes["dark"] : classes["light"]
+        }`}
+      />
+      <div
+        className={`${classes["side-drawer__auth"]} ${
+          isDarkMode ? classes["dark"] : classes["light"]
+        }`}
+        style={isLoggedIn ? { justifyContent: "space-between" } : null}
       >
-        <div
-          className={`${classes["navigation__top_padding"]} ${
-            isDarkMode ? classes["dark"] : classes["light"]
-          }`}
+        <UserAvatar
+          className={
+            isLoggedIn
+              ? classes["side-drawer__avatar"]
+              : classes["side-drawer__anonymous-avatar"]
+          }
+          isDarkMode={isDarkMode}
+          onClick={showAuth}
         />
-        <div
-          className={`${classes["side-drawer__auth"]} ${
-            isDarkMode ? classes["dark"] : classes["light"]
-          }`}
-          style={isLoggedIn ? { justifyContent: "space-between" } : null}
-        >
-          <UserAvatar
-            className={
-              isLoggedIn
-                ? classes["side-drawer__avatar"]
-                : classes["side-drawer__anonymous-avatar"]
-            }
-            onClick={showAuth}
+        <NavigationItem
+          key={"sideDrawer-login_" + uuidKeys[0]}
+          type="link"
+          to="/auth"
+          show={!isLoggedIn}
+          content={language.login}
+          className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
+          navInitialState={{ toLogin: true }}
+          onClick={props.onCancel}
+          icon={<LoginIcon />}
+          iconClassName={classes["side-drawer__nav-icon"]}
+        />
+        <NavigationItem
+          key={"sideDrawer-signup_" + uuidKeys[1]}
+          type="link"
+          to="/auth"
+          show={!isLoggedIn}
+          content={language.signup}
+          className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
+          navInitialState={{ toLogin: false }}
+          onClick={props.onCancel}
+          icon={<HistoryEduIcon />}
+          iconClassName={classes["side-drawer__nav-icon"]}
+        />
+        <NavigationItem
+          key={"sideDrawer-logout_" + uuidKeys[2]}
+          type="button"
+          onClick={logout}
+          show={isLoggedIn}
+          content={language.logout}
+          className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}
+          icon={<LogoutIcon />}
+          iconClassName={classes["side-drawer__nav-icon"]}
+        />
+        <div className={classes["side-drawer__cross"]} onClick={props.onCancel}>
+          <img
+            className={`${classes["cross-symbol"]}`}
+            src={crossImage}
+            alt="x-symbol"
           />
-          <NavigationItem
-            key={"sideDrawer-login_" + uuidKeys[0]}
-            type="link"
-            to="/auth"
-            show={!isLoggedIn}
-            content={language.login}
-            className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
-            navInitialState={{ toLogin: true }}
-            onClick={props.onCancel}
-            icon={<LoginIcon />}
-            iconClassName={classes["side-drawer__nav-icon"]}
-          />
-          <NavigationItem
-            key={"sideDrawer-signup_" + uuidKeys[1]}
-            type="link"
-            to="/auth"
-            show={!isLoggedIn}
-            content={language.signup}
-            className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
-            navInitialState={{ toLogin: false }}
-            onClick={props.onCancel}
-            icon={<HistoryEduIcon />}
-            iconClassName={classes["side-drawer__nav-icon"]}
-          />
-          <NavigationItem
-            key={"sideDrawer-logout_" + uuidKeys[2]}
-            type="button"
-            onClick={logout}
-            show={isLoggedIn}
-            content={language.logout}
-            className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}
-            icon={<LogoutIcon />}
-            iconClassName={classes["side-drawer__nav-icon"]}
-          />
-          <div
-            className={classes["side-drawer__cross"]}
-            style={isLoggedIn ? { flex: 1 } : { flex: 2 }}
-            onClick={props.onCancel}
-          >
-            <img
-              className={`${classes["cross-symbol"]}`}
-              src={crossImage}
-              alt="x-symbol"
-            />
-          </div>
         </div>
       </div>
     </>
