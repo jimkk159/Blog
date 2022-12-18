@@ -35,7 +35,7 @@ const Fake_User = [
 
 function AuthForm(props) {
   const auth = useContext(AuthContext);
-  const language = useContext(LanguageContext);
+  const { language } = useContext(LanguageContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   const uuidKeys = useUuid(3);

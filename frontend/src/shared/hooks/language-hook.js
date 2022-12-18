@@ -16,7 +16,6 @@ function useTranslation() {
     } else {
       setLanguage(en);
     }
-    console.log(1);
   }, []);
 
   //Toggle Language

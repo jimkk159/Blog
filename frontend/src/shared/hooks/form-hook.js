@@ -82,17 +82,17 @@ function useInput(initalValue, initalIsValid, validators) {
     isValid: initalIsValid || false, //Check the the input is valid after user has touched
   });
 
-  const changeHandler = (event) => {
+  const changeHandler = useCallback((event) => {
     dispatch({
       type: "CHANGE",
       value: event.target.value,
       validators: validators,
     });
-  };
+  }, [validators]);
 
-  const blurHandler = () => {
+  const blurHandler = useCallback(() => {
     dispatch({ type: "TOUCH" });
-  };
+  }, []);
 
   return { inputState, changeHandler, blurHandler };
 }

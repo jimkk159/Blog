@@ -32,7 +32,6 @@ function Navigation(props) {
   const { isDarkMode } = useContext(ThemeContext);
   const { isEnglish, language, toggleLanguage } = useContext(LanguageContext);
   const navigate = useNavigate();
-  console.log(isEnglish, language.login);
   const { scrollPosition, isScrollingUp } = useScroll();
   const { matches } = useMediaQuery("min", "768");
 
