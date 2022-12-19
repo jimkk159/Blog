@@ -18,7 +18,7 @@ function RootLayout() {
   const { isDarkMode } = useContext(ThemeContext);
   return (
     <div
-      className={`${classes["root"]} ${
+      className={`${classes["root-layout"]} ${
         isDarkMode ? classes["dark"] : classes["light"]
       }`}
       style={{ backgroundImage: `url(${cubesImage})` }}

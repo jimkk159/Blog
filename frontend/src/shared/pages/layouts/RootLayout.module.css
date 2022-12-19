@@ -1,5 +1,5 @@
-.root {
-  padding-top: 10rem;
+.root-layout {
+  padding-top: 6rem;
 }
 
 .light {
@@ -9,4 +9,10 @@
 .dark {
   background-color: black;
   color: #E4E4E4;
+}
+
+@media (min-width:768px){
+  .root-layout {
+    padding-top: 10rem;
+  }
 }
