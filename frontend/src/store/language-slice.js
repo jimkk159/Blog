@@ -17,9 +17,20 @@ const languageSlice = createSlice({
       state.isEnglish = !state.isEnglish;
       state.language = state.isEnglish ? en : ch;
     },
+    setEnglish: (state) => {
+      state.isEnglish = true;
+      state.language = en;
+    },
+    setChinese: (state) => {
+      state.isEnglish = false;
+      state.language = ch;
+    },
   },
 });
 
 export const languageActions = languageSlice.actions;
 
 export default languageSlice.reducer;
+
+//reference RTK Query:https://redux-toolkit.js.org/rtk-query/overview
+//reference createAsyncThunk:https://redux-toolkit.js.org/api/createAsyncThunk

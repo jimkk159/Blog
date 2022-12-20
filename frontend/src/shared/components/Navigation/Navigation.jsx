@@ -31,8 +31,8 @@ function Navigation(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const isLoggedIn  = useSelector((state) => state.auth.isLoggedIn);
-  const {isEnglish, language} = useSelector((state) => state.language);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { isEnglish, language } = useSelector((state) => state.language);
   const dispatch = useDispatch();
 
   //React Router
@@ -75,6 +75,16 @@ function Navigation(props) {
     setIsDrawer(false);
   }, [matches, navigate]);
 
+  //Localization
+  useEffect(() => {
+    const userLanguae = navigator.language || navigator.userLanguae;
+    if (userLanguae === "zh-TW" || userLanguae === "zh-CH") {
+      dispatch(languageActions.setChinese());
+    } else {
+      dispatch(languageActions.setEnglish());
+    }
+  }, [dispatch]);
+
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
@@ -109,7 +119,9 @@ function Navigation(props) {
           <Languae
             className={classes["navigation__pc__language"]}
             show={isEnglish}
-            onToggle={()=>{dispatch(languageActions.toggle())}}
+            onToggle={() => {
+              dispatch(languageActions.toggle());
+            }}
             isDarkMode={isDarkMode}
           >
             <p>EN</p>
