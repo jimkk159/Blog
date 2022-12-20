@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { useSelector } from "react-redux";
 
 //Icon
 import HomeIcon from "@mui/icons-material/Home";
@@ -7,7 +8,6 @@ import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 //Custom Context
-import { ThemeContext } from "../../context/theme-context";
 import { AuthContext } from "../../context/auth-context";
 import { LanguageContext } from "../../context/language-context";
 
@@ -20,10 +20,13 @@ import useUuid from "../../hooks/uuid-hook";
 //CSS
 import classes from "./NavigationItems.module.css";
 
+
 function NavigationItems(props) {
   const auth = useContext(AuthContext);
-  const { isDarkMode } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
+  
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
 
   const uuidKeys = useUuid(4);
 

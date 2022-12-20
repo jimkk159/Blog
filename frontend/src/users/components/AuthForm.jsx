@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 //Custom Context
 import { AuthContext } from "../../shared/context/auth-context";
-import { ThemeContext } from "../../shared/context/theme-context";
 import { LanguageContext } from "../../shared/context/language-context";
 
 //Custom Component
@@ -36,10 +36,13 @@ const Fake_User = [
 
 function AuthForm(props) {
   const auth = useContext(AuthContext);
-  const { isDarkMode } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+
+  //Custom Hook
   const uuidKeys = useUuid(3);
   const { formState, inputHandler, setFormData } = useForm(
     {
@@ -92,7 +95,9 @@ function AuthForm(props) {
 
   return (
     <Card className={classes.authentication} isDarkMode={isDarkMode}>
-      <h2 className={`${isDarkMode?classes.dark:classes.light}`}>{`${isLoginMode ? language.login : language.signup}`}</h2>
+      <h2 className={`${isDarkMode ? classes.dark : classes.light}`}>{`${
+        isLoginMode ? language.login : language.signup
+      }`}</h2>
       <hr />
       <form onSubmit={authSubmitHandler}>
         {!isLoginMode && (

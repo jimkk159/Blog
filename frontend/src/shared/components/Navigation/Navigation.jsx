@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 //Custom Context
 import { AuthContext } from "../../context/auth-context";
-import { ThemeContext } from "../../context/theme-context";
 import { LanguageContext } from "../../context/language-context";
+
+//Redux Slice
+import { themeActions } from "../../../store/theme-slice";
 
 //Custom Component
 import Theme from "./Theme";
@@ -29,9 +32,16 @@ function Navigation(props) {
   const [showModal, setShowModal] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
-  const { isDarkMode, switchMode } = useContext(ThemeContext);
   const { isEnglish, language, toggleLanguage } = useContext(LanguageContext);
+
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+  const dispatch = useDispatch();
+
+  //React Router
   const navigate = useNavigate();
+
+  //CustomHook
   const { scrollPosition, isScrollingUp } = useScroll();
   const { matches } = useMediaQuery("min", "768");
 
@@ -93,7 +103,9 @@ function Navigation(props) {
           <Theme
             className={classes["navigation__theme"]}
             isDarkMode={isDarkMode}
-            onSwitch={switchMode}
+            onSwitch={() => {
+              dispatch(themeActions.toggle());
+            }}
           >
             {isDarkMode ? language.darkMode : language.normalMode}
           </Theme>

@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //Icon
 import LoginIcon from "@mui/icons-material/Login";
@@ -11,7 +12,6 @@ import crossImage from "../../../../assets/img/x-symbol.png";
 
 //Custom Context
 import { AuthContext } from "../../../context/auth-context";
-import { ThemeContext } from "../../../context/theme-context";
 import { LanguageContext } from "../../../context/language-context";
 
 //Custom Component
@@ -24,12 +24,18 @@ import useUuid from "../../../hooks/uuid-hook";
 //CSS
 import classes from "./SideDrawerTitle.module.css";
 
+
 function SideDrawerTitle(props) {
-  const { isDarkMode } = useContext(ThemeContext);
   const { language } = useContext(LanguageContext);
   const { isLoggedIn, logout } = useContext(AuthContext);
+
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+  
+  //React Router
   const navigate = useNavigate();
 
+  //Custom Hook
   const uuidKeys = useUuid(3);
 
   //Auth

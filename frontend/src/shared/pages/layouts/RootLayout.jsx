@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 //Image
 import cubesImage from "../../../assets/img/cubes.png";
-
-//Custom Context
-import { ThemeContext } from "../../context/theme-context.js";
 
 //Custom Component
 import Navigation from "../../components/Navigation/Navigation";
@@ -15,7 +13,8 @@ import Footer from "../../components/Footer/Footer";
 import classes from "./RootLayout.module.css";
 
 function RootLayout() {
-  const { isDarkMode } = useContext(ThemeContext);
+  const isDarkMode = useSelector((state) => state.theme.value);
+
   return (
     <div
       className={`${classes["root-layout"]} ${

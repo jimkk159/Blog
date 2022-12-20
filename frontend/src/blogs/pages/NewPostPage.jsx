@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-
-//Custom Context
-import { ThemeContext } from "../../shared/context/theme-context";
+import React from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";
 
 function NewPostPage() {
-  const { isDarkMode } = useContext(ThemeContext);
+  const isDarkMode = useSelector((state)=>state.theme.value)
   return <Card isDarkMode={isDarkMode}>NewPostPage</Card>;
 }
 

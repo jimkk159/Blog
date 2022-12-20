@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 //Image
 import animateImage from "../../assets/img/Shock-Bocchi.gif";
-
-//Custom Context
-import { ThemeContext } from "../context/theme-context";
 
 //Custom Component
 import Card from "../components/UI/Card";
@@ -16,7 +14,9 @@ import Button from "../components/Form/Button";
 import classes from "../pages/NotFoundPage.module.css";
 
 function NotFoundPage() {
-  const { isDarkMode } = useContext(ThemeContext);
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+  //React Router
   const navigate = useNavigate();
   const retrunHandler = () => {
     navigate("/");

@@ -1,12 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { useRouteError } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 //Image
 import animateImage from "../../assets/img/Sad-Bocchi.gif";
-
-//Custom Context
-import { ThemeContext } from "../context/theme-context";
 
 //Custom Component
 import Card from "../components/UI/Card";
@@ -14,8 +12,9 @@ import Card from "../components/UI/Card";
 //CSS
 import classes from "../pages/ErrorPage.module.css";
 
+
 function ErrorPage() {
-  const { isDarkMode } = useContext(ThemeContext);
+  const isDarkMode = useSelector((state) => state.theme.value);
 
   const error = useRouteError();
   return (

@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
-
-//Custom Context
-import { ThemeContext } from "../context/theme-context";
+import React from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import Card from "../components/UI/Card";
 
 function HomePage() {
-  const { isDarkMode } = useContext(ThemeContext);
+  const isDarkMode = useSelector((state) => state.theme.value);
   return (
     <Card className="Page" isDarkMode={isDarkMode}>
       <h1>

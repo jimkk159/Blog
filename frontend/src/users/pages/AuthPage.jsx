@@ -8,6 +8,7 @@ import AuthForm from "../components/AuthForm";
 import classes from "./AuthPage.module.css";
 
 function AuthPage(props) {
+  //React Router
   const navigate = useNavigate()
   const location = useLocation();
   const toLogin = location.state ? location.state.toLogin : true;

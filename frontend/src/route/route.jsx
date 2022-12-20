@@ -32,6 +32,7 @@ const loadingContent = {
     </div>
   ),
 };
+
 //React-route 6.4 Lazy Loading solution reference:
 //https://www.robinwieruch.de/react-router-lazy-loading/
 const BlogLayout = loadable(
