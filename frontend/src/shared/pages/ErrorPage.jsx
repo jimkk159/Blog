@@ -3,7 +3,7 @@ import { useRouteError } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 //Image
-import robotImage from "../../assets/img/wall-e.png";
+import animateImage from "../../assets/img/Sad-Bocchi.gif";
 
 //Custom Context
 import { ThemeContext } from "../context/theme-context";
@@ -36,9 +36,9 @@ function ErrorPage() {
               </div>
               <div className={classes["image-container"]}>
                 <img
-                  src={robotImage}
-                  alt="robot"
-                  className={classes["robot-img"]}
+                  src={animateImage}
+                  alt="sad-girl"
+                  className={classes["animate-img"]}
                 />
               </div>
             </div>

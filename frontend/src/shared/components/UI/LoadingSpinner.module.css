@@ -1,0 +1,55 @@
+.rotating-ring {
+  display: inline-block;
+  width: 64px;
+  height: 64px;
+}
+
+.rotating-ring:after {
+  content: " ";
+  display: block;
+  width: 46px;
+  height: 46px;
+  margin: 1px;
+}
+
+.overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img {
+  max-height: 30rem;
+  max-width: 30rem;
+}
+.small-img {
+    max-height: 20rem;
+    max-width: 20rem;
+  }
+.dark {
+  border: 5px solid #e4e4e4;
+  border-color: #e4e4e4 transparent #e4e4e4 transparent;
+  border-radius: 50%;
+  animation: rotating-ring 1.2s linear infinite;
+}
+
+.light {
+  border: 5px solid #510077;
+  border-color: #510077 transparent #510077 transparent;
+  border-radius: 50%;
+  animation: rotating-ring 1.2s linear infinite;
+}
+
+@keyframes rotating-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
