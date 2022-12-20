@@ -1,13 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-//Custom Context
-import { AuthContext } from "../../context/auth-context";
-import { LanguageContext } from "../../context/language-context";
-
 //Redux Slice
 import { themeActions } from "../../../store/theme-slice";
+import { languageActions } from "../../../store/language-slice";
 
 //Custom Component
 import Theme from "./Theme";
@@ -31,11 +28,11 @@ function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [isSearch, setIsSearch] = useState(false);
-  const { isLoggedIn } = useContext(AuthContext);
-  const { isEnglish, language, toggleLanguage } = useContext(LanguageContext);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+  const isLoggedIn  = useSelector((state) => state.auth.isLoggedIn);
+  const {isEnglish, language} = useSelector((state) => state.language);
   const dispatch = useDispatch();
 
   //React Router
@@ -112,7 +109,7 @@ function Navigation(props) {
           <Languae
             className={classes["navigation__pc__language"]}
             show={isEnglish}
-            onToggle={toggleLanguage}
+            onToggle={()=>{dispatch(languageActions.toggle())}}
             isDarkMode={isDarkMode}
           >
             <p>EN</p>

@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //Icon
 import LoginIcon from "@mui/icons-material/Login";
@@ -10,9 +10,8 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 //Image
 import crossImage from "../../../../assets/img/x-symbol.png";
 
-//Custom Context
-import { AuthContext } from "../../../context/auth-context";
-import { LanguageContext } from "../../../context/language-context";
+//Redux Slice
+import { authActions } from "../../../../store/auth-slice";
 
 //Custom Component
 import NavigationItem from "../NavigationItem";
@@ -24,14 +23,13 @@ import useUuid from "../../../hooks/uuid-hook";
 //CSS
 import classes from "./SideDrawerTitle.module.css";
 
-
 function SideDrawerTitle(props) {
-  const { language } = useContext(LanguageContext);
-  const { isLoggedIn, logout } = useContext(AuthContext);
-
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const language = useSelector((state) => state.language.language);
+  const dispatch = useDispatch();
+
   //React Router
   const navigate = useNavigate();
 
@@ -94,7 +92,9 @@ function SideDrawerTitle(props) {
         <NavigationItem
           key={"sideDrawer-logout_" + uuidKeys[2]}
           type="button"
-          onClick={logout}
+          onClick={() => {
+            dispatch(authActions.logout());
+          }}
           show={isLoggedIn}
           content={language.logout}
           className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}

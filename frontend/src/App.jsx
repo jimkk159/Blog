@@ -3,7 +3,6 @@ import { Provider } from 'react-redux'
 import { RouterProvider } from "react-router-dom";
 
 //Context
-import AuthContextProvider from "./shared/context/auth-context";
 import LanguageContextProvider from "./shared/context/language-context";
 
 //Redux Store
@@ -19,11 +18,9 @@ function App() {
   const router = RouteCreate();
   return (
     <Provider store={store}>
-      <AuthContextProvider>
         <LanguageContextProvider>
             <RouterProvider router={router} />
         </LanguageContextProvider>
-      </AuthContextProvider>
     </Provider>
   );
 }

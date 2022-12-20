@@ -1,9 +1,8 @@
-import React, { useState, useContext, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-//Custom Context
-import { AuthContext } from "../../shared/context/auth-context";
-import { LanguageContext } from "../../shared/context/language-context";
+//Redux Slice
+import { authActions } from "../../store/auth-slice";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";
@@ -35,12 +34,12 @@ const Fake_User = [
 ];
 
 function AuthForm(props) {
-  const auth = useContext(AuthContext);
-  const { language } = useContext(LanguageContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+  const language = useSelector((state) => state.language.language);
+  const dispatch = useDispatch();
 
   //Custom Hook
   const uuidKeys = useUuid(3);
@@ -85,9 +84,9 @@ function AuthForm(props) {
     event.preventDefault();
 
     if (isLoginMode) {
-      auth.login(Fake_User[0].userId);
+      dispatch(authActions.login({ uid: Fake_User[0].userId }));
     } else {
-      auth.login(Fake_User[1].userId);
+      dispatch(authActions.login({ uid: Fake_User[1].userId }));
     }
 
     onSubmit();

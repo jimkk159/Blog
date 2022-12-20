@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 //Icon
 import HomeIcon from "@mui/icons-material/Home";
@@ -7,9 +7,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
-//Custom Context
-import { AuthContext } from "../../context/auth-context";
-import { LanguageContext } from "../../context/language-context";
+//Redux Slice
+import { authActions } from "../../../store/auth-slice";
 
 //Custom Component
 import NavigationItem from "./NavigationItem";
@@ -20,14 +19,14 @@ import useUuid from "../../hooks/uuid-hook";
 //CSS
 import classes from "./NavigationItems.module.css";
 
-
 function NavigationItems(props) {
-  const auth = useContext(AuthContext);
-  const { language } = useContext(LanguageContext);
-  
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const language = useSelector((state) => state.language.language);
+  const dispatch = useDispatch();
 
+  //Custom Hook
   const uuidKeys = useUuid(4);
 
   return (
@@ -59,8 +58,10 @@ function NavigationItems(props) {
       <NavigationItem
         key={"logout_" + uuidKeys[3]}
         type="li-button"
-        onClick={auth.logout}
-        show={auth.isLoggedIn}
+        onClick={() => {
+          dispatch(authActions.logout());
+        }}
+        show={isLoggedIn}
         content={language.logout}
         icon={<LogoutIcon />}
         iconClassName={`${props.iconClassName} ${props.logout}`}

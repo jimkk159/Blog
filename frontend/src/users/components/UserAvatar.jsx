@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { CSSTransition } from "react-transition-group";
 
 //Image
 import anonymousUser from "../../assets/img/anonymous_user.png";
-
-//Custom Context
-import { AuthContext } from "../../shared/context/auth-context";
 
 //Custom Component
 import Avatar from "../../shared/components/UI/Avatar";
@@ -14,7 +12,7 @@ import Avatar from "../../shared/components/UI/Avatar";
 import classes from "./UserAvatar.module.css";
 
 function UserAvatar(props) {
-  const auth = useContext(AuthContext);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const userImage =
     "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
   return (
@@ -27,7 +25,7 @@ function UserAvatar(props) {
           alt="beauty"
         />
         <CSSTransition
-          in={auth.isLoggedIn}
+          in={isLoggedIn}
           timeout={{ enter: 2000, exit: 2000 }}
           classNames={{
             enter: classes["user-img-enter"],
@@ -40,7 +38,9 @@ function UserAvatar(props) {
         >
           <Avatar
             className={`${classes["user-img"]} ${
-              props.isDarkMode ? classes["avatar-dark"] : classes["avatar-light"]
+              props.isDarkMode
+                ? classes["avatar-dark"]
+                : classes["avatar-light"]
             }`}
             image={userImage}
             alt="beauty"
