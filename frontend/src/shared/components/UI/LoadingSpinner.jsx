@@ -24,7 +24,6 @@ function LoadingSpinner(props) {
 
   //Loading Content
   let loadingContent;
-  console.log(randomNum);
   if (randomNum === 6) {
     loadingContent = (
       <div

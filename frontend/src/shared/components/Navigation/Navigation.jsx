@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //Redux Slice
@@ -34,9 +34,6 @@ function Navigation(props) {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { isEnglish, language } = useSelector((state) => state.language);
   const dispatch = useDispatch();
-
-  //React Router
-  const navigate = useNavigate();
 
   //CustomHook
   const { scrollPosition, isScrollingUp } = useScroll();
@@ -73,7 +70,7 @@ function Navigation(props) {
   //Window Size Change
   useEffect(() => {
     setIsDrawer(false);
-  }, [matches, navigate]);
+  }, []);
 
   //Localization
   useEffect(() => {

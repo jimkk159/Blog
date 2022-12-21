@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 //Image
@@ -8,7 +8,6 @@ import animateImage from "../../assets/img/Shock-Bocchi.gif";
 
 //Custom Component
 import Card from "../components/UI/Card";
-import Button from "../components/Form/Button";
 
 //CSS
 import classes from "../pages/NotFoundPage.module.css";
@@ -16,14 +15,9 @@ import classes from "../pages/NotFoundPage.module.css";
 function NotFoundPage() {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  //React Router
-  const navigate = useNavigate();
-  const retrunHandler = () => {
-    navigate("/");
-  };
+
   return (
     <>
-      <Navigation />
       <main className="error">
         <Card className="page" isDarkMode={isDarkMode}>
           <div
@@ -41,6 +35,12 @@ function NotFoundPage() {
                     This page does not exist...{" "}
                   </h2>
                   <p className={classes["cry-face"]}>;^;</p>
+                  <div className={`${classes["return-container"]}`}>
+                    <p className={classes["return-arrow"]}>{`<<`}&nbsp;</p>
+                    <Link className={classes["return-link"]} to="/">
+                      {"Return"}
+                    </Link>
+                  </div>
                 </div>
                 <div className={classes["image-container"]}>
                   <img
@@ -50,12 +50,6 @@ function NotFoundPage() {
                   />
                 </div>
               </div>
-              <Button
-                className={classes["return-button"]}
-                content="Return"
-                isDarkMode={isDarkMode}
-                onClick={retrunHandler}
-              />
             </div>
           </div>
         </Card>

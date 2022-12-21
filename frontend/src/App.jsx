@@ -1,28 +1,23 @@
 import React from "react";
-import { Provider } from 'react-redux'
-import { RouterProvider } from "react-router-dom";
-
-//Context
-import LanguageContextProvider from "./shared/context/language-context";
+import { Provider } from "react-redux";
 
 //Redux Store
 import store from "./store/index.js";
 
-//Route
-import RouteCreate from "./route/route";
+//Custom Component
+import CustomRoute from "./route/route";
 
 //CSS
 // import classes from "./App.module.css";
 
 function App() {
-  const router = RouteCreate();
   return (
     <Provider store={store}>
-        <LanguageContextProvider>
-            <RouterProvider router={router} />
-        </LanguageContextProvider>
+      <CustomRoute />
     </Provider>
   );
 }
 
 export default App;
+
+//reference https://stackoverflow.com/questions/72515460/react-redux-could-not-find-react-redux-context-value-please-ensure-the-componen

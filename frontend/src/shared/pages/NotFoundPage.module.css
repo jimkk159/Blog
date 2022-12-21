@@ -40,8 +40,22 @@
   max-width: 15rem;
   min-width: 10rem;
 }
-.return-button {
-  display: block;
+.return-container {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+.return-arrow {
+  display: inline-block;
+  font-size: 15px;
+  text-align: left;
+}
+.return-link {
+  display: inline-block;
+  /* text-decoration: none; */
+  color: #e4e4e4;
+  text-align: left;
+  font-size: 20px;
 }
 .light {
   color: black;
