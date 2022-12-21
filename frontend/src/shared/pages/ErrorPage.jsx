@@ -4,28 +4,32 @@ import { useRouteError } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 //Image
+import cubesImage from "../../assets/img/cubes.png";
 import animateImage from "../../assets/img/Sad-Bocchi.gif";
 
 //Custom Component
 import Card from "../components/UI/Card";
+import Footer from "../components/Footer/Footer";
 
 //CSS
 import classes from "../pages/ErrorPage.module.css";
-
 
 function ErrorPage() {
   const isDarkMode = useSelector((state) => state.theme.value);
 
   const error = useRouteError();
   return (
-    <>
+    <div
+      className={`${classes["error-layout"]} ${
+        isDarkMode ? classes["dark"] : classes["light"]
+      }`}
+      style={{ backgroundImage: `url(${cubesImage})` }}
+    >
       <Navigation />
       <main className="error">
         <Card className="page" isDarkMode={isDarkMode}>
           <div
-            className={`${classes["error-page"]} ${
-              isDarkMode ? classes.dark : classes.light
-            }`}
+            className={`${classes["error-page"]} `}
           >
             <div className={classes["error-content"]}>
               <div className={classes["error-textarea"]}>
@@ -44,7 +48,8 @@ function ErrorPage() {
           </div>
         </Card>
       </main>
-    </>
+      <Footer isDarkMode={isDarkMode} />
+    </div>
   );
 }
 

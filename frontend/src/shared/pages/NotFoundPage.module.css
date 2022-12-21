@@ -2,14 +2,13 @@
   display: flex;
   height: 80vh;
   justify-content: center;
-  align-items: center;
   padding: 0 2rem;
 }
 .error-content {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 10rem;
 }
 .not-found {
   text-align: left;

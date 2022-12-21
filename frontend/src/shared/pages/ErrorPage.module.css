@@ -2,16 +2,13 @@
   display: flex;
   height: 80vh;
   justify-content: center;
-  align-items: center;
-  padding: 0 2rem;
+  align-items: flex-start;
+  padding: 10rem 2rem;
 }
 .error-content {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.error-textarea {
-  flex: 1 1 1;
 }
 .oops {
   text-align: left;
@@ -30,7 +27,6 @@
   margin: 1rem 0 0;
 }
 .image-container {
-  flex: 1 1 1;
   position: relative;
 }
 .animate-img {
@@ -41,17 +37,28 @@
   margin-left: -2rem;
 }
 
+.error-layout {
+  padding-top: 6rem;
+}
+
 .light {
+  background-color: #868a85;
   color: black;
 }
+
 .dark {
+  background-color: black;
   color: #e4e4e4;
 }
 
 @media (min-width: 768px) {
-    .error-page {
-        padding: 0 6rem;
-      }
+  .error-layout {
+    padding-top: 10rem;
+  }
+  .error-page {
+    align-items: flex-start;
+    padding: 8rem 6rem;
+  }
   .oops {
     font-size: 80px;
   }

@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Navigation from "../components/Navigation/Navigation";
 
 //Image
 import animateImage from "../../assets/img/Shock-Bocchi.gif";
