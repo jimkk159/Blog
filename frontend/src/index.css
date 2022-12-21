@@ -46,10 +46,20 @@ footer {
   min-height: 100vh;
 }
 
+.black-background{
+  background-color: black;
+}
+
 @font-face {
   font-family: "Muli-bold";
   src: url(./assets/fonts/Muli-Bold.ttf) format("truetype");
 }
+
+@font-face {
+  font-family: "Helvetica Neue";
+  src: url(./assets/fonts/Helvetica-Neue.ttf) format("truetype");
+}
+
 
 @media screen and (min-width: 768px) {
   main {

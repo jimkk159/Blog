@@ -16,6 +16,7 @@ function RootLayout() {
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
+    <>
     <div
       className={`${classes["root-layout"]} ${
         isDarkMode ? classes["dark"] : classes["light"]
@@ -28,6 +29,7 @@ function RootLayout() {
       </main>
       <Footer isDarkMode={isDarkMode} />
     </div>
+    </>
   );
 }
 

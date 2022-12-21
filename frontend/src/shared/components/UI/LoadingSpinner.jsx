@@ -7,6 +7,7 @@ import catSwagImage from "../../../assets/img/loading/cat-swag-tail.gif";
 import guraChristmasImage from "../../../assets/img/loading/gura-christmas.gif";
 import guraSpinImage from "../../../assets/img/loading/gura-gura-spin.gif";
 import bocchiImage from "../../../assets/img/loading/Bocchi-Rock.gif";
+import rabbitImage from "../../../assets/img/loading/野うさぎ同盟.gif";
 
 //CSS
 import classes from "./LoadingSpinner.module.css";
@@ -17,14 +18,15 @@ const Images = [
   catBongo,
   catSwagImage,
   catSleepingImage,
+  rabbitImage
 ];
 
 function LoadingSpinner(props) {
-  const randomNum = Math.floor(6 * Math.random());
+  const randomNum = Math.floor(8 * Math.random());
 
   //Loading Content
   let loadingContent;
-  if (randomNum === 6) {
+  if (randomNum === 7) {
     loadingContent = (
       <div
         className={`${classes["rotating-ring"]} ${

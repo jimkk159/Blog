@@ -1,0 +1,37 @@
+.info-container {
+  margin: 1rem 0;
+}
+.info-content {
+  margin: 0 1rem;
+}
+.info-content h1 {
+  margin: 0;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+}
+.info-content p {
+  margin: 0;
+  display: inline;
+  font-size: 10px;
+  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+}
+.info-description {
+  display: flex;
+}
+
+.info-description img {
+  width: 10rem;
+  height: 10rem;
+  margin-right: 1rem;
+  margin-top: 1rem;
+}
+.info-description p {
+  text-align: justify;
+  margin-top: 1rem;
+  font-size: 18px;
+  line-height: 1.2;
+  font-family: "Times New Roman";
+}
+.info-description a{
+  display: inline;
+  text-decoration: none;
+}
