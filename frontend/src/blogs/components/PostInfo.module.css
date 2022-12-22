@@ -1,0 +1,46 @@
+.author {
+  font-weight: bold;
+}
+
+.statement {
+  color: #868e96;
+  font-style: italic;
+}
+
+.icon {
+  margin: 0 0.25rem -0.1rem;
+  font-size: 20px;
+}
+
+.pin {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 20px;
+}
+
+.light-blue {
+  background-color: #effafa;
+}
+.light-green {
+  background-color: #fafaef;
+}
+.link-blue {
+  color: #117e96;
+}
+.link-yellow {
+  color: #ffbf00;
+}
+.light-trash-can {
+  color: #42a69d;
+}
+.light-pencil {
+  color: #a87554;
+}
+.light-pin {
+  color: #f05f72;
+}
+
+.icon:hover {
+  font-size: 25px;
+}

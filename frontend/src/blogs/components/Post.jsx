@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 
 //Custom Component
+import PostInfo from "./PostInfo";
 import Card from "../../shared/components/UI/Card";
-import Pin from "../../shared/components/Icons/Pin";
 
 //Custom Hook
 import useMediaQuery from "../../shared/hooks/media-query-hook";
@@ -43,13 +42,6 @@ function Post(props) {
     );
   }
 
-  const editHandler = () => {
-    console.log("edit");
-  };
-  const deleteHandler = () => {
-    console.log("delete");
-  };
-
   return (
     <Card
       className={`${classes["info-container"]} ${backgroundColor}`}
@@ -57,28 +49,10 @@ function Post(props) {
     >
       <div className={classes["info-content"]}>
         <h1>{props.title}</h1>
-        <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
-        <p className={classes["author"]}>{props.author}&nbsp;&nbsp;</p>
-        <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
-        <Pin
-          className={`${classes["pin"]} ${
-            !props.isDarkMode && classes["light-pin"]
-          }`}
-          isPined={props.isPined}
-          isAdmin={props.isAdmin}
-          onToggle={null}
-        />
-        <AiOutlineEdit
-          className={`${classes["icon"]} ${
-            !props.isDarkMode && classes["light-pencil"]
-          }`}
-          onClick={editHandler}
-        />
-        <AiFillDelete
-          className={`${classes["icon"]} ${
-            !props.isDarkMode && classes["light-trash-can"]
-          }`}
-          onClick={deleteHandler}
+        <PostInfo
+          author={props.author}
+          date={props.date}
+          isDarkMode={props.isDarkMode}
         />
         <hr />
         <div className={classes["info-description"]}>
