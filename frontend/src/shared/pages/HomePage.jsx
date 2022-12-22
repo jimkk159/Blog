@@ -15,15 +15,9 @@ import { Dummy_blogs } from "./Dummy_blogs";
 
 function HomePage() {
   const isDarkMode = useSelector((state) => state.theme.value);
-  let isHome = true;
   const [searchParams, setSearchParams] = useSearchParams();
-  // const page = Math.floor(searchParams.get("page"));
-  // if (page && page >= 2) {
-  //   isHome = false;
-  // }
-  // let postStart = isHome ? 0 : 10 * Math.floor(page - 2) + 8;
-  // let postEnd = isHome ? 8 : 10 * Math.floor(page - 1) + 8;
   const [posts, setPosts] = useState([]);
+  const [isHome, setIsHome] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(10);
@@ -33,10 +27,33 @@ function HomePage() {
     setPosts(Dummy_blogs);
   }, []);
 
-  //Get current posts
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  //Setting Page Post
+  const postsOfHome = 8;
+  let indexOfLastPost, indexOfFirstPost, currentPosts;
+  if (isHome) {
+    indexOfFirstPost = 0;
+    indexOfLastPost = posts.length > postsOfHome ? postsOfHome : posts.length;
+    currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  } else {
+    indexOfFirstPost = postsOfHome + (currentPage - 2) * postsPerPage;
+    indexOfLastPost =
+      posts.length > indexOfFirstPost + postsPerPage
+        ? indexOfFirstPost + postsPerPage
+        : posts.length;
+  }
+
+  currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+
+  //Paginate
+  const paginateHandler = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    const checkIsHome = 1 >= pageNumber;
+    console.log(isHome, checkIsHome);
+    if (isHome !== checkIsHome) {
+      setIsHome(checkIsHome);
+    }
+  };
+
   return (
     <div>
       {isHome && (
@@ -48,10 +65,9 @@ function HomePage() {
       <Posts posts={currentPosts} loading={isLoading} isDarkMode={isDarkMode} />
       <Pagination
         postsPerPage={postsPerPage}
+        offsetPosts={postsOfHome}
         totalPosts={posts.length}
-        onPaginate={(num) => {
-          console.log(num, "paginate");
-        }}
+        onPaginate={paginateHandler}
       />
     </div>
   );
@@ -61,3 +77,4 @@ export default HomePage;
 
 //reference1:https://stackoverflow.com/questions/35352638/how-to-get-parameter-value-from-query-string
 //reference2:https://ultimatecourses.com/blog/navigate-to-url-query-strings-search-params-react-router
+//reference3:https://www.youtube.com/watch?v=IYCa1F-OWmk
