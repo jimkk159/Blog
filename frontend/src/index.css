@@ -46,10 +46,6 @@ footer {
   min-height: 100vh;
 }
 
-.black-background{
-  background-color: black;
-}
-
 @font-face {
   font-family: "Muli-bold";
   src: url(./assets/fonts/Muli-Bold.ttf) format("truetype");

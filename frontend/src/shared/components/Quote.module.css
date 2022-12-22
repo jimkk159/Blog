@@ -1,0 +1,22 @@
+.quote-container {
+    width: 100%;
+    position: relative;
+    background-color: black;
+    overflow: hidden;
+    color:#E4E4E4
+  }
+  .quote-container h1 {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    text-align: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+  }
+  @media (min-width: 768px) {
+    .quote-container h1{
+      top: 20%;
+      font-size: 2rem;
+      margin-right: 2rem;
+    }
+  }

@@ -6,13 +6,32 @@
 }
 .info-content h1 {
   margin: 0;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
 }
 .info-content p {
   margin: 0;
   display: inline;
   font-size: 10px;
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+}
+.author {
+  font-weight: bold;
+}
+.statement {
+  color: #868e96;
+  font-style: italic;
+}
+.icon {
+  margin-left: 0.5rem;
+  margin-bottom: -0.1rem;
+  font-size: 20px;
+}
+
+.pin {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 20px;
 }
 .info-description {
   display: flex;
@@ -31,7 +50,28 @@
   line-height: 1.2;
   font-family: "Times New Roman";
 }
-.info-description a{
+.info-description a {
   display: inline;
   text-decoration: none;
+}
+.light-blue {
+  background-color: #effafa;
+}
+.light-green {
+  background-color: #fafaef;
+}
+.link-blue {
+  color: #117e96;
+}
+.link-yellow {
+  color: #ffbf00;
+}
+.light-trash-can {
+  color: #42a69d;
+}
+.light-pencil {
+  color: #a87554;
+}
+.light-pin {
+  color: #f05f72;
 }
