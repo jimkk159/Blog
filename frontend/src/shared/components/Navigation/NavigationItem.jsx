@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 
 //Custom Component
-import NavIcon from "./NavIcon";
+import Icon from "../Icons/Icon";
 
 //CSS
 import classes from "./NavigationItem.module.css";
@@ -33,7 +33,7 @@ function NavigationItem(props) {
             : classes["nav-link-light"]
         }`}
       >
-        <NavIcon
+        <Icon
           icon={props.icon}
           className={`${classes["nav-icon"]} ${props.iconClassName} `}
         />
@@ -54,7 +54,7 @@ function NavigationItem(props) {
             : classes["nav-link-light"]
         }`}
       >
-        <NavIcon
+        <Icon
           icon={props.icon}
           className={`${classes["nav-icon"]} ${props.iconClassName} `}
         />
@@ -76,7 +76,7 @@ function NavigationItem(props) {
         }`}
         onClick={props.onClick}
       >
-        <NavIcon
+        <Icon
           icon={props.icon}
           className={`${classes["nav-icon"]} ${props.iconClassName} `}
         />
@@ -99,7 +99,7 @@ function NavigationItem(props) {
       }`}
       onClick={props.onClick}
     >
-      <NavIcon
+      <Icon
         icon={props.icon}
         className={`${classes["nav-icon"]} ${props.iconClassName} `}
       />

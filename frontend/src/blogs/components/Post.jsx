@@ -10,9 +10,9 @@ import Pin from "../../shared/components/Icons/Pin";
 import useMediaQuery from "../../shared/hooks/media-query-hook";
 
 //CSS
-import classes from "./PostInfo.module.css";
+import classes from "./Post.module.css";
 
-function PostInfo(props) {
+function Post(props) {
   const { description } = props;
   const backgroundColor =
     !props.isDarkMode &&
@@ -59,7 +59,7 @@ function PostInfo(props) {
         <h1>{props.title}</h1>
         <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
         <p className={classes["author"]}>{props.author}&nbsp;&nbsp;</p>
-        <p className={classes["statement"]}>on {props.date}</p>
+        <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
         <Pin
           className={`${classes["pin"]} ${
             !props.isDarkMode && classes["light-pin"]
@@ -90,4 +90,4 @@ function PostInfo(props) {
   );
 }
 
-export default PostInfo;
+export default Post;

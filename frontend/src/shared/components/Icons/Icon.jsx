@@ -1,6 +1,6 @@
 import { cloneElement } from "react";
 
-function NavIcon(props) {
+function Icon(props) {
   if (!props.icon) return;
   return cloneElement(props.icon, {
     className: props.className,
@@ -8,6 +8,6 @@ function NavIcon(props) {
   });
 }
 
-export default NavIcon;
+export default Icon;
 
 //reference:https://www.youtube.com/watch?v=4W8Jy21R05M
