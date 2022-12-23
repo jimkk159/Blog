@@ -54,7 +54,7 @@ function HomePage() {
   };
 
   return (
-    <div>
+    <div className={classes["container"]}>
       {isHome && (
         <>
           <Quote />
@@ -68,6 +68,7 @@ function HomePage() {
         siblingCount={siblingCount}
         currentPage={currentPage}
         offsetPosts={postsOfHome}
+        isDarkMode={isDarkMode}
         onNavPage={paginateHandler}
       />
     </div>

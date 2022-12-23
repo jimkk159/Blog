@@ -35,6 +35,7 @@
   font-size: 18px;
   line-height: 1.2;
   font-family: "Times New Roman";
+  letter-spacing: 0.02rem;
 }
 .info-description a {
   display: inline;

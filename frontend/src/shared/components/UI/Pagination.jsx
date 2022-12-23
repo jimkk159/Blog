@@ -1,4 +1,9 @@
 import React from "react";
+import { BiFirstPage, BiLastPage } from "react-icons/bi";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+
+//Custom Component
+import Icon from "../Icons/Icon";
 
 //Custom Hook
 import usePagination, { DOTS } from "../../hooks/pagination-hook";
@@ -14,16 +19,17 @@ function Pagination(props) {
     currentPage,
     onNavPage,
     offsetPosts,
+    isDarkMode
   } = props;
 
-  const [totalPage, paginationRange] = usePagination({
+  const paginationRange = usePagination({
     totalPosts,
     postsPerPage,
     siblingCount,
     currentPage,
     offsetPosts,
   });
-
+  const totalPage = paginationRange[paginationRange.length - 1];
   const onFirst = () => {
     onNavPage(1);
   };
@@ -43,26 +49,57 @@ function Pagination(props) {
   };
   if (currentPage < 1 || paginationRange.length < 2) return null;
   return (
-    <nav>
-      <ul>
-        <li onClick={onFirst}>{"|<"}</li>
-        <li onClick={onPrev}>{"<"}</li>
-        {paginationRange.map((pageNumber, index) => {
-          if (pageNumber === DOTS) {
-            return <li key={index}>{DOTS}</li>;
-          }
+    <ul
+      className={`${classes["pagination-container"]} ${
+        isDarkMode ? classes["dark"] : classes["light"]
+      }`}
+    >
+      <li className={classes["pagination-icon"]} onClick={onFirst}>
+        <BiFirstPage />
+      </li>
+      <li
+        className={`${classes["pagination-icon"]} ${
+          currentPage === 1 && classes["disabled"]
+        }`}
+        onClick={onPrev}
+      >
+        <MdNavigateBefore />
+      </li>
+      {paginationRange.map((pageNumber, index) => {
+        if (pageNumber === DOTS) {
           return (
-            <li key={index} className="page-item">
-              <a href="#" onClick={() => onNavPage(pageNumber)}>
-                {pageNumber}
-              </a>
+            <li
+              key={index}
+              className={`${classes["pagination-item"]} ${classes["dots"]}`}
+            >
+              &#8230;
             </li>
           );
-        })}
-        <li onClick={onNext}>{">"}</li>
-        <li onClick={onLast}>{">|"}</li>
-      </ul>
-    </nav>
+        }
+        return (
+          <li
+            key={index}
+            className={`${classes["pagination-item"]} ${
+              pageNumber === currentPage && classes["selected"]
+            }`}
+            onClick={() => onNavPage(pageNumber)}
+          >
+            <a href="#">{pageNumber}</a>
+          </li>
+        );
+      })}
+      <li
+        className={`${classes["pagination-icon"]} ${
+          currentPage === totalPage && classes["disabled"]
+        }`}
+        onClick={onNext}
+      >
+        <MdNavigateNext />
+      </li>
+      <li className={classes["pagination-icon"]} onClick={onLast}>
+        <BiLastPage />
+      </li>
+    </ul>
   );
 }
 

@@ -27,7 +27,7 @@ function usePagination({
     const showGap = 2 * siblingCount + 3;
     const atLeastShowPageNumber = showGap + 1;
     if (atLeastShowPageNumber >= totalPage) {
-      return [totalPage, range(1, totalPage)];
+      return range(1, totalPage);
     }
 
     //Settingthe Sibling page boundary
@@ -44,7 +44,7 @@ function usePagination({
       let leftItemCount = showGap;
       let leftRange = range(1, leftItemCount);
 
-      return [totalPage, [...leftRange, DOTS, totalPage]];
+      return [...leftRange, DOTS, totalPage];
     }
 
     //Case 3 only right dots
@@ -52,16 +52,16 @@ function usePagination({
       let rightItemCount = showGap;
       let rightRange = range(totalPage - rightItemCount + 1, totalPage);
 
-      return [totalPage, [1, DOTS, ...rightRange]];
+      return [1, DOTS, ...rightRange];
     }
 
     //Case 4 Both side have dots
     if (shouldShowLeftDots && shouldShowRightDots) {
       let middleRange = range(leftSiblingIndex, rightSiblingIndex);
 
-      return [totalPage, [1, DOTS, ...middleRange, DOTS, totalPage]];
+      return [1, DOTS, ...middleRange, DOTS, totalPage];
     }
-  }, [totalPosts, postsPerPage, siblingCount, currentPage]);
+  }, [totalPosts, postsPerPage, siblingCount, currentPage, offsetPosts]);
   return pagination;
 }
 
