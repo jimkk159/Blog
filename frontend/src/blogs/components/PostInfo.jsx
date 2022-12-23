@@ -1,4 +1,7 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
+//Icon
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 
 //Custom Component
@@ -8,6 +11,7 @@ import Pin from "../../shared/components/Icons/Pin";
 import classes from "./PostInfo.module.css";
 
 function PostInfo(props) {
+  const isDarkMode = useSelector((state) => state.theme.value);
   const editHandler = () => {
     console.log("edit");
   };
@@ -21,7 +25,7 @@ function PostInfo(props) {
       <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
       <Pin
         className={`${classes["pin"]} ${
-          !props.isDarkMode && classes["light-pin"]
+          !isDarkMode && classes["light-pin"]
         }`}
         isPined={props.isPined}
         isAdmin={props.isAdmin}
@@ -29,13 +33,13 @@ function PostInfo(props) {
       />
       <AiOutlineEdit
         className={`${classes["icon"]} ${
-          !props.isDarkMode && classes["light-pencil"]
+          !isDarkMode && classes["light-pencil"]
         }`}
         onClick={editHandler}
       />
       <AiFillDelete
         className={`${classes["icon"]} ${
-          !props.isDarkMode && classes["light-trash-can"]
+          !isDarkMode && classes["light-trash-can"]
         }`}
         onClick={deleteHandler}
       />

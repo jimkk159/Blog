@@ -13,12 +13,6 @@ body {
   background-color: white;
 }
 
-main {
-  min-height: 100vh;
-  max-width: 1024px;
-}
-
-main,
 header {
   margin-left: auto;
   margin-right: auto;
@@ -55,7 +49,6 @@ footer {
   font-family: "Helvetica Neue";
   src: url(./assets/fonts/Helvetica-Neue.ttf) format("truetype");
 }
-
 
 @media screen and (min-width: 768px) {
   main {

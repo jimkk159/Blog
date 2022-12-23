@@ -17,18 +17,18 @@ function RootLayout() {
 
   return (
     <>
-    <div
-      className={`${classes["root-layout"]} ${
-        isDarkMode ? classes["dark"] : classes["light"]
-      }`}
-      style={{ backgroundImage: `url(${cubesImage})` }}
-    >
-      <Navigation />
-      <main>
-        <Outlet />
-      </main>
-      <Footer isDarkMode={isDarkMode} />
-    </div>
+      <div
+        className={`${classes["root-layout"]} ${
+          isDarkMode ? classes["dark"] : classes["light"]
+        }`}
+        style={{ backgroundImage: `url(${cubesImage})` }}
+      >
+        <Navigation />
+        <main>
+          <Outlet />
+        </main>
+        <Footer isDarkMode={isDarkMode} />
+      </div>
     </>
   );
 }

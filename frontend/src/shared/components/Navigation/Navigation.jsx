@@ -91,7 +91,7 @@ function Navigation(props) {
         setShowModal={setShowModal}
       />
 
-      <NavigationHeader isDarkMode={isDarkMode}>
+      <NavigationHeader>
         <div className={classes.navigation__title}>
           <Hamburger onClick={openDrawerHandler} isDarkMode={isDarkMode} />
           <h1 className={classes.navigation__icon}>

@@ -1,0 +1,28 @@
+.map-container {
+  position: fixed;
+  top: 30%;
+  right: 0;
+  height: 3rem;
+  width: 3rem;
+  padding: 0.5rem;
+  opacity: 0.2;
+  background-color: transparent;
+}
+
+.map-1024 {
+  height: 4rem;
+  width: 4rem;
+}
+.map-768 {
+  height: 3.5rem;
+  width: 3.5rem;
+}
+.map-container img {
+  height: 100%;
+  width: 100%;
+  user-select: none;
+}
+
+.map-container:hover {
+  opacity: 1;
+}

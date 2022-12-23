@@ -16,7 +16,6 @@ function Posts(props) {
       description={post.description}
       tags={post.tag}
       isPined={post.isPined}
-      isDarkMode={props.isDarkMode}
       isAdmin={isUserAdmin}
       isOdd={index % 2 ? true : false}
     />

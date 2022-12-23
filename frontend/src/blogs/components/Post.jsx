@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import PostInfo from "./PostInfo";
@@ -9,14 +10,15 @@ import Card from "../../shared/components/UI/Card";
 import classes from "./Post.module.css";
 
 function Post(props) {
+  const isDarkMode = useSelector((state) => state.theme.value);
   const backgroundColor =
-    !props.isDarkMode &&
+    !isDarkMode &&
     (props.isOdd ? classes["light-blue"] : classes["light-green"]);
 
   return (
     <Card
       className={`${classes["info-container"]} ${backgroundColor}`}
-      isDarkMode={props.isDarkMode}
+      isDarkMode={isDarkMode}
     >
       <div className={classes["info-content"]}>
         <h1>{props.title}</h1>
@@ -24,7 +26,6 @@ function Post(props) {
           author={props.author}
           date={props.date}
           isPined={props.isPined}
-          isDarkMode={props.isDarkMode}
         />
         <hr />
         <div className={classes["description-container"]}>
@@ -32,7 +33,6 @@ function Post(props) {
           <PostDescription
             description={props.description}
             tags={props.tags}
-            isDarkMode={props.isDarkMode}
           />
         </div>
       </div>

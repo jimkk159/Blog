@@ -1,6 +1,8 @@
 import React from "react";
-import { RxCross2 } from "react-icons/rx";
 import SearchIcon from "@mui/icons-material/Search";
+
+//Icon
+import { RxCross2 } from "react-icons/rx";
 
 //CSS
 import classes from "./Search.module.css";

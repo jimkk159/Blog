@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+
+//Icon
 import { AiOutlineTag } from "react-icons/ai";
 
 //Custom Hook
@@ -7,10 +9,14 @@ import useMediaQuery from "../../shared/hooks/media-query-hook";
 
 //CSS
 import classes from "./PostDescription.module.css";
+import { useSelector } from "react-redux";
 
 function PostDescription(props) {
-  const { description, tags, isDarkMode } = props;
+  const { description, tags } = props;
 
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+  
   //Tag Content
   const tagContent = (
     <div className={classes["detail-bottom"]}>
@@ -50,7 +56,7 @@ function PostDescription(props) {
           <Link
             to="/blog"
             className={
-              props.isDarkMode ? classes["link-yellow"] : classes["link-green"]
+              isDarkMode ? classes["link-yellow"] : classes["link-green"]
             }
           >
             {"more"}

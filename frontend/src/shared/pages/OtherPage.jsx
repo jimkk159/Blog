@@ -148,7 +148,6 @@ function OtherPage(props) {
           author={blogs.author}
           date={blogs.date}
           isPined={blogs.isPined}
-          isDarkMode={isDarkMode}
           isAdmin={isUserAdmin}
           isOdd={index % 2 ? true : false}
         />

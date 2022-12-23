@@ -21,7 +21,6 @@ import classes from "./NavigationItems.module.css";
 
 function NavigationItems(props) {
   //Redux
-  const isDarkMode = useSelector((state) => state.theme.value);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
@@ -37,7 +36,6 @@ function NavigationItems(props) {
         content={language.home}
         icon={<HomeIcon />}
         iconClassName={props.iconClassName}
-        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"about_" + uuidKeys[1]}
@@ -45,7 +43,6 @@ function NavigationItems(props) {
         content={language.about}
         icon={<ContactSupportIcon />}
         iconClassName={props.iconClassName}
-        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"blog_" + uuidKeys[2]}
@@ -53,7 +50,6 @@ function NavigationItems(props) {
         content={language.blog}
         icon={<CreateIcon />}
         iconClassName={props.iconClassName}
-        isDarkMode={isDarkMode}
       />
       <NavigationItem
         key={"logout_" + uuidKeys[3]}
@@ -65,7 +61,6 @@ function NavigationItems(props) {
         content={language.logout}
         icon={<LogoutIcon />}
         iconClassName={`${props.iconClassName} ${props.logout}`}
-        isDarkMode={isDarkMode}
       />
     </ul>
   );

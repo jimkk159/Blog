@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 //Custom Component
@@ -18,6 +19,10 @@ import classes from "./NavigationItem.module.css";
  */
 function NavigationItem(props) {
   const inputContent = props.content ? props.content : props.children;
+
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+
   // Show Item or not
   if (props.show === false) {
     return;
@@ -28,7 +33,7 @@ function NavigationItem(props) {
     return (
       <div
         className={`${props.className} ${classes["nav-link"]} ${
-          props.isDarkMode
+          isDarkMode
             ? classes["nav-link-dark"]
             : classes["nav-link-light"]
         }`}
@@ -49,7 +54,7 @@ function NavigationItem(props) {
     return (
       <li
         className={`${props.className} ${classes["nav-link"]} ${
-          props.isDarkMode
+          isDarkMode
             ? classes["nav-link-dark"]
             : classes["nav-link-light"]
         }`}
@@ -70,7 +75,7 @@ function NavigationItem(props) {
     return (
       <div
         className={`${props.className} ${classes["nav-link"]} ${
-          props.isDarkMode
+          isDarkMode
             ? classes["nav-link-dark"]
             : classes["nav-link-light"]
         }`}
@@ -95,7 +100,7 @@ function NavigationItem(props) {
   return (
     <li
       className={`${classes["nav-link"]} ${props.className} ${
-        props.isDarkMode ? classes["nav-link-dark"] : classes["nav-link-light"]
+        isDarkMode ? classes["nav-link-dark"] : classes["nav-link-light"]
       }`}
       onClick={props.onClick}
     >
