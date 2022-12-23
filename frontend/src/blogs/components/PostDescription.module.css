@@ -1,0 +1,52 @@
+.detail-container {
+  margin-top: 1rem;
+}
+
+.detail-upper {
+  height: 85%;
+}
+.detail-upper p {
+  text-align: justify;
+  font-size: 18px;
+  line-height: 1.2;
+  font-family: "Times New Roman";
+  letter-spacing: 0.02rem;
+}
+.detail-upper a {
+  display: inline;
+  text-decoration: none;
+}
+
+.detail-bottom {
+  display: flex;
+  height: 15%;
+  align-items: center;
+  font-size: 20px;
+}
+.detail-bottom p {
+  margin: 0 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  border-radius: 100px;
+
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+.link-green {
+  color: #117e96;
+}
+.link-yellow {
+  color: #ffbf00;
+}
+
+.dark{
+  color: rgb(41, 41, 41, 1);
+  background-color: rgb(242, 242, 242, 0.8);
+}
+.light{
+  color: rgb(242, 242, 242, 0.9);
+  background-color: rgb(41, 41, 41, 0.7);
+}

@@ -29,7 +29,7 @@ import HomePage from "../shared/pages/HomePage";
 //Custom Component
 import LoadingSpinner from "../shared/components/UI/LoadingSpinner";
 
-const loadingContent = {
+const loadingFallback = {
   fallback: (
     <div className="center">
       <LoadingSpinner />
@@ -41,39 +41,39 @@ const loadingContent = {
 //https://www.robinwieruch.de/react-router-lazy-loading/
 const BlogLayout = loadable(
   () => import("../blogs/pages/layout/BlogLayout"),
-  loadingContent
+  loadingFallback
 );
 const AboutPage = loadable(
   () => import("../shared/pages/AboutPage"),
-  loadingContent
+  loadingFallback
 );
 const NotFoundPage = loadable(
   () => import("../shared/pages/NotFoundPage"),
-  loadingContent
+  loadingFallback
 );
 const ErrorPage = loadable(
   () => import("../shared/pages/ErrorPage"),
-  loadingContent
+  loadingFallback
 );
 const AuthPage = loadable(
   () => import("../users/pages/AuthPage"),
-  loadingContent
+  loadingFallback
 );
 const NewPostPage = loadable(
   () => import("../blogs/pages/NewPostPage"),
-  loadingContent
+  loadingFallback
 );
 const PostPage = loadable(
   () => import("../blogs/pages/PostPage"),
-  loadingContent
+  loadingFallback
 );
 const PostsPage = loadable(
   () => import("../blogs/pages/PostsPage"),
-  loadingContent
+  loadingFallback
 );
 const TestPage = loadable(
   () => import("../shared/pages/TestPage"),
-  loadingContent
+  loadingFallback
 );
 
 export function RouteCreate() {

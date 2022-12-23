@@ -15,7 +15,7 @@ function PostInfo(props) {
     console.log("delete");
   };
   return (
-    <>
+    <div className={classes["container"]}>
       <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
       <p className={classes["author"]}>{props.author}&nbsp;&nbsp;</p>
       <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
@@ -39,7 +39,7 @@ function PostInfo(props) {
         }`}
         onClick={deleteHandler}
       />
-    </>
+    </div>
   );
 }
 

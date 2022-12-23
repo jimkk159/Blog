@@ -12,37 +12,29 @@
 }
 
 .info-content p {
-  margin: 0;
   display: inline;
-  font-size: 10px;
   font-family: "Helvetica Neue", "Arial", sans-serif;
 }
 
-.info-description {
+.description-container {
   display: flex;
 }
 
-.info-description img {
+.description-container img {
   width: 10rem;
   height: 10rem;
   margin-right: 1rem;
   margin-top: 1rem;
 }
 
-.info-description p {
-  text-align: justify;
-  margin-top: 1rem;
-  font-size: 18px;
-  line-height: 1.2;
-  font-family: "Times New Roman";
-  letter-spacing: 0.02rem;
-}
-.info-description a {
-  display: inline;
-  text-decoration: none;
-}
-
 .info-container:hover {
   margin: 1.25rem -0.25rem;
   padding: 1.25rem;
+}
+
+.light-blue {
+  background-color: #effafa;
+}
+.light-green {
+  background-color: #fafaef;
 }

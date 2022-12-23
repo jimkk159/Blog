@@ -1,3 +1,7 @@
+.container p{
+  font-size: 10px;
+}
+
 .author {
   font-weight: bold;
 }
@@ -19,18 +23,8 @@
   font-size: 20px;
 }
 
-.light-blue {
-  background-color: #effafa;
-}
-.light-green {
-  background-color: #fafaef;
-}
-.link-blue {
-  color: #117e96;
-}
-.link-yellow {
-  color: #ffbf00;
-}
+
+
 .light-trash-can {
   color: #42a69d;
 }

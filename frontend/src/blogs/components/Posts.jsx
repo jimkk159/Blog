@@ -10,10 +10,11 @@ function Posts(props) {
     <Post
       key={index}
       title={post.title}
+      date={post.date}
+      author={post.author}
       image={post.cover}
       description={post.description}
-      author={post.author}
-      date={post.date}
+      tags={post.tag}
       isPined={post.isPined}
       isDarkMode={props.isDarkMode}
       isAdmin={isUserAdmin}
