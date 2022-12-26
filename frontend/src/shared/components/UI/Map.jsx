@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 
 //Icon
 import mapImage from "../../../assets/img/Map.png";
@@ -15,7 +14,6 @@ import classes from "./Map.module.css";
 
 function Map(props) {
   const [isOpen, setIsOpen] = useState(false);
-  const isDarkMode = useSelector((state) => state.theme.value);
 
   //Custom Hook
   const { matches: matches_768 } = useMediaQuery("min", "768");

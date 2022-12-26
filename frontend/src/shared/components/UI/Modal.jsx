@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { CSSTransition } from "react-transition-group";
 
 //Custom Component
 import Backdrop from "./Backdrop";
@@ -15,6 +16,28 @@ function Modal(props) {
     </div>,
     document.getElementById("modal")
   );
+  if (props.isAnimate) {
+    return (
+      <>
+        {props.show && <Backdrop onClick={props.onCancel} />}
+        <CSSTransition
+          in={props.show}
+          timeout={{ enter: 1000, exit: 500 }}
+          classNames={{
+            enter: classes["modal-enter"],
+            enterActive: classes["modal-enter-active"],
+            exit: classes["modal-exit"],
+            exitActive: classes["modal-exit-active"],
+            exitDone: classes["modal-exit-done"],
+          }}
+          mountOnEnter
+          unmountOnExit
+        >
+          <>{ModalContent}</>
+        </CSSTransition>
+      </>
+    );
+  }
 
   return (
     <>

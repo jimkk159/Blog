@@ -89,6 +89,7 @@ function Navigation(props) {
       <AuthModal
         show={!isLoggedIn && showModal && matches}
         setShowModal={setShowModal}
+        isAnimate
       />
 
       <NavigationHeader>

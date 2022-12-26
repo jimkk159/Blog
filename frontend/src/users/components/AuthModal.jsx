@@ -31,7 +31,12 @@ function AuthModal(props) {
   };
 
   return (
-    <Modal show={show} onCancel={closeModalHandler} style={customModalStyle}>
+    <Modal
+      show={show}
+      onCancel={closeModalHandler}
+      style={customModalStyle}
+      isAnimate={props.isAnimate}
+    >
       <AuthForm onSubmit={submitHandler} isLogin={props.isLogin} />
     </Modal>
   );
