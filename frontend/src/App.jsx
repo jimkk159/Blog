@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import store from "./store/index.js";
 
 //Custom Component
-import CustomRoute from "./route/route";
+import CustomRoute from "./routes/routes";
 
 //CSS
 // import classes from "./App.module.css";

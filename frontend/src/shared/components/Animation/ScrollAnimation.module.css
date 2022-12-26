@@ -1,0 +1,4 @@
+.container {
+    position: absolute;
+    transition: top 1s;
+}

@@ -22,7 +22,7 @@ function PostPage() {
         <img src={cover} alt={"Post Cover"}/>
         <p>{description}</p>
       </Card>
-      <Map />
+      <Map isDarkMode={isDarkMode}/>
     </div>
   );
 }

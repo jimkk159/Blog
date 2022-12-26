@@ -1,10 +1,14 @@
-.map-container {
-  position: fixed;
-  top: 30%;
+.position {
+  top: 25%;
   right: 0;
+}
+.map-container {
   height: 3rem;
   width: 3rem;
   padding: 0.5rem;
+}
+
+.transparent {
   opacity: 0.2;
   background-color: transparent;
 }
@@ -21,6 +25,11 @@
   height: 100%;
   width: 100%;
   user-select: none;
+}
+
+.show-container {
+  width: 20rem;
+  height: 20rem;
 }
 
 .map-container:hover {

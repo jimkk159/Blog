@@ -11,6 +11,7 @@ function Card(props) {
         props.isDarkMode ? classes["dark"] : classes["light"]
       } ${props.className}`}
       style={props.style}
+      onClick={props.onClick}
     >
       {props.children}
     </div>
