@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 
 //Custom Comonent
-import Map from "../../shared/components/UI/Map";
+import Guide from "../components/BlogGuide/Guide";
 import Card from "../../shared/components/UI/Card";
 
 //CSS
@@ -22,7 +22,7 @@ function PostPage() {
         <img src={cover} alt={"Post Cover"}/>
         <p>{description}</p>
       </Card>
-      <Map isDarkMode={isDarkMode}/>
+      <Guide isDarkMode={isDarkMode}/>
     </div>
   );
 }

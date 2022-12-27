@@ -1,0 +1,21 @@
+.flow-chart-container {
+  width: 20rem;
+  height: 20rem;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.cross {
+  color: blue;
+  font-size: 25px;
+  position: absolute;
+  right: 1rem;
+}
+
+.cross-dark {
+  color: #E4E4E4;
+}
+.cross-light {
+  color: black;
+}

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineTag } from "react-icons/ai";
 
 //Custom Hook
-import useMediaQuery from "../../shared/hooks/media-query-hook";
+import useMediaQuery from "../../../shared/hooks/media-query-hook";
 
 //CSS
 import classes from "./PostDescription.module.css";

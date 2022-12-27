@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 //Custom Component
 import PostInfo from "./PostInfo";
 import PostDescription from "./PostDescription";
-import Card from "../../shared/components/UI/Card";
+import Card from "../../../shared/components/UI/Card";
 
 //CSS
 import classes from "./Post.module.css";

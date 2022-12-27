@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { AiOutlineEdit, AiFillDelete } from "react-icons/ai";
 
 //Custom Component
-import Pin from "../../shared/components/Icons/Pin";
+import Pin from "../../../shared/components/Icons/Pin";
 
 //CSS
 import classes from "./PostInfo.module.css";

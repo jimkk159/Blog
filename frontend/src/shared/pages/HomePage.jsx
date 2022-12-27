@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 //Custom Component
 import Quote from "../components/Quote";
-import Posts from "../../blogs/components/Posts";
+import Posts from "../../blogs/components/PostsBrowse/Posts";
 import Pagination from "../components/UI/Pagination";
 
 //CSS
@@ -22,7 +22,8 @@ function HomePage() {
   const [isHome, setIsHome] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(10);
+  // const [postsPerPage, setPostsPerPage] = useState(10);
+  const postsPerPage = 10;
 
   useEffect(() => {
     //Get Post
