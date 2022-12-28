@@ -20,7 +20,13 @@ function GuideOpen(props) {
         className={`${classes["flow-chart-container"]}`}
         isDarkMode={props.isDarkMode}
       >
-        <h1 className={`${classes["title"]}`}>Topic Map</h1>
+        <h1
+          className={`${classes["title"]} ${
+            props.isDarkMode ? classes["title-dark"] : classes["title-light"]
+          }`}
+        >
+          Topic Map
+        </h1>
         <FlowChart type="rect" width={cardWidth} height={cardHeight} />
         <RxCross2
           className={`${classes["cross"]} ${
