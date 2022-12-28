@@ -2,19 +2,27 @@
   width: 20rem;
   height: 20rem;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   padding: 1rem;
 }
-
+.title {
+  margin: 0.5rem auto;
+  padding: 0.25rem 0.5rem;
+  
+  border: 3px solid #E4E4E4;
+  text-align: center;
+  font-size: 25px;
+}
 .cross {
   color: blue;
   font-size: 25px;
   position: absolute;
+  top: 1rem;
   right: 1rem;
 }
-
 .cross-dark {
-  color: #E4E4E4;
+  color: #e4e4e4;
 }
 .cross-light {
   color: black;

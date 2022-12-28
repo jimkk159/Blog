@@ -1,23 +1,52 @@
 import React from "react";
 import { Raphael, Set, Text, Rect } from "react-raphael";
 
+const defaultElementAttr = {
+  fill: "#a966ff",
+  stroke: "#333333",
+  "stroke-width": 2,
+};
+
+const defaultTextAttr = {
+  fill: "#000",
+  "text-anchor": "middle",
+  "font-family": "Menlo, Monaco, Consolas, 'Droid Sans Mono', monospace",
+  "font-size": "12px",
+  stroke: "none",
+  "font-weight": "bold",
+  opacity: 1,
+  cursor: "pointer",
+};
+
 function Rectangle(props) {
+  const strokeColor = props.isDarkMode ? "#E4E4E4" : "#333333";
+  const textFontSize =
+    props.name.length > 5
+      ? props.name.length > 8
+        ? props.name.length > 11
+          ? "12px"
+          : "14px"
+        : "18px"
+      : "20px";
+      
+  const elementAttr = {
+    ...defaultElementAttr,
+    stroke: strokeColor,
+    ...props.elementAttr,
+  };
   const textAttr = {
-    fill: "#000",
-    "text-anchor": "middle",
-    "font-family": "Menlo, Monaco, Consolas, 'Droid Sans Mono', monospace",
-    "font-size": "12px",
-    stroke: "none",
-    "font-weight": "bold",
-    opacity: 1,
-    cursor: "pointer",
+    ...defaultTextAttr,
+    "font-size": textFontSize,
+    ...props.textAttr,
   };
-  const cirAttr = {
-    fill: "#a966ff",
-    stroke: props.isDarkMode?"#E4E4E4":"#333333",
-    "stroke-width": 2,
-    ...props.cirAttr,
-  };
+
+  const elementAnimate = props.cirAnimate
+    ? props.elementAnimate
+    : Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>");
+  const textAnimate = props.textAnimate
+    ? props.textAnimate
+    : Raphael.animation({ x: props.x }, 500, "<>");
+
   return (
     <Set>
       <Rect
@@ -27,8 +56,8 @@ function Rectangle(props) {
         r={props.r}
         width={props.width}
         height={props.height}
-        attr={cirAttr}
-        animate={Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>")}
+        attr={elementAttr}
+        animate={elementAnimate}
       />
       <Text
         index={props.index}
@@ -36,7 +65,7 @@ function Rectangle(props) {
         y={props.y}
         text={props.name}
         attr={textAttr}
-        animate={Raphael.animation({ x: props.x }, 500, "<>")}
+        animate={textAnimate}
       />
     </Set>
   );

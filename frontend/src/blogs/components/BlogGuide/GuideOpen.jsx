@@ -12,14 +12,15 @@ import ScrollAnimation from "../../../shared/components/Animation/ScrollAnimatio
 import classes from "./GuideOpen.module.css";
 
 const cardWidth = 16 * 20 - 16;
-const cardHeight = 16 * 20 - 16;
+const cardHeight = 16 * 20 - 16 - 16 * 4;
 function GuideOpen(props) {
   return (
     <ScrollAnimation className={`${props.className}`} top="20%">
       <Card
-        className={`${classes["map-container"]} ${classes["flow-chart-container"]}`}
+        className={`${classes["flow-chart-container"]}`}
         isDarkMode={props.isDarkMode}
       >
+        <h1 className={`${classes["title"]}`}>Topic Map</h1>
         <FlowChart type="rect" width={cardWidth} height={cardHeight} />
         <RxCross2
           className={`${classes["cross"]} ${

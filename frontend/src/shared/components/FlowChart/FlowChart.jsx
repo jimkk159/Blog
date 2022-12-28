@@ -17,7 +17,7 @@ const rectRadius = 10;
 function FlowChart(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const [data, linkData] = createTree({
-    Topic: "Node",
+    Topic: "React-Router",
     graphicWidth: props.width,
     graphicHeight: props.height,
     width: rectWidth,
@@ -32,7 +32,7 @@ function FlowChart(props) {
       r: rectRadius,
       width: rectWidth,
       height: rectHeight,
-      cirAttr: { fill: "#F866FF" },
+      elementAttr: { fill: "#F866FF" },
     },
     {
       name: "A2",
@@ -41,7 +41,7 @@ function FlowChart(props) {
       r: 10,
       width: 80,
       height: 30,
-      cirAttr: { fill: "#C566FF" },
+      elementAttr: { fill: "#C566FF" },
     },
     {
       name: "A3",
@@ -50,7 +50,7 @@ function FlowChart(props) {
       r: 10,
       width: 80,
       height: 30,
-      cirAttr: { fill: "#FFBD66" },
+      elementAttr: { fill: "#FFBD66" },
     },
     {
       name: "A4",
@@ -59,7 +59,7 @@ function FlowChart(props) {
       r: 10,
       width: 80,
       height: 30,
-      cirAttr: { fill: "#7EFF66" },
+      elementAttr: { fill: "#7EFF66" },
     },
     {
       name: "A5",
@@ -68,7 +68,7 @@ function FlowChart(props) {
       r: 10,
       width: 80,
       height: 30,
-      cirAttr: { fill: "#7278FF" },
+      elementAttr: { fill: "#7278FF" },
     },
     {
       name: "A6",
@@ -77,7 +77,7 @@ function FlowChart(props) {
       r: 10,
       width: 80,
       height: 30,
-      cirAttr: { fill: "#66E4FF" },
+      elementAttr: { fill: "#66E4FF" },
     },
   ];
   const rectLinkData = [
@@ -88,12 +88,12 @@ function FlowChart(props) {
     { startNode: rectData[4], endNode: rectData[5] },
   ];
   const nodeData = [
-    { name: "A1", x: 50, y: 50, r: 17, cirAttr: { fill: "#F866FF" } },
-    { name: "A2", x: 50, y: 150, r: 17, cirAttr: { fill: "#C566FF" } },
-    { name: "A3", x: 150, y: 250, r: 17, cirAttr: { fill: "#FFBD66" } },
-    { name: "A4", x: 50, y: 350, r: 17, cirAttr: { fill: "#7EFF66" } },
-    { name: "A5", x: 50, y: 450, r: 17, cirAttr: { fill: "#7278FF" } },
-    { name: "A6", x: 50, y: 550, r: 17, cirAttr: { fill: "#66E4FF" } },
+    { name: "A1", x: 50, y: 50, r: 17, elementAttr: { fill: "#F866FF" } },
+    { name: "A2", x: 50, y: 150, r: 17, elementAttr: { fill: "#C566FF" } },
+    { name: "A3", x: 150, y: 250, r: 17, elementAttr: { fill: "#FFBD66" } },
+    { name: "A4", x: 50, y: 350, r: 17, elementAttr: { fill: "#7EFF66" } },
+    { name: "A5", x: 50, y: 450, r: 17, elementAttr: { fill: "#7278FF" } },
+    { name: "A6", x: 50, y: 550, r: 17, elementAttr: { fill: "#66E4FF" } },
   ];
   const nodeLinkData = [
     { startNode: nodeData[0], endNode: nodeData[1] },
@@ -118,8 +118,8 @@ function FlowChart(props) {
                 r={element.r}
                 width={element.width}
                 height={element.height}
-                cirAttr={element.cirAttr}
-                cirAnimate={element.cirAnimate}
+                elementAttr={element.elementAttr}
+                elementAnimate={element.elementAnimate}
                 textX={element.x}
                 textY={element.y}
                 textAttr={element.textAttr}
@@ -165,8 +165,8 @@ function FlowChart(props) {
               x={element.x}
               y={element.y}
               r={element.r}
-              cirAttr={element.cirAttr}
-              cirAnimate={element.cirAnimate}
+              elementAttr={element.elementAttr}
+              elementAnimate={element.elementAnimate}
               textX={element.x}
               textY={element.y}
               textAttr={element.textAttr}

@@ -190,7 +190,7 @@ export function createTree({
         r: radius,
         width: width,
         height: height,
-        cirAttr: { fill: colors[i] },
+        elementAttr: { fill: colors[i] },
       });
     }
   }

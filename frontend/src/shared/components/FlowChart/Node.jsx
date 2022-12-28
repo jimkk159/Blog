@@ -1,29 +1,36 @@
 import React from "react";
 import { Raphael, Set, Circle, Text } from "react-raphael";
 
+const defaultTextAttr = {
+  fill: "#000",
+  "text-anchor": "middle",
+  "font-family": "Menlo, Monaco, Consolas, 'Droid Sans Mono', monospace",
+  "font-size": "12px",
+  stroke: "none",
+  "font-weight": "bold",
+  opacity: 1,
+  cursor: "pointer",
+};
+const defaultElementAttr = {
+  fill: "#a966ff",
+  stroke: "#fff",
+  "stroke-width": 2,
+};
+
 function Node(props) {
+  const elementAttr = {
+    ...defaultElementAttr,
+    ...props.elementAttr,
+  };
   const textAttr = {
-    fill: "#000",
-    "text-anchor": "middle",
-    "font-family": "Menlo, Monaco, Consolas, 'Droid Sans Mono', monospace",
-    "font-size": "12px",
-    stroke: "none",
-    "font-weight": "bold",
-    opacity: 1,
-    cursor: "pointer",
+    ...defaultTextAttr,
     ...props.textAttr,
   };
-  const cirAttr = {
-    fill: "#a966ff",
-    stroke: "#fff",
-    "stroke-width": 2,
-    ...props.cirAttr,
-  };
-  const cirAnimation = props.cirAnimation
-    ? props.cirAnimation
+  const elementAnimate = props.elementAnimate
+    ? props.elementAnimate
     : Raphael.animation({ cx: props.x }, 500, "<>");
-  const textAnimation = props.textAnimation
-    ? props.textAnimation
+  const textAnimate = props.textAnimate
+    ? props.textAnimate
     : Raphael.animation({ x: props.x }, 500, "<>");
   return (
     <Set>
@@ -32,8 +39,8 @@ function Node(props) {
         x={props.x - 10}
         y={props.y}
         r={props.r}
-        attr={cirAttr}
-        animate={cirAnimation}
+        attr={elementAttr}
+        animate={elementAnimate}
       />
       <Text
         index={props.index}
@@ -41,7 +48,7 @@ function Node(props) {
         y={props.y}
         text={props.name}
         attr={textAttr}
-        animate={textAnimation}
+        animate={textAnimate}
       />
     </Set>
   );
