@@ -6,10 +6,10 @@ const options = { year: "numeric", month: "short", day: "numeric" };
 
 export const Dummy_blogs = [
     {
-      title: "Test title 1",
+      title: "從非本科系到矽谷工程師 — 夢想完成後的學習",
       cover: coverImage1,
       description:
-        "但是館長沒逼他啊,給他一筆錢也沒用合約逼他要來多久或減重多少公斤,所以不想運動是很正常ㄉㄅ？.",
+        "當在衡量模型的表現結果 (performance) 時，會藉由評估指標來進行，本文將要介紹在影像分割 (Image Segmentation) 任務上經常使用的評估指標，並進行實作，所有 code 會放置在文章下方。",
       date: new Date("2022-11-28").toLocaleDateString("en-US", options),
       author: "Amy",
       isPined: true,
