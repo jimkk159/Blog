@@ -28,7 +28,7 @@ function Rectangle(props) {
           : "14px"
         : "18px"
       : "20px";
-      
+
   const elementAttr = {
     ...defaultElementAttr,
     stroke: strokeColor,
@@ -40,18 +40,15 @@ function Rectangle(props) {
     ...props.textAttr,
   };
 
-  const elementAnimate = props.cirAnimate
-    ? props.elementAnimate
-    : Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>");
-  const textAnimate = props.textAnimate
-    ? props.textAnimate
-    : Raphael.animation({ x: props.x }, 500, "<>");
-
+  const elementAnimate = props.elementAnimate ? props.elementAnimate : null;
+  // Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>");
+  const textAnimate = props.textAnimate ? props.textAnimate : null;
+  //Raphael.animation({ x: props.x }, 500, "<>");
   return (
     <Set>
       <Rect
         index={props.index}
-        x={props.x - props.width / 2 - 10}
+        x={props.x - props.width / 2}
         y={props.y - props.height / 2}
         r={props.r}
         width={props.width}
@@ -61,7 +58,7 @@ function Rectangle(props) {
       />
       <Text
         index={props.index}
-        x={props.x - 10}
+        x={props.x}
         y={props.y}
         text={props.name}
         attr={textAttr}

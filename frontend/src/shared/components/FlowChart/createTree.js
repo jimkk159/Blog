@@ -70,18 +70,15 @@ const DUMMY_Tree = [
   { id: 5, level: 4, topic: "React", parent: "Node" },
   { id: 4, level: 4, topic: "Express", parent: "Node" },
   { id: 8, level: 5, topic: "Test1", parent: "Express" },
-  { id: 9, level: 5, topic: "Test2", parent: "Express" },
-  { id: 10, level: 5, topic: "Test3", parent: "Express" },
+  { id: 9, level: 5, topic: "Test22", parent: "Express" },
+  { id: 10, level: 5, topic: "Test333", parent: "Express" },
 ];
 
 function compareLevel(a, b) {
   if (a.level !== b.level) return a.level - b.level;
   return a.id - b.id;
 }
-function sortParent(a, b) {
-  if (a.level !== b.level) return a.level - b.level;
-  return a.id - b.id;
-}
+
 const colors = [
   "#F866FF",
   "#C566FF",
@@ -98,6 +95,8 @@ export function createTree({
   graphicHeight,
   width,
   height,
+  userOffsetX,
+  userOffsetY,
   radius,
 }) {
   const linearData = []; //Linear Structure
@@ -141,7 +140,7 @@ export function createTree({
     for (let j = 0; j < levelLength; j++) {
       for (let k = 0; k < nextLevelLength; k++) {
         if (treeData[i][j].topic === treeData[i + 1][k].parent) {
-            sortTreeData[i + 1].push({
+          sortTreeData[i + 1].push({
             topic: treeData[i + 1][k].topic,
             parent: treeData[i + 1][k].parent,
           });
@@ -185,8 +184,8 @@ export function createTree({
       linearData.push({
         name: sortTreeData[i][j].topic,
         parent: sortTreeData[i][j].parent,
-        x: totalOffsetX + levelOffsetX + spaceX * j,
-        y: totalOffsetY + (graphicHeight / showLevel) * (i + 1),
+        x: userOffsetX + totalOffsetX + levelOffsetX + spaceX * j,
+        y: userOffsetY + totalOffsetY + (graphicHeight / showLevel) * (i + 1),
         r: radius,
         width: width,
         height: height,

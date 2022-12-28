@@ -11,18 +11,18 @@ import classes from "./PostPage.module.css";
 //Dummy Data
 import { Dummy_blogs } from "../../Dummy_blogs";
 
-
 function PostPage() {
   const isDarkMode = useSelector((state) => state.theme.value);
   const { title, description, cover } = Dummy_blogs[0];
+
   return (
     <div className={classes["flex-container"]}>
       <Card className="page" isDarkMode={isDarkMode}>
         <h1>{title}</h1>
-        <img src={cover} alt={"Post Cover"}/>
+        <img src={cover} alt={"Post Cover"} />
         <p>{description}</p>
       </Card>
-      <Guide isDarkMode={isDarkMode}/>
+      <Guide isDarkMode={isDarkMode} />
     </div>
   );
 }

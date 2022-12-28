@@ -12,6 +12,13 @@ function Card(props) {
       } ${props.className}`}
       style={props.style}
       onClick={props.onClick}
+      onMouseDown={props.onMouseDown}
+      onMouseEnter={props.onMouseEnter}
+      onMouseLeave={props.onMouseLeave}
+      onMouseMove={props.onMouseMove}
+      onMouseOut={props.onMouseOut}
+      onMouseOver={props.onMouseOver}
+      onMouseUp={props.onMouseUp}
     >
       {props.children}
     </div>

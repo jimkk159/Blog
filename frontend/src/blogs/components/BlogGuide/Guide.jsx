@@ -30,7 +30,7 @@ function Guide(props) {
     <GuideOpen
       className={classes["position"]}
       isDarkMode={props.isDarkMode}
-      onClick={closeGuideHandler}
+      onClose={closeGuideHandler}
     />
   );
 }

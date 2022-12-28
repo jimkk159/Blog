@@ -18,20 +18,27 @@ const defaultElementAttr = {
 };
 
 function Node(props) {
+  const textFontSize =
+    props.name.length > 5
+      ? props.name.length > 6
+        ? props.name.length > 11
+          ? "12px"
+          : "14px"
+        : "16px"
+      : "18px";
   const elementAttr = {
     ...defaultElementAttr,
     ...props.elementAttr,
   };
   const textAttr = {
     ...defaultTextAttr,
+    "font-size": textFontSize,
     ...props.textAttr,
   };
-  const elementAnimate = props.elementAnimate
-    ? props.elementAnimate
-    : Raphael.animation({ cx: props.x }, 500, "<>");
-  const textAnimate = props.textAnimate
-    ? props.textAnimate
-    : Raphael.animation({ x: props.x }, 500, "<>");
+  const elementAnimate = props.elementAnimate ? props.elementAnimate : null;
+  // Raphael.animation({ cx: props.x }, 500, "<>");
+  const textAnimate = props.textAnimate ? props.textAnimate : null;
+  // Raphael.animation({ x: props.x }, 500, "<>");
   return (
     <Set>
       <Circle
