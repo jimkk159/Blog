@@ -1,11 +1,5 @@
 import React from "react";
-import { Raphael, Set, Text, Rect } from "react-raphael";
-
-const defaultElementAttr = {
-  fill: "#a966ff",
-  stroke: "#333333",
-  "stroke-width": 2,
-};
+import { Set, Circle, Text } from "react-raphael";
 
 const defaultTextAttr = {
   fill: "#000",
@@ -17,21 +11,23 @@ const defaultTextAttr = {
   opacity: 1,
   cursor: "pointer",
 };
+const defaultElementAttr = {
+  fill: "#a966ff",
+  stroke: "#fff",
+  "stroke-width": 2,
+};
 
-function Rectangle(props) {
-  const strokeColor = props.isDarkMode ? "#E4E4E4" : "#333333";
+function Node(props) {
   const textFontSize =
     props.name.length > 5
-      ? props.name.length > 8
+      ? props.name.length > 6
         ? props.name.length > 11
           ? "12px"
           : "14px"
-        : "18px"
-      : "20px";
-
+        : "16px"
+      : "18px";
   const elementAttr = {
     ...defaultElementAttr,
-    stroke: strokeColor,
     ...props.elementAttr,
   };
   const textAttr = {
@@ -39,26 +35,23 @@ function Rectangle(props) {
     "font-size": textFontSize,
     ...props.textAttr,
   };
-
   const elementAnimate = props.elementAnimate ? props.elementAnimate : null;
-  // Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>");
+  // Raphael.animation({ cx: props.x }, 500, "<>");
   const textAnimate = props.textAnimate ? props.textAnimate : null;
-  //Raphael.animation({ x: props.x }, 500, "<>");
+  // Raphael.animation({ x: props.x }, 500, "<>");
   return (
     <Set>
-      <Rect
+      <Circle
         index={props.index}
-        x={props.x - props.width / 2}
-        y={props.y - props.height / 2}
+        x={props.x - 10}
+        y={props.y}
         r={props.r}
-        width={props.width}
-        height={props.height}
         attr={elementAttr}
         animate={elementAnimate}
       />
       <Text
         index={props.index}
-        x={props.x}
+        x={props.x - 10}
         y={props.y}
         text={props.name}
         attr={textAttr}
@@ -68,4 +61,4 @@ function Rectangle(props) {
   );
 }
 
-export default Rectangle;
+export default Node;

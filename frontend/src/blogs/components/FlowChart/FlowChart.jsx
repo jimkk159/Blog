@@ -1,7 +1,7 @@
 import React from "react";
 
 //Function
-import { createFlowData } from "../../util/createFlowData";
+import { createFlowData } from "../../util/createFlowData.js";
 
 //Custom Component
 import CirChart from "./CirChart";
