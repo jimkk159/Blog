@@ -12,7 +12,7 @@ import classes from "./PostDescription.module.css";
 import { useSelector } from "react-redux";
 
 function PostDescription(props) {
-  const { description, tags } = props;
+  const { description, tags, language } = props;
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -47,7 +47,7 @@ function PostDescription(props) {
               isDarkMode ? classes["link-yellow"] : classes["link-green"]
             }
           >
-            {"more"}
+            {language.continue}
           </Link>
           {" )"}
         </p>

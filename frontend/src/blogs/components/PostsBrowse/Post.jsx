@@ -11,6 +11,7 @@ import classes from "./Post.module.css";
 
 function Post(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
+  const language = useSelector((state) => state.language.language);
   const backgroundColor =
     !isDarkMode &&
     (props.isOdd ? classes["light-blue"] : classes["light-green"]);
@@ -33,6 +34,7 @@ function Post(props) {
           <PostDescription
             description={props.description}
             tags={props.tags}
+            language={language}
           />
         </div>
       </div>
