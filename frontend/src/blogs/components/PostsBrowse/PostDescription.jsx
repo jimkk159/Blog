@@ -12,7 +12,7 @@ import classes from "./PostDescription.module.css";
 import { useSelector } from "react-redux";
 
 function PostDescription(props) {
-  const { description, tags, language } = props;
+  const { short, tags, language } = props;
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -23,24 +23,23 @@ function PostDescription(props) {
   //Custom Hook
   const { matches } = useMediaQuery("min", "768");
   const limit = matches ? 200 : 150;
-  if (description.length < limit)
+  if (short.length < limit)
     return (
       <div className={classes["detail-container"]}>
-        <div className={classes["detail-upper"]}>{description}</div>{" "}
-        {tagContent}
+        <div className={classes["detail-upper"]}>{short}</div> {tagContent}
       </div>
     );
 
   //Count the description stop word
   let count = limit;
-  for (let i = limit; description[i - 1] !== " " && i < limit + 50; i++) {
+  for (let i = limit; short[i - 1] !== " " && i < limit + 50; i++) {
     count = i;
   }
   return (
     <div className={classes["detail-container"]}>
       <div className={classes["detail-upper"]}>
         <p>
-          {description.slice(0, count) + "... ( "}
+          {short.slice(0, count) + "... ( "}
           <Link
             to="/blog"
             className={

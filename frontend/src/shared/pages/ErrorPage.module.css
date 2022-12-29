@@ -51,6 +51,10 @@
   color: #e4e4e4;
 }
 
+.img-dark {
+  background-color: #444;
+}
+
 @media (min-width: 768px) {
   .error-layout {
     padding-top: 10rem;

@@ -1,0 +1,34 @@
+.flex-container {
+  display: flex;
+  justify-items: center;
+  margin-bottom: 3rem;
+  text-align: left;
+}
+.post-container {
+  padding: 1.5rem 3rem 3rem;
+}
+.title {
+  font-size: 32px;
+  line-height: 32px;
+  margin-top: 0.6em;
+  text-align: center;
+}
+.title-hr {
+  margin: 0.5rem 0 1rem;
+}
+.tags-container {
+  margin-top: 3rem;
+}
+.tags-container svg {
+  font-size: 30px;
+}
+.tags-container p {
+  background-color: rgba(222, 222, 222, 1);
+  color: rgba(41, 41, 41, 1);
+  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 8px;
+  margin-top: 8px;
+  padding: 8px 16px;
+}

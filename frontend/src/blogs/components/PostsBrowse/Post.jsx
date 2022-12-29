@@ -32,7 +32,7 @@ function Post(props) {
         <div className={classes["description-container"]}>
           <img src={props.image} alt="blog-cover" />
           <PostDescription
-            description={props.description}
+            short={props.short}
             tags={props.tags}
             language={language}
           />

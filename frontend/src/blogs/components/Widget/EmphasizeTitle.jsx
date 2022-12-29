@@ -4,15 +4,24 @@ import React from "react";
 import classes from "./EmphasizeTitle.module.css";
 
 function EmphasizeTitle(props) {
+  const { content, children } = props;
+  if (content)
+    return (
+      <h3
+        className={`${classes["title"]} ${
+          props.isDarkMode ? classes["dark"] : classes["light"]
+        }`}
+      >
+        {content}
+      </h3>
+    );
   return (
     <h3
       className={`${classes["title"]} ${
-        props.isDarkMode
-          ? classes["dark"]
-          : classes["light"]
+        props.isDarkMode ? classes["dark"] : classes["light"]
       }`}
     >
-      Segmentation 相關文章
+      {children}
     </h3>
   );
 }
