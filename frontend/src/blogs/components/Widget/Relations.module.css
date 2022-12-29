@@ -1,0 +1,28 @@
+.title{
+  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  margin-block-end: 1em;
+  margin-block-start: 1em;
+  margin-inline-end: 0px;
+  margin-inline-start: 0px;
+}
+.list-items {
+  margin: 0;
+  margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+}
+.list-item {
+  font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times,
+    serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.003em;
+  line-height: 28px;
+  line-height: 28px;
+  list-style-type: disc;
+  margin-bottom: -0.46em;
+  margin-top: 0.94em;
+  padding-left: 0px;
+}

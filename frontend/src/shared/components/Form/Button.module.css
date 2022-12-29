@@ -1,10 +1,10 @@
 .button {
-  font: inherit;
-  padding: 0.5rem 1.5rem;
   border-radius: 4px;
   cursor: pointer;
-  text-decoration: none;
   display: inline-block;
+  font: inherit;
+  padding: 0.5rem 1.5rem;
+  text-decoration: none;
 }
 
 .button:focus {
@@ -15,20 +15,20 @@
 .button:hover:disabled,
 .button:active:disabled {
   background-color: #ccc;
-  color: #979797;
   border-color: #ccc;
+  color: #979797;
   cursor: not-allowed;
 }
 
 .light{
-  border: 1px solid #ff0055;
   background-color: #ff0055;
+  border: 1px solid #ff0055;
   color: white;
 }
 
 .dark{
-  border: 1px solid #C38FFF;
   background-color: #C38FFF;
+  border: 1px solid #C38FFF;
   color: black;
   font-weight: bold;
 }

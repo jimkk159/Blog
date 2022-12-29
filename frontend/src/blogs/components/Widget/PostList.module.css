@@ -1,0 +1,14 @@
+.list-items {
+  padding-left: 1.5rem;
+}
+.list-item {
+  font-family: source-serif-pro, Georgia, Cambria, "Times New Roman", Times,
+    serif;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.003em;
+  line-height: 28px;
+  margin-bottom: -0.46em;
+  margin-top: 2.14em;
+  padding-left: 0px;
+}

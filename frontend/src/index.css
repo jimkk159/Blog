@@ -9,8 +9,8 @@ html {
 }
 
 body {
-  margin: 0;
   background-color: white;
+  margin: 0;
 }
 
 header {
@@ -25,15 +25,15 @@ footer {
 }
 
 .center {
-  text-align: center;
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
+  text-align: center;
 }
 
 .error {
-  text-align: center;
   color: white;
+  text-align: center;
 }
 
 .page {
@@ -52,7 +52,7 @@ footer {
 
 @media screen and (min-width: 768px) {
   main {
-    padding-right: 20px !important;
     padding-left: 20px !important;
+    padding-right: 20px !important;
   }
 }

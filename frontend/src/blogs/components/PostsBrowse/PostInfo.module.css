@@ -12,15 +12,15 @@
 }
 
 .icon {
-  margin: 0 0.25rem -0.1rem;
   font-size: 20px;
+  margin: 0 0.25rem -0.1rem;
 }
 
 .pin {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
   font-size: 20px;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
 }
 
 

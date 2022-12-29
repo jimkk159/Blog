@@ -1,15 +1,15 @@
 /* Foot Container */
 
 .foot-container {
-  text-align: center;
-  padding: 2% 0;
   margin-top: 1rem;
   min-height: 4rem;
+  padding: 2% 0;
+  text-align: center;
 }
 
 .foot-container p {
-  font-size: 10px;
   color: #fff;
+  font-size: 10px;
 }
 
 .light {

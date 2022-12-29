@@ -1,27 +1,27 @@
 .rotating-ring {
   display: inline-block;
-  width: 64px;
   height: 64px;
+  width: 64px;
 }
 
 .rotating-ring:after {
   content: " ";
   display: block;
-  width: 46px;
   height: 46px;
   margin: 1px;
+  width: 46px;
 }
 
 .overlay {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  align-items: center;
   background: transparent;
   display: flex;
+  height: 100%;
   justify-content: center;
-  align-items: center;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 .img {
   max-height: 30rem;
@@ -32,17 +32,17 @@
     max-width: 20rem;
   }
 .dark {
+  animation: rotating-ring 1.2s linear infinite;
   border: 5px solid #e4e4e4;
   border-color: #e4e4e4 transparent #e4e4e4 transparent;
   border-radius: 50%;
-  animation: rotating-ring 1.2s linear infinite;
 }
 
 .light {
+  animation: rotating-ring 1.2s linear infinite;
   border: 5px solid #510077;
   border-color: #510077 transparent #510077 transparent;
   border-radius: 50%;
-  animation: rotating-ring 1.2s linear infinite;
 }
 
 @keyframes rotating-ring {

@@ -5,43 +5,43 @@
   padding: 0 2rem;
 }
 .error-content {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 10rem;
 }
 .not-found {
-  text-align: left;
   font-size: 50px;
   margin: 0;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 .suffix {
-  text-align: left;
   font-size: 20px;
+  text-align: left;
 }
 .description {
-  text-align: left;
   font-size: 15px;
   margin: 0 0 1rem 0.5rem;
+  text-align: left;
 }
 .cry-face {
-  text-align: center;
   font-size: 30px;
   margin: 1rem 0 0;
+  text-align: center;
 }
 .image-container {
   position: relative;
 }
 .animate-img {
-  position: relative;
-  width: 100%;
   max-width: 15rem;
   min-width: 10rem;
+  position: relative;
+  width: 100%;
 }
 .return-container {
-  display: flex;
   align-items: center;
+  display: flex;
   margin-top: 1rem;
 }
 .return-arrow {
@@ -50,11 +50,11 @@
   text-align: left;
 }
 .return-link {
-  display: inline-block;
   /* text-decoration: none; */
   color: #e4e4e4;
-  text-align: left;
+  display: inline-block;
   font-size: 20px;
+  text-align: left;
 }
 .light {
   color: black;

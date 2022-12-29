@@ -1,21 +1,21 @@
 .theme {
-  display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 16px;
+  display: flex;
+  justify-content: center;
   padding: 0.25rem 0.6rem;
 }
 
 .light{
-  color: #6b6b6b;
   background-color: white;
   border: 2px solid #9b9b9b;
+  color: #6b6b6b;
 }
 
 .dark{
-  color: #ababab;
   background-color: #232323;
   border: 2px solid #ebebeb;
+  color: #ababab;
 }
 
 .icon {

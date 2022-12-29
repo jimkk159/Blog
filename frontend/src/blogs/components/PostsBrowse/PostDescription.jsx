@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-//Icon
-import { AiOutlineTag } from "react-icons/ai";
-
 //Custom Hook
 import useMediaQuery from "../../../shared/hooks/media-query-hook";
+
+//Custom Component
+import Tags from "../../../shared/components/UI/Tags";
 
 //CSS
 import classes from "./PostDescription.module.css";
@@ -16,21 +16,9 @@ function PostDescription(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  
+
   //Tag Content
-  const tagContent = (
-    <div className={classes["detail-bottom"]}>
-      <AiOutlineTag className={classes["icon"]} />
-      {tags.map((tag, index) => (
-        <p
-          key={index}
-          className={`${isDarkMode ? classes["dark"] : classes["light"]}`}
-        >
-          {tag}
-        </p>
-      ))}
-    </div>
-  );
+  const tagContent = <Tags isDarkMode={isDarkMode} content={tags} />;
 
   //Custom Hook
   const { matches } = useMediaQuery("min", "768");

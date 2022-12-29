@@ -14,7 +14,7 @@ function Posts(props) {
       author={post.author}
       image={post.cover}
       description={post.description}
-      tags={post.tag}
+      tags={post.tags}
       isPined={post.isPined}
       isAdmin={isUserAdmin}
       isOdd={index % 2 ? true : false}

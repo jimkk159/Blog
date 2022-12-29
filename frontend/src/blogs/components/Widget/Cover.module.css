@@ -1,0 +1,19 @@
+.cover {
+  background-color: rgba(255, 255, 255, 1);
+  max-width: 100%;
+  width: 100%;
+}
+.comment {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.dark {
+  color: rgba(177, 177, 177, 1);
+}
+.light {
+  color: rgba(107, 107, 107, 1);
+}

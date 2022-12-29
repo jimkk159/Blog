@@ -1,0 +1,16 @@
+.title {
+  display: inline;
+  font-size: 22px;
+  line-height: 30px;
+  margin: 10px 0;
+  min-width: 340px;
+  padding: 8px 70px 8px 20px;
+}
+.dark {
+  background: linear-gradient(-135deg, transparent 30px, #1c2d44 30px);
+  color: #fff;
+}
+.light {
+  background: linear-gradient(-135deg, transparent 30px, #ff6e31 30px);
+  color: black;
+}

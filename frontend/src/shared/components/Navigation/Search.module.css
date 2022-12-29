@@ -1,28 +1,28 @@
 .icon {
-  padding: 3px;
-  position: absolute;
   box-sizing: border-box;
   color: #ababab;
+  padding: 3px;
+  position: absolute;
 }
 
 .input-icon-search {
   height: 1.7rem;
-  width: 1.5rem;
   right: 10px;
+  width: 1.5rem;
 }
 
 .input-icon-cross {
-  right: 30px;
   height: 22px;
+  right: 30px;
   width: 24px;
 }
 
 .input {
-  height: 32px;
   border-radius: 20px;
   box-sizing: border-box;
-  padding-left: 0.75rem;
+  height: 32px;
   outline: none;
+  padding-left: 0.75rem;
   width: 3rem;
 }
 
@@ -31,9 +31,9 @@
 }
 
 .search-input {
-  position: relative;
-  display: flex;
   align-items: center;
+  display: flex;
+  position: relative;
 }
 
 .icon-light {
@@ -45,15 +45,15 @@
 }
 
 .light {
-  border-color: pink;
   background-color: white;
+  border-color: pink;
   caret-color: black;
   color: white;
 }
 
 .dark {
-  border-color: #E4E4E4;
   background-color: #232323;
+  border-color: #E4E4E4;
   caret-color: #ababab;
   color: #E4E4E4;
 }

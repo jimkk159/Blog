@@ -1,12 +1,12 @@
 .map-container {
   height: 3rem;
-  width: 3rem;
   padding: 0.5rem;
+  width: 3rem;
 }
 
 .transparent {
-  opacity: 0.2;
   background-color: transparent;
+  opacity: 0.2;
 }
 
 .map-1024 {
@@ -19,8 +19,8 @@
 }
 .map-container img {
   height: 100%;
-  width: 100%;
   user-select: none;
+  width: 100%;
 }
 
 .map-container:hover {

@@ -13,7 +13,7 @@ export const Dummy_blogs = [
       date: new Date("2022-11-28").toLocaleDateString("en-US", options),
       author: "Amy",
       isPined: true,
-      tag:["CS","react", "vue", "python"]
+      tags:["CS","react", "vue", "python"]
     },
     {
       title: "Test title 2",
@@ -22,7 +22,7 @@ export const Dummy_blogs = [
         "The background-color property in CSS is used to specify the background color of an element. On the other hand, if you only use “Background:” Property, you can either specify it's valued as an image URL or as a color code or specify the value of each background property in the below-given order.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -32,7 +32,7 @@ export const Dummy_blogs = [
         "L123",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -42,7 +42,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: true,
     },
     {
@@ -52,7 +52,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -62,7 +62,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: true,
     },
     {
@@ -72,7 +72,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -82,7 +82,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -92,7 +92,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -102,7 +102,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -112,7 +112,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -122,7 +122,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -132,7 +132,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -142,7 +142,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -152,7 +152,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -162,7 +162,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -172,7 +172,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -182,7 +182,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -192,7 +192,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -202,7 +202,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -212,7 +212,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -222,7 +222,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -232,7 +232,7 @@ export const Dummy_blogs = [
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
       date: new Date("2010-10-05").toLocaleDateString("en-US", options),
       author: "Bob",
-      tag: ["Book"],
+      tags: ["Book"],
       isPined: false,
     },
     {
@@ -242,7 +242,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -252,7 +252,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -262,7 +262,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -272,7 +272,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -282,7 +282,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -292,7 +292,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
       {
@@ -302,7 +302,7 @@ export const Dummy_blogs = [
           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         date: new Date("2010-10-05").toLocaleDateString("en-US", options),
         author: "Bob",
-        tag: ["Book"],
+        tags: ["Book"],
         isPined: false,
       },
   ];

@@ -20,19 +20,19 @@
 
 .input-control input,
 .input-control textarea {
-  width: 100%;
-  font: inherit;
-  border: 1px solid #ccc;
   background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  font: inherit;
   padding: 0.15rem 0.25rem;
+  width: 100%;
 }
 
 
 .input-control input:focus,
 .input-control textarea:focus {
-  outline: none;
   background-color: #ebebeb;
   border-color: #510077;
+  outline: none;
 }
 
 .input-invalid label,
@@ -46,8 +46,8 @@
 
 .form-invalid input,
 .form-invalid textarea {
-  border-color: red;
   background-color: #ffd1d1;
+  border-color: red;
 }
 
 .light {

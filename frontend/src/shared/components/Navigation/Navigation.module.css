@@ -1,12 +1,12 @@
 .navigation__title {
-  display: flex;
   align-items: flex-end;
+  display: flex;
 }
 
 .navigation__icon {
+  margin-bottom: 0.25rem;
   margin-left: 1rem;
   margin-right: auto;
-  margin-bottom: 0.25rem;
 }
 
 .navigation__icon a {
@@ -19,28 +19,28 @@
 }
 
 .navigation__search {
-  margin-right: 0rem;
   align-self: center;
+  margin-right: 0rem;
 }
 
 .navigation__search-input {
-  margin-top: 0.5rem;
   margin-right: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .navigation__theme {
-  margin-top: 0.5rem;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
   align-self: center;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .navigation__pc__language {
-  cursor: pointer;
+  align-self: center;
   background-color: transparent;
+  cursor: pointer;
   font: inherit;
   margin: 0.5rem 3rem 0 0.75rem;
-  align-self: center;
 }
 
 .ch{
