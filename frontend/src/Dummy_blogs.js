@@ -7,7 +7,7 @@ const options = { year: "numeric", month: "short", day: "numeric" };
 
 export const Dummy_blogs = [
   {
-    id: 1,
+    id: 0,
     date: new Date("2022-11-28").toLocaleDateString("en-US", options),
     author: "Amy",
     isPined: true,
@@ -19,7 +19,7 @@ export const Dummy_blogs = [
     language: {
       en: {},
       ch: {
-        title: "從非本科系到矽谷工程師 — 夢想完成後的學習",
+        title: "Test Title 1",
         support: true,
         short:
           "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
@@ -89,6 +89,60 @@ export const Dummy_blogs = [
           },
         ],
       },
+    },
+  },
+  {
+    id: 1,
+    date: new Date("2022-10-15").toLocaleDateString("en-US", options),
+    author: "Jim",
+    isPined: true,
+    tags: ["CS", "react", "vue", "python"],
+    cover: {
+      img: coverImage2,
+      description: "公司在 wework 辦公時我非常喜歡他們的 slogan",
+    },
+    language: {
+      en: {
+        title: "English Test Title 2",
+        support: true,
+        short:
+          "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
+        structure: [
+          {
+            type: "description",
+            content:
+              "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
+          },
+        ],
+      },
+      ch: {
+        title: "中文測試標題2",
+        support: true,
+        short:
+          "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
+        structure: [
+          {
+            type: "description",
+            content:
+              "當在衡量模型的表現結果 (performance) 時，會藉由評估指標來進行，本文將要介紹在影像分割 (Image Segmentation) 任務上經常使用的評估指標，並進行實作，所有 code 會放置在文章下方。",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 2,
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
     },
   },
 ];

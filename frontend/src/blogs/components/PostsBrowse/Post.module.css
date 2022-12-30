@@ -27,14 +27,18 @@
   width: 10rem;
 }
 
-.info-container:hover {
-  margin: 1.25rem -0.25rem;
-  padding: 1.25rem;
+.dark:hover {
+  background-color: #555;
 }
-
 .light-blue {
   background-color: #effafa;
 }
+.light-blue:hover {
+  background-color: #dffafa;
+}
 .light-green {
   background-color: #fafaef;
+}
+.light-green:hover {
+  background-color: #f8f8df;
 }

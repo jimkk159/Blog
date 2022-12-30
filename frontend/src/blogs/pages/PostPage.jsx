@@ -1,5 +1,12 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router";
+
+//Image
+import defaultCoverImage from "../../assets/img/cover/default-cover-2.jpg";
+
+//Custom Function
+import { choiceLanguage } from "../util/choiceLanguage";
 
 //Custom Comonent
 import Image from "../components/Widget/Image";
@@ -18,15 +25,21 @@ import { Dummy_blogs } from "../../Dummy_blogs";
 function PostPage(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const isEnglish = useSelector((state) => state.language.isEnglish);
-  const { cover, tags } = Dummy_blogs[0];
-  let title, structure;
-  title = isEnglish
-    ? Dummy_blogs[0].language.en.title
-    : Dummy_blogs[0].language.ch.title;
-  structure = isEnglish
-    ? Dummy_blogs[0].language.en.structure
-    : Dummy_blogs[0].language.ch.structure;
-    
+  const { blogId } = useParams();
+  const { cover, tags, language } = Dummy_blogs[blogId];
+  const postCover = cover.img ? cover.img : defaultCoverImage;
+  const title = choiceLanguage(
+    isEnglish,
+    language.en?.title,
+    language.ch?.title,
+    "No Title"
+  );
+  const structure = choiceLanguage(
+    isEnglish,
+    language.en?.structure,
+    language.ch?.structure,
+    []
+  );
   return (
     <div className={classes["flex-container"]}>
       <Card
@@ -37,7 +50,7 @@ function PostPage(props) {
         <hr className={classes["title-hr"]} />
         <Image
           type="cover"
-          img={cover.img}
+          img={postCover}
           description={cover.description}
           isDarkMode={isDarkMode}
         />

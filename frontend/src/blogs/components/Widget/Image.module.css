@@ -1,13 +1,18 @@
 .cover {
   background-color: rgba(255, 255, 255, 1);
-  max-width: 100%;
-  width: 100%;
+  display: block;
+  justify-items: center;
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80%;
+  width: 80%;
 }
 .img {
-  max-width: 100%;
   display: block;
-  text-align: center;
   margin: 3rem auto 0;
+  max-width: 100%;
+  text-align: center;
 }
 .comment {
   font-size: 14px;
