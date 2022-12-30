@@ -5,6 +5,20 @@ import coverImage3 from "./assets/img/cover/3.jpg";
 
 const options = { year: "numeric", month: "short", day: "numeric" };
 
+export const DUMMY_Structure = [
+  { id: 5, level: 4, topic: "React", parent: "Node" },
+  { id: 7, level: 5, topic: "React-Router", parent: "React" },
+  { id: 9, level: 5, topic: "Test22", parent: "Express" },
+  { id: 6, level: 5, topic: "Redux", parent: "React" },
+  { id: 0, level: 0, topic: "Root", parent: "" },
+  { id: 8, level: 5, topic: "Test1", parent: "Express" },
+  { id: 1, level: 1, topic: "CS", parent: "Root" },
+  { id: 3, level: 3, topic: "Node", parent: "JS" },
+  { id: 2, level: 2, topic: "JS", parent: "CS" },
+  { id: 4, level: 4, topic: "Express", parent: "Node" },
+  { id: 10, level: 5, topic: "Test333", parent: "Express" },
+];
+
 export const Dummy_blogs = [
   {
     id: 0,

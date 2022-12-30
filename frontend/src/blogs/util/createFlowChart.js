@@ -118,7 +118,7 @@ export function createSvgRelation(inputTreeData, inputSvgElments) {
 }
 
 //Create Flow Data
-export function createFlowData({
+export function createFlowChart({
   Topic,
   graphicWidth,
   graphicHeight,

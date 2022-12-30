@@ -20,7 +20,7 @@ import Relations from "../components/Widget/Relations";
 import classes from "./PostPage.module.css";
 
 //Dummy Data
-import { Dummy_blogs } from "../../Dummy_blogs";
+import { Dummy_blogs, DUMMY_Structure } from "../../Dummy_blogs";
 
 function PostPage(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -70,7 +70,7 @@ function PostPage(props) {
           <Tags content={tags} />
         </div>
       </Card>
-      <Guide isDarkMode={isDarkMode} />
+      <Guide isDarkMode={isDarkMode} topicRelation={DUMMY_Structure} />
     </div>
   );
 }
