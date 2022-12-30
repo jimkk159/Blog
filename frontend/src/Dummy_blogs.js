@@ -16,12 +16,15 @@ export const DUMMY_Structure = [
   { id: 3, level: 3, topic: "Node", parent: "JS" },
   { id: 2, level: 2, topic: "JS", parent: "CS" },
   { id: 4, level: 4, topic: "Express", parent: "Node" },
+
   { id: 10, level: 5, topic: "Test333", parent: "Express" },
 ];
 
 export const Dummy_blogs = [
   {
     id: 0,
+    topic: "React",
+    type: "Problem",
     date: new Date("2022-11-28").toLocaleDateString("en-US", options),
     author: "Amy",
     isPined: true,
@@ -30,6 +33,7 @@ export const Dummy_blogs = [
       img: coverImage1,
       description: "公司在 wework 辦公時我非常喜歡他們的 slogan",
     },
+
     language: {
       en: {},
       ch: {
@@ -107,6 +111,8 @@ export const Dummy_blogs = [
   },
   {
     id: 1,
+    topic: "Node",
+    type: "Post",
     date: new Date("2022-10-15").toLocaleDateString("en-US", options),
     author: "Jim",
     isPined: true,

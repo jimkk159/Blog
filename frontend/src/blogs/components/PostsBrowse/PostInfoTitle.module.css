@@ -1,0 +1,43 @@
+.container p {
+  font-size: 10px;
+}
+
+.author {
+  font-weight: bold;
+}
+
+.statement {
+  color: #868e96;
+  font-style: italic;
+}
+
+.icon {
+  font-size: 20px;
+  margin: 0 0.25rem -0.1rem;
+}
+
+.pin {
+  font-size: 20px;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+}
+
+.icon-container {
+  pointer-events: none;
+  background-color: green;
+}
+
+.light-trash-can {
+  color: #42a69d;
+}
+.light-pencil {
+  color: #a87554;
+}
+.light-pin {
+  color: #f05f72;
+}
+
+.icon:hover {
+  font-size: 25px;
+}

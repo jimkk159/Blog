@@ -1,40 +1,44 @@
-.container p{
-  font-size: 10px;
+.info-container {
+  margin: 1rem 0;
 }
 
-.author {
-  font-weight: bold;
+.info-content {
+  margin: 0 1rem;
 }
 
-.statement {
-  color: #868e96;
-  font-style: italic;
+.info-content h1 {
+  font-family: "Helvetica Neue", "Arial", sans-serif;
+  margin: 0;
 }
 
-.icon {
-  font-size: 20px;
-  margin: 0 0.25rem -0.1rem;
+.info-content p {
+  display: inline;
+  font-family: "Helvetica Neue", "Arial", sans-serif;
 }
 
-.pin {
-  font-size: 20px;
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
+.description-container {
+  display: flex;
 }
 
-
-
-.light-trash-can {
-  color: #42a69d;
-}
-.light-pencil {
-  color: #a87554;
-}
-.light-pin {
-  color: #f05f72;
+.description-container img {
+  height: 10rem;
+  margin-right: 1rem;
+  margin-top: 1rem;
+  width: 10rem;
 }
 
-.icon:hover {
-  font-size: 25px;
+.dark:hover {
+  background-color: #555;
+}
+.light-blue {
+  background-color: #effafa;
+}
+.light-blue:hover {
+  background-color: #dffafa;
+}
+.light-green {
+  background-color: #fafaef;
+}
+.light-green:hover {
+  background-color: #f8f8df;
 }

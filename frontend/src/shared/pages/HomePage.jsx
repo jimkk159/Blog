@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 
 //Custom Component
 import Quote from "../components/Quote";
-import Posts from "../../blogs/components/PostsBrowse/Posts";
+import PostsInfo from "../../blogs/components/PostsBrowse/PostsInfo";
 import Pagination from "../components/UI/Pagination";
 
 //CSS
@@ -63,7 +63,7 @@ function HomePage() {
           <hr className={classes["interval-line"]} />
         </>
       )}
-      <Posts posts={currentPosts} loading={null} isDarkMode={isDarkMode} />
+      <PostsInfo posts={currentPosts} loading={null} isDarkMode={isDarkMode} />
       <Pagination
         totalPosts={posts.length}
         postsPerPage={postsPerPage}

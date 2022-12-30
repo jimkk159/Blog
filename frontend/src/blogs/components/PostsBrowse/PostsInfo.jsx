@@ -1,17 +1,18 @@
 import React from "react";
 
 //Custom Component
-import Post from "./Post";
+import PostInfo from "./PostInfo";
 
 const isUserAdmin = false;
-function Posts(props) {
+function PostsInfo(props) {
   if (props.isLoading) return <h2>Loading...</h2>;
 
   return props.posts.map((post, index) => {
     return (
-      <Post
+      <PostInfo
         key={index}
         postId={post.id}
+        topic={post.topic}
         date={post.date}
         author={post.author}
         cover={post.cover}
@@ -25,4 +26,4 @@ function Posts(props) {
   });
 }
 
-export default Posts;
+export default PostsInfo;

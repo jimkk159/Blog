@@ -8,10 +8,10 @@ import useMediaQuery from "../../../shared/hooks/media-query-hook";
 import Tags from "../../../shared/components/UI/Tags";
 
 //CSS
-import classes from "./PostDescription.module.css";
+import classes from "./PostInfoDescription.module.css";
 import { useSelector } from "react-redux";
 
-function PostDescription(props) {
+function PostInfoDescription(props) {
   const { postId, short, tags, language } = props;
 
   //Redux
@@ -56,4 +56,4 @@ function PostDescription(props) {
   );
 }
 
-export default PostDescription;
+export default PostInfoDescription;
