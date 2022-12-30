@@ -71,6 +71,10 @@ const PostsPage = loadable(
   () => import("../blogs/pages/PostsPage"),
   loadingFallback
 );
+const PostSearchPage = loadable(
+  () => import("../blogs/pages/PostSearchPage"),
+  loadingFallback
+);
 const TestPage = loadable(
   () => import("../shared/pages/TestPage"),
   loadingFallback
@@ -111,6 +115,7 @@ export function RouteCreate() {
         </Route>
         <Route path="/about" element={<AboutPage />} loader={null} />
         {authRoute}
+        <Route path="/search/:searchItem" element={<PostSearchPage />} loader={null}></Route>
         <Route path="/test" element={<TestPage />} loader={null} />
         <Route path="/*" element={<NotFoundPage />} loader={null} />
         {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}

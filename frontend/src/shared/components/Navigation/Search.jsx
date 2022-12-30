@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 
 //Icon
@@ -8,17 +9,55 @@ import { RxCross2 } from "react-icons/rx";
 import classes from "./Search.module.css";
 
 function Search(props) {
+  const [isSearch, setIsSearch] = useState(false);
+  const [searchItem, setSearchItem] = useState("");
+  const navigate = useNavigate();
+
+  //Toggle Search Bar
+  const toggleSearchHandler = () => {
+    setIsSearch((prev) => !prev);
+    if (isSearch) {
+      setSearchItem("");
+    }
+  };
+
+  //Open Search Bar
+  const openSearchHandler = () => {
+    setIsSearch(true);
+  };
+
+  //Close Search Bar
+  const closeSearchHandler = () => {
+    setIsSearch(false);
+    setSearchItem("");
+  };
+
+  //Input Search
+  const searchChangeHandler = (event) => {
+    if (isSearch) {
+      setSearchItem(event.target.value);
+    }
+  };
+
+  //Search
+  const searchHandler = (event) => {
+    if (isSearch && event.key === "Enter" && searchItem) {
+      navigate(`/search/${searchItem}`);
+      setSearchItem("");
+    }
+  };
+
   return (
     <div
-      className={`${classes["search-input"]} ${classes.wrapper} ${props.className} `}
+      className={`${classes["search-container"]} ${classes.wrapper} ${props.className} `}
       styles={`${props.styles}`}
     >
-      {props.showSearch && (
+      {isSearch && (
         <div
           className={`${classes.icon} ${classes["input-icon-cross"]} ${
             props.isDarkMode ? classes["icon-dark"] : classes["icon-light"]
           }`}
-          onClick={props.onCancel}
+          onClick={closeSearchHandler}
         >
           <RxCross2 />
         </div>
@@ -27,16 +66,20 @@ function Search(props) {
         className={`${classes.icon} ${classes["input-icon-search"]} ${
           props.isDarkMode ? classes["icon-dark"] : classes["icon-light"]
         }`}
-        onClick={props.onToggle}
+        onClick={toggleSearchHandler}
       >
         <SearchIcon />
       </div>
       <input
         type="text"
-        className={`${props.showSearch && classes["input-show"]} ${
-          classes.input
-        } ${props.isDarkMode ? classes.dark : classes.light}`}
-        placeholder={props.showSearch ? "Search..." : null}
+        className={`${!isSearch && classes["input-hide"]} ${classes.input} ${
+          props.isDarkMode ? classes.dark : classes.light
+        }`}
+        placeholder={isSearch ? "Search..." : null}
+        onFocus={openSearchHandler}
+        onChange={searchChangeHandler}
+        onKeyDown={searchHandler}
+        value={searchItem}
       />
     </div>
   );

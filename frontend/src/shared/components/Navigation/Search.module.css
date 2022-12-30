@@ -1,3 +1,9 @@
+.search-container {
+  align-items: center;
+  display: flex;
+  position: relative;
+}
+
 .icon {
   box-sizing: border-box;
   color: #ababab;
@@ -23,18 +29,9 @@
   height: 32px;
   outline: none;
   padding-left: 0.75rem;
-  width: 3rem;
+
 }
 
-.input-show {
-  width: 10rem;
-}
-
-.search-input {
-  align-items: center;
-  display: flex;
-  position: relative;
-}
 
 .icon-light {
   color: #6b6b6b;
@@ -48,12 +45,17 @@
   background-color: white;
   border-color: pink;
   caret-color: black;
-  color: white;
+  color: black;
 }
 
 .dark {
   background-color: #232323;
-  border-color: #E4E4E4;
+  border-color: #e4e4e4;
   caret-color: #ababab;
-  color: #E4E4E4;
+  color: #e4e4e4;
+}
+
+.input-hide {
+  caret-color: transparent;
+  width: 3rem;
 }

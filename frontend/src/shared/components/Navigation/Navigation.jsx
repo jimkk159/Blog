@@ -27,7 +27,6 @@ import classes from "./Navigation.module.css";
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [isSearch, setIsSearch] = useState(false);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -58,14 +57,7 @@ function Navigation(props) {
     }
   };
 
-  //Show Search Bar
-  const toggleSearchHandler = () => {
-    setIsSearch((prev) => !prev);
-  };
 
-  const closeSearchHandler = () => {
-    setIsSearch(false);
-  };
 
   //Window Size Change
   useEffect(() => {
@@ -100,9 +92,6 @@ function Navigation(props) {
           </h1>
           <Search
             className={`${classes["navigation__search"]} ${classes["navigation__search-input"]}`}
-            onToggle={toggleSearchHandler}
-            onCancel={closeSearchHandler}
-            showSearch={isSearch}
             isDarkMode={isDarkMode}
           />
           <Theme
