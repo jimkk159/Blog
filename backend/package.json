@@ -1,10 +1,11 @@
 {
   "name": "backend",
+  "type": "module",
   "version": "1.0.0",
   "description": "jim's personal site backend",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "--es-module-specifier-resolution=node app.js"
   },
   "author": "jim",
   "license": "ISC",
