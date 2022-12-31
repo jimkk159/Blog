@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
+//Image
+import anonymousUser from "../../../assets/img/anonymous_user.png";
+
 //Redux Slice
 import { themeActions } from "../../../store/theme-slice";
 import { languageActions } from "../../../store/language-slice";
@@ -23,6 +26,8 @@ import useMediaQuery from "../../hooks/media-query-hook";
 
 //CSS
 import classes from "./Navigation.module.css";
+const userImage =
+  "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
 
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
@@ -57,8 +62,6 @@ function Navigation(props) {
     }
   };
 
-
-
   //Window Size Change
   useEffect(() => {
     setIsDrawer(false);
@@ -77,7 +80,6 @@ function Navigation(props) {
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
-
       <AuthModal
         show={!isLoggedIn && showModal && matches}
         setShowModal={setShowModal}
@@ -115,7 +117,13 @@ function Navigation(props) {
             <p className={classes.ch}>CH</p>
           </Languae>
           {matches && (
-            <UserAvatar onClick={showAuthHandler} isDarkMode={isDarkMode} />
+            <UserAvatar
+              show={isLoggedIn}
+              defaultImg={anonymousUser}
+              isDarkMode={isDarkMode}
+              onClick={showAuthHandler}
+              img={userImage}
+            />
           )}
         </div>
         <hr />

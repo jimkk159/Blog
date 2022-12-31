@@ -8,15 +8,6 @@
   padding: 1.5rem 3rem 3rem;
   width: 100%;
 }
-.title {
-  font-size: 32px;
-  line-height: 32px;
-  margin-top: 0.6em;
-  text-align: center;
-}
-.title-hr {
-  margin: 0.5rem 0 1rem;
-}
 .tags-container {
   margin-top: 3rem;
 }

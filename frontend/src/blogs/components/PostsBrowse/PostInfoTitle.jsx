@@ -29,7 +29,6 @@ function PostInfoTitle(props) {
       <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
       <p className={classes["author"]}>{props.author}&nbsp;&nbsp;</p>
       <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
-
       <Pin
         className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
         isPined={props.isPined}

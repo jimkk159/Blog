@@ -18,12 +18,9 @@ const siblingCount = 1;
 const postsPerPage = 10;
 function HomePage() {
   const isDarkMode = useSelector((state) => state.theme.value);
-  // const [searchParams, setSearchParams] = useSearchParams();
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
-  // const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  // const [postsPerPage, setPostsPerPage] = useState(10);
   
   useEffect(() => {
     //Get Post

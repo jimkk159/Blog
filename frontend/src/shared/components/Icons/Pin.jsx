@@ -5,14 +5,16 @@ import { BsFillPinAngleFill, BsFillPinFill } from "react-icons/bs";
 // import classes from "./Pin.module.css";
 
 function Pin(props) {
-  if (props.isPined)
+  const {show=true, isPined, isAdmin} = props
+  if (!show) return;
+  if (isPined)
     return (
       <BsFillPinFill
         className={`${props.className} ${props.pin}`}
         onClick={props.onToggle}
       />
     );
-  if (props.isAdmin)
+  if (isAdmin)
     return (
       <BsFillPinAngleFill
         className={`${props.className}  ${props.pin}`}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 
@@ -9,12 +9,13 @@ import defaultCoverImage from "../../assets/img/cover/default-cover-2.jpg";
 import { choiceLanguage } from "../util/choiceLanguage";
 
 //Custom Comonent
-import Image from "../components/Widget/Image";
 import Guide from "../components/BlogGuide/Guide";
 import Tags from "../../shared/components/UI/Tags";
 import Card from "../../shared/components/UI/Card";
-import CreateWidget from "../components/CreateWidget";
-import Relations from "../components/Widget/Relations";
+import Image from "../components/PostDetail/Widget/Image";
+import Relations from "../components/PostDetail/Widget/Relations";
+import PostDetailTitle from "../components/PostDetail/PostDetailTitle";
+import CreateWidget from "../components/PostDetail/CreateWidget";
 
 //CSS
 import classes from "./PostPage.module.css";
@@ -22,11 +23,12 @@ import classes from "./PostPage.module.css";
 //Dummy Data
 import { Dummy_blogs, DUMMY_Structure } from "../../Dummy_blogs";
 
+const isUserAdmin = false;
 function PostPage(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const { blogId } = useParams();
-  const { cover, tags, language } = Dummy_blogs[blogId];
+  const { author, date, isPined, cover, tags, language } = Dummy_blogs[blogId];
   const postCover = cover.img ? cover.img : defaultCoverImage;
   const title = choiceLanguage(
     isEnglish,
@@ -40,15 +42,20 @@ function PostPage(props) {
     language.ch?.structure,
     []
   );
-
   return (
     <div className={classes["flex-container"]}>
       <Card
         className={`${classes["page"]} ${classes["post-container"]}`}
         isDarkMode={isDarkMode}
       >
-        <h1 className={classes["title"]}>{title}</h1>
-        <hr className={classes["title-hr"]} />
+        <PostDetailTitle
+          title={title}
+          author={author}
+          date={date}
+          isPined={isPined}
+          isAdmin={isUserAdmin}
+          isDarkMode={isDarkMode}
+        />
         <Image
           type="cover"
           img={postCover}

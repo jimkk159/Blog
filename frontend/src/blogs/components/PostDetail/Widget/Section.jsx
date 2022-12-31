@@ -5,7 +5,7 @@ import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import SubTitle from "./SubTitle";
 import Description from "./Description";
 import CreateWidget from "../CreateWidget";
-import Card from "../../../shared/components/UI/Card";
+import Card from "../../../../shared/components/UI/Card";
 
 //CSS
 import classes from "./Section.module.css";

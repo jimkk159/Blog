@@ -1,9 +1,5 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { CSSTransition } from "react-transition-group";
-
-//Image
-import anonymousUser from "../../assets/img/anonymous_user.png";
 
 //Custom Component
 import Avatar from "../../shared/components/UI/Avatar";
@@ -12,20 +8,17 @@ import Avatar from "../../shared/components/UI/Avatar";
 import classes from "./UserAvatar.module.css";
 
 function UserAvatar(props) {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const userImage =
-    "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
-  return (
+ return (
     <div className={`${classes.container} ${props.className}`}>
       <div className={classes["open-up"]}></div>
       <div className={`${classes["user-avatar"]}`} onClick={props.onClick}>
         <Avatar
           className={classes["user-img"]}
-          image={anonymousUser}
-          alt="beauty"
+          image={props.defaultImg}
+          alt="default-avatar"
         />
         <CSSTransition
-          in={isLoggedIn}
+          in={props.show}
           timeout={{ enter: 2000, exit: 2000 }}
           classNames={{
             enter: classes["user-img-enter"],
@@ -42,8 +35,8 @@ function UserAvatar(props) {
                 ? classes["avatar-dark"]
                 : classes["avatar-light"]
             }`}
-            image={userImage}
-            alt="beauty"
+            image={props.img}
+            alt="user-avatar"
           />
         </CSSTransition>
       </div>
