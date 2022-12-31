@@ -1,0 +1,13 @@
+.title-img {
+  width: 100%;
+}
+
+.interval-line {
+  border: 2px solid white;
+}
+
+.container{
+  min-height: 100vh;
+  padding-bottom: 4rem;
+  position: relative;
+}

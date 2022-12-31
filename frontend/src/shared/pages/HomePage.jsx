@@ -13,8 +13,9 @@ import classes from "./HomePage.module.css";
 //Dummy Data
 import { Dummy_blogs } from "../../Dummy_blogs";
 
-const siblingCount = 1;
 const postsOfHome = 8;
+const siblingCount = 1;
+const postsPerPage = 10;
 function HomePage() {
   const isDarkMode = useSelector((state) => state.theme.value);
   // const [searchParams, setSearchParams] = useSearchParams();
@@ -23,8 +24,7 @@ function HomePage() {
   // const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   // const [postsPerPage, setPostsPerPage] = useState(10);
-  const postsPerPage = 10;
-
+  
   useEffect(() => {
     //Get Post
     setPosts(Dummy_blogs);
@@ -35,7 +35,6 @@ function HomePage() {
   if (isHome) {
     indexOfFirstPost = 0;
     indexOfLastPost = posts.length > postsOfHome ? postsOfHome : posts.length;
-    currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
   } else {
     indexOfFirstPost = postsOfHome + (currentPage - 2) * postsPerPage;
     indexOfLastPost =

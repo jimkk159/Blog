@@ -17,7 +17,7 @@ function Pagination(props) {
     siblingCount = 1,
     currentPage,
     onNavPage,
-    offsetPosts,
+    offsetPosts=0,
     isDarkMode
   } = props;
 

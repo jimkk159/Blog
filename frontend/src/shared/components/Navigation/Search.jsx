@@ -15,9 +15,14 @@ function Search(props) {
 
   //Toggle Search Bar
   const toggleSearchHandler = () => {
-    setIsSearch((prev) => !prev);
-    if (isSearch) {
+    if (searchItem !== "") {
+      navigate(`/search/${searchItem}`);
       setSearchItem("");
+    } else {
+      setIsSearch((prev) => !prev);
+      if (isSearch) {
+        setSearchItem("");
+      }
     }
   };
 

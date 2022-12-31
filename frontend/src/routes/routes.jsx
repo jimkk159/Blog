@@ -71,8 +71,8 @@ const PostsPage = loadable(
   () => import("../blogs/pages/PostsPage"),
   loadingFallback
 );
-const PostSearchPage = loadable(
-  () => import("../blogs/pages/PostSearchPage"),
+const SearchPage = loadable(
+  () => import("../shared/pages/SearchPage"),
   loadingFallback
 );
 const TestPage = loadable(
@@ -98,9 +98,11 @@ export function RouteCreate() {
       <Route path="edit-blog" element={<NewPostPage />} loader={null} />
     );
   } else {
-    authRoute = !matches ?
+    authRoute = !matches ? (
       <Route path="/auth" element={<AuthPage />} loader={null} />
-    : <Route path="/auth" element={<Navigate replace to="/" />} loader={null} />;
+    ) : (
+      <Route path="/auth" element={<Navigate replace to="/" />} loader={null} />
+    );
   }
 
   const routes = createBrowserRouter(
@@ -115,7 +117,11 @@ export function RouteCreate() {
         </Route>
         <Route path="/about" element={<AboutPage />} loader={null} />
         {authRoute}
-        <Route path="/search/:searchItem" element={<PostSearchPage />} loader={null}></Route>
+        <Route
+          path="/search/:searchItem"
+          element={<SearchPage />}
+          loader={null}
+        ></Route>
         <Route path="/test" element={<TestPage />} loader={null} />
         <Route path="/*" element={<NotFoundPage />} loader={null} />
         {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}

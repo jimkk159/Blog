@@ -4,20 +4,13 @@
   font-size: 20px;
   height: 15%;
 }
-.detail-bottom p {
+.detail-bottom a {
   border-radius: 100px;
   font-size: 10px;
   margin: 0 4px;
   padding: 2px 8px;
+  text-decoration: none;
 }
 .icon {
   margin-right: 0.5rem;
-}
-.dark {
-  background-color: rgb(242, 242, 242, 0.8);
-  color: rgb(41, 41, 41, 1);
-}
-.light {
-  background-color: rgb(41, 41, 41, 0.7);
-  color: rgb(242, 242, 242, 0.9);
 }

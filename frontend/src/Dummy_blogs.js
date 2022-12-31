@@ -152,6 +152,223 @@ export const Dummy_blogs = [
   },
   {
     id: 2,
+    topic: "",
+    type: "",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+];
+
+export const Dummy_search = [
+  {
+    id: 0,
+    topic: "React",
+    type: "Problem",
+    date: new Date("2022-11-28").toLocaleDateString("en-US", options),
+    author: "Amy",
+    isPined: true,
+    tags: ["CS", "react", "vue", "python"],
+    cover: {
+      img: coverImage1,
+      description: "公司在 wework 辦公時我非常喜歡他們的 slogan",
+    },
+    language: {
+      en: {},
+      ch: {
+        title: "Search Title 1",
+        support: true,
+        short:
+          "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
+        structure: [
+          {
+            type: "description",
+            content:
+              "當在衡量模型的表現結果 (performance) 時，會藉由評估指標來進行，本文將要介紹在影像分割 (Image Segmentation) 任務上經常使用的評估指標，並進行實作，所有 code 會放置在文章下方。",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 1,
+    topic: "Node",
+    type: "Post",
+    date: new Date("2022-10-15").toLocaleDateString("en-US", options),
+    author: "Jim",
+    isPined: true,
+    tags: ["CS", "react", "vue", "python"],
+    cover: {
+      img: coverImage2,
+      description: "公司在 wework 辦公時我非常喜歡他們的 slogan",
+    },
+    language: {
+      en: {
+        title: "Search Title 2",
+        support: true,
+        short:
+          "React is a popular JavaScript library for building user interfaces, and it has a strong ecosystem of tools, libraries, and best practices that can help developers build efficient and maintainable applications. Here are some best practices to keep in mind when working with React",
+        structure: [
+          {
+            type: "description",
+            content:
+              "當在衡量模型的表現結果 (performance) 時，會藉由評估指標來進行，本文將要介紹在影像分割 (Image Segmentation) 任務上經常使用的評估指標，並進行實作，所有 code 會放置在文章下方。",
+          },
+        ],
+      },
+      ch: {
+      },
+    },
+  },
+  {
+    id: 2,
+    topic: "Node",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 3,
+    topic: "Node",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 4,
+    topic: "JS",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 5,
+    topic: "JS",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 6,
+    topic: "CS",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 7,
+    topic: "Book",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 8,
+    topic: "Food",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 9,
+    topic: "Book",
+    type: "Post",
+    date: new Date("2022-7-01").toLocaleDateString("en-US", options),
+    author: "Bob",
+    isPined: false,
+    tags: [],
+    cover: {
+      img: null,
+      description: "",
+    },
+    language: {
+      en: {},
+      ch: {},
+    },
+  },
+  {
+    id: 10,
+    topic: "Food",
+    type: "Post",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
     isPined: false,

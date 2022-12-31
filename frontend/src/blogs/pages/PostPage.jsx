@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 
@@ -40,6 +40,7 @@ function PostPage(props) {
     language.ch?.structure,
     []
   );
+
   return (
     <div className={classes["flex-container"]}>
       <Card
