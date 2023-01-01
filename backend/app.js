@@ -1,6 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+//Models
+import HttpError from "./models/http-error.js";
+
 //Routes
 import postRouters from "./routes/post-route.js";
 
@@ -23,6 +26,18 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/posts", postRouters);
+
+//Undefined Route Case
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route", 404);
+  throw error;
+});
+
+//Deal with Error
+app.use((error, req, res, next) => {
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occurred!" });
+});
 
 const port = 5000;
 app.listen(port, () => console.log("Server running on port 5000"));
