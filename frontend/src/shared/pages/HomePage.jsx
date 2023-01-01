@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import { useSearchParams } from "react-router-dom";
 
+//Custom Hook
+import { useHttp } from "../hooks/http-hook";
+
 //Custom Component
 import Quote from "../components/Quote";
 import PostsInfo from "../../blogs/components/PostsBrowse/PostsInfo";
@@ -10,37 +13,17 @@ import Pagination from "../components/UI/Pagination";
 //CSS
 import classes from "./HomePage.module.css";
 
-//Dummy Data
-import { Dummy_blogs } from "../../Dummy_blogs";
-
 const postsOfHome = 8;
 const siblingCount = 1;
 const postsPerPage = 10;
 function HomePage() {
-  const isDarkMode = useSelector((state) => state.theme.value);
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { isLoading, error, sendRequest, clearError } =useHttp();
 
-  const sendRequest = useCallback(async (url) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(url, { method: "GET" });
-      const responseData = await response.json();
-      setIsLoading(false);
-      return responseData;
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-      throw err;
-    }
-  }, []);
-
-  const clearError = () => {
-    setError(null);
-  };
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
 
   useEffect(() => {
     const fetchPosts = async () => {
