@@ -15,16 +15,7 @@ import useMediaQuery from "../shared/hooks/media-query-hook";
 //PAGE
 import RootLayout from "../shared/pages/layouts/RootLayout";
 
-// import BlogLayout from "../shared/pages/layouts/BlogLayout";
-import HomePage from "../shared/pages/HomePage";
-// import AboutPage from "../shared/pages/AboutPage";
-// import NotFoundPage from "../shared/pages/NotFoundPage";
-// import ErrorPage from "../shared/pages/ErrorPage";
-// import AuthPage from "../users/pages/AuthPage";
-// import NewPostPage from "../blogs/pages/NewPostPage";
-// import PostPage from "../blogs/pages/PostPage";
-// import PostsPage from "../blogs/pages/PostsPage";
-// import TestPage from "../shared/pages//TestPage";
+import PostsPage, { loader as postsLoader } from "../blogs/pages/PostsPage";
 
 //Custom Component
 import LoadingSpinner from "../shared/components/UI/LoadingSpinner";
@@ -67,10 +58,6 @@ const PostPage = loadable(
   () => import("../blogs/pages/PostPage"),
   loadingFallback
 );
-const PostsPage = loadable(
-  () => import("../blogs/pages/PostsPage"),
-  loadingFallback
-);
 const SearchPage = loadable(
   () => import("../shared/pages/SearchPage"),
   loadingFallback
@@ -108,9 +95,9 @@ export function RouteCreate() {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
-        <Route index element={<HomePage />} loader={null} />
+        <Route index element={<PostsPage />} loader={postsLoader} />
         <Route path="/blog" element={<BlogLayout />} loader={null}>
-          <Route index element={<PostsPage />} loader={null} />
+          <Route index element={<Navigate replace to="/" />} />
           {newBlogRoute}
           {editBlogRoute}
           <Route path=":blogId" element={<PostPage />} loader={null} />
