@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import { useSearchParams } from "react-router-dom";
 
@@ -21,11 +21,38 @@ function HomePage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  
-  useEffect(() => {
-    //Get Post
-    setPosts(Dummy_blogs);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const sendRequest = useCallback(async (url) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(url, { method: "GET" });
+      const responseData = await response.json();
+      setIsLoading(false);
+      return responseData;
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+      throw err;
+    }
   }, []);
+  
+  const clearError = () => {
+    setError(null);
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        console.log(process.env.APP_BACKEND_URL);
+        const responseData = await sendRequest(process.env.REACT_APP_BACKEND_URL);
+        console.log(responseData);
+        
+      } catch (err) {}
+    };
+    fetchPosts();
+  }, [sendRequest]);
 
   //Setting Page Post
   let indexOfLastPost, indexOfFirstPost, currentPosts;
