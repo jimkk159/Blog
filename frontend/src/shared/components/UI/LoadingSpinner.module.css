@@ -1,3 +1,7 @@
+.container {
+  height: 100vh;
+}
+
 .rotating-ring {
   display: inline-block;
   height: 64px;
@@ -28,9 +32,9 @@
   max-width: 30rem;
 }
 .small-img {
-    max-height: 20rem;
-    max-width: 20rem;
-  }
+  max-height: 20rem;
+  max-width: 20rem;
+}
 .dark {
   animation: rotating-ring 1.2s linear infinite;
   border: 5px solid #e4e4e4;

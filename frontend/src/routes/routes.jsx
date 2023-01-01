@@ -14,8 +14,7 @@ import useMediaQuery from "../shared/hooks/media-query-hook";
 
 //PAGE
 import RootLayout from "../shared/pages/layouts/RootLayout";
-
-import PostsPage, { loader as postsLoader } from "../blogs/pages/PostsPage";
+import PostsPage from "../blogs/pages/PostsPage";
 
 //Custom Component
 import LoadingSpinner from "../shared/components/UI/LoadingSpinner";
@@ -78,39 +77,31 @@ export function RouteCreate() {
   let editBlogRoute = null;
   let authRoute = null;
   if (isLoggedIn) {
-    newBlogRoute = (
-      <Route path="new-blog" element={<NewPostPage />} loader={null} />
-    );
-    editBlogRoute = (
-      <Route path="edit-blog" element={<NewPostPage />} loader={null} />
-    );
+    newBlogRoute = <Route path="new-blog" element={<NewPostPage />} />;
+    editBlogRoute = <Route path="edit-blog" element={<NewPostPage />} />;
   } else {
     authRoute = !matches ? (
-      <Route path="/auth" element={<AuthPage />} loader={null} />
+      <Route path="/auth" element={<AuthPage />} />
     ) : (
-      <Route path="/auth" element={<Navigate replace to="/" />} loader={null} />
+      <Route path="/auth" element={<Navigate replace to="/" />} />
     );
   }
 
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
-        <Route index element={<PostsPage />} loader={postsLoader} />
-        <Route path="/blog" element={<BlogLayout />} loader={null}>
+        <Route index element={<PostsPage />} />
+        <Route path="/blog" element={<BlogLayout />}>
           <Route index element={<Navigate replace to="/" />} />
           {newBlogRoute}
           {editBlogRoute}
-          <Route path=":blogId" element={<PostPage />} loader={null} />
+          <Route path=":blogId" element={<PostPage />} />
         </Route>
-        <Route path="/about" element={<AboutPage />} loader={null} />
+        <Route path="/about" element={<AboutPage />} />
         {authRoute}
-        <Route
-          path="/search/:searchItem"
-          element={<SearchPage />}
-          loader={null}
-        ></Route>
-        <Route path="/test" element={<TestPage />} loader={null} />
-        <Route path="/*" element={<NotFoundPage />} loader={null} />
+        <Route path="/search/:searchItem" element={<SearchPage />}></Route>
+        <Route path="/test" element={<TestPage />} />
+        <Route path="/*" element={<NotFoundPage />} />
         {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}
       </Route>
     )

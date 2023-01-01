@@ -11,3 +11,7 @@
   padding-bottom: 4rem;
   position: relative;
 }
+
+.loading-container{
+  height: 100vh;
+}

@@ -7,7 +7,6 @@ import catSwagImage from "../../../assets/img/loading/cat-swag-tail.gif";
 import guraChristmasImage from "../../../assets/img/loading/gura-christmas.gif";
 import guraSpinImage from "../../../assets/img/loading/gura-gura-spin.gif";
 import bocchiImage from "../../../assets/img/loading/Bocchi-Rock.gif";
-import rabbitImage from "../../../assets/img/loading/野うさぎ同盟.gif";
 
 //CSS
 import classes from "./LoadingSpinner.module.css";
@@ -18,7 +17,6 @@ const Images = [
   catBongo,
   catSwagImage,
   catSleepingImage,
-  rabbitImage
 ];
 
 function LoadingSpinner(props) {
@@ -26,7 +24,7 @@ function LoadingSpinner(props) {
 
   //Loading Content
   let loadingContent;
-  if (randomNum === 7) {
+  if (randomNum === 6) {
     loadingContent = (
       <div
         className={`${classes["rotating-ring"]} ${
@@ -34,7 +32,7 @@ function LoadingSpinner(props) {
         }`}
       />
     );
-  } else if (randomNum === 2 || randomNum === 3){
+  } else if (randomNum === 2 || randomNum === 3) {
     loadingContent = (
       <img
         className={classes["small-img"]}
@@ -54,7 +52,9 @@ function LoadingSpinner(props) {
 
   return (
     <div
-      className={`${props.className} ${props.asOverlay && classes.overlay} `}
+      className={`center ${props.className} ${
+        props.asOverlay && classes.overlay
+      }`}
     >
       {loadingContent}
     </div>

@@ -1,18 +1,26 @@
-import React from 'react';
+import React from "react";
 
 //Custom Component
-import Modal from './Modal';
-import Button from '../Form/Button';
+import Modal from "./Modal";
+import Button from "../Form/Button";
+import Alert from "./Alert";
 
-const ErrorModal = props => {
+//CSS
+import classes from "./ErrorModal.module.css"
+
+const ErrorModal = (props) => {
   return (
     <Modal
+      show={!!props.error}
       onCancel={props.onClear}
-      header="An Error Occurred!"
-      show={true}
-      footer={<Button onClick={props.onClear}>Okay</Button>}
+      isAnimate={props.isAnimate}
     >
-      <p>{props.error}</p>
+      <Alert
+        header="An Error Occurred!"
+        footer={<Button className={classes["button"]} onClick={props.onClear}>Okay</Button>}
+      >
+        {props.error}
+      </Alert>
     </Modal>
   );
 };
