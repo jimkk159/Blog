@@ -37,7 +37,7 @@ function HomePage() {
       throw err;
     }
   }, []);
-  
+
   const clearError = () => {
     setError(null);
   };
@@ -45,10 +45,10 @@ function HomePage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        console.log(process.env.APP_BACKEND_URL);
-        const responseData = await sendRequest(process.env.REACT_APP_BACKEND_URL);
-        console.log(responseData);
-        
+        const responseData = await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + "posts"
+        );
+        setPosts(responseData);
       } catch (err) {}
     };
     fetchPosts();
