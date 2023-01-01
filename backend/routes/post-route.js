@@ -9,7 +9,7 @@ import {
 const router = express.Router();
 
 router.get("/", getAllPosts);
-router.get("/structure", getPostsStructure);
 router.get("/search", getPostSearch);
+router.get("/structure", getPostsStructure);
 
 export default router;
