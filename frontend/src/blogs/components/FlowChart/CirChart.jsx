@@ -8,11 +8,11 @@ import Node from "./Node";
 
 const strokWidth = 2;
 function CirChart(props) {
-  const { width, height, data, linkData } = props;
+  const { width, height, data, linkData, onNavTopic } = props;
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
-    <Paper width={width} height={height} >
+    <Paper width={width} height={height}>
       <Set>
         {data.map(function (element, index) {
           return (
@@ -30,6 +30,7 @@ function CirChart(props) {
               textAttr={element.textAttr}
               textAnimate={element.textAnimate}
               isDarkMode={isDarkMode}
+              onNavTopic={onNavTopic}
             />
           );
         })}

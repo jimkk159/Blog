@@ -18,10 +18,11 @@ const defaultElementAttr = {
 };
 
 function Node(props) {
+  const { index, name, x, y, r, onNavTopic } = props;
   const textFontSize =
-    props.name.length > 5
-      ? props.name.length > 6
-        ? props.name.length > 11
+    name.length > 5
+      ? name.length > 6
+        ? name.length > 11
           ? "12px"
           : "14px"
         : "16px"
@@ -42,18 +43,21 @@ function Node(props) {
   return (
     <Set>
       <Circle
-        index={props.index}
-        x={props.x - 10}
-        y={props.y}
-        r={props.r}
+        index={index}
+        x={x - 10}
+        y={y}
+        r={r}
         attr={elementAttr}
         animate={elementAnimate}
+        click={() => {
+          onNavTopic(name);
+        }}
       />
       <Text
-        index={props.index}
-        x={props.x - 10}
-        y={props.y}
-        text={props.name}
+        index={index}
+        x={x - 10}
+        y={y}
+        text={name}
         attr={textAttr}
         animate={textAnimate}
       />

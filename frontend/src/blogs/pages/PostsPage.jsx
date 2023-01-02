@@ -19,7 +19,7 @@ const postsOfHome = 8;
 const siblingCount = 1;
 const postsPerPage = 10;
 const postsPerRequest = 50;
-function HomePage() {
+function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -113,7 +113,7 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default PostsPage;
 //reference1:https://stackoverflow.com/questions/35352638/how-to-get-parameter-value-from-query-string
 //reference2:https://ultimatecourses.com/blog/navigate-to-url-query-strings-search-params-react-router
 //reference3:https://reactrouter.com/en/main/route/error-element

@@ -5,6 +5,7 @@ const defaultElementAttr = {
   fill: "#a966ff",
   stroke: "#333333",
   "stroke-width": 2,
+  cursor: "pointer",
 };
 
 const defaultTextAttr = {
@@ -15,15 +16,16 @@ const defaultTextAttr = {
   stroke: "none",
   "font-weight": "bold",
   opacity: 1,
-  cursor: "pointer",
+  
 };
 
 function Rectangle(props) {
-  const strokeColor = props.isDarkMode ? "#E4E4E4" : "#333333";
+  const { index, name, x, y, r, width, height, isDarkMode, onNavTopic } = props;
+  const strokeColor = isDarkMode ? "#E4E4E4" : "#333333";
   const textFontSize =
-    props.name.length > 5
-      ? props.name.length > 8
-        ? props.name.length > 11
+    name.length > 5
+      ? name.length > 8
+        ? name.length > 11
           ? "12px"
           : "14px"
         : "18px"
@@ -44,23 +46,27 @@ function Rectangle(props) {
   // Raphael.animation({ x: props.x - props.width / 2 }, 500, "<>");
   const textAnimate = props.textAnimate ? props.textAnimate : null;
   //Raphael.animation({ x: props.x }, 500, "<>");
+
   return (
     <Set>
       <Rect
-        index={props.index}
-        x={props.x - props.width / 2}
-        y={props.y - props.height / 2}
-        r={props.r}
-        width={props.width}
-        height={props.height}
+        index={index}
+        x={x - width / 2}
+        y={y - height / 2}
+        r={r}
+        width={width}
+        height={height}
         attr={elementAttr}
         animate={elementAnimate}
+        click={() => {
+          onNavTopic(name);
+        }}
       />
       <Text
-        index={props.index}
-        x={props.x}
-        y={props.y}
-        text={props.name}
+        index={index}
+        x={x}
+        y={y}
+        text={name}
         attr={textAttr}
         animate={textAnimate}
       />

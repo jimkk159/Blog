@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 //Function
 import { createFlowChart } from "../../util/createFlowChart.js";
@@ -13,6 +14,10 @@ const rectHeight = 30;
 const rectRadius = 10;
 function FlowChart(props) {
   const { type, width, height, offsetX, offsetY, topics } = props;
+
+  //React-Router
+  const navigate = useNavigate();
+
   const typePorperty =
     type === "rect"
       ? {
@@ -25,6 +30,7 @@ function FlowChart(props) {
           height: 2 * cirRadius + 20,
           radius: cirRadius,
         };
+
   const [data, linkData] = createFlowChart({
     Topic: "Node",
     graphicWidth: width,
@@ -35,6 +41,10 @@ function FlowChart(props) {
     ...typePorperty,
   });
 
+  const navTopicHandler = (topic) => {
+    navigate(`/search/${topic}`);
+  };
+
   //Rect FlowChart
   if (type === "rect")
     return (
@@ -43,12 +53,19 @@ function FlowChart(props) {
         height={height}
         data={data}
         linkData={linkData}
+        onNavTopic={navTopicHandler}
       />
     );
 
   //Cir FlowChart
   return (
-    <CirChart width={width} height={height} data={data} linkData={linkData} />
+    <CirChart
+      width={width}
+      height={height}
+      data={data}
+      linkData={linkData}
+      onNavTopic={navTopicHandler}
+    />
   );
 }
 

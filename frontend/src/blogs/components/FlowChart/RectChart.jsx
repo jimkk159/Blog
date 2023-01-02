@@ -8,7 +8,9 @@ import Rectangle from "./Rectangle";
 
 const strokWidth = 2;
 function RectChart(props) {
-  const { width, height, data, linkData } = props;
+  const { width, height, data, linkData, onNavTopic } = props;
+
+  //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -32,6 +34,7 @@ function RectChart(props) {
               textAttr={element.textAttr}
               textAnimate={element.textAnimate}
               isDarkMode={isDarkMode}
+              onNavTopic={onNavTopic}
             />
           );
         })}
