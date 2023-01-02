@@ -5,7 +5,7 @@
   "description": "jim's personal site backend",
   "main": "app.js",
   "scripts": {
-    "start": "--es-module-specifier-resolution=node app.js"
+    "start": "nodemon app.js"
   },
   "author": "jim",
   "license": "ISC",

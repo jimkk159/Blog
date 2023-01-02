@@ -146,7 +146,7 @@ export const Dummy_blogs = [
   },
   {
     id: 2,
-    topic: "",
+    topic: "CS",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -170,12 +170,24 @@ export const Dummy_blogs = [
           },
         ],
       },
-      ch: {},
+      ch: {
+        title: "中文測試標題 3",
+        support: true,
+        short:
+          "中文測試標題 中文測試標題 中文測試標題 中文測試標題 中文測試標題 ",
+        structure: [
+          {
+            type: "description",
+            content:
+              "中文測試標題 中文測試標題 中文測試標題 中文測試標題 中文測試標題 ",
+          },
+        ],
+      },
     },
   },
   {
     id: 3,
-    topic: "",
+    topic: "CS",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -204,7 +216,7 @@ export const Dummy_blogs = [
   },
   {
     id: 4,
-    topic: "",
+    topic: "Python",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -233,7 +245,7 @@ export const Dummy_blogs = [
   },
   {
     id: 5,
-    topic: "",
+    topic: "Vue",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -262,7 +274,7 @@ export const Dummy_blogs = [
   },
   {
     id: 6,
-    topic: "",
+    topic: "Python",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -291,7 +303,7 @@ export const Dummy_blogs = [
   },
   {
     id: 7,
-    topic: "",
+    topic: "Book",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -320,7 +332,7 @@ export const Dummy_blogs = [
   },
   {
     id: 8,
-    topic: "",
+    topic: "Vue",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",
@@ -349,7 +361,7 @@ export const Dummy_blogs = [
   },
   {
     id: 9,
-    topic: "",
+    topic: "Vue",
     type: "",
     date: new Date("2022-7-01").toLocaleDateString("en-US", options),
     author: "Bob",

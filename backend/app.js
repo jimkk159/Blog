@@ -6,6 +6,7 @@ import HttpError from "./models/http-error.js";
 
 //Routes
 import postRouters from "./routes/post-route.js";
+import topicRouters from "./routes/topic-route.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,6 +27,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use("/posts", postRouters);
+app.use("/topics", topicRouters);
 
 //Undefined Route Case
 app.use((req, res, next) => {
