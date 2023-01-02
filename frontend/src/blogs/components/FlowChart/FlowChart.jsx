@@ -12,7 +12,7 @@ const rectWidth = 80;
 const rectHeight = 30;
 const rectRadius = 10;
 function FlowChart(props) {
-  const { type, width, height, offsetX, offsetY, topicRelation } = props;
+  const { type, width, height, offsetX, offsetY, topics } = props;
   const typePorperty =
     type === "rect"
       ? {
@@ -31,7 +31,7 @@ function FlowChart(props) {
     graphicHeight: height,
     userOffsetX: offsetX,
     userOffsetY: offsetY,
-    topicData: topicRelation,
+    topicData: topics,
     ...typePorperty,
   });
 

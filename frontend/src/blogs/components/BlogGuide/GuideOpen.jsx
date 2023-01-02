@@ -54,7 +54,7 @@ function GuideOpen(props) {
             height={cardHeight}
             offsetX={dragState.offset.x}
             offsetY={dragState.offset.y}
-            topicRelation={props.topicRelation}
+            topics={props.topics}
           />
         </div>
         <AiFillHome

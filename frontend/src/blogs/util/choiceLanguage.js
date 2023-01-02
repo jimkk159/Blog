@@ -1,5 +1,5 @@
 export function choiceLanguage(isEnglish, en, ch, defaultDescription) {
-  
+
   //Only Chinese
   if (!en && ch) return ch;
   

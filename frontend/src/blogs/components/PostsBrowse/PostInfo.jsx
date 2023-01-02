@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -17,52 +17,70 @@ import Card from "../../../shared/components/UI/Card";
 import classes from "./PostInfo.module.css";
 
 function PostInfo(props) {
+  const { post, isOdd } = props;
   const {
-    postId,
+    id: postId,
     topic,
-    language: postLanguage,
-    author,
     date,
+    author,
     cover,
-    isPined,
-    isOdd,
+    language: postLanguage,
     tags,
-  } = props;
+    isPined,
+  } = post;
   const postCover = cover.img ? cover.img : defaultCoverImage;
-  //React Router
-  const navigate = useNavigate();
+
+  const [title, setTitle] = useState("No Title");
+  const [short, setShort] = useState("No Description...");
+  const [cardColor, setCardColor] = useState(classes["dark"]);
+  
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const { isEnglish, language } = useSelector((state) => state.language);
-  const backgroundColor = isDarkMode
-    ? classes["dark"]
-    : isOdd
-    ? classes["light-blue"]
-    : classes["light-green"];
-  const title = choiceLanguage(
-    isEnglish,
-    postLanguage.en.title,
-    postLanguage.ch.title,
-    "No Title"
-  );
-  const short = choiceLanguage(
-    isEnglish,
-    postLanguage.en.short,
-    postLanguage.ch.short,
-    "No Description..."
-  );
+
+  //React Router
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCardColor(
+      isDarkMode
+        ? classes["dark"]
+        : isOdd
+        ? classes["light-blue"]
+        : classes["light-green"]
+    );
+  }, [isOdd, isDarkMode]);
+  useEffect(() => {
+    setTitle(
+      choiceLanguage(
+        isEnglish,
+        postLanguage.en.title,
+        postLanguage.ch.title,
+        "No Title"
+      )
+    );
+    setShort(
+      choiceLanguage(
+        isEnglish,
+        postLanguage.en.short,
+        postLanguage.ch.short,
+        "No Description..."
+      )
+    );
+  }, [isEnglish, postLanguage]);
+
   const navPostHandler = () => {
     navigate(`/blog/${postId}`, { state: { toLogin: true } });
   };
 
   return (
     <Card
-      className={`${classes["info-container"]} ${backgroundColor}`}
+      className={`${classes["info-container"]} ${cardColor}`}
       isDarkMode={isDarkMode}
       onClick={navPostHandler}
     >
       <div className={classes["info-content"]}>
-        <h1>{`[ ${topic?topic:"  "} ] ${title}`}</h1>
+        <h1>{`[ ${topic ? topic : "  "} ] ${title}`}</h1>
         <PostInfoTitle author={author} date={date} isPined={isPined} />
         <hr />
         <div className={classes["description-container"]}>

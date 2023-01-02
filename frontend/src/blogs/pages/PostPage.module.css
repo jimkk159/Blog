@@ -8,6 +8,9 @@
   padding: 1.5rem 3rem 3rem;
   width: 100%;
 }
+.loading-container {
+  height: 60vh;
+}
 .tags-container {
   margin-top: 3rem;
 }

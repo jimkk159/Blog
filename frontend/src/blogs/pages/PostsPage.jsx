@@ -22,13 +22,15 @@ function HomePage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
 
+  //Custom Hook
+  const { isLoading, error, sendRequest, clearError } = useHttp();
+
   //Setting Page Post
-  let indexOfLastPost, indexOfFirstPost, currentPosts;
+  let indexOfFirstPost, indexOfLastPost, currentPosts;
   if (isHome) {
     indexOfFirstPost = 0;
     indexOfLastPost = posts.length > postsOfHome ? postsOfHome : posts.length;
@@ -51,11 +53,12 @@ function HomePage() {
     }
   };
 
+  //Fetch Posts
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "postsa"
+          process.env.REACT_APP_BACKEND_URL + "posts"
         );
         setPosts(responseData);
       } catch (err) {}
@@ -65,7 +68,7 @@ function HomePage() {
 
   return (
     <div className={classes["container"]}>
-      <ErrorModal error={error} onClear={clearError} isAnimate/>
+      <ErrorModal error={error} onClear={clearError} isAnimate />
       {isHome && (
         <>
           <Quote />

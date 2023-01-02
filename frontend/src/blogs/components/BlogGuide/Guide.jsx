@@ -31,7 +31,7 @@ function Guide(props) {
       className={classes["position"]}
       isDarkMode={props.isDarkMode}
       onClose={closeGuideHandler}
-      topicRelation={props.topicRelation}
+      topics={props.topics}
     />
   );
 }
