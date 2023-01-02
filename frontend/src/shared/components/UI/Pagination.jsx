@@ -37,7 +37,6 @@ function Pagination(props) {
       onNavPage(currentPage + 1);
     }
   };
-
   const onPrev = () => {
     if (currentPage > 1) {
       onNavPage(currentPage - 1);

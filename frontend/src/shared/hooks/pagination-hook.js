@@ -19,7 +19,7 @@ function usePagination({
     if (totalPosts < offsetPosts) {
       totalPage = 1;
     } else {
-      totalPage = Math.ceil((totalPosts - 8) / postsPerPage) + 1;
+      totalPage = Math.ceil((totalPosts - offsetPosts) / postsPerPage) + 1;
     }
 
     //Case 1

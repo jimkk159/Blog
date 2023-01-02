@@ -18,10 +18,13 @@ import classes from "./PostsPage.module.css";
 const postsOfHome = 8;
 const siblingCount = 1;
 const postsPerPage = 10;
+const postsPerRequest = 50;
 function HomePage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [isGetAllPosts, setIsGetAllPosts] = useState(false);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -41,7 +44,6 @@ function HomePage() {
         ? indexOfFirstPost + postsPerPage
         : posts.length;
   }
-
   currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   //Paginate
@@ -56,15 +58,26 @@ function HomePage() {
   //Fetch Posts
   useEffect(() => {
     const fetchPosts = async () => {
+      console.log("get Post");
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "posts"
+          process.env.REACT_APP_BACKEND_URL +
+            `posts?start=${posts.length}&number=${postsPerRequest}`
         );
-        setPosts(responseData);
+        const currentPosts = [...posts, ...responseData];
+        const currentTotalPage =
+          currentPosts.length > postsOfHome
+            ? Math.ceil((currentPosts.length - postsOfHome) / postsPerPage) + 1
+            : 1;
+        setPosts(currentPosts);
+        setLastPage(currentTotalPage);
+        setIsGetAllPosts(lastPage >= currentTotalPage);
       } catch (err) {}
     };
-    fetchPosts();
-  }, [sendRequest]);
+
+    if (!isGetAllPosts && (currentPage === lastPage || posts.length === 0))
+      fetchPosts();
+  }, [posts, currentPage, lastPage, isGetAllPosts, sendRequest]);
 
   return (
     <div className={classes["container"]}>
