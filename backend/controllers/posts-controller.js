@@ -26,7 +26,7 @@ export const getPostSearch = async (req, res, next) => {
   const result = [];
   if (result.length < 150) {
     const searchAuthor = Dummy_blogs.filter((x) => {
-      return x.author === searchTarget;
+      return x.author.toLowerCase() === searchTarget.toLowerCase();
     });
     result.push(...searchAuthor);
   }
