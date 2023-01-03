@@ -32,7 +32,7 @@ function PostsPage() {
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
-  //Setting Page Post
+  //Setting Page of Posts
   let indexOfFirstPost, indexOfLastPost, currentPosts;
   if (isHome) {
     indexOfFirstPost = 0;
@@ -53,6 +53,12 @@ function PostsPage() {
     if (isHome !== checkIsHome) {
       setIsHome(checkIsHome);
     }
+  };
+
+  //Delete Post
+  const deletePostHandler = (deletePostId) => {
+    setPosts((prev) => prev.filter((post) => post.id !== deletePostId));
+    console.log("deletePost", deletePostId);
   };
 
   //Fetch Posts
@@ -97,6 +103,7 @@ function PostsPage() {
             posts={currentPosts}
             loading={null}
             isDarkMode={isDarkMode}
+            onDelete={deletePostHandler}
           />
           <Pagination
             totalPosts={posts.length}

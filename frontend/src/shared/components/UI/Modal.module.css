@@ -28,10 +28,3 @@
 .modal-exit-done {
   opacity: 0;
 }
-
-@media (min-width: 768px) {
-  .modal {
-    left: calc(50% - 15rem);
-    width: 30rem;
-  }
-}

@@ -1,0 +1,12 @@
+.modal{
+  min-width: 20rem;
+}
+.warning-content {
+  min-height: 7rem;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    width: 40rem;
+  }
+}

@@ -12,6 +12,7 @@ function PostsInfo(props) {
         key={index}
         post={post}
         isOdd={index % 2 ? true : false}
+        onDelete={props.onDelete}
       />
     );
   });

@@ -1,9 +1,46 @@
+.warning-modal.modal {
+  left: 25%;
+  position: fixed;
+  top: 22vh;
+  width: 50%;
+  z-index: 100;
+}
+.button-container {
+  display: flex;
+  justify-content: start;
+}
+.button {
+  cursor: pointer;
+  font-family: "Inter", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.8rem 1.4rem;
+  margin-right: 1rem;
+}
+.delete-btn {
+  background-color: transparent;
+  border: 2px solid black;
+  color: black;
+}
+.delete-btn:hover {
+  background-color: black;
+  border: 2px solid black;
+  color: white;
+}
+.cancel-btn {
+  background-color: black;
+  border: 2px solid transparent;
+  color: white;
+}
+.loading-content {
+  height:17rem
+}
 .info-container {
   margin: 1rem 0;
 }
-
 .info-content {
   margin: 0 1rem;
+  height:17rem
 }
 
 .info-content h1 {

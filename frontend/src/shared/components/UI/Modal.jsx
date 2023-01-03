@@ -9,19 +9,30 @@ import Backdrop from "./Backdrop";
 import classes from "./Modal.module.css";
 
 function Modal(props) {
-  const inputContent = props.content ? props.content : props.children;
+  const { content, show, style, children, onCancel, isAnimate } = props;
+  const inputContent = content ? content : children;
+  const preventPropagation = (event) => event.stopPropagation();
   const ModalContent = ReactDOM.createPortal(
-    <div className={`${classes.modal} ${props.className}`} style={props.style}>
+    <div
+      className={`${classes.modal} ${props.className}`}
+      style={style}
+      onClick={preventPropagation}
+    >
       {inputContent}
     </div>,
     document.getElementById("modal")
   );
-  if (props.isAnimate) {
+
+  const cancelHandler = () => {
+    onCancel();
+  };
+
+  if (isAnimate) {
     return (
       <>
-        {props.show && <Backdrop onClick={props.onCancel} />}
+        {show && <Backdrop onClick={onCancel} />}
         <CSSTransition
-          in={props.show}
+          in={show}
           timeout={{ enter: 1000, exit: 500 }}
           classNames={{
             enter: classes["modal-enter"],
@@ -41,8 +52,8 @@ function Modal(props) {
 
   return (
     <>
-      {props.show && <Backdrop onClick={props.onCancel} />}
-      {props.show && ModalContent}
+      {show && <Backdrop onClick={cancelHandler} />}
+      {show && ModalContent}
     </>
   );
 }

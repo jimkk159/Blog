@@ -6,18 +6,26 @@ import Button from "../Form/Button";
 import Alert from "./Alert";
 
 //CSS
-import classes from "./ErrorModal.module.css"
+import classes from "./ErrorModal.module.css";
 
 const ErrorModal = (props) => {
   return (
     <Modal
+      className={`${classes["modal"]}`}
       show={!!props.error}
       onCancel={props.onClear}
       isAnimate={props.isAnimate}
     >
       <Alert
         header="An Error Occurred!"
-        footer={<Button className={classes["button"]} onClick={props.onClear}>Okay</Button>}
+        headerClass={props.headerClass}
+        contentClass={props.contentClass}
+        footer={
+          <Button className={classes["button"]} onClick={props.onClear}>
+            Okay
+          </Button>
+        }
+        footerClass={props.footerClass}
       >
         {props.error}
       </Alert>

@@ -1,7 +1,7 @@
 import React from "react";
 
 //Image
-import catBongo from "../../../assets/img/loading/cat-bongo.gif";
+import dogChaseCatImage from "../../../assets/img/loading/dog_chase_cat.gif";
 import catSleepingImage from "../../../assets/img/loading/cat-sleeping.gif";
 import catSwagImage from "../../../assets/img/loading/cat-swag-tail.gif";
 import guraChristmasImage from "../../../assets/img/loading/gura-christmas.gif";
@@ -11,10 +11,10 @@ import bocchiImage from "../../../assets/img/loading/Bocchi-Rock.gif";
 //CSS
 import classes from "./LoadingSpinner.module.css";
 const Images = [
+  dogChaseCatImage,
   bocchiImage,
   guraSpinImage,
   guraChristmasImage,
-  catBongo,
   catSwagImage,
   catSleepingImage,
 ];
