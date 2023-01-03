@@ -4,12 +4,14 @@ import {
   getPost,
   getPosts,
   getPostSearch,
+  deletePost
 } from "../controllers/posts-controller.js";
 
 const router = express.Router();
 
 router.get("/", getPosts);
 router.get("/search", getPostSearch);
-router.get("/:postId", getPost);
+router.get("/:pid", getPost);
+router.delete("/:pid", deletePost);
 
 export default router;
