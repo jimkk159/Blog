@@ -1,0 +1,50 @@
+.RichEditor-styleButton {
+  color: #999;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 16px;
+  padding: 2px 0;
+}
+
+.RichEditor-activeButton {
+  color: #5890ff;
+}
+
+.item {
+  align-items: center;
+  box-shadow: 0px 1px 11px 1px rgba(15, 15, 15, 0.2);
+  cursor: pointer;
+  display: flex;
+  font-family: Oxygen, sans-serif;
+
+  font-size: 16px;
+  height: 27px;
+  justify-content: center;
+  margin-right: 5px;
+  transition: all 250ms ease-in-out;
+  width: 28px;
+}
+.item-dark {
+  background-color: #14293e;
+  color: #fff;
+}
+.item-light {
+  background-color: #fff;
+  color: black;
+}
+.item-active,
+.item:hover {
+  background-color: transparent;
+  box-shadow: none;
+  transform: translateY(1px);
+}
+.item-dark:hover,
+.item-dark-active {
+  border: 1px solid #14293e;
+  color: #14293e;
+}
+.item-light:hover,
+.item-light-active {
+  background-color: #fff;
+  color: black;
+}

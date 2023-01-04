@@ -1,12 +1,13 @@
 import React, { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-import "draft-js/dist/Draft.css";
 
-//Custom Component
-import BlockStyleControls from "./BlockStyleControls";
-import InlineStyleControls from "./InlineStyleControls";
+//Custom Function
+import ToolBar from "./ToolBar/ToolBar";
+import defaultToolbar from "../../../util/defaultToolbar";
 
 //CSS
+import "draft-js/dist/Draft.css";
 import "./MyEditor.css";
 
 // Custom overrides for "code" style.
@@ -29,6 +30,8 @@ function getBlockStyle(block) {
 }
 
 export default function MyEditor(props) {
+  const toolbar = defaultToolbar;
+  const isDarkMode = useSelector((state) => state.theme.value);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -62,27 +65,19 @@ export default function MyEditor(props) {
     return getDefaultKeyBinding(event);
   };
 
-  const toggleBlockTypeHandler = (blockType) => {
-    setEditorState(RichUtils.toggleBlockType(editorState, blockType));
-  };
-
-  const toggleInlineStyleHandler = (inlineStyle) => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
-  };
-
   return (
     <>
-      <div className={"RichEditor-root"}>
-        <BlockStyleControls
+      <div
+        className={`editor-wrapper ${
+          isDarkMode ? "editor-wrapper-dark" : "editor-wrapper-light"
+        }`}
+      >
+        <ToolBar
           editorState={editorState}
-          onToggle={toggleBlockTypeHandler}
+          setEditorState={setEditorState}
+          isDarkMode={isDarkMode}
         />
-
-        <InlineStyleControls
-          editorState={editorState}
-          onToggle={toggleInlineStyleHandler}
-        />
-        <div className={"RichEditor-editor"} onClick={focusEditor}>
+        <div className={"editor-container"} onClick={focusEditor}>
           <Editor
             ref={editor}
             blockStyleFn={getBlockStyle}
@@ -105,3 +100,6 @@ export default function MyEditor(props) {
     </>
   );
 }
+//reference 1:https://draftjs.org/docs/quickstart-rich-styling
+//reference 2:https://www.youtube.com/watch?v=t12a6z090AU
+//reference 3:https://www.youtube.com/watch?v=0pPlbLyeclI

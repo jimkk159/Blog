@@ -12,36 +12,37 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-.RichEditor-root {
-  background: #fff;
-  border: 1px solid #ddd;
-  font-family: "Georgia", serif;
-  font-size: 14px;
-  padding: 15px;
+.editor-wrapper {
+  min-width: 700px;
+  /* display: flex;
+  flex-direction: column;
+  height: fit-content; */
+  margin-top: 3em;
 }
 
-.RichEditor-editor {
-  border-top: 1px solid #ddd;
-  cursor: text;
-  font-size: 16px;
-  margin-top: 10px;
+.editor-container {
+  /* display: flex; */
+  min-height: 9em;
+  border-radius: 0 0 3px 3px;
+  background-color: #fff;
+  padding: 5px;
+  font-size: 17px;
+  font-weight: 300;
+  box-shadow: 0px 0px 3px 1px rgba(15, 15, 15, 0.17);
+  color: black;
 }
 
-.RichEditor-editor .public-DraftEditorPlaceholder-root,
-.RichEditor-editor .public-DraftEditor-content {
+.editor-container .public-DraftEditorPlaceholder-root,
+.editor-container .public-DraftEditor-content {
   margin: 0 -15px -15px;
   padding: 15px;
 }
 
-.RichEditor-editor .public-DraftEditor-content {
+.editor-container .public-DraftEditor-content {
   min-height: 100px;
 }
 
-.RichEditor-hidePlaceholder .public-DraftEditorPlaceholder-root {
-  display: none;
-}
-
-.RichEditor-editor .RichEditor-blockquote {
+.editor-container .RichEditor-blockquote {
   border-left: 5px solid #eee;
   color: #666;
   font-family: "Hoefler Text", "Georgia", serif;
@@ -50,10 +51,9 @@
   padding: 10px 20px;
 }
 
-.RichEditor-editor .public-DraftStyleDefault-pre {
+.editor-container .public-DraftStyleDefault-pre {
   background-color: rgba(0, 0, 0, 0.05);
   font-family: "Inconsolata", "Menlo", "Consolas", monospace;
   font-size: 16px;
   padding: 20px;
 }
-
