@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { useHttp } from "../hooks/http-hook";
 
 //Custom Comonent
-import ErrorModal from "../components/UI/ErrorModal";
+import ErrorModal from "../components/UI/Modal/ErrorModal";
 import Pagination from "../components/UI/Pagination";
 import LoadingSpinner from "../components/UI/LoadingSpinner";
 import PostsInfo from "../../blogs/components/PostsBrowse/PostsInfo";

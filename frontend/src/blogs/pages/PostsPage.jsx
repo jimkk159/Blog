@@ -8,7 +8,7 @@ import { useHttp } from "../../shared/hooks/http-hook";
 //Custom Component
 import Quote from "../../shared/components/Quote";
 import PostsInfo from "../components/PostsBrowse/PostsInfo";
-import ErrorModal from "../../shared/components/UI/ErrorModal";
+import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import Pagination from "../../shared/components/UI/Pagination";
 import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 

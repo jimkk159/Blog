@@ -16,7 +16,7 @@ import Guide from "../components/BlogGuide/Guide";
 import Tags from "../../shared/components/UI/Tags";
 import Card from "../../shared/components/UI/Card";
 import Image from "../components/PostDetail/Widget/Image";
-import ErrorModal from "../../shared/components/UI/ErrorModal";
+import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import CreateWidget from "../components/PostDetail/CreateWidget";
 import Relations from "../components/PostDetail/Widget/Relations";
 import PostDetailTitle from "../components/PostDetail/PostDetailTitle";

@@ -57,6 +57,10 @@ const PostPage = loadable(
   () => import("../blogs/pages/PostPage"),
   loadingFallback
 );
+const EditPage = loadable(
+  () => import("../blogs/pages/EditPage"),
+  loadingFallback
+);
 const SearchPage = loadable(
   () => import("../shared/pages/SearchPage"),
   loadingFallback
@@ -95,6 +99,7 @@ export function RouteCreate() {
           <Route index element={<Navigate replace to="/" />} />
           {newBlogRoute}
           {editBlogRoute}
+          <Route path="new" element={<EditPage />} />
           <Route path=":blogId" element={<PostPage />} />
         </Route>
         <Route path="/about" element={<AboutPage />} />

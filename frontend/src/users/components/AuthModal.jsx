@@ -2,7 +2,7 @@ import React from "react";
 
 //Custom Component
 import AuthForm from "./AuthForm";
-import Modal from "../../shared/components/UI/Modal";
+import Modal from "../../shared/components/UI/Modal/Modal";
 
 //Custom Hook
 import useMediaQuery from "../../shared/hooks/media-query-hook";

@@ -2,8 +2,8 @@ import React from "react";
 
 //Custom Component
 import Modal from "./Modal";
-import Button from "../Form/Button";
-import Alert from "./Alert";
+import Button from "../../Form/Button";
+import Alert from "../Alert";
 
 //CSS
 import classes from "./ErrorModal.module.css";

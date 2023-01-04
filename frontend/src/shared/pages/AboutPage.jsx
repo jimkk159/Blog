@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 //Custom Component
 import Card from "../components/UI/Card";
 
+
 function AboutPage() {
   const isDarkMode = useSelector((state) => state.theme.value);
   return (

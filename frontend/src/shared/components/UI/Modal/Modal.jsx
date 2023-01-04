@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { CSSTransition } from "react-transition-group";
 
 //Custom Component
-import Backdrop from "./Backdrop";
+import Backdrop from "../Backdrop";
 
 //CSS
 import classes from "./Modal.module.css";

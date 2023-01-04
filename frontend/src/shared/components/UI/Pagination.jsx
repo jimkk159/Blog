@@ -82,7 +82,7 @@ function Pagination(props) {
             }`}
             onClick={() => onNavPage(pageNumber)}
           >
-            <a href="#">{pageNumber}</a>
+            <p>{pageNumber}</p>
           </li>
         );
       })}

@@ -2,7 +2,7 @@ import React from "react";
 
 //Custom Component
 import Modal from "./Modal";
-import Alert from "./Alert";
+import Alert from "../Alert";
 
 //CSS
 import classes from "./WarningModal.module.css"

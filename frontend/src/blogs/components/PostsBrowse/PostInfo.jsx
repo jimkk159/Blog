@@ -16,8 +16,8 @@ import PostInfoTitle from "./PostInfoTitle";
 import Card from "../../../shared/components/UI/Card";
 import PostInfoDescription from "./PostInfoDescription";
 import Button from "../../../shared/components/Form/Button";
-import ErrorModal from "../../../shared/components/UI/ErrorModal";
-import WarningModal from "../../../shared/components/UI/WarningModal";
+import ErrorModal from "../../../shared/components/UI/Modal/ErrorModal";
+import WarningModal from "../../../shared/components/UI/Modal/WarningModal";
 import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 
 //CSS
