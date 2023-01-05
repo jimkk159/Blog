@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card"
-import MyEditor from "../../shared/components/UI/TextEditor/MyEditor";
+import RichTextEditor from "../../shared/components/UI/TextEditor/RichTextEditor";
 // import RichTextEditor from "../../shared/components/UI/TextEditor/RichTextEditor";
 
 function EditPage() {
@@ -11,8 +11,7 @@ function EditPage() {
   return (
     <Card className="page" isDarkMode={isDarkMode}>
       <h1>Edit Page</h1>
-      <MyEditor />
-      {/* <RichTextEditor /> */}
+      <RichTextEditor />
     </Card>
   );
 }

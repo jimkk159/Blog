@@ -1,12 +1,11 @@
 import React from "react";
 
-import { blockTypes } from "./toolbar-setting";
-
 //Custom Component
 import StyleButton from "./StyleButton";
+import DropDownButton from "./DropDownButton";
 
 //CSS
-import classes from "./BlockStyleControls.module.css"
+import classes from "./BlockStyleControls.module.css";
 
 const BlockStyleControls = (props) => {
   const { editorState } = props;
@@ -16,22 +15,35 @@ const BlockStyleControls = (props) => {
     .getBlockForKey(selection.getStartKey())
     .getType();
 
-  return (
-    <div className={classes["container"]}>
-      {blockTypes.map((type) => (
+  let content;
+  if (props.config.inDropdown) {
+    content = (
+      <DropDownButton
+        id={props.id}
+        config={props.config}
+        onToggle={props.onToggle}
+        isDarkMode={props.isDarkMode}
+      />
+    );
+  } else {
+    content = props.config.options.map((option) => {
+      const opt = props.config[option];
+      return (
         <StyleButton
-          key={type.label}
+          key={opt.label}
+          id={props.id}
           className={classes["item"]}
-          active={type.style === blockType}
-          label={type.label}
-          icon={type.icon}
+          active={opt.style === blockType}
+          label={opt.label}
+          icon={opt.icon}
           onToggle={props.onToggle}
-          style={type.style}
+          style={opt.style}
           isDarkMode={props.isDarkMode}
         />
-      ))}
-    </div>
-  );
+      );
+    });
+  }
+  return <div className={classes["container"]}>{content}</div>;
 };
 
 export default BlockStyleControls;
