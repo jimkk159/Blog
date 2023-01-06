@@ -1,14 +1,19 @@
 import React from "react";
 
 //Custom Component
-import StyleButton from "./StyleButton";
-import DropDownButton from "./DropDownButton";
+import StyleButton from "./StyleButton/StyleButton";
+import DropDownButton from "./StyleButton/DropDownButton";
 
 //CSS
-import classes from "./InlineStyleControls.module.css";
+import classes from "./RemoveControls.module.css";
 
-const InlineStyleControls = (props) => {
-  const currentStyle = props.editorState.getCurrentInlineStyle();
+const RemoveControls = (props) => {
+  const { editorState } = props;
+  const selection = editorState.getSelection();
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType();
 
   let content;
   if (props.config.inDropdown) {
@@ -22,12 +27,13 @@ const InlineStyleControls = (props) => {
     );
   } else {
     content = props.config.options.map((option) => {
-      const opt = props.config[option];
+      const opt = props.config.choices[option];
       return (
         <StyleButton
           key={opt.label}
           id={props.id}
-          active={currentStyle.has(opt.style)}
+          className={classes["item"]}
+          active={opt.style === blockType}
           label={opt.label}
           icon={opt.icon}
           onToggle={props.onToggle}
@@ -40,4 +46,4 @@ const InlineStyleControls = (props) => {
   return <div className={classes["container"]}>{content}</div>;
 };
 
-export default InlineStyleControls;
+export default RemoveControls;

@@ -1,8 +1,11 @@
 import React, { useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 
 import { styleMap } from "./style-map";
+
+//Redux Slice
+import { toolbarActions } from "../../../../store/toolbar-slice";
 
 //Custom Function
 import ToolBar from "./ToolBar/ToolBar";
@@ -15,6 +18,14 @@ function getBlockStyle(block) {
   switch (block.getType()) {
     case "blockquote":
       return "RichEditor-blockquote";
+    case "ALIGN_RIGHT":
+      return "ALIGN_RIGHT";
+    case "ALIGN_CENTER":
+      return "ALIGN_CENTER";
+    case "ALIGN_LEFT":
+      return "ALIGN_LEFT";
+    case "ALIGN_JUSTIFY":
+      return "ALIGN_JUSTIFY";
     default:
       return null;
   }
@@ -38,13 +49,18 @@ function getCustomStyleFn(style) {
 }
 
 function RichTextEditor(props) {
-  const isDarkMode = useSelector((state) => state.theme.value);
+  const editor = useRef(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const editor = useRef(null);
+
+  //Redux
+  const isDarkMode = useSelector((state) => state.theme.value);
+  const dispatch = useDispatch();
+
   const focusEditorHandler = () => {
     editor.current.focus();
+    dispatch(toolbarActions.close());
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
@@ -84,7 +100,10 @@ function RichTextEditor(props) {
           setEditorState={setEditorState}
           isDarkMode={isDarkMode}
         />
-        <div className={"editor-container"} onClick={focusEditorHandler}>
+        <div
+          className={"editor-container"}
+          onClick={focusEditorHandler}
+        >
           <Editor
             ref={editor}
             editorState={editorState}

@@ -5,9 +5,6 @@ export const styleMap = {
     fontSize: 16,
     padding: 2,
   },
-  FONT_SIZE_8: {
-    fontSize: "8px",
-  },
   Arial: {
     fontFamily: "Arial",
   },
@@ -26,8 +23,8 @@ export const styleMap = {
   Verdana: {
     fontFamily: "Verdana",
   },
-  Align_Left: { textAlign: "left" },
-  Align_Center: { textAlign: "center" },
-  Align_Right: { textAlign: "right" },
-  Align_Justify: { textAlign: "justify" },
+  ALIGN_LEFT: { textAlign: "left" },
+  ALIGN_CENTER: { textAlign: "center" },
+  ALIGN_RIGHT: { textAlign: "right" },
+  ALIGN_JUSTIFY: { textAlign: "justify" },
 };

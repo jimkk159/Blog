@@ -57,3 +57,15 @@
   font-size: 16px;
   padding: 20px;
 }
+.ALIGN_RIGHT .public-DraftStyleDefault-block {
+  text-align: right;
+}
+.ALIGN_CENTER .public-DraftStyleDefault-block {
+  text-align: center;
+}
+.ALIGN_LEFT .public-DraftStyleDefault-block {
+  text-align: left;
+}
+.ALIGN_JUSTIFY .public-DraftStyleDefault-block {
+  text-align: justify;
+}

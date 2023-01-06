@@ -1,13 +1,13 @@
 import React from "react";
 
 //Custom Component
-import StyleButton from "./StyleButton";
-import DropDownButton from "./DropDownButton";
+import StyleButton from "./StyleButton/StyleButton";
+import DropDownButton from "./StyleButton/DropDownButton";
 
 //CSS
-import classes from "./BlockStyleControls.module.css";
+import classes from "./IndentControls.module.css";
 
-const BlockStyleControls = (props) => {
+const IndentControls = (props) => {
   const { editorState } = props;
   const selection = editorState.getSelection();
   const blockType = editorState
@@ -27,7 +27,7 @@ const BlockStyleControls = (props) => {
     );
   } else {
     content = props.config.options.map((option) => {
-      const opt = props.config[option];
+      const opt = props.config.choices[option];
       return (
         <StyleButton
           key={opt.label}
@@ -46,4 +46,4 @@ const BlockStyleControls = (props) => {
   return <div className={classes["container"]}>{content}</div>;
 };
 
-export default BlockStyleControls;
+export default IndentControls;

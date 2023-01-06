@@ -18,7 +18,7 @@
 .wrapper:focus{
   border-color: transparent;
 }
-.dropdownoption-default {
+.dropdown-option-default {
   border: none;
   min-height: 25px;
 }

@@ -25,6 +25,8 @@ function StyleButton(props) {
         props.isDarkMode ? classes["item-dark"] : classes["item-light"]
       }`}
       onMouseDown={toggleHandler}
+      title={props.label}
+      aria-label={props.label}
     >
       {props.icon || props.label}
     </div>
