@@ -10,9 +10,9 @@ import DropDownOption from "./DropDownOption";
 //CSS
 import classes from "./DropDown.module.css";
 
-//Using ul & li for dropdwon is the editor will lose focus when choose the option
+//The Reason for using ul & li for dropdwon is that draft.js editor will lose focus when choose the option on <Select>
 function DropDown(props) {
-  const { id, title, activeStyle, config, onToggle } = props;
+  const { id, title, activeStyle, config, onChange } = props;
   const [currentOption, setCurrentOption] = useState(null);
 
   //Redux
@@ -38,9 +38,20 @@ function DropDown(props) {
 
   //Select Option
   const selectOptionHandler = (option, style) => {
-    if (onToggle) {
-      setCurrentOption(option);
-      onToggle(style);
+    let onChangeFn;
+    switch (typeof onChange) {
+      case "function":
+        onChangeFn = onChange;
+        onChangeFn(style);
+        setCurrentOption(option);
+        break
+      case "object":
+        onChangeFn = onChange[option];
+        onChangeFn();
+        setCurrentOption(option);
+        break
+      default:
+        break
     }
     dispatch(toolbarActions.close());
   };
@@ -74,7 +85,6 @@ function DropDown(props) {
             {config.options.map((opt, index) => {
               const choiceStyle = config.choices[opt].style;
               const isActive = activeStyle === choiceStyle;
-
               return (
                 <DropDownOption
                   key={index}

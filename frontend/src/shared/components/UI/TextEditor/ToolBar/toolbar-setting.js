@@ -57,7 +57,7 @@ export const inline = {
     },
   },
 };
-export const blockType2 = {
+export const blockTypeFlat = {
   type: "blockType",
   inDropdown: false,
   options: ["Blockquote", "Code"],
@@ -74,7 +74,7 @@ export const blockType2 = {
     },
   },
 };
-export const blockType = {
+export const blockTypeDrop = {
   type: "blockType",
   inDropdown: true,
   options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
@@ -293,15 +293,15 @@ export const map = {
 export const toolbar = {
   options: [
     "inline",
-    "blockType2",
-    "blockType",
+    "blockTypeFlat",
+    "blockTypeDrop",
     "fontSize",
     "fontFamily",
-    // "list",
-    // "indent",
+    "list",
+    "indent",
     // "textAlign",
     // "link",
-    // "remove",
+    "remove",
     // "embedded",
     "history",
     // "image",
@@ -309,8 +309,8 @@ export const toolbar = {
   ],
   features: {
     inline: inline,
-    blockType2: blockType2,
-    blockType: blockType,
+    blockTypeFlat: blockTypeFlat,
+    blockTypeDrop: blockTypeDrop,
     fontSize: fontSize,
     fontFamily: fontFamily,
     list: list,

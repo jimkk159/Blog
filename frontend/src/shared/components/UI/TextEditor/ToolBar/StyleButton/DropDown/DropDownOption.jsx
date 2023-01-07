@@ -7,7 +7,6 @@ function DropDown(props) {
 
   const selectHandler = (event) => {
     onSelect(option, style);
-    console.log(option, style)
     event.preventDefault();
     event.stopPropagation();
   };

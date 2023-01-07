@@ -4,11 +4,6 @@ import React from "react";
 import classes from "./StyleButton.module.css";
 
 function StyleButton(props) {
-  const toggleHandler = (event) => {
-    event.preventDefault();
-    props.onToggle(props.style);
-  };
-
   //Check button active
   let className = classes["item"];
   if (props.active) {
@@ -18,6 +13,23 @@ function StyleButton(props) {
         : classes["item-light-active"]
     }`;
   }
+
+  const toggleHandler = (event) => {
+    event.preventDefault();
+    let onChangeFn;
+    switch (typeof props.onChange) {
+      case "function":
+        onChangeFn = props.onChange;
+        onChangeFn(props.style);
+        break;
+      case "object":
+        onChangeFn = props.onChange[props.opt];
+        if (onChangeFn) onChangeFn();
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div

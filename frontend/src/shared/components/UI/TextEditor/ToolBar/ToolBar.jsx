@@ -1,11 +1,12 @@
 import React from "react";
-import { EditorState, RichUtils, Modifier } from "draft-js";
 
 import { toolbar } from "./toolbar-setting";
 
 //Custom Component
-import IndentControls from "./IndentControls";
-import RemoveControls from "./RemoveControls";
+import BundleButton from "./StyleButton/BundleButton";
+import RemoveAllStyleControls from "./StyleControls/RemoveControls";
+import IndentControls from "./StyleControls/IndentControls";
+import HistoryControls from "./StyleControls/HistoryControls";
 import BlockStyleControls from "./StyleControls/BlockStyleControls";
 import InlineStyleControls from "./StyleControls/InlineStyleControls";
 
@@ -14,68 +15,6 @@ import classes from "./ToolBar.module.css";
 
 function ToolBar(props) {
   const { editorState, setEditorState } = props;
-
-  //History
-  const undoHandler = () => {
-    setEditorState(EditorState.undo(editorState));
-  };
-  // const redoHandler = () => {
-  //   setEditorState(EditorState.redo(editorState));
-  // };
-
-  //Indent
-  // const adjustDepth = () => {};
-  const indentHandler = () => {
-    const selection = editorState.getSelection();
-    const block = editorState
-      .getCurrentContent()
-      .getBlockForKey(selection.getStartKey());
-    const blockKey = block.getKey();
-    const depth = block.getDepth();
-    const newBlock = block.set("depth", depth + 1);
-    const contentState = editorState.getCurrentContent();
-    const blockMap = contentState.getBlockMap();
-    const newBlockMap = blockMap.set(blockKey, newBlock);
-    setEditorState(
-      EditorState.push(
-        editorState,
-        contentState.merge({ blockMap: newBlockMap }),
-        "adjust-depth"
-      )
-    );
-  };
-
-  //Remove InlineStyle
-  const removeAllInlineStyles = (editorState) => {
-    let contentState = editorState.getCurrentContent();
-    toolbar.options.forEach((option) => {
-      const feature = toolbar.features[option];
-      if (feature.type === "inline") {
-        feature.options.forEach((option) => {
-          contentState = Modifier.removeInlineStyle(
-            contentState,
-            editorState.getSelection(),
-            feature.choices[option].style
-          );
-        });
-      }
-    });
-    return EditorState.push(editorState, contentState, "change-inline-style");
-  };
-
-  const removeInlineStylesHandler = () => {
-    setEditorState(removeAllInlineStyles(editorState));
-  };
-
-  //Toggle Block Type
-  const toggleBlockTypeHandler = (blockType) => {
-    setEditorState(RichUtils.toggleBlockType(editorState, blockType));
-  };
-
-  //Toggle Inline Style
-  const toggleInlineStyleHandler = (inlineStyle) => {
-    setEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
-  };
 
   return (
     <div
@@ -86,64 +25,72 @@ function ToolBar(props) {
       } `}
     >
       {toolbar.options.map((opt, index) => {
+        let active, onButtonTrigger;
+        const toolType = toolbar.features[opt].type;
         const config = toolbar.features[opt];
-        if (toolbar.features[opt].type === "history")
-          return (
-            <IndentControls
-              key={index}
-              id={opt}
-              title={opt}
-              config={config}
-              editorState={editorState}
-              onToggle={undoHandler}
-              isDarkMode={props.isDarkMode}
-            />
-          );
-        if (toolbar.features[opt].type === "indent")
-          return (
-            <IndentControls
-              key={index}
-              id={opt}
-              title={opt}
-              config={config}
-              editorState={editorState}
-              onToggle={indentHandler}
-              isDarkMode={props.isDarkMode}
-            />
-          );
-        if (toolbar.features[opt].type === "remove")
-          return (
-            <RemoveControls
-              key={index}
-              id={opt}
-              title={opt}
-              config={config}
-              editorState={editorState}
-              onToggle={removeInlineStylesHandler}
-              isDarkMode={props.isDarkMode}
-            />
-          );
-        if (toolbar.features[opt].type === "blockType")
-          return (
-            <BlockStyleControls
-              key={index}
-              id={opt}
-              title={opt}
-              config={config}
-              editorState={editorState}
-              onToggle={toggleBlockTypeHandler}
-              isDarkMode={props.isDarkMode}
-            />
-          );
+
+        switch (toolType) {
+          case "blockType":
+            const { activeStyle, toggleBlockTypeHandler } = BlockStyleControls({
+              editorState,
+              onChange: setEditorState,
+            });
+            active = activeStyle;
+            onButtonTrigger = toggleBlockTypeHandler;
+            break;
+
+          case "inline":
+            const { activeStyleFn, toggleInlineStyleHandler } =
+              InlineStyleControls({
+                editorState,
+                onChange: setEditorState,
+              });
+            active = activeStyleFn;
+            onButtonTrigger = toggleInlineStyleHandler;
+            break;
+
+          case "indent":
+            const { indentHandler, outdentHandler } = IndentControls({
+              editorState,
+              onChange: setEditorState,
+            });
+            onButtonTrigger = {
+              indent: indentHandler,
+              outdent: outdentHandler,
+            };
+            break;
+
+          case "remove":
+            const { removeInlineStylesHandler } = RemoveAllStyleControls({
+              toolbar,
+              editorState,
+              onChange: setEditorState,
+            });
+
+            onButtonTrigger = removeInlineStylesHandler;
+            break;
+
+          case "history":
+            const { undoHandler, redoHandler } = HistoryControls({
+              editorState,
+              onChange: setEditorState,
+            });
+            onButtonTrigger = { undo: undoHandler, redo: redoHandler };
+            break;
+
+          default:
+            break;
+        }
+
+        if (!onButtonTrigger) return null;
         return (
-          <InlineStyleControls
+          <BundleButton
             key={index}
-            id={opt}
-            title={opt}
+            opt={opt}
+            active={active}
             config={config}
-            editorState={editorState}
-            onToggle={toggleInlineStyleHandler}
             isDarkMode={props.isDarkMode}
+            onChange={onButtonTrigger}
           />
         );
       })}

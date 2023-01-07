@@ -1,20 +1,18 @@
-import React from "react";
-
-//Custom Component
-import BundleButton from "../StyleButton/BundleButton";
+import { RichUtils } from "draft-js";
 
 const InlineStyleControls = (props) => {
+  const { editorState, onChange } = props;
   const currentStyle = props.editorState.getCurrentInlineStyle();
-  return (
-    <BundleButton
-      id={props.id}
-      title={props.title}
-      config={props.config}
-      onToggle={props.onToggle}
-      isDarkMode={props.isDarkMode}
-      active={(style) => currentStyle.has(style)}
-    />
-  );
+
+  //Toggle Inline Style
+  const toggleInlineStyleHandler = (inlineStyle) => {
+    onChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+  };
+
+  return {
+    activeStyleFn: (style) => currentStyle.has(style),
+    toggleInlineStyleHandler,
+  };
 };
 
 export default InlineStyleControls;

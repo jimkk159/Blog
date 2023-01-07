@@ -3,7 +3,6 @@ import React from "react";
 //Custom Component
 import StyleButton from "./StyleButton";
 import DropDown from "./DropDown/DropDown";
-// import DropDownButton from "./DropDownButton";
 
 //CSS
 import classes from "./BundleButton.module.css";
@@ -25,18 +24,12 @@ function BundleButton(props) {
     //dropdown bundle type
     content = (
       <>
-        {/* <DropDownButton
-          id={props.id}
-          config={props.config}
-          onToggle={props.onToggle}
-          isDarkMode={props.isDarkMode}
-        /> */}
         <DropDown
-          key={props.id}
-          id={props.id}
-          title={props.title}
+          key={props.opt}
+          id={props.opt}
+          title={props.opt}
           config={props.config}
-          onToggle={props.onToggle}
+          onChange={props.onChange}
           activeStyle={props.active}
           isDarkMode={props.isDarkMode}
         />
@@ -49,18 +42,20 @@ function BundleButton(props) {
       return (
         <StyleButton
           key={opt.label}
-          id={props.id}
+          id={option}
           className={classes["item"]}
+          opt={option}
           active={checkActive(opt.style, props.active)}
           label={opt.label}
           icon={opt.icon}
           style={opt.style}
-          onToggle={props.onToggle}
+          onChange={props.onChange}
           isDarkMode={props.isDarkMode}
         />
       );
     });
   }
+
   return <div className={classes["container"]}>{content}</div>;
 }
 
