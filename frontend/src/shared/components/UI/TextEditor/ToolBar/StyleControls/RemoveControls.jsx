@@ -1,10 +1,27 @@
-import { RichUtils, SelectionState } from "draft-js";
-import { EditorState, Modifier } from "draft-js";
+import { EditorState, Modifier, RichUtils, SelectionState } from "draft-js";
 
-const RemoveAllStyleControls = (props) => {
+const RemoveStyleControls = (props) => {
   const { toolbar, editorState, onChange } = props;
 
-  //Remove InlineStyle
+  //Remove Specific InlineStyle
+  const removeTargetInlineStyles = (editorState, targets) => {
+    let contentState = editorState.getCurrentContent();
+    targets.forEach((target) => {
+      contentState = Modifier.removeInlineStyle(
+        contentState,
+        editorState.getSelection(),
+        target
+      );
+    });
+
+    return EditorState.push(editorState, contentState, "change-inline-style");
+  };
+
+  const removeTargetsInlineStylesHandler = (targets) => {
+    onChange(removeTargetInlineStyles(editorState, targets));
+  };
+
+  //Remove All InlineStyle
   const removeAllInlineStyles = (editorState) => {
     let contentState = editorState.getCurrentContent();
     toolbar.options.forEach((option) => {
@@ -22,7 +39,7 @@ const RemoveAllStyleControls = (props) => {
     return EditorState.push(editorState, contentState, "change-inline-style");
   };
 
-  const removeInlineStylesHandler = () => {
+  const removeAllInlineStylesHandler = () => {
     onChange(removeAllInlineStyles(editorState));
   };
 
@@ -39,7 +56,6 @@ const RemoveAllStyleControls = (props) => {
     toolbar.options.forEach((option) => {
       const feature = toolbar.features[option];
       if (feature.type === "inline") {
-        console.log("clean inline");
         feature.options.forEach((option) => {
           contentWithoutStyles = Modifier.removeInlineStyle(
             contentWithoutStyles,
@@ -62,7 +78,6 @@ const RemoveAllStyleControls = (props) => {
     const block = newEditorState
       .getCurrentContent()
       .getBlockForKey(selection.getStartKey());
-    console.log(JSON.stringify(selection), block.getKey());
     if (block.getType() !== "unstyled") {
       //Select text range
       const selectionState = SelectionState.createEmpty(block.getKey());
@@ -82,7 +97,7 @@ const RemoveAllStyleControls = (props) => {
         contentWithoutBlocks,
         "change-block-type"
       );
-     return newEditorState2;
+      return newEditorState2;
     }
 
     return newEditorState;
@@ -94,10 +109,12 @@ const RemoveAllStyleControls = (props) => {
 
   return {
     removeBlockTypeHandler,
-    removeInlineStylesHandler,
+    removeAllInlineStylesHandler,
+    removeTargetInlineStyles,
+    removeTargetsInlineStylesHandler,
     removeAllStylesHandler,
   };
 };
 
-export default RemoveAllStyleControls;
+export default RemoveStyleControls;
 //reference:https://medium.com/hackernoon/draft-js-how-to-remove-formatting-of-the-text-cd191866d9ad

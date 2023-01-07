@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
+import { checkActive } from "../checkActive";
+
 //Redux Slice
 import { toolbarActions } from "../../../../../../../store/toolbar-slice";
 
@@ -12,7 +14,7 @@ import classes from "./DropDown.module.css";
 
 //The Reason for using ul & li for dropdwon is that draft.js editor will lose focus when choose the option on <Select>
 function DropDown(props) {
-  const { id, title, activeStyle, config, onChange } = props;
+  const { id, title, choicesCreator, activeStyle, config, onChange } = props;
   const [currentOption, setCurrentOption] = useState(null);
 
   //Redux
@@ -83,8 +85,17 @@ function DropDown(props) {
             onMouseDown={stopPropagationHandler}
           >
             {config.options.map((opt, index) => {
-              const choiceStyle = config.choices[opt].style;
-              const isActive = activeStyle === choiceStyle;
+              
+              let choice;
+              if(choicesCreator){
+                choice = choicesCreator(opt)
+              } else{
+                choice = config?.choices[opt];
+              }
+              
+              const choiceLabel = choice?.label;
+              const choiceStyle = choice?.style;
+              const isActive = checkActive(choiceStyle, activeStyle)
               return (
                 <DropDownOption
                   key={index}
@@ -93,7 +104,7 @@ function DropDown(props) {
                   active={isActive}
                   onSelect={selectOptionHandler}
                 >
-                  {config.choices[opt].label}
+                  {choiceLabel}
                 </DropDownOption>
               );
             })}

@@ -1,20 +1,13 @@
 import React from "react";
 
+import { checkActive } from "./checkActive";
+
 //Custom Component
 import StyleButton from "./StyleButton";
 import DropDown from "./DropDown/DropDown";
 
 //CSS
 import classes from "./BundleButton.module.css";
-
-//Judge the button active
-const checkActive = (style, active) => {
-  let isActive = style === active;
-  if (typeof active === "function") {
-    isActive = active(style);
-  }
-  return isActive;
-};
 
 function BundleButton(props) {
   let content;
@@ -29,6 +22,7 @@ function BundleButton(props) {
           id={props.opt}
           title={props.opt}
           config={props.config}
+          choicesCreator={props.choicesCreator}
           onChange={props.onChange}
           activeStyle={props.active}
           isDarkMode={props.isDarkMode}

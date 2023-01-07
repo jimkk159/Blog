@@ -123,6 +123,7 @@ function RichTextEditor(props) {
         editorState={EditorState.createWithContent(
           editorState.getCurrentContent()
         )}
+        readOnly
       />
     </>
   );

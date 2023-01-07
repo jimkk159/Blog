@@ -107,63 +107,9 @@ export const blockTypeDrop = {
   },
 };
 export const fontSize = {
-  type: "inline",
+  type: "fontSize",
   inDropdown: true,
   options: [8, 10, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96],
-  choices: {
-    8: {
-      label: "8",
-      style: "FONT_SIZE_8",
-    },
-    10: {
-      label: "10",
-      style: "FONT_SIZE_10",
-    },
-    12: {
-      label: "12",
-      style: "FONT_SIZE_12",
-    },
-    14: {
-      label: "14",
-      style: "FONT_SIZE_14",
-    },
-    16: {
-      label: "16",
-      style: "FONT_SIZE_16",
-    },
-    18: {
-      label: "18",
-      style: "FONT_SIZE_18",
-    },
-    24: {
-      label: "24",
-      style: "FONT_SIZE_24",
-    },
-    30: {
-      label: "30",
-      style: "FONT_SIZE_30",
-    },
-    36: {
-      label: "36",
-      style: "FONT_SIZE_36",
-    },
-    48: {
-      label: "48",
-      style: "FONT_SIZE_48",
-    },
-    60: {
-      label: "60",
-      style: "FONT_SIZE_60",
-    },
-    72: {
-      label: "72",
-      style: "FONT_SIZE_72",
-    },
-    96: {
-      label: "96",
-      style: "FONT_SIZE_96",
-    },
-  },
 };
 export const fontFamily = {
   type: "inline",

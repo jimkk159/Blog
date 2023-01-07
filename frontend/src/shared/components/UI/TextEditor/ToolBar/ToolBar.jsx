@@ -1,12 +1,14 @@
 import React from "react";
 
+//Custom Function
 import { toolbar } from "./toolbar-setting";
 
 //Custom Component
 import BundleButton from "./StyleButton/BundleButton";
-import RemoveAllStyleControls from "./StyleControls/RemoveControls";
 import IndentControls from "./StyleControls/IndentControls";
 import HistoryControls from "./StyleControls/HistoryControls";
+import FontSizeControls from "./StyleControls/FontSizeControls";
+import RemoveStyleControls from "./StyleControls/RemoveControls";
 import BlockStyleControls from "./StyleControls/BlockStyleControls";
 import InlineStyleControls from "./StyleControls/InlineStyleControls";
 
@@ -25,7 +27,7 @@ function ToolBar(props) {
       } `}
     >
       {toolbar.options.map((opt, index) => {
-        let active, onButtonTrigger;
+        let active, choicesCreator, onButtonTrigger;
         const toolType = toolbar.features[opt].type;
         const config = toolbar.features[opt];
 
@@ -40,13 +42,28 @@ function ToolBar(props) {
             break;
 
           case "inline":
-            const { activeStyleFn, toggleInlineStyleHandler } =
+            const { activeStyleFn: inlineActiveFn, toggleInlineStyleHandler } =
               InlineStyleControls({
                 editorState,
                 onChange: setEditorState,
               });
-            active = activeStyleFn;
+            active = inlineActiveFn;
             onButtonTrigger = toggleInlineStyleHandler;
+            break;
+
+          case "fontSize":
+            const {
+              activeStyleFn: fontSizeActiveFn,
+              fontSizeChoicesCreator,
+              toggleFontSizeHandler,
+            } = FontSizeControls({
+              fontSizeOptions: config.options,
+              editorState,
+              onChange: setEditorState,
+            });
+            active = fontSizeActiveFn;
+            choicesCreator = fontSizeChoicesCreator;
+            onButtonTrigger = toggleFontSizeHandler;
             break;
 
           case "indent":
@@ -61,13 +78,13 @@ function ToolBar(props) {
             break;
 
           case "remove":
-            const { removeInlineStylesHandler } = RemoveAllStyleControls({
+            const { removeAllInlineStylesHandler } = RemoveStyleControls({
               toolbar,
               editorState,
               onChange: setEditorState,
             });
 
-            onButtonTrigger = removeInlineStylesHandler;
+            onButtonTrigger = removeAllInlineStylesHandler;
             break;
 
           case "history":
@@ -81,7 +98,6 @@ function ToolBar(props) {
           default:
             break;
         }
-
         if (!onButtonTrigger) return null;
         return (
           <BundleButton
@@ -91,6 +107,7 @@ function ToolBar(props) {
             config={config}
             isDarkMode={props.isDarkMode}
             onChange={onButtonTrigger}
+            choicesCreator={choicesCreator}
           />
         );
       })}
