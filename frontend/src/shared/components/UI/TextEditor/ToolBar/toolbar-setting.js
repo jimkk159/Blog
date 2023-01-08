@@ -192,7 +192,7 @@ export const textAlign = {
   },
 };
 export const link = {
-  type: "",
+  type: "blockType",
   inDropdown: false,
   options: ["link", "unlink"],
   choices: {
@@ -202,7 +202,7 @@ export const link = {
   linkCallback: undefined,
 };
 export const embedded = {
-  type: "",
+  type: "blockType",
   inDropdown: false,
   options: ["embedded"],
   choices: { embedded: { label: "embedded", style: "", icon: <ImEmbed2 /> } },
@@ -225,33 +225,31 @@ export const history = {
   },
 };
 export const image = {
-  type: "",
+  type: "blockType",
   inDropdown: false,
   options: ["image"],
   choices: { image: { label: "image", style: "", icon: <FaRegImage /> } },
 };
 export const map = {
-  type: "",
+  type: "blockType",
   inDropdown: false,
   options: ["map"],
   choices: { map: { label: "map", style: "", icon: <FaMapMarkedAlt /> } },
 };
 export const toolbar = {
   options: [
-    "inline",
-    "blockTypeFlat",
-    "blockTypeDrop",
-    "fontSize",
-    "fontFamily",
-    "list",
-    "indent",
-    // "textAlign",
-    // "link",
-    "remove",
-    // "embedded",
-    "history",
-    // "image",
-    // "map",
+    ["inline", "blockTypeFlat", "blockTypeDrop", "fontSize", "fontFamily"],
+    [
+      "textAlign",
+      "list",
+      "indent",
+      "link",
+      "image",
+      "map",
+      "embedded",
+      "remove",
+      "history",
+    ],
   ],
   features: {
     inline: inline,

@@ -93,9 +93,8 @@ function DropDown(props) {
               } else {
                 choice = config?.choices[opt];
               }
-
-              const choiceLabel = choice?.label;
               const choiceStyle = choice?.style;
+              const choiceContent = choice?.label;
               const isActive = checkActive(choiceStyle, activeStyle);
               return (
                 <DropDownOption
@@ -105,7 +104,7 @@ function DropDown(props) {
                   active={isActive}
                   onSelect={selectOptionHandler}
                 >
-                  {choiceLabel}
+                  {choiceContent}
                 </DropDownOption>
               );
             })}

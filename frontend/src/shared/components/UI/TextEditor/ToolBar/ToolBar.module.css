@@ -1,7 +1,4 @@
 .container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   min-height: 48px;
   padding: 5px 7px;
   margin-bottom: 8px;
@@ -14,4 +11,11 @@
 }
 .container-light {
   background-color: rgb(100, 162, 187);
+}
+
+.line-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
 }
