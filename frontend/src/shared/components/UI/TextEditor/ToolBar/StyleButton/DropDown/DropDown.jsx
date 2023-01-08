@@ -30,7 +30,9 @@ function DropDown(props) {
 
   //Expand Options
   const toggleExpandedHandler = (event) => {
+    //Prevent Click other area
     event.stopPropagation();
+    //Prevent the Text Editor Selection
     event.preventDefault();
     if (currentTool === title) {
       dispatch(toolbarActions.close());

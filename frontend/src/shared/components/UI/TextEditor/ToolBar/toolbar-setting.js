@@ -24,6 +24,7 @@ import { BsFillEraserFill } from "react-icons/bs";
 import { RiBracesLine } from "react-icons/ri";
 import { GrBlockQuote } from "react-icons/gr";
 import { ImEmbed2 } from "react-icons/im";
+import { IoIosColorPalette } from "react-icons/io";
 
 export const inline = {
   type: "inline",
@@ -142,6 +143,22 @@ export const fontFamily = {
     },
   },
 };
+
+export const textAlign = {
+  type: "blockType",
+  inDropdown: false,
+  options: ["left", "center", "right", "justify"],
+  choices: {
+    left: { label: "left", style: "ALIGN_LEFT", icon: <FaAlignLeft /> },
+    center: { label: "center", style: "ALIGN_CENTER", icon: <FaAlignCenter /> },
+    right: { label: "right", style: "ALIGN_RIGHT", icon: <FaAlignRight /> },
+    justify: {
+      label: "justify",
+      style: "ALIGN_JUSTIFY",
+      icon: <FaAlignJustify />,
+    },
+  },
+};
 export const list = {
   type: "blockType",
   inDropdown: false,
@@ -176,18 +193,14 @@ export const indent = {
     },
   },
 };
-export const textAlign = {
+export const color = {
   type: "blockType",
   inDropdown: false,
-  options: ["left", "center", "right", "justify"],
+  options: ["color"],
   choices: {
-    left: { label: "left", style: "ALIGN_LEFT", icon: <FaAlignLeft /> },
-    center: { label: "center", style: "ALIGN_CENTER", icon: <FaAlignCenter /> },
-    right: { label: "right", style: "ALIGN_RIGHT", icon: <FaAlignRight /> },
-    justify: {
-      label: "justify",
-      style: "ALIGN_JUSTIFY",
-      icon: <FaAlignJustify />,
+    color: {
+      label: "color",
+      icon: <IoIosColorPalette />,
     },
   },
 };
@@ -200,6 +213,18 @@ export const link = {
     unlink: { label: "unlink", style: "unlink", icon: <FaUnlink /> },
   },
   linkCallback: undefined,
+};
+export const image = {
+  type: "blockType",
+  inDropdown: false,
+  options: ["image"],
+  choices: { image: { label: "image", style: "", icon: <FaRegImage /> } },
+};
+export const map = {
+  type: "blockType",
+  inDropdown: false,
+  options: ["map"],
+  choices: { map: { label: "map", style: "", icon: <FaMapMarkedAlt /> } },
 };
 export const embedded = {
   type: "blockType",
@@ -224,18 +249,7 @@ export const history = {
     redo: { label: "redo", style: "", icon: <FaRedo /> },
   },
 };
-export const image = {
-  type: "blockType",
-  inDropdown: false,
-  options: ["image"],
-  choices: { image: { label: "image", style: "", icon: <FaRegImage /> } },
-};
-export const map = {
-  type: "blockType",
-  inDropdown: false,
-  options: ["map"],
-  choices: { map: { label: "map", style: "", icon: <FaMapMarkedAlt /> } },
-};
+
 export const toolbar = {
   options: [
     ["inline", "blockTypeFlat", "blockTypeDrop", "fontSize", "fontFamily"],
@@ -243,6 +257,7 @@ export const toolbar = {
       "textAlign",
       "list",
       "indent",
+      "color",
       "link",
       "image",
       "map",
@@ -260,11 +275,12 @@ export const toolbar = {
     list: list,
     indent: indent,
     textAlign: textAlign,
+    color: color,
     link: link,
-    remove: remove,
-    embedded: embedded,
-    history: history,
     image: image,
     map: map,
+    embedded: embedded,
+    remove: remove,
+    history: history,
   },
 };

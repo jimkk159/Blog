@@ -7,7 +7,9 @@ function DropDown(props) {
 
   const selectHandler = (event) => {
     onSelect(option, style);
+    //Prevent the Text Editor Selection
     event.preventDefault();
+     //Prevent Click other area
     event.stopPropagation();
   };
 

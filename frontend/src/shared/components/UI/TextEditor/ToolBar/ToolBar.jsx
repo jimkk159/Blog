@@ -17,7 +17,11 @@ import classes from "./ToolBar.module.css";
 
 function ToolBar(props) {
   const { editorState, setEditorState } = props;
-
+  const preventDefaultHandler = (event) => {
+    //Very Import to prevent the Text editor force when chooseing
+    //the tool bar to keep focus on text editor
+    event.preventDefault();
+  };
   return (
     <div
       className={`${classes["container"]} ${
@@ -25,7 +29,22 @@ function ToolBar(props) {
           ? classes["container-dark"]
           : classes["container-light"]
       } `}
+      onMouseDown={preventDefaultHandler}
     >
+      <input
+        id="color-picker"
+        type="color"
+        onChange={(event) => {
+          console.log(event.target.value);
+        }}
+        onClick={(event) => {
+          console.log("click");
+        }}
+        onMouseDown={(event) => {
+          console.log("down");
+        }}
+        onSelect={() => console.log("select")}
+      />
       {toolbar.options.map((line, index) => {
         return (
           <div key={index} className={classes["line-container"]}>

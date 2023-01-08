@@ -100,10 +100,7 @@ function RichTextEditor(props) {
           setEditorState={setEditorState}
           isDarkMode={isDarkMode}
         />
-        <div
-          className={"editor-container"}
-          onClick={focusEditorHandler}
-        >
+        <div className={"editor-container"} onClick={focusEditorHandler}>
           <Editor
             ref={editor}
             editorState={editorState}
