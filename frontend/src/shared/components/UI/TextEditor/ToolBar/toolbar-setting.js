@@ -36,9 +36,9 @@ export const inline = {
     "italic",
     "strikethrough",
     "underline",
-    "monospace",
     "superscript",
     "subscript",
+    "monospace",
   ],
   choices: {
     bold: {
@@ -61,11 +61,6 @@ export const inline = {
       style: "UNDERLINE",
       icon: <FaUnderline />,
     },
-    monospace: {
-      label: "Monospace",
-      style: "CODE",
-      icon: <RiBracesLine />,
-    },
     superscript: {
       label: "superscript",
       style: "SUPERSCRIPT",
@@ -75,6 +70,11 @@ export const inline = {
       label: "subscript",
       style: "SUBSCRIPT",
       icon: <FaSubscript />,
+    },
+    monospace: {
+      label: "Monospace",
+      style: "CODE",
+      icon: <RiBracesLine />,
     },
   },
 };
@@ -289,7 +289,8 @@ export const history = {
 
 export const toolbar = {
   options: [
-    ["link", "blockTypeFlat", "image", "map", "embedded"],
+    ["blockTypeFlat"],
+    ["remove", "history"],
     [
       "inline",
       "blockTypeDrop",
@@ -297,16 +298,12 @@ export const toolbar = {
       "colorPicker",
       "fontFamily",
       "textAlign",
-      "list",
-      "indent",
-      "remove",
-      "history",
     ],
+    ["image", "map", "embedded", "link"],
   ],
   features: {
     inline: inline,
     blockTypeFlat: blockTypeFlat,
-    // blockScript: blockScript,
     blockTypeDrop: blockTypeDrop,
     fontSize: fontSize,
     fontFamily: fontFamily,

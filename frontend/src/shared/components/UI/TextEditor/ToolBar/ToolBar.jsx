@@ -4,14 +4,7 @@ import React from "react";
 import { toolbar } from "./toolbar-setting";
 
 //Custom Component
-import BundleButton from "./StyleButton/BundleButton";
-import IndentControls from "./StyleControls/IndentControls";
-import HistoryControls from "./StyleControls/HistoryControls";
-import FontSizeControls from "./StyleControls/FontSizeControls";
-import RemoveStyleControls from "./StyleControls/RemoveControls";
-import BlockStyleControls from "./StyleControls/BlockStyleControls";
-import ColorPickerControls from "./StyleControls/ColorPickerControls";
-import InlineStyleControls from "./StyleControls/InlineStyleControls";
+import ToolBarBundle from "./ToolBarBundle";
 
 //CSS
 import classes from "./ToolBar.module.css";
@@ -34,113 +27,38 @@ function ToolBar(props) {
       } `}
       onMouseDown={preventDefaultHandler}
     >
-      {toolbar.options.map((line, index) => {
-        return (
-          <div key={index} className={classes["line-container"]}>
-            {line.map((opt, index) => {
-              let active, disable, width, choicesCreator, onButtonTrigger;
-              const toolType = toolbar.features[opt].type;
-              const config = toolbar.features[opt];
-
-              switch (toolType) {
-                case "blockType":
-                  const { activeStyle, toggleBlockTypeHandler } =
-                    BlockStyleControls({
-                      editorState,
-                      onChange: setEditorState,
-                    });
-                  active = activeStyle;
-                  width = 90;
-                  onButtonTrigger = toggleBlockTypeHandler;
-                  break;
-
-                case "inline":
-                  const {
-                    activeStyleFn: inlineActiveFn,
-                    toggleInlineStyleHandler,
-                  } = InlineStyleControls({
-                    editorState,
-                    onChange: setEditorState,
-                  });
-                  active = inlineActiveFn;
-                  onButtonTrigger = toggleInlineStyleHandler;
-                  break;
-
-                case "fontSize":
-                  const {
-                    activeStyleFn: fontSizeActiveFn,
-                    fontSizeChoicesCreator,
-                    toggleFontSizeHandler,
-                  } = FontSizeControls({
-                    fontSizeOptions: config.options,
-                    editorState,
-                    onChange: setEditorState,
-                  });
-                  active = fontSizeActiveFn;
-                  width = 60;
-                  choicesCreator = fontSizeChoicesCreator;
-                  onButtonTrigger = toggleFontSizeHandler;
-                  break;
-
-                case "indent":
-                  const { isDisabled, indentHandler, outdentHandler } =
-                    IndentControls({
-                      editorState,
-                      onChange: setEditorState,
-                    });
-                  disable = isDisabled;
-                  onButtonTrigger = {
-                    indent: indentHandler,
-                    outdent: outdentHandler,
-                  };
-                  break;
-
-                case "remove":
-                  const { removeAllInlineStylesHandler } = RemoveStyleControls({
-                    toolbar,
-                    editorState,
-                    onChange: setEditorState,
-                  });
-
-                  onButtonTrigger = removeAllInlineStylesHandler;
-                  break;
-                case "color-picker":
-                  const { toggleColorHandler } = ColorPickerControls({
-                    editorState,
-                    onChange: setEditorState,
-                  });
-
-                  onButtonTrigger = toggleColorHandler;
-                  break;
-                case "history":
-                  const { undoHandler, redoHandler } = HistoryControls({
-                    editorState,
-                    onChange: setEditorState,
-                  });
-                  onButtonTrigger = { undo: undoHandler, redo: redoHandler };
-                  break;
-
-                default:
-                  break;
-              }
-              if (!onButtonTrigger) return null;
-              return (
-                <BundleButton
-                  key={index}
-                  opt={opt}
-                  width={width}
-                  active={active}
-                  disable={disable}
-                  config={config}
-                  isDarkMode={props.isDarkMode}
-                  onChange={onButtonTrigger}
-                  choicesCreator={choicesCreator}
-                />
-              );
-            })}
-          </div>
-        );
-      })}
+      <div className={classes["toolbar-row-1"]}>
+        <ToolBarBundle
+          key={"toolbar-bundle-1"}
+          toolbar={toolbar}
+          options={toolbar.options[0]}
+          editorState={editorState}
+          onChange={setEditorState}
+        />
+                <ToolBarBundle
+          key={"toolbar-bundle-1"}
+          toolbar={toolbar}
+          options={toolbar.options[1]}
+          editorState={editorState}
+          onChange={setEditorState}
+        />
+      </div>
+      <div className={classes["toolbar-row-2"]}>
+        <ToolBarBundle
+          key={"toolbar-bundle-2"}
+          toolbar={toolbar}
+          options={toolbar.options[2]}
+          editorState={editorState}
+          onChange={setEditorState}
+        />
+        <ToolBarBundle
+          key={"toolbar-bundle-3"}
+          toolbar={toolbar}
+          options={toolbar.options[3]}
+          editorState={editorState}
+          onChange={setEditorState}
+        />
+      </div>
     </div>
   );
 }
