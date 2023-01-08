@@ -16,6 +16,8 @@ import {
   FaUnlink,
   FaUndo,
   FaRedo,
+  FaSubscript,
+  FaSuperscript,
   FaRegImage,
   FaMapMarkedAlt,
 } from "react-icons/fa";
@@ -29,7 +31,15 @@ import { IoIosColorPalette } from "react-icons/io";
 export const inline = {
   type: "inline",
   inDropdown: false,
-  options: ["bold", "italic", "strikethrough", "underline", "monospace"],
+  options: [
+    "bold",
+    "italic",
+    "strikethrough",
+    "underline",
+    "monospace",
+    "superscript",
+    "subscript",
+  ],
   choices: {
     bold: {
       label: "bold",
@@ -55,6 +65,33 @@ export const inline = {
       label: "Monospace",
       style: "CODE",
       icon: <RiBracesLine />,
+    },
+    superscript: {
+      label: "superscript",
+      style: "SUPERSCRIPT",
+      icon: <FaSuperscript />,
+    },
+    subscript: {
+      label: "subscript",
+      style: "SUBSCRIPT",
+      icon: <FaSubscript />,
+    },
+  },
+};
+export const blockScript = {
+  type: "blockType",
+  inDropdown: false,
+  options: [],
+  choices: {
+    superscript: {
+      label: "superscript",
+      style: "SUPERSCRIPT",
+      icon: <FaSuperscript />,
+    },
+    subscript: {
+      label: "subscript",
+      style: "SUBSCRIPT",
+      icon: <FaSubscript />,
     },
   },
 };
@@ -269,6 +306,7 @@ export const toolbar = {
   features: {
     inline: inline,
     blockTypeFlat: blockTypeFlat,
+    // blockScript: blockScript,
     blockTypeDrop: blockTypeDrop,
     fontSize: fontSize,
     fontFamily: fontFamily,

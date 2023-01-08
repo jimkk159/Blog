@@ -15,6 +15,10 @@ const IndentControls = (props) => {
 
   //Adjust
   const adjustDepth = (adjustment) => {
+    const blockKey = block.getKey();
+    const depth = block.getDepth();
+    const newDepth = depth + adjustment;
+
     //Check if Empty length
     if (text.length === 0) {
       return;
@@ -28,9 +32,6 @@ const IndentControls = (props) => {
       return;
     }
 
-    const blockKey = block.getKey();
-    const depth = block.getDepth();
-    const newDepth = depth + adjustment;
     if (minDepth <= newDepth && newDepth <= maxDepth) {
       const newBlock = block.set("depth", newDepth);
       const contentState = editorState.getCurrentContent();

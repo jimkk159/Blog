@@ -11,6 +11,7 @@ function EditPage() {
   const isDarkMode = useSelector((state) => state.theme.value);
   return (
     <Card className="page" isDarkMode={isDarkMode}>
+    <span>123<sub id="super">4</sub></span>
       <h1 className={classes["select"]}>Edit Page</h1>
       <RichTextEditor />
     </Card>

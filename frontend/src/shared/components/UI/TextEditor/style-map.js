@@ -23,6 +23,11 @@ export const styleMap = {
   Verdana: {
     fontFamily: "Verdana",
   },
+  SUPERSCRIPT: {
+    verticalAlign: "super",
+    fontSize: "medium",
+  },
+  SUBSCRIPT: { verticalAlign: "sub", fontSize: "medium" },
   ALIGN_LEFT: { textAlign: "left" },
   ALIGN_CENTER: { textAlign: "center" },
   ALIGN_RIGHT: { textAlign: "right" },

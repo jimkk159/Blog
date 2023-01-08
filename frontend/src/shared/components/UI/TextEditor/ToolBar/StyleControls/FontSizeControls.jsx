@@ -1,33 +1,19 @@
-import { EditorState, RichUtils, Modifier } from "draft-js";
+import { RichUtils } from "draft-js";
+
+//Custom Function
+import { removePrevStyle } from "./RemoveControls";
 
 const FontSizeControls = (props) => {
   const { editorState, onChange, fontSizeOptions } = props;
 
   //Toggle
   const toggleFontSizeHandler = (fontSizeStyle) => {
-    const selection = editorState.getSelection();
-    let newEditorState = editorState;
-
-    //Remove prev FontSize style
-    if (selection.isCollapsed()) {
-      //If No Select anything than only modify the InlineStyleOverride
-      newEditorState = EditorState.setInlineStyleOverride(editorState, null);
-    } else {
-      //Remove all the FontSize in the setting
-      let contentState = editorState.getCurrentContent();
-      fontSizeOptions.forEach((fontSize) => {
-        contentState = Modifier.removeInlineStyle(
-          contentState,
-          editorState.getSelection(),
-          `FONT_SIZE_${fontSize}`
-        );
-      });
-      newEditorState = EditorState.push(
-        editorState,
-        contentState,
-        "change-inline-style"
-      );
-    }
+    const createFontSizetStyle = (fontSize) => `FONT_SIZE_${fontSize}`;
+    let newEditorState = removePrevStyle(
+      editorState,
+      fontSizeOptions,
+      createFontSizetStyle
+    );
 
     //Set New FontSize
     if (onChange) {

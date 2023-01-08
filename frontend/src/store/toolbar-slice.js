@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    currentTool:null,
+  color: "#000000",
+  currentTool: null,
 };
 
 const toolbarSlice = createSlice({
@@ -13,6 +14,9 @@ const toolbarSlice = createSlice({
     },
     close: (state) => {
       state.currentTool = null;
+    },
+    changeColor:(state, action) => {
+      state.color = action.payload.color;
     },
   },
 });

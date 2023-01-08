@@ -1,43 +1,35 @@
-import { useState } from "react";
-import { RichUtils, EditorState, Modifier } from "draft-js";
+import { useSelector, useDispatch } from "react-redux";
+import { RichUtils } from "draft-js";
+
+//Custom Function
+import { removePrevStyle } from "./RemoveControls";
+
+//Redux Slice
+import { toolbarActions } from "../../../../../../store/toolbar-slice";
 
 const ColorPickerControls = (props) => {
   const { editorState, onChange } = props;
-  const [prevColor, setPrevColor] = useState("#000000");
+
+  //Redux
+  const color = useSelector((state) => state.toolbar.color);
+  const dispatch = useDispatch();
 
   //Toggle Color
   const toggleColorHandler = (event) => {
-    if (event.target.value !== prevColor) {
-      const selection = editorState.getSelection();
-      let newEditorState = editorState;
-
-      //Remove prev Color
-      if (selection.isCollapsed()) {
-        //If No Select anything than only modify the InlineStyleOverride
-        newEditorState = EditorState.setInlineStyleOverride(editorState, null);
-      } else {
-        //Remove all the Color in the setting
-        let contentState = editorState.getCurrentContent();
-        const colorStyles = editorState
-          .getCurrentInlineStyle()
-          .filter((style) => style.startsWith("COLOR_#"));
-        colorStyles.forEach((colorStyle) => {
-          contentState = Modifier.removeInlineStyle(
-            contentState,
-            editorState.getSelection(),
-            colorStyle
-          );
-        });
-        newEditorState = EditorState.push(
-          editorState,
-          contentState,
-          "change-inline-style"
-        );
-      }
+    if (event.target.value !== color) {
+      const colorStyles = editorState
+        .getCurrentInlineStyle()
+        .filter((style) => style.startsWith("COLOR_#"));
+      const createColorStyle = (style) => style;
+      let newEditorState = removePrevStyle(
+        editorState,
+        colorStyles,
+        createColorStyle
+      );
 
       //Set New Color
       if (onChange) {
-        setPrevColor(event.target.value);
+        dispatch(toolbarActions.changeColor({ color: event.target.value }));
         onChange(
           RichUtils.toggleInlineStyle(
             newEditorState,
