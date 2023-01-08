@@ -11,9 +11,19 @@ import classes from "./BundleButton.module.css";
 
 function BundleButton(props) {
   let content;
-
   //Choice the button type
-  if (props.config.inDropdown) {
+  if (props.opt === "colorPicker") {
+    content = (
+      <input
+        key={props.opt}
+        id="color-picker"
+        className={classes["color-pciker"]}
+        type="color"
+        title={props.opt}
+        onChange={props.onChange}
+      />
+    );
+  } else if (props.config.inDropdown) {
     //dropdown bundle type
     content = (
       <>

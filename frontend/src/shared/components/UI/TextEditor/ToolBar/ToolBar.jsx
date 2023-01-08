@@ -10,6 +10,7 @@ import HistoryControls from "./StyleControls/HistoryControls";
 import FontSizeControls from "./StyleControls/FontSizeControls";
 import RemoveStyleControls from "./StyleControls/RemoveControls";
 import BlockStyleControls from "./StyleControls/BlockStyleControls";
+import ColorPickerControls from "./StyleControls/ColorPickerControls";
 import InlineStyleControls from "./StyleControls/InlineStyleControls";
 
 //CSS
@@ -17,11 +18,13 @@ import classes from "./ToolBar.module.css";
 
 function ToolBar(props) {
   const { editorState, setEditorState } = props;
+
+  //Very Import to prevent the Text editor force when chooseing
+  //the tool bar to keep Selection text on text editor
   const preventDefaultHandler = (event) => {
-    //Very Import to prevent the Text editor force when chooseing
-    //the tool bar to keep focus on text editor
     event.preventDefault();
   };
+
   return (
     <div
       className={`${classes["container"]} ${
@@ -31,20 +34,6 @@ function ToolBar(props) {
       } `}
       onMouseDown={preventDefaultHandler}
     >
-      <input
-        id="color-picker"
-        type="color"
-        onChange={(event) => {
-          console.log(event.target.value);
-        }}
-        onClick={(event) => {
-          console.log("click");
-        }}
-        onMouseDown={(event) => {
-          console.log("down");
-        }}
-        onSelect={() => console.log("select")}
-      />
       {toolbar.options.map((line, index) => {
         return (
           <div key={index} className={classes["line-container"]}>
@@ -115,7 +104,14 @@ function ToolBar(props) {
 
                   onButtonTrigger = removeAllInlineStylesHandler;
                   break;
+                case "color-picker":
+                  const { toggleColorHandler } = ColorPickerControls({
+                    editorState,
+                    onChange: setEditorState,
+                  });
 
+                  onButtonTrigger = toggleColorHandler;
+                  break;
                 case "history":
                   const { undoHandler, redoHandler } = HistoryControls({
                     editorState,

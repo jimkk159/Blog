@@ -193,8 +193,8 @@ export const indent = {
     },
   },
 };
-export const color = {
-  type: "blockType",
+export const colorPicker = {
+  type: "color-picker",
   inDropdown: false,
   options: ["color"],
   choices: {
@@ -252,16 +252,16 @@ export const history = {
 
 export const toolbar = {
   options: [
-    ["inline", "blockTypeFlat", "blockTypeDrop", "fontSize", "fontFamily"],
+    ["link", "blockTypeFlat", "image", "map", "embedded"],
     [
+      "inline",
+      "blockTypeDrop",
+      "fontSize",
+      "colorPicker",
+      "fontFamily",
       "textAlign",
       "list",
       "indent",
-      "color",
-      "link",
-      "image",
-      "map",
-      "embedded",
       "remove",
       "history",
     ],
@@ -275,7 +275,7 @@ export const toolbar = {
     list: list,
     indent: indent,
     textAlign: textAlign,
-    color: color,
+    colorPicker: colorPicker,
     link: link,
     image: image,
     map: map,
