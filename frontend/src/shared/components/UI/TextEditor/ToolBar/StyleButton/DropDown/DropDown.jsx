@@ -14,7 +14,8 @@ import classes from "./DropDown.module.css";
 
 //The Reason for using ul & li for dropdwon is that draft.js editor will lose focus when choose the option on <Select>
 function DropDown(props) {
-  const { id, title, choicesCreator, activeStyle, config, onChange } = props;
+  const { id, title, width, choicesCreator, activeStyle, config, onChange } =
+    props;
   const [currentOption, setCurrentOption] = useState(null);
 
   //Redux
@@ -46,22 +47,23 @@ function DropDown(props) {
         onChangeFn = onChange;
         onChangeFn(style);
         setCurrentOption(option);
-        break
+        break;
       case "object":
         onChangeFn = onChange[option];
         onChangeFn();
         setCurrentOption(option);
-        break
+        break;
       default:
-        break
+        break;
     }
     dispatch(toolbarActions.close());
   };
 
   return (
-    <div className={classes["block-wrapper"]}>
+    <div className={`${classes["block-wrapper"]}`}>
       <div
         className={`${props.className} ${classes["wrapper"]} ${classes["block-dropdown"]}`}
+        style={width && { width: `${width}px` }}
         aria-expanded={isExpand}
         aria-label={id || "dropdown"}
       >
@@ -81,21 +83,20 @@ function DropDown(props) {
         </div>
         {isExpand && (
           <ul
-            className={classes["options-wrapper"]}
+            className={`${classes["options-wrapper"]}`}
             onMouseDown={stopPropagationHandler}
           >
             {config.options.map((opt, index) => {
-              
               let choice;
-              if(choicesCreator){
-                choice = choicesCreator(opt)
-              } else{
+              if (choicesCreator) {
+                choice = choicesCreator(opt);
+              } else {
                 choice = config?.choices[opt];
               }
-              
+
               const choiceLabel = choice?.label;
               const choiceStyle = choice?.style;
-              const isActive = checkActive(choiceStyle, activeStyle)
+              const isActive = checkActive(choiceStyle, activeStyle);
               return (
                 <DropDownOption
                   key={index}

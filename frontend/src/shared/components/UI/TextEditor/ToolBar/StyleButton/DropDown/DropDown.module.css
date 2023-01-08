@@ -3,9 +3,9 @@
   display: flex;
   flex-wrap: wrap;
 }
-.block-dropdown { 
-   height: 27px;
-   width: 110px;
+.block-dropdown {
+  height: 27px;
+  width: 110px;
 }
 .wrapper {
   background: white;

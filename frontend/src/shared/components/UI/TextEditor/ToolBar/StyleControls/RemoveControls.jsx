@@ -23,20 +23,30 @@ const RemoveStyleControls = (props) => {
 
   //Remove All InlineStyle
   const removeAllInlineStyles = (editorState) => {
+    const selection = editorState.getSelection();
     let contentState = editorState.getCurrentContent();
-    toolbar.options.forEach((option) => {
-      const feature = toolbar.features[option];
-      if (feature.type === "inline") {
-        feature.options.forEach((option) => {
-          contentState = Modifier.removeInlineStyle(
-            contentState,
-            editorState.getSelection(),
-            feature.choices[option].style
-          );
-        });
-      }
-    });
-    return EditorState.push(editorState, contentState, "change-inline-style");
+
+    if (selection.isCollapsed()) {
+      const nweEditorState = EditorState.setInlineStyleOverride(
+        editorState,
+        null
+      );
+      return nweEditorState;
+    } else {
+      toolbar.options.forEach((option) => {
+        const feature = toolbar.features[option];
+        if (feature.type === "inline") {
+          feature.options.forEach((option) => {
+            contentState = Modifier.removeInlineStyle(
+              contentState,
+              editorState.getSelection(),
+              feature.choices[option].style
+            );
+          });
+        }
+      });
+      return EditorState.push(editorState, contentState, "change-inline-style");
+    }
   };
 
   const removeAllInlineStylesHandler = () => {

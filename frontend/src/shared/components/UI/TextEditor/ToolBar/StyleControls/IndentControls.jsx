@@ -4,22 +4,23 @@ const minDepth = 0;
 const maxDepth = 4;
 const IndentControls = (props) => {
   const { editorState, onChange } = props;
+  const selection = editorState.getSelection();
+  const block = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey());
+  const text = block.getText();
+  const blockType = block.getType();
+  const isDisabled =
+    blockType !== "unordered-list-item" && blockType !== "ordered-list-item";
 
   //Adjust
   const adjustDepth = (adjustment) => {
-    const selection = editorState.getSelection();
-    const block = editorState
-      .getCurrentContent()
-      .getBlockForKey(selection.getStartKey());
-
     //Check if Empty length
-    const text = block.getText();
     if (text.length === 0) {
       return;
     }
-    
+
     //Check if unordered-list or ordered-list
-    const blockType = block.getType();
     if (
       blockType !== "unordered-list-item" &&
       blockType !== "ordered-list-item"
@@ -57,7 +58,7 @@ const IndentControls = (props) => {
     adjustDepth(-1);
   };
 
-  return { indentHandler, outdentHandler };
+  return { isDisabled, indentHandler, outdentHandler };
 };
 
 export default IndentControls;

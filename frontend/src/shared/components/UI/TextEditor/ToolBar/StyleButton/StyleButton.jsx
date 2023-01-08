@@ -5,12 +5,20 @@ import classes from "./StyleButton.module.css";
 
 function StyleButton(props) {
   //Check button active
-  let className = classes["item"];
-  if (props.active) {
-    className += ` ${classes["item-active"]} ${
-      props.isDarkMode
-        ? classes["item-dark-active"]
-        : classes["item-light-active"]
+  let buttonClassName = classes["item"];
+  if (props.disable) {
+    buttonClassName += ` ${classes["item-disable"]}`;
+    buttonClassName += props.isDarkMode
+    ? ` ${classes["item-disable-dark"]}`
+    : ` ${classes["item-disable-light"]}`;
+  } else if (props.active) {
+    buttonClassName += ` ${classes["item-normal"]} ${classes["item-active"]}`;
+    buttonClassName += props.isDarkMode
+      ? ` ${classes["item-dark"]} ${classes["item-dark-active"]}`
+      : ` ${classes["item-light"]} ${classes["item-light-active"]}`;
+  } else {
+    buttonClassName += ` ${classes["item-normal"]} ${
+      props.isDarkMode ? classes["item-dark"] : classes["item-light"]
     }`;
   }
 
@@ -33,10 +41,8 @@ function StyleButton(props) {
 
   return (
     <div
-      className={`${className} ${
-        props.isDarkMode ? classes["item-dark"] : classes["item-light"]
-      }`}
-      onMouseDown={toggleHandler}
+      className={`${buttonClassName}`}
+      onMouseDown={!props.disable ? toggleHandler : null}
       title={props.label}
       aria-label={props.label}
     >

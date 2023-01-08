@@ -20,6 +20,7 @@ function BundleButton(props) {
         <DropDown
           key={props.opt}
           id={props.opt}
+          width={props.width}
           title={props.opt}
           config={props.config}
           choicesCreator={props.choicesCreator}
@@ -39,6 +40,7 @@ function BundleButton(props) {
           id={option}
           className={classes["item"]}
           opt={option}
+          disable={props.disable}
           active={checkActive(opt.style, props.active)}
           label={opt.label}
           icon={opt.icon}

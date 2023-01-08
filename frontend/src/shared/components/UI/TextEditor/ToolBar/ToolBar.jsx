@@ -27,7 +27,7 @@ function ToolBar(props) {
       } `}
     >
       {toolbar.options.map((opt, index) => {
-        let active, choicesCreator, onButtonTrigger;
+        let active, disable, width, choicesCreator, onButtonTrigger;
         const toolType = toolbar.features[opt].type;
         const config = toolbar.features[opt];
 
@@ -38,6 +38,7 @@ function ToolBar(props) {
               onChange: setEditorState,
             });
             active = activeStyle;
+            width = 90;
             onButtonTrigger = toggleBlockTypeHandler;
             break;
 
@@ -62,15 +63,18 @@ function ToolBar(props) {
               onChange: setEditorState,
             });
             active = fontSizeActiveFn;
+            width = 60;
             choicesCreator = fontSizeChoicesCreator;
             onButtonTrigger = toggleFontSizeHandler;
             break;
 
           case "indent":
-            const { indentHandler, outdentHandler } = IndentControls({
-              editorState,
-              onChange: setEditorState,
-            });
+            const { isDisabled, indentHandler, outdentHandler } =
+              IndentControls({
+                editorState,
+                onChange: setEditorState,
+              });
+            disable = isDisabled;
             onButtonTrigger = {
               indent: indentHandler,
               outdent: outdentHandler,
@@ -103,7 +107,9 @@ function ToolBar(props) {
           <BundleButton
             key={index}
             opt={opt}
+            width={width}
             active={active}
+            disable={disable}
             config={config}
             isDarkMode={props.isDarkMode}
             onChange={onButtonTrigger}

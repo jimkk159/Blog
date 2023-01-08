@@ -20,15 +20,14 @@
   color: #14293e;
 }
 .item-light {
-  background-color: #fff;
+  border: 1px solid #14293e;
   color: black;
 }
 .item-active,
-.item:hover {
-  background-color: transparent;
+.item-normal:hover {
   transform: translateY(1px);
 }
-.item:hover {
+.item-normal:hover {
   box-shadow: 0px 1px 11px 1px rgba(15, 15, 15, 0.2);
 }
 .item-active {
@@ -37,10 +36,24 @@
 .item-dark:hover,
 .item-dark-active {
   background-color: #14293e;
+  border: 1px solid #14293e;
   color: #fff;
 }
 .item-light:hover,
 .item-light-active {
   background-color: #fff;
+  border: 1px solid #14293e;
+  color: black;
+}
+.item-disable{
+  cursor: default;
+  opacity: 0.3;
+}
+.item-disable-dark{
+  border: 1px solid #14293e;
+  color: #14293e;
+}
+.item-disable-light{
+  border: 1px solid #14293e;
   color: black;
 }
