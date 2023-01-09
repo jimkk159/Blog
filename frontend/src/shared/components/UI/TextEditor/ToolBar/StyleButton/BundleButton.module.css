@@ -5,3 +5,6 @@
 .color-pciker{
   width: 28px;
 }
+.item-container{
+  position: relative;;
+}

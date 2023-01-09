@@ -17,11 +17,11 @@ const InlineStyleControls = (props) => {
         contentState,
         "change-inline-style"
       );
-      console.log(JSON.stringify(newEditorState.getCurrentInlineStyle()));
       return newEditorState;
     }
     return editorState;
   };
+  
   //Toggle Inline Style
   const toggleInlineStyleHandler = (inlineStyle) => {
     let newEditorState = editorState;

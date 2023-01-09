@@ -28,7 +28,7 @@ function RootLayout() {
         }`}
         style={{ backgroundImage: `url(${cubesImage})` }}
         onMouseDown={() => {
-          dispatch(toolbarActions.close());
+          dispatch(toolbarActions.closeAll());
         }}
       >
         <Navigation />

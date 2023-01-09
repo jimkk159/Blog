@@ -1,4 +1,8 @@
-import { EditorState, Modifier } from "draft-js";
+import { useDispatch } from "react-redux";
+import { EditorState, Modifier, RichUtils } from "draft-js";
+
+//Redux Slicer
+import { toolbarActions } from "../../../../../../store/toolbar-slice.js";
 
 const getSelectionText = (editorState) => {
   const selection = editorState.getSelection();
@@ -14,10 +18,15 @@ const getSelectionText = (editorState) => {
 
 const LinkControls = (props) => {
   const { editorState, onChange } = props;
+  const dispatch = useDispatch();
 
-  const addLink = (hyperLink) => {
+  const fakeFocusHandler = () => {
+    onChange(RichUtils.toggleInlineStyle(editorState, "FAKE_FOCUS"));
+  };
+
+  const addLinkHandler = (hyperLink) => {
     let link = hyperLink;
-    // if (!hyperLink) return;
+    if (!hyperLink) return;
     if (!hyperLink.startsWith("http://") && !hyperLink.startsWith("https://")) {
       link = `http://${hyperLink}`;
     }
@@ -45,10 +54,18 @@ const LinkControls = (props) => {
     onChange(newEditorState);
   };
 
-  const addLinkHandler = (hyperLink) => {
-    addLink(hyperLink);
+  const unlink = () => {};
+
+  const toggleLinkModalHandler = () => {
+    fakeFocusHandler()
+    dispatch(toolbarActions.toggleLinkModal());
   };
-  return { addLinkHandler };
+
+  const unlinkHandler = () => {
+    unlink();
+  };
+
+  return { toggleLinkModalHandler, addLinkHandler, unlinkHandler };
 };
 
 export default LinkControls;

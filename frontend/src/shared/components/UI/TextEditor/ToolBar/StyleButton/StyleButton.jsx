@@ -24,6 +24,7 @@ function StyleButton(props) {
 
   const toggleHandler = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     let onChangeFn;
     switch (typeof props.onChange) {
       case "function":

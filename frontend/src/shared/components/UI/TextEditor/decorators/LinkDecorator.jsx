@@ -17,16 +17,20 @@ const findLinkEntities = (contentBlock, callback, contentState) => {
 function Link(props) {
   const { contentState, entityKey, children } = props;
   const { url, linkText } = contentState.getEntity(entityKey).getData();
-  const mouseDownHandler = (event) => {
-    event.preventDefault();
+  const clickHandler = (event) => {
     window.open(url, "_blank", "noreferrer");
   };
+  const mouseDownHandler = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <a
       href={url}
       target="_blank"
       rel="noreferrer"
       className={classes["link"]}
+      onClick={clickHandler}
       onMouseDown={mouseDownHandler}
     >
       {linkText || children}

@@ -16,10 +16,11 @@ import classes from "./ToolBarBundle.module.css";
 
 function ToolBarBundle(props) {
   const { className, toolbar, options, editorState, onChange } = props;
+
   return (
     <div className={`${className} ${classes["line-container"]}`}>
       {options.map((opt, index) => {
-        let active, disable, width, choicesCreator, onButtonTrigger;
+        let active, disable, width, choicesCreator, onAddLink, onButtonTrigger;
         const toolType = toolbar.features[opt].type;
         const config = toolbar.features[opt];
 
@@ -84,11 +85,16 @@ function ToolBarBundle(props) {
             break;
 
           case "link":
-            const { addLinkHandler } = LinkControls({
-              editorState,
-              onChange: onChange,
-            });
-            onButtonTrigger = addLinkHandler;
+            const { toggleLinkModalHandler, addLinkHandler, unlinkHandler } =
+              LinkControls({
+                editorState,
+                onChange: onChange,
+              });
+            onAddLink = addLinkHandler;
+            onButtonTrigger = {
+              link: toggleLinkModalHandler,
+              unlink: unlinkHandler,
+            };
             break;
 
           case "color-picker":
@@ -121,8 +127,9 @@ function ToolBarBundle(props) {
             disable={disable}
             config={config}
             isDarkMode={props.isDarkMode}
-            onChange={onButtonTrigger}
             choicesCreator={choicesCreator}
+            onAddLink={onAddLink}
+            onChange={onButtonTrigger}
           />
         );
       })}

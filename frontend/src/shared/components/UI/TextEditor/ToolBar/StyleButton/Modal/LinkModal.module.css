@@ -1,0 +1,48 @@
+.link-modal {
+  background: white;
+  border: 1px solid #f1f1f1;
+  border-radius: 2px;
+  box-shadow: 1px 1px 1px #bfbdbd;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto";
+  font-size: 15px;
+  height: 110px;
+  right: 0;
+  padding: 10px 15px;
+  position: absolute;
+  top: 35px;
+  width: 235px;
+  z-index: 100;
+}
+.link-title {
+  margin-left: 1px;
+  user-select: none;
+}
+.link-input {
+  border: 1px solid #c1c1c1;
+  border-radius: 2px;
+  height: 25px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 0 5px;
+  outline: none;
+}
+.link-btn-section {
+  display: flex;
+  margin: 0 auto;
+  width: 100%;
+  justify-content: flex-end;
+}
+.link-btn {
+  background: white;
+  border: 1px solid #c1c1c1;
+  border-radius: 2px;
+  cursor: pointer;
+  height: 30px;
+  margin-left: 15px;
+  margin-top: 5px;
+  text-transform: capitalize;
+  width: 75px;
+}

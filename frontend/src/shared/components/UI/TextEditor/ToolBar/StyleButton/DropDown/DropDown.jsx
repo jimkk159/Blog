@@ -35,7 +35,7 @@ function DropDown(props) {
     //Prevent the Text Editor Selection
     event.preventDefault();
     if (currentTool === title) {
-      dispatch(toolbarActions.close());
+      dispatch(toolbarActions.closeDrop());
     } else {
       dispatch(toolbarActions.choice({ tool: title }));
     }
@@ -58,7 +58,7 @@ function DropDown(props) {
       default:
         break;
     }
-    dispatch(toolbarActions.close());
+    dispatch(toolbarActions.closeDrop());
   };
 
   return (

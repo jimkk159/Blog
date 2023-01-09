@@ -1,14 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
-
-import { styleMap } from "./style-map";
-import { createLinkDecorator } from "./decorators/LinkDecorator";
 
 //Redux Slice
 import { toolbarActions } from "../../../../store/toolbar-slice";
 
 //Custom Function
+import { styleMap } from "./style-map";
+import { createLinkDecorator } from "./decorators/LinkDecorator";
+import { removeTargetInlineStyles } from "./ToolBar/StyleControls/RemoveControls";
+
+//Custom Component
 import ToolBar from "./ToolBar/ToolBar";
 
 //CSS
@@ -55,14 +57,15 @@ function RichTextEditor(props) {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty(decorator)
   );
-
+  
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+  const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
   const dispatch = useDispatch();
 
   const focusEditorHandler = () => {
     editor.current.focus();
-    dispatch(toolbarActions.close());
+    dispatch(toolbarActions.closeAll());
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
@@ -89,6 +92,12 @@ function RichTextEditor(props) {
     }
     return getDefaultKeyBinding(event);
   };
+  
+  useEffect(() => {
+    if (!isLinkModal) {
+      setEditorState(removeTargetInlineStyles(editorState, ["FAKE_FOCUS"]));
+    }
+  }, [isLinkModal, editorState]);
 
   return (
     <>

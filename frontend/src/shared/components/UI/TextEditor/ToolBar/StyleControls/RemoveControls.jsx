@@ -146,10 +146,9 @@ function RemoveStyleControls(props) {
   };
 
   return {
-    removeBlockTypeHandler,
-    removeAllInlineStylesHandler,
-    removeTargetInlineStyles,
     removeTargetsInlineStylesHandler,
+    removeAllInlineStylesHandler,
+    removeBlockTypeHandler,
     removeAllStylesHandler,
   };
 }
