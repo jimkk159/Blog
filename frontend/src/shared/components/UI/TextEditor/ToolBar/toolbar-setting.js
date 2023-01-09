@@ -242,12 +242,12 @@ export const colorPicker = {
   },
 };
 export const link = {
-  type: "blockType",
+  type: "link",
   inDropdown: false,
   options: ["link", "unlink"],
   choices: {
-    link: { label: "link", style: "link", icon: <FaLink /> },
-    unlink: { label: "unlink", style: "unlink", icon: <FaUnlink /> },
+    link: { label: "link", style: "LINK", icon: <FaLink /> },
+    unlink: { label: "unlink", style: "UNLINK", icon: <FaUnlink /> },
   },
   linkCallback: undefined,
 };

@@ -35,8 +35,8 @@ function ToolBar(props) {
           editorState={editorState}
           onChange={setEditorState}
         />
-                <ToolBarBundle
-          key={"toolbar-bundle-1"}
+        <ToolBarBundle
+          key={"toolbar-bundle-2"}
           toolbar={toolbar}
           options={toolbar.options[1]}
           editorState={editorState}
@@ -45,14 +45,14 @@ function ToolBar(props) {
       </div>
       <div className={classes["toolbar-row-2"]}>
         <ToolBarBundle
-          key={"toolbar-bundle-2"}
+          key={"toolbar-bundle-3"}
           toolbar={toolbar}
           options={toolbar.options[2]}
           editorState={editorState}
           onChange={setEditorState}
         />
         <ToolBarBundle
-          key={"toolbar-bundle-3"}
+          key={"toolbar-bundle-4"}
           toolbar={toolbar}
           options={toolbar.options[3]}
           editorState={editorState}

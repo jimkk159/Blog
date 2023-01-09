@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 
 import { styleMap } from "./style-map";
+import { createLinkDecorator } from "./decorators/LinkDecorator";
 
 //Redux Slice
 import { toolbarActions } from "../../../../store/toolbar-slice";
@@ -50,8 +51,9 @@ function getCustomStyleFn(style) {
 
 function RichTextEditor(props) {
   const editor = useRef(null);
+  const decorator = createLinkDecorator();
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
+    EditorState.createEmpty(decorator)
   );
 
   //Redux

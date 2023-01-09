@@ -2,6 +2,7 @@ import React from "react";
 
 //Custom Component
 import BundleButton from "./StyleButton/BundleButton";
+import LinkControls from "./StyleControls/LinkControls";
 import IndentControls from "./StyleControls/IndentControls";
 import HistoryControls from "./StyleControls/HistoryControls";
 import FontSizeControls from "./StyleControls/FontSizeControls";
@@ -81,6 +82,15 @@ function ToolBarBundle(props) {
 
             onButtonTrigger = removeAllInlineStylesHandler;
             break;
+
+          case "link":
+            const { addLinkHandler } = LinkControls({
+              editorState,
+              onChange: onChange,
+            });
+            onButtonTrigger = addLinkHandler;
+            break;
+
           case "color-picker":
             const { toggleColorHandler } = ColorPickerControls({
               editorState,
@@ -89,6 +99,7 @@ function ToolBarBundle(props) {
 
             onButtonTrigger = toggleColorHandler;
             break;
+
           case "history":
             const { undoHandler, redoHandler } = HistoryControls({
               editorState,
