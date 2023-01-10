@@ -5,8 +5,9 @@ import bodyParser from "body-parser";
 import HttpError from "./models/http-error.js";
 
 //Routes
-import postRouters from "./routes/post-route.js";
-import topicRouters from "./routes/topic-route.js";
+import usersRouters from "./routes/users-route.js";
+import postsRouters from "./routes/posts-route.js";
+import topicsRouters from "./routes/topics-route.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,8 +27,9 @@ app.get("/", (req, res, next) => {
   res.json({ hello: "Hello World" });
 });
 
-app.use("/posts", postRouters);
-app.use("/topics", topicRouters);
+app.use("/users", usersRouters);
+app.use("/posts", postsRouters);
+app.use("/topics", topicsRouters);
 
 //Undefined Route Case
 app.use((req, res, next) => {

@@ -14,6 +14,9 @@ export const DUMMY_Structure = [
   { id: 10, level: 5, topic: "Test333", parent: "Express" },
 ];
 
+export const Dummy_users = [
+];
+
 export const Dummy_blogs = [
   {
     id: 0,
