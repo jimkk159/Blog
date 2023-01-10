@@ -30,7 +30,7 @@ function Modal(props) {
   if (isAnimate) {
     return (
       <>
-        {show && <Backdrop onClick={onCancel} />}
+        {show && <Backdrop onClick={cancelHandler} />}
         <CSSTransition
           in={show}
           timeout={{ enter: 1000, exit: 500 }}

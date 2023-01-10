@@ -4,6 +4,7 @@
   max-width: 25rem;
   text-align: center;
   width: 100%;
+  min-height: 22rem;
 }
 
 .authentication form {

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 // import { useSearchParams } from "react-router-dom";
 
 //Custom Hook
-import { useHttp } from "../../shared/hooks/http-hook";
+import useHttp from "../../shared/hooks/http-hook";
 
 //Custom Component
 import Quote from "../../shared/components/Quote";

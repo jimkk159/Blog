@@ -7,6 +7,9 @@ import Modal from "../../shared/components/UI/Modal/Modal";
 //Custom Hook
 import useMediaQuery from "../../shared/hooks/media-query-hook";
 
+//CSS
+import classes from "./AuthModal.module.css";
+
 function AuthModal(props) {
   const { show, setShowModal } = props;
   const { matches } = useMediaQuery("min", "768");
@@ -33,9 +36,10 @@ function AuthModal(props) {
   return (
     <Modal
       show={show}
-      onCancel={closeModalHandler}
+      className={classes["auth-modal"]}
       style={customModalStyle}
       isAnimate={props.isAnimate}
+      onCancel={closeModalHandler}
     >
       <AuthForm onSubmit={submitHandler} isLogin={props.isLogin} />
     </Modal>

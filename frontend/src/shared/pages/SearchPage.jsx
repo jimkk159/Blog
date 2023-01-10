@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 //Custom Hook
-import { useHttp } from "../hooks/http-hook";
+import useHttp from "../hooks/http-hook";
 
 //Custom Comonent
 import ErrorModal from "../components/UI/Modal/ErrorModal";

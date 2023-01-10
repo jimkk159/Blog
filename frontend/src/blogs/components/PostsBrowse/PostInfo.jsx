@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import defaultCoverImage from "../../../assets/img/cover/default-cover-2.jpg";
 
 //Custom Hook
-import { useHttp } from "../../../shared/hooks/http-hook";
+import useHttp from "../../../shared/hooks/http-hook";
 
 //Custom Function
 import { choiceLanguage } from "../../util/choiceLanguage";

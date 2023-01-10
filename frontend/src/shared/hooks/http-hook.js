@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
-export function useHttp() {
+function useHttp() {
   const activeHttpRequests = useRef([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const sendRequest = useCallback(
-    async (url, method= "GET", body = null, headers = {}) => {
+    async (url, method = "GET", body = null, headers = {}) => {
       setIsLoading(true);
       const httpAbortCtrl = new AbortController();
       activeHttpRequests.current.push(httpAbortCtrl);
@@ -49,3 +49,5 @@ export function useHttp() {
 
   return { isLoading, error, sendRequest, clearError };
 }
+
+export default useHttp;

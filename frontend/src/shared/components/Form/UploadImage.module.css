@@ -1,0 +1,33 @@
+.input-control {
+  margin: 1rem 0;
+}
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.upload-preview {
+  width: 10rem;
+  height: 10rem;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 1rem;
+}
+.upload-preview-dark {
+  background-color: transparent;
+}
+.upload-preview-light {
+  background-color: #f8f8f8;
+}
+.upload-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.upload-img {
+  font-size: 35px;
+}

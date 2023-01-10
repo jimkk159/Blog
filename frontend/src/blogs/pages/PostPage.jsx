@@ -9,7 +9,7 @@ import defaultCoverImage from "../../assets/img/cover/default-cover-2.jpg";
 import { choiceLanguage } from "../util/choiceLanguage";
 
 //Custom Hook
-import { useHttp } from "../../shared/hooks/http-hook";
+import useHttp from "../../shared/hooks/http-hook";
 
 //Custom Comonent
 import Guide from "../components/BlogGuide/Guide";

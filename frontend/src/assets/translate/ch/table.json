@@ -16,6 +16,7 @@
   "switchTo": "切換到",
   "uploadImage": "請上傳圖片",
   "validName": "請輸入名稱",
+  "validImage": "請上傳大頭貼",
   "validEmail": "無效電子信箱",
   "validPassword": "密碼至少需要六位數"
 }

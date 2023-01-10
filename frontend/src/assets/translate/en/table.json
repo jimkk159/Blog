@@ -16,6 +16,7 @@
   "switchTo": "Switch to ",
   "uploadImage": "upload Image",
   "validName": "Please enter your name.",
+  "validImage": "Please provide an image.",
   "validEmail": "Please enter a valid email.",
   "validPassword": "Enter at least 6 characters."
 }
