@@ -11,7 +11,7 @@ function UploadImage(props) {
 
   const iputImageHandler = (event) => {
     let pickedFile;
-    let fileIsValid = isValid;
+    let fileIsValid = isValid; //State not update instantly
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
       setImage(pickedFile);

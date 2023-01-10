@@ -33,15 +33,10 @@ const imageKey = "image";
 const emailKey = "email";
 const passwordKey = "password";
 
-//Test Data
-const Fake_User = [
-  { userId: "1", name: "Tom" },
-  { userId: "2", name: "Amy" },
-];
-
 function AuthForm(props) {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttp();
+
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
@@ -101,7 +96,7 @@ function AuthForm(props) {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "users/login",
+          process.env.REACT_APP_BACKEND_URL + "/users/login",
           "POST",
           JSON.stringify({
             [emailKey]: formState.inputs[emailKey].value,
@@ -111,7 +106,13 @@ function AuthForm(props) {
             "Content-Type": "application/json",
           }
         );
-        dispatch(authActions.login({ uid: Fake_User[0].userId }));
+        dispatch(
+          authActions.login({
+            uid: responseData.userId,
+            image: responseData.image,
+            token: responseData.token,
+          })
+        );
         onSubmit();
       } catch (err) {}
       //Send Signup data to backend
@@ -127,7 +128,13 @@ function AuthForm(props) {
           "POST",
           formData
         );
-        dispatch(authActions.login({ uid: Fake_User[1].userId }));
+        dispatch(
+          authActions.login({
+            uid: responseData.userId,
+            image: responseData.image,
+            token: responseData.token,
+          })
+        );
         onSubmit();
       } catch (err) {}
     }

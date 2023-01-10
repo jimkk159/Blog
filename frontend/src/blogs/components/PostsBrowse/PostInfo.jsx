@@ -105,7 +105,7 @@ function PostInfo(props) {
     setShowWarning(false);
     try {
       await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `posts/${postId}`,
+        process.env.REACT_APP_BACKEND_URL + `/posts/${postId}`,
         "DELETE"
       );
       onDelete(postId);

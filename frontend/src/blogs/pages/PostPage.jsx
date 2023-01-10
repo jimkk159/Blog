@@ -47,7 +47,7 @@ function PostPage(props) {
     const fetchTopics = async () => {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "topics"
+          process.env.REACT_APP_BACKEND_URL + "/topics"
         );
         setTopics(responseData);
       } catch (err) {}
@@ -60,7 +60,7 @@ function PostPage(props) {
     const fetchPost = async () => {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + `posts/${blogId}`
+          process.env.REACT_APP_BACKEND_URL + `/posts/${blogId}`
         );
         setTitle(
           choiceLanguage(

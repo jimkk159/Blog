@@ -26,8 +26,6 @@ import useMediaQuery from "../../hooks/media-query-hook";
 
 //CSS
 import classes from "./Navigation.module.css";
-const userImage =
-  "https://media.gq.com.tw/photos/6239445a7e6557df4af61f16/1:1/w_1600%2Cc_limit/site.jpg";
 
 function Navigation(props) {
   const [isDrawer, setIsDrawer] = useState(false);
@@ -35,7 +33,7 @@ function Navigation(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { avatar, isLoggedIn } = useSelector((state) => state.auth);
   const { isEnglish, language } = useSelector((state) => state.language);
   const dispatch = useDispatch();
 
@@ -122,7 +120,7 @@ function Navigation(props) {
               defaultImg={anonymousUser}
               isDarkMode={isDarkMode}
               onClick={showAuthHandler}
-              img={userImage}
+              img={`${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
             />
           )}
         </div>
