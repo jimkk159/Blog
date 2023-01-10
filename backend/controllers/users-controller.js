@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
+import { validationResult } from "express-validator";
 
 import { Dummy_users } from "./Dummy_data.js";
 import HttpError from "../models/http-error.js";
@@ -23,6 +24,14 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const signup = async (req, res, next) => {
+  
+  //Validate the req
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs, please check your input is correct", 422)
+    );
+  }
   const { name, email, password } = req.body;
 
   //Check User if exist
@@ -45,7 +54,6 @@ export const signup = async (req, res, next) => {
   //Hash Password
   let hashedPassword;
   try {
-    console.log(password);
     hashedPassword = await bcrypt.hash(password, 12);
   } catch (err) {
     const error = new HttpError("Encrypt fail, please try again.", 500);

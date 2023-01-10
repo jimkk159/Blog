@@ -1,3 +1,4 @@
+import path from "path";
 import express from "express";
 import bodyParser from "body-parser";
 
@@ -10,7 +11,11 @@ import postsRouters from "./routes/posts-route.js";
 import topicsRouters from "./routes/topics-route.js";
 
 const app = express();
+
 app.use(bodyParser.json());
+
+//Add Static Folder to save images
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 //Allow CROS
 app.use((req, res, next) => {
@@ -23,13 +28,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res, next) => {
-  res.json({ hello: "Hello World" });
-});
-
 app.use("/users", usersRouters);
 app.use("/posts", postsRouters);
 app.use("/topics", topicsRouters);
+
+app.get("/", (req, res, next) => {
+  res.json({ hello: "Hello World" });
+});
 
 //Undefined Route Case
 app.use((req, res, next) => {
