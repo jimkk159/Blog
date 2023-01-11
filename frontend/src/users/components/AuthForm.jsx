@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //Redux Slice
-import { authActions } from "../../store/auth-slice";
+import { loginAuto } from "../../store/auth-slice";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";
@@ -107,10 +107,13 @@ function AuthForm(props) {
           }
         );
         dispatch(
-          authActions.login({
+          loginAuto({
             uid: responseData.userId,
-            image: responseData.image,
+            avatar: responseData.avatar,
             token: responseData.token,
+            expiration: new Date(
+              new Date().getTime() + 1000 * 60 * 60 //Token Lifecycle is 1h
+            ).toISOString(),
           })
         );
         onSubmit();
@@ -129,9 +132,9 @@ function AuthForm(props) {
           formData
         );
         dispatch(
-          authActions.login({
+          loginAuto({
             uid: responseData.userId,
-            image: responseData.image,
+            avatar: responseData.avatar,
             token: responseData.token,
           })
         );

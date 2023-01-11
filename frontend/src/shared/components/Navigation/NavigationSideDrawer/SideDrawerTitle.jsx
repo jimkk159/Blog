@@ -11,7 +11,7 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import crossImage from "../../../../assets/img/x-symbol.png";
 
 //Redux Slice
-import { authActions } from "../../../../store/auth-slice";
+import { logoutAuto } from "../../../../store/auth-slice";
 
 //Custom Component
 import NavigationItem from "../NavigationItem";
@@ -93,7 +93,7 @@ function SideDrawerTitle(props) {
           key={"sideDrawer-logout_" + uuidKeys[2]}
           type="button"
           onClick={() => {
-            dispatch(authActions.logout());
+            dispatch(logoutAuto());
           }}
           show={isLoggedIn}
           content={language.logout}

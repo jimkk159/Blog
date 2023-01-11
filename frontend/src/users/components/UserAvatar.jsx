@@ -8,7 +8,7 @@ import Avatar from "../../shared/components/UI/Avatar";
 import classes from "./UserAvatar.module.css";
 
 function UserAvatar(props) {
- return (
+  return (
     <div className={`${classes.container} ${props.className}`}>
       <div className={classes["open-up"]}></div>
       <div className={`${classes["user-avatar"]}`} onClick={props.onClick}>
@@ -19,7 +19,7 @@ function UserAvatar(props) {
         />
         <CSSTransition
           in={props.show}
-          timeout={{ enter: 2000, exit: 2000 }}
+          timeout={{ enter: 2000, exit: 200 }}
           classNames={{
             enter: classes["user-img-enter"],
             enterActive: classes["user-img-enter-active"],

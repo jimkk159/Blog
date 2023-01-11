@@ -8,7 +8,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 //Redux Slice
-import { authActions } from "../../../store/auth-slice";
+import { logoutAuto } from "../../../store/auth-slice";
 
 //Custom Component
 import NavigationItem from "./NavigationItem";
@@ -55,7 +55,7 @@ function NavigationItems(props) {
         key={"logout_" + uuidKeys[3]}
         type="li-button"
         onClick={() => {
-          dispatch(authActions.logout());
+          dispatch(logoutAuto());
         }}
         show={isLoggedIn}
         content={language.logout}

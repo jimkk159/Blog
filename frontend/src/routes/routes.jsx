@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Route,
   createBrowserRouter,
@@ -7,7 +7,10 @@ import {
   Navigate,
 } from "react-router-dom";
 import loadable from "@loadable/component";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+
+//Redux Slice
+import { loginAuto, logoutAuto } from "../store/auth-slice";
 
 //Custom Hook
 import useMediaQuery from "../shared/hooks/media-query-hook";
@@ -71,7 +74,43 @@ const TestPage = loadable(
 );
 
 export function RouteCreate() {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  //Redux
+  const { isLoggedIn, token, expiration, login, logout } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+
+  //Set token automatically logout life cycle
+  useEffect(() => {
+    let logoutTimer;
+    if (token && expiration) {
+      const remainingTime =
+        new Date(expiration).getTime() - new Date().getTime();
+      logoutTimer = setTimeout(() => {
+        dispatch(logoutAuto());
+      }, remainingTime);
+    }
+    return () => {
+      if (logoutTimer) {
+        clearTimeout(logoutTimer);
+      }
+    };
+  }, [dispatch, token, expiration, logout]);
+
+  //Automatically login
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    if (userData?.token && new Date(userData.expiration) > new Date()) {
+      dispatch(
+        loginAuto({
+          uid: userData.userId,
+          avatar: userData.avatar,
+          token: userData.token,
+          expiration: userData.expiration,
+        })
+      );
+    }
+  }, [dispatch, login]);
 
   //Custom Hook
   const { matches } = useMediaQuery("min", "768");

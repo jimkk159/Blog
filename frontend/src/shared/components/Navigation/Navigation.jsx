@@ -74,7 +74,7 @@ function Navigation(props) {
       dispatch(languageActions.setEnglish());
     }
   }, [dispatch]);
-
+  
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
