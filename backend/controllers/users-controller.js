@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import normalize from "normalize-path";
 import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import { validationResult } from "express-validator";
@@ -24,7 +25,7 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const signup = async (req, res, next) => {
-  
+  console.log("Sign Up");
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -62,11 +63,13 @@ export const signup = async (req, res, next) => {
 
   //Create User
   let newUser;
+  const avatarPath = normalize(req.file.path);
   try {
     newUser = {
       id: uuidv4(),
       name,
       email,
+      avatar: avatarPath,
       password: hashedPassword,
     };
     dummy_users.push(newUser);
@@ -93,13 +96,17 @@ export const signup = async (req, res, next) => {
     );
     return next(error);
   }
-
-  res
-    .status(201)
-    .json({ userId: newUser.id, email: newUser.email, token: token });
+  console.log(newUser);
+  res.status(201).json({
+    userId: newUser.id,
+    email: newUser.email,
+    avatar: newUser.avatar,
+    token: token,
+  });
 };
 
 export const login = async (req, res, next) => {
+  console.log("Login");
   const { email, password } = req.body;
 
   //Check User if exist
@@ -149,6 +156,7 @@ export const login = async (req, res, next) => {
   res.json({
     userId: existingUser.id,
     email: existingUser.email,
+    avatar: existingUser.avatar,
     token: token,
   });
 };
