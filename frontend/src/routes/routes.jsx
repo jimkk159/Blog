@@ -9,8 +9,8 @@ import {
 import loadable from "@loadable/component";
 import { useSelector, useDispatch } from "react-redux";
 
-//Redux Slice
-import { loginAuto, logoutAuto } from "../store/auth-slice";
+//Redux Thunk
+import { loginAuto, logoutAuto } from "../store/auth-thunk";
 
 //Custom Hook
 import useMediaQuery from "../shared/hooks/media-query-hook";

@@ -8,7 +8,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
 //Redux Slice
-import { logoutAuto } from "../../../store/auth-slice";
+import { logoutAuto } from "../../../store/auth-thunk";
 
 //Custom Component
 import NavigationItem from "./NavigationItem";

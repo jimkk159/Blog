@@ -11,7 +11,7 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 import crossImage from "../../../../assets/img/x-symbol.png";
 
 //Redux Slice
-import { logoutAuto } from "../../../../store/auth-slice";
+import { logoutAuto } from "../../../../store/auth-thunk";
 
 //Custom Component
 import NavigationItem from "../NavigationItem";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 //Redux Slice
-import { loginAuto } from "../../store/auth-slice";
+import { loginAuto } from "../../store/auth-thunk";
 
 //Custom Component
 import Card from "../../shared/components/UI/Card";
