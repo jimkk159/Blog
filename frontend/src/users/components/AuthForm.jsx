@@ -26,6 +26,7 @@ import {
 
 //CSS
 import classes from "./AuthForm.module.css";
+import "./test.css";
 
 //Constant Variable
 const nameKey = "name";
@@ -34,9 +35,9 @@ const emailKey = "email";
 const passwordKey = "password";
 
 function AuthForm(props) {
+  const [isDrag, setIsDrag] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const { isLoading, error, sendRequest, clearError } = useHttp();
-
+  
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
@@ -44,6 +45,7 @@ function AuthForm(props) {
 
   //Custom Hook
   const uuidKeys = useUuid(3);
+  const { isLoading, error, sendRequest, clearError } = useHttp();
   const { formState, inputHandler, setFormData } = useForm(
     {
       [emailKey]: { value: "", isValid: false },
@@ -143,6 +145,15 @@ function AuthForm(props) {
     }
   };
 
+  //When Drag in trigger upload area
+  const dragHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "dragenter") {
+      setIsDrag(true);
+    }
+  };
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -159,13 +170,15 @@ function AuthForm(props) {
               isLoginMode ? language.login : language.signup
             }`}</h2>
             <hr />
-            <form onSubmit={authSubmitHandler}>
+            <form onSubmit={authSubmitHandler} onDragEnter={dragHandler}>
               {!isLoginMode && (
                 <UploadImage
                   id={imageKey}
                   isDarkMode={isDarkMode}
                   onInput={inputHandler}
                   errorMessage={language.validImage}
+                  isDrag={isDrag}
+                  setIsDrag={setIsDrag}
                 >
                   {language.uploadImage}
                 </UploadImage>
