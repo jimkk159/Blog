@@ -10,7 +10,7 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 //Image
 import crossImage from "../../../../assets/img/x-symbol.png";
 
-//Redux Slice
+//Redux Thunk
 import { logoutAuto } from "../../../../store/auth-thunk";
 
 //Custom Component

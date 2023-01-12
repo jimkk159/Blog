@@ -5,7 +5,7 @@ import { RichUtils } from "draft-js";
 import { removePrevStyle } from "./RemoveControls";
 
 //Redux Slice
-import { toolbarActions } from "../../../../../../store/toolbar-slice";
+import { toolbarActions } from "../../../../../store/toolbar-slice";
 
 const ColorPickerControls = (props) => {
   const { editorState, onChange } = props;

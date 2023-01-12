@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-//Redux Slice
+//Redux Thunk
 import { loginAuto } from "../../store/auth-thunk";
 
 //Custom Component

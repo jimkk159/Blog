@@ -1,4 +1,4 @@
-.root-layout {
+.home-layout {
   padding-top: 6rem;
 }
 
@@ -12,7 +12,7 @@
 }
 
 @media (min-width:768px){
-  .root-layout {
+  .home-layout {
     padding-top: 10rem;
   }
 }

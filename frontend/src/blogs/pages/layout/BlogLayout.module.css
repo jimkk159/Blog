@@ -1,34 +1,30 @@
-.flex-container {
-  display: flex;
-  justify-items: center;
-  margin-bottom: 3rem;
-  text-align: left;
+.blog-layout {
+  padding-top: 6rem;
 }
-.post-container {
-  padding: 1.5rem 3rem 3rem;
+
+.light {
+  background-color: #868a85;
+  color: black;
 }
-.title {
-  font-size: 32px;
-  line-height: 32px;
-  margin-top: 0.6em;
-  text-align: center;
+.dark {
+  background-color: black;
+  color: #E4E4E4;
 }
-.title-hr {
-  margin: 0.5rem 0 1rem;
+
+@media (min-width:768px){
+  .blog-layout {
+    padding-top: 10rem;
+  }
 }
-.tags-container {
-  margin-top: 3rem;
+
+main {
+  max-width: 1024px;
+  min-height: 100vh;
 }
-.tags-container svg {
-  font-size: 30px;
-}
-.tags-container p {
-  background-color: rgba(222, 222, 222, 1);
-  color: rgba(41, 41, 41, 1);
-  font-family: sohne, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  margin-right: 8px;
-  margin-top: 8px;
-  padding: 8px 16px;
+
+main{
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 5px;
+  padding-right: 5px;
 }

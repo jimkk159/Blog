@@ -1,14 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
 
 //Redux Slice
-import { toolbarActions } from "../../../../store/toolbar-slice";
+import { toolbarActions } from "../../../store/toolbar-slice";
 
 //Custom Function
 import { styleMap } from "./style-map";
-import { createLinkDecorator } from "./decorators/LinkDecorator";
-import { removeTargetInlineStyles } from "./ToolBar/StyleControls/RemoveControls";
 
 //Custom Component
 import ToolBar from "./ToolBar/ToolBar";
@@ -52,26 +50,22 @@ function getCustomStyleFn(style) {
 }
 
 function RichTextEditor(props) {
+  const {editorState, onChange} = props;
   const editor = useRef(null);
-  const decorator = createLinkDecorator();
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty(decorator)
-  );
-  
+
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
   const dispatch = useDispatch();
 
   const focusEditorHandler = () => {
-    editor.current.focus();
+    // editor.current.focus();
     dispatch(toolbarActions.closeAll());
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
-      setEditorState(newState);
+      onChange(newState);
       return true;
     }
     return false;
@@ -86,18 +80,12 @@ function RichTextEditor(props) {
       );
 
       if (newEditorState !== editorState) {
-        setEditorState(newEditorState);
+        onChange(newEditorState);
       }
       return;
     }
     return getDefaultKeyBinding(event);
   };
-  
-  useEffect(() => {
-    if (!isLinkModal) {
-      setEditorState(removeTargetInlineStyles(editorState, ["FAKE_FOCUS"]));
-    }
-  }, [isLinkModal, editorState]);
 
   return (
     <>
@@ -108,14 +96,14 @@ function RichTextEditor(props) {
       >
         <ToolBar
           editorState={editorState}
-          setEditorState={setEditorState}
+          setEditorState={onChange}
           isDarkMode={isDarkMode}
         />
         <div className={"editor-container"} onClick={focusEditorHandler}>
           <Editor
             ref={editor}
             editorState={editorState}
-            onChange={setEditorState}
+            onChange={onChange}
             blockStyleFn={getBlockStyle}
             customStyleMap={styleMap}
             customStyleFn={getCustomStyleFn}

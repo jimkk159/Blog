@@ -16,6 +16,7 @@ import { loginAuto, logoutAuto } from "../store/auth-thunk";
 import useMediaQuery from "../shared/hooks/media-query-hook";
 
 //PAGE
+import HomeLayout from "../shared/pages/layouts/HomeLayout";
 import RootLayout from "../shared/pages/layouts/RootLayout";
 import PostsPage from "../blogs/pages/PostsPage";
 
@@ -32,6 +33,10 @@ const loadingFallback = {
 
 //React-route 6.4 Lazy Loading solution reference:
 //https://www.robinwieruch.de/react-router-lazy-loading/
+const BlogRootLayout = loadable(
+  () => import("../blogs/pages/layout/BlogRootLayout"),
+  loadingFallback
+);
 const BlogLayout = loadable(
   () => import("../blogs/pages/layout/BlogLayout"),
   loadingFallback
@@ -133,20 +138,24 @@ export function RouteCreate() {
   const routes = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<RootLayout />} errorElement={<ErrorPage />}>
-        <Route index element={<PostsPage />} />
-        <Route path="/blog" element={<BlogLayout />}>
-          <Route index element={<Navigate replace to="/" />} />
-          {newBlogRoute}
-          {editBlogRoute}
-          <Route path="new" element={<EditPage />} />
-          <Route path=":blogId" element={<PostPage />} />
+        <Route path="/" element={<HomeLayout />}>
+          <Route index element={<PostsPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          {authRoute}
+          <Route path="/search/:searchItem" element={<SearchPage />}></Route>
+          <Route path="/test" element={<TestPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
+          {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}
         </Route>
-        <Route path="/about" element={<AboutPage />} />
-        {authRoute}
-        <Route path="/search/:searchItem" element={<SearchPage />}></Route>
-        <Route path="/test" element={<TestPage />} />
-        <Route path="/*" element={<NotFoundPage />} />
-        {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}
+        <Route path="/blog" element={<BlogRootLayout />}>
+          <Route path="" element={<BlogLayout />}>
+            <Route index element={<Navigate replace to="/" />} />
+            {newBlogRoute}
+            {editBlogRoute}
+            <Route path=":blogId" element={<PostPage />} />
+          </Route>
+          <Route path="new" element={<EditPage />} />
+        </Route>
       </Route>
     )
   );

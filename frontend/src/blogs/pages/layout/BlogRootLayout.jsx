@@ -1,9 +1,9 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
-function RootLayout() {
-
+function BlogRootLayout() {
+    
   return <Outlet />;
 }
 
-export default RootLayout;
+export default BlogRootLayout;

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkActive } from "../checkActive";
 
 //Redux Slice
-import { toolbarActions } from "../../../../../../../store/toolbar-slice";
+import { toolbarActions } from "../../../../../../store/toolbar-slice";
 
 //Custom Component
 import DropDownOption from "./DropDownOption";

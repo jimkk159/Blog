@@ -7,7 +7,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
 
-//Redux Slice
+//Redux Thunk
 import { logoutAuto } from "../../../store/auth-thunk";
 
 //Custom Component
