@@ -56,6 +56,7 @@ function BundleButton(props) {
     //bundle the every single style button
     content = props.config.options.map((option) => {
       const opt = props.config.choices[option];
+
       return (
         <div key={opt.label} className={classes["item-container"]}>
           <StyleButton
@@ -71,7 +72,7 @@ function BundleButton(props) {
             isDarkMode={props.isDarkMode}
           />
           {option === "link" && isLinkModal && (
-            <LinkModal onClose={closeHandler} onAddLink={props.onAddLink}/>
+            <LinkModal onClose={closeHandler} onAddLink={props.onAddLink} />
           )}
         </div>
       );

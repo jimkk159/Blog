@@ -3,6 +3,7 @@ import React from "react";
 //Custom Component
 import BundleButton from "./StyleButton/BundleButton";
 import LinkControls from "./StyleControls/LinkControls";
+import ImageControls from "./StyleControls/ImageControls";
 import IndentControls from "./StyleControls/IndentControls";
 import HistoryControls from "./StyleControls/HistoryControls";
 import FontSizeControls from "./StyleControls/FontSizeControls";
@@ -28,7 +29,7 @@ function ToolBarBundle(props) {
           case "blockType":
             const { activeStyle, toggleBlockTypeHandler } = BlockStyleControls({
               editorState,
-              onChange: onChange,
+              onChange,
             });
             active = activeStyle;
             width = 90;
@@ -39,7 +40,7 @@ function ToolBarBundle(props) {
             const { activeStyleFn: inlineActiveFn, toggleInlineStyleHandler } =
               InlineStyleControls({
                 editorState,
-                onChange: onChange,
+                onChange,
               });
             active = inlineActiveFn;
             onButtonTrigger = toggleInlineStyleHandler;
@@ -53,7 +54,7 @@ function ToolBarBundle(props) {
             } = FontSizeControls({
               fontSizeOptions: config.options,
               editorState,
-              onChange: onChange,
+              onChange,
             });
             active = fontSizeActiveFn;
             width = 60;
@@ -65,7 +66,7 @@ function ToolBarBundle(props) {
             const { isDisabled, indentHandler, outdentHandler } =
               IndentControls({
                 editorState,
-                onChange: onChange,
+                onChange,
               });
             disable = isDisabled;
             onButtonTrigger = {
@@ -78,7 +79,7 @@ function ToolBarBundle(props) {
             const { removeAllInlineStylesHandler } = RemoveStyleControls({
               toolbar,
               editorState,
-              onChange: onChange,
+              onChange,
             });
 
             onButtonTrigger = removeAllInlineStylesHandler;
@@ -88,7 +89,7 @@ function ToolBarBundle(props) {
             const { toggleLinkModalHandler, addLinkHandler, unlinkHandler } =
               LinkControls({
                 editorState,
-                onChange: onChange,
+                onChange,
               });
             onAddLink = addLinkHandler;
             onButtonTrigger = {
@@ -100,16 +101,24 @@ function ToolBarBundle(props) {
           case "color-picker":
             const { toggleColorHandler } = ColorPickerControls({
               editorState,
-              onChange: onChange,
+              onChange,
             });
 
             onButtonTrigger = toggleColorHandler;
             break;
 
+          case "image":
+            const { addImageHandler } = ImageControls({
+              editorState,
+              onChange,
+            });
+            onButtonTrigger = addImageHandler;
+            break;
+
           case "history":
             const { undoHandler, redoHandler } = HistoryControls({
               editorState,
-              onChange: onChange,
+              onChange,
             });
             onButtonTrigger = { undo: undoHandler, redo: redoHandler };
             break;

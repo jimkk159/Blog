@@ -252,7 +252,7 @@ export const link = {
   linkCallback: undefined,
 };
 export const image = {
-  type: "blockType",
+  type: "image",
   inDropdown: false,
   options: ["image"],
   choices: { image: { label: "image", style: "", icon: <FaRegImage /> } },

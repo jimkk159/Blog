@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 //CSS
 import classes from "./StyleButton.module.css";
 
 function StyleButton(props) {
+  const { onChange } = props;
+  const inputRef = useRef(null);
+  const [image, setImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [height, setHeight] = useState("auto");
+  const [width, setWidth] = useState("auto");
+
   //Check button active
   let buttonClassName = classes["item"];
   if (props.disable) {
     buttonClassName += ` ${classes["item-disable"]}`;
     buttonClassName += props.isDarkMode
-    ? ` ${classes["item-disable-dark"]}`
-    : ` ${classes["item-disable-light"]}`;
+      ? ` ${classes["item-disable-dark"]}`
+      : ` ${classes["item-disable-light"]}`;
   } else if (props.active) {
     buttonClassName += ` ${classes["item-normal"]} ${classes["item-active"]}`;
     buttonClassName += props.isDarkMode
@@ -22,6 +29,7 @@ function StyleButton(props) {
     }`;
   }
 
+  //Press Button
   const toggleHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -38,17 +46,75 @@ function StyleButton(props) {
       default:
         break;
     }
+    //Mouse Click to pick an Image
+    if (props.opt === "image") {
+      inputRef.current.click();
+    }
   };
 
+  //Image
+  const selectImage = (event) => {
+    let pickedFile;
+    if (event.target.files && event.target.files.length === 1) {
+      pickedFile = event.target.files[0];
+      setImage(pickedFile);
+    }
+  };
+
+  // const addImageFromState = () => {
+  //   if (!isNaN(height)) {
+  //     setHeight(`${height}px`);
+  //   }
+  //   if (!isNaN(width)) {
+  //     setWidth(`${width}px`);
+  //   }
+  //   console.log(previewUrl);
+  //   props.onChange(previewUrl, height, width);
+  // };
+
+  //Update preview when image upload
+  useEffect(() => {
+    if (!image) return;
+    const fileReader = new FileReader();
+    fileReader.onload = () => {
+      setPreviewUrl(fileReader.result);
+    };
+    fileReader.readAsDataURL(image);
+  }, [image]);
+
+  useEffect(() => {
+    if (!isNaN(height)) {
+      setHeight(`${height}px`);
+    }
+    if (!isNaN(width)) {
+      setWidth(`${width}px`);
+    }
+    if (onChange) {
+      onChange(previewUrl, height, width);
+    }
+  }, [width, height, previewUrl]);
+
   return (
-    <div
-      className={`${buttonClassName}`}
-      onMouseDown={!props.disable ? toggleHandler : null}
-      title={props.label}
-      aria-label={props.label}
-    >
-      {props.icon || props.label}
-    </div>
+    <>
+      <div
+        className={`${buttonClassName}`}
+        onMouseDown={!props.disable ? toggleHandler : null}
+        title={props.label}
+        aria-label={props.label}
+      >
+        {props.icon || props.label}
+      </div>
+      {props.opt === "image" && (
+        <input
+          id="upload-image"
+          ref={inputRef}
+          type="file"
+          style={{ display: "none" }}
+          accept=".jpg,.png,.jpeg,.jfif"
+          onChange={selectImage}
+        />
+      )}
+    </>
   );
 }
 
