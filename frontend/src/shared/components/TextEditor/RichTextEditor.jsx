@@ -7,6 +7,7 @@ import { toolbarActions } from "../../../store/toolbar-slice";
 
 //Custom Function
 import { styleMap } from "./style-map";
+import blockRendererFn from "./render/render";
 
 //Custom Component
 import ToolBar from "./ToolBar/ToolBar";
@@ -50,7 +51,7 @@ function getCustomStyleFn(style) {
 }
 
 function RichTextEditor(props) {
-  const {editorState, onChange} = props;
+  const { editorState, onChange } = props;
   const editor = useRef(null);
 
   //Redux
@@ -105,6 +106,7 @@ function RichTextEditor(props) {
             editorState={editorState}
             onChange={onChange}
             blockStyleFn={getBlockStyle}
+            blockRendererFn={blockRendererFn}
             customStyleMap={styleMap}
             customStyleFn={getCustomStyleFn}
             handleKeyCommand={handleKeyCommandHandler}

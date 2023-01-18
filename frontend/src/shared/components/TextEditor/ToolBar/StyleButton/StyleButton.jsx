@@ -4,7 +4,8 @@ import React, { useRef, useState, useEffect } from "react";
 import classes from "./StyleButton.module.css";
 
 function StyleButton(props) {
-  const { onChange } = props;
+  const { active, disable, opt, onChange, isDarkMode, style, label, icon } =
+    props;
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -13,19 +14,19 @@ function StyleButton(props) {
 
   //Check button active
   let buttonClassName = classes["item"];
-  if (props.disable) {
+  if (disable) {
     buttonClassName += ` ${classes["item-disable"]}`;
-    buttonClassName += props.isDarkMode
+    buttonClassName += isDarkMode
       ? ` ${classes["item-disable-dark"]}`
       : ` ${classes["item-disable-light"]}`;
-  } else if (props.active) {
+  } else if (active) {
     buttonClassName += ` ${classes["item-normal"]} ${classes["item-active"]}`;
-    buttonClassName += props.isDarkMode
+    buttonClassName += isDarkMode
       ? ` ${classes["item-dark"]} ${classes["item-dark-active"]}`
       : ` ${classes["item-light"]} ${classes["item-light-active"]}`;
   } else {
     buttonClassName += ` ${classes["item-normal"]} ${
-      props.isDarkMode ? classes["item-dark"] : classes["item-light"]
+      isDarkMode ? classes["item-dark"] : classes["item-light"]
     }`;
   }
 
@@ -33,78 +34,57 @@ function StyleButton(props) {
   const toggleHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    let onChangeFn;
-    switch (typeof props.onChange) {
-      case "function":
-        onChangeFn = props.onChange;
-        onChangeFn(props.style);
+    switch (opt) {
+
+      //Mouse Click to pick an Image(Pick Image => Update Editor State)
+      case "image":
+        inputRef.current.click();
         break;
-      case "object":
-        onChangeFn = props.onChange[props.opt];
-        if (onChangeFn) onChangeFn();
-        break;
+
       default:
-        break;
-    }
-    //Mouse Click to pick an Image
-    if (props.opt === "image") {
-      inputRef.current.click();
+        let onChangeFn;
+        switch (typeof onChange) {
+          case "function":
+            onChangeFn = onChange;
+            onChangeFn(style);
+            break;
+          case "object":
+            onChangeFn = onChange[opt];
+            if (onChangeFn) onChangeFn();
+            break;
+          default:
+            break;
+        }
     }
   };
 
   //Image
   const selectImage = (event) => {
     let pickedFile;
+    const updateImage = async (inputImage) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        onChange(fileReader.result)
+      };
+      fileReader.readAsDataURL(inputImage);
+    };
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
-      setImage(pickedFile);
+      updateImage(pickedFile);
     }
   };
-
-  // const addImageFromState = () => {
-  //   if (!isNaN(height)) {
-  //     setHeight(`${height}px`);
-  //   }
-  //   if (!isNaN(width)) {
-  //     setWidth(`${width}px`);
-  //   }
-  //   console.log(previewUrl);
-  //   props.onChange(previewUrl, height, width);
-  // };
-
-  //Update preview when image upload
-  useEffect(() => {
-    if (!image) return;
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewUrl(fileReader.result);
-    };
-    fileReader.readAsDataURL(image);
-  }, [image]);
-
-  useEffect(() => {
-    if (!isNaN(height)) {
-      setHeight(`${height}px`);
-    }
-    if (!isNaN(width)) {
-      setWidth(`${width}px`);
-    }
-    if (onChange) {
-      onChange(previewUrl, height, width);
-    }
-  }, [width, height, previewUrl]);
 
   return (
     <>
       <div
         className={`${buttonClassName}`}
-        onMouseDown={!props.disable ? toggleHandler : null}
-        title={props.label}
-        aria-label={props.label}
+        onMouseDown={!disable ? toggleHandler : null}
+        title={label}
+        aria-label={label}
       >
-        {props.icon || props.label}
+        {icon || label}
       </div>
-      {props.opt === "image" && (
+      {opt === "image" && (
         <input
           id="upload-image"
           ref={inputRef}
