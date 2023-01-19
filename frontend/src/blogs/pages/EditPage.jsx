@@ -9,7 +9,6 @@ import { toolbarActions } from "../../store/toolbar-slice";
 import cubesImage from "../../assets/img/cubes.png";
 
 //Custom Function
-import { createLinkDecorator } from "../../shared/components/TextEditor/decorators/LinkDecorator";
 import { removeTargetInlineStyles } from "../../shared/components/TextEditor/ToolBar/StyleControls/RemoveControls";
 
 //Custom Component
@@ -22,9 +21,8 @@ import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
 import classes from "./EditPage.module.css";
 
 function EditPage(props) {
-  const decorator = createLinkDecorator();
   const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty(decorator)
+    EditorState.createEmpty()
   );
   const dispatch = useDispatch();
   const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);

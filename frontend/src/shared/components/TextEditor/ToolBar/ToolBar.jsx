@@ -1,7 +1,7 @@
 import React from "react";
 
 //Custom Function
-import { toolbar } from "./toolbar-setting";
+import { toolbar } from "../../../util/toolbar-setting";
 
 //Custom Component
 import ToolBarBundle from "./ToolBarBundle";

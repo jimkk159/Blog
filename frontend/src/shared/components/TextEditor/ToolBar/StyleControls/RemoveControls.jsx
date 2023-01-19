@@ -70,7 +70,26 @@ export const removeAllInlineStyles = (toolbar, editorState) => {
   }
 };
 
-//Reove All Style
+//Remove Entity
+export const removeEntities = (editorState) => {
+  const selection = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  const contentWithoutEntities = Modifier.applyEntity(
+    contentState,
+    selection,
+    null
+  );
+
+  const newEditorState = EditorState.push(
+    editorState,
+    contentWithoutEntities,
+    "apply-entity"
+  );
+
+  return newEditorState;
+};
+
+//Remove All Style
 export const removeAllStyles = (toolbar, editorState) => {
   //Remove Inline
   const contentState = editorState.getCurrentContent();
@@ -132,8 +151,14 @@ function RemoveStyleControls(props) {
     onChange(removeTargetInlineStyles(editorState, targets));
   };
 
+  //Remove InlineStyle
   const removeAllInlineStylesHandler = () => {
     onChange(removeAllInlineStyles(toolbar, editorState));
+  };
+
+  //Remove Entities
+  const removeEntityHandler = () => {
+    onChange(removeEntities(editorState));
   };
 
   //Remove BlockType
@@ -141,6 +166,7 @@ function RemoveStyleControls(props) {
     onChange(RichUtils.toggleBlockType(editorState, "unstyled"));
   };
 
+  //Remove All
   const removeAllStylesHandler = () => {
     onChange(removeAllStyles(toolbar, editorState));
   };
@@ -148,6 +174,7 @@ function RemoveStyleControls(props) {
   return {
     removeTargetsInlineStylesHandler,
     removeAllInlineStylesHandler,
+    removeEntityHandler,
     removeBlockTypeHandler,
     removeAllStylesHandler,
   };

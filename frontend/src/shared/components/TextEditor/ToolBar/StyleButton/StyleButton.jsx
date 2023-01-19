@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef } from "react";
 
 //CSS
 import classes from "./StyleButton.module.css";
@@ -7,10 +7,6 @@ function StyleButton(props) {
   const { active, disable, opt, onChange, isDarkMode, style, label, icon } =
     props;
   const inputRef = useRef(null);
-  const [image, setImage] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [height, setHeight] = useState("auto");
-  const [width, setWidth] = useState("auto");
 
   //Check button active
   let buttonClassName = classes["item"];
@@ -60,13 +56,15 @@ function StyleButton(props) {
 
   //Image
   const selectImage = (event) => {
-    let pickedFile;
-    const updateImage = async (inputImage) => {
+    //To Do if the Image is same, it won't update image twice
+    let pickedFile; 
+    const updateImage = (inputImage) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         onChange(fileReader.result)
       };
       fileReader.readAsDataURL(inputImage);
+      return
     };
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];

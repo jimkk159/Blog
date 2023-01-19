@@ -1,13 +1,17 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RichUtils, Editor, EditorState, getDefaultKeyBinding } from "draft-js";
+import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
+
+import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
 import { toolbarActions } from "../../../store/toolbar-slice";
 
 //Custom Function
-import { styleMap } from "./style-map";
-import blockRendererFn from "./render/render";
+import { styleMap } from "../../util/style-map";
+import plugins, { AlignmentTool } from "./Plugin";
+import { getBlockStyle, getCustomStyleFn } from "./CustomStyleFn";
+import { createLinkDecorator } from "./decorators/LinkDecorator";
 
 //Custom Component
 import ToolBar from "./ToolBar/ToolBar";
@@ -16,50 +20,19 @@ import ToolBar from "./ToolBar/ToolBar";
 import "draft-js/dist/Draft.css";
 import "./RichTextEditor.css";
 
-function getBlockStyle(block) {
-  switch (block.getType()) {
-    case "blockquote":
-      return "RichEditor-blockquote";
-    case "ALIGN_RIGHT":
-      return "ALIGN_RIGHT";
-    case "ALIGN_CENTER":
-      return "ALIGN_CENTER";
-    case "ALIGN_LEFT":
-      return "ALIGN_LEFT";
-    case "ALIGN_JUSTIFY":
-      return "ALIGN_JUSTIFY";
-    default:
-      return null;
-  }
-}
-
-const CUSTOM_STYLE_PREFIX_COLOR = "COLOR_";
-const CUSTOM_STYLE_PREFIX_FONT_SIZE = "FONT_SIZE_";
-function getCustomStyleFn(style) {
-  const styleNames = style.toJS();
-  return styleNames.reduce((styles, styleName) => {
-    if (styleName.startsWith(CUSTOM_STYLE_PREFIX_COLOR)) {
-      styles.color = `${styleName.split(CUSTOM_STYLE_PREFIX_COLOR)[1]}`;
-    }
-    if (styleName.startsWith(CUSTOM_STYLE_PREFIX_FONT_SIZE)) {
-      styles.fontSize = `${
-        styleName.split(CUSTOM_STYLE_PREFIX_FONT_SIZE)[1]
-      }px`;
-    }
-    return styles;
-  }, {});
-}
+const decorator = createLinkDecorator();
 
 function RichTextEditor(props) {
   const { editorState, onChange } = props;
   const editor = useRef(null);
+  const [rawData, setRawData] = useState(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const dispatch = useDispatch();
 
   const focusEditorHandler = () => {
-    // editor.current.focus();
+    editor.current.focus();
     dispatch(toolbarActions.closeAll());
   };
 
@@ -105,24 +78,31 @@ function RichTextEditor(props) {
             ref={editor}
             editorState={editorState}
             onChange={onChange}
+            decorators={[decorator]}
             blockStyleFn={getBlockStyle}
-            blockRendererFn={blockRendererFn}
             customStyleMap={styleMap}
             customStyleFn={getCustomStyleFn}
             handleKeyCommand={handleKeyCommandHandler}
             keyBindingFn={mapKeyToEditorCommandHandler}
             placeholder="Tell a story..."
             spellCheck={true}
+            plugins={plugins}
           />
         </div>
+        <AlignmentTool />
       </div>
-      <button onClick={null}>Click</button>
-      <Editor
-        editorState={EditorState.createWithContent(
-          editorState.getCurrentContent()
-        )}
-        readOnly
-      />
+      <button
+        onClick={() => {
+          console.log("Click");
+          const currentContent = editorState.getCurrentContent();
+          const rawData = convertToRaw(currentContent);
+          const rawJson = JSON.stringify(rawData);
+          setRawData(rawJson);
+        }}
+      >
+        Click
+      </button>
+      <p>{rawData}</p>
     </>
   );
 }

@@ -1,9 +1,10 @@
-import { AtomicBlockUtils, EditorState } from "draft-js";
+import { AtomicBlockUtils } from "draft-js";
 
 const ImageControls = (props) => {
   const { editorState, onChange } = props;
 
   const addImageHandler = (src, height, width) => {
+
     const entityData = {
       src: src,
       height: height ? height : "100%",
@@ -13,7 +14,7 @@ const ImageControls = (props) => {
     const currentContent = editorState.getCurrentContent();
     const contentStateWithEntity = currentContent.createEntity(
       "IMAGE",
-      "MUTABLE",
+      "IMMUTABLE",
       entityData
     );
     const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
