@@ -1,19 +1,21 @@
 .editor-wrapper {
   min-width: 600px;
-  width:100%;
-  margin-top: 3em;
+  width: 100%;
+  margin: 0;
 }
 
 .editor-container {
-  /* display: flex; */
-  min-height: 9em;
-  border-radius: 0 0 3px 3px;
+  min-height: 100vh;
+  border-radius: 6px;
   background-color: #fff;
   padding: 5px;
   font-size: 17px;
   font-weight: 300;
-  box-shadow: 0px 0px 3px 1px rgba(15, 15, 15, 0.17);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   color: black;
+  overflow: hidden;
+  padding: 1rem;
+  position: relative;
 }
 
 .editor-container .public-DraftEditorPlaceholder-root,
@@ -44,6 +46,15 @@
 
 .editor-container figure {
   margin: 0;
+}
+
+.btn-container {
+  margin-top: 0.8rem;
+  text-align: right;
+}
+
+.btn{
+  margin-left: 0.5rem;
 }
 
 .ALIGN_RIGHT .public-DraftStyleDefault-block {

@@ -15,6 +15,7 @@ import { createLinkDecorator } from "./decorators/LinkDecorator";
 
 //Custom Component
 import ToolBar from "./ToolBar/ToolBar";
+import Button2 from "../Form/Button2";
 
 //CSS
 import "draft-js/dist/Draft.css";
@@ -23,7 +24,7 @@ import "./RichTextEditor.css";
 const decorator = createLinkDecorator();
 
 function RichTextEditor(props) {
-  const { editorState, onChange } = props;
+  const { editorState, onChange, className } = props;
   const editor = useRef(null);
   const [rawData, setRawData] = useState(null);
 
@@ -44,7 +45,7 @@ function RichTextEditor(props) {
     }
     return false;
   };
-
+  
   const mapKeyToEditorCommandHandler = (event) => {
     if (event.keyCode === 9 /* TAB */) {
       const newEditorState = RichUtils.onTab(
@@ -64,7 +65,7 @@ function RichTextEditor(props) {
   return (
     <>
       <div
-        className={`editor-wrapper ${
+        className={`editor-wrapper ${className} ${
           isDarkMode ? "editor-wrapper-dark" : "editor-wrapper-light"
         }`}
       >
@@ -91,17 +92,32 @@ function RichTextEditor(props) {
         </div>
         <AlignmentTool />
       </div>
-      <button
-        onClick={() => {
-          console.log("Click");
-          const currentContent = editorState.getCurrentContent();
-          const rawData = convertToRaw(currentContent);
-          const rawJson = JSON.stringify(rawData);
-          setRawData(rawJson);
-        }}
-      >
-        Click
-      </button>
+      <div className={`btn-container`}>
+        <Button2
+          className={`btn`}
+          onClick={() => {
+            console.log("Click");
+            const currentContent = editorState.getCurrentContent();
+            const rawData = convertToRaw(currentContent);
+            const rawJson = JSON.stringify(rawData);
+            setRawData(rawJson);
+          }}
+        >
+          SAVE
+        </Button2>
+        <Button2
+          className={`btn`}
+          onClick={() => {
+            console.log("Click");
+            const currentContent = editorState.getCurrentContent();
+            const rawData = convertToRaw(currentContent);
+            const rawJson = JSON.stringify(rawData);
+            setRawData(rawJson);
+          }}
+        >
+          DELETE
+        </Button2>
+      </div>
       <p>{rawData}</p>
     </>
   );

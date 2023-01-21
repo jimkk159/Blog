@@ -46,11 +46,11 @@ function EditPage(props) {
     >
       <Navigation />
       <main>
-        <Card className={`page`} isDarkMode={isDarkMode}>
-          <a href="https://www.google.com/">123</a>
-          <h1 className={classes["select"]}>Edit Page</h1>
+        {/* <Card className={`page`} isDarkMode={isDarkMode}> */}
+          {/* <a href="https://www.google.com/">123</a>
+          <h1 className={classes["select"]}>Edit Page</h1> */}
           <RichTextEditor editorState={editorState} onChange={setEditorState} />
-        </Card>
+        {/* </Card> */}
       </main>
       <Footer isDarkMode={isDarkMode} />
     </div>
