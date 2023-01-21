@@ -9,6 +9,7 @@ import HistoryEduIcon from "@mui/icons-material/HistoryEdu";
 
 //Image
 import crossImage from "../../../../assets/img/x-symbol.png";
+import anonymousUser from "../../../../assets/img/anonymous_user.png";
 
 //Redux Thunk
 import { logoutAuto } from "../../../../store/auth-thunk";
@@ -26,7 +27,7 @@ import classes from "./SideDrawerTitle.module.css";
 function SideDrawerTitle(props) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { avatar, isLoggedIn } = useSelector((state) => state.auth);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
@@ -37,7 +38,7 @@ function SideDrawerTitle(props) {
   const uuidKeys = useUuid(3);
 
   //Auth
-  const showAuth = () => {
+  const showAuthHandler = () => {
     if (!isLoggedIn) {
       navigate("/auth", { state: { toLogin: true } });
       props.onCancel();
@@ -57,13 +58,16 @@ function SideDrawerTitle(props) {
         style={isLoggedIn ? { justifyContent: "space-between" } : null}
       >
         <UserAvatar
+          show={isLoggedIn}
           className={
             isLoggedIn
               ? classes["side-drawer__avatar"]
               : classes["side-drawer__anonymous-avatar"]
           }
+          defaultImg={anonymousUser}
           isDarkMode={isDarkMode}
-          onClick={showAuth}
+          onClick={showAuthHandler}
+          img={`${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
         />
         <NavigationItem
           key={"sideDrawer-login_" + uuidKeys[0]}

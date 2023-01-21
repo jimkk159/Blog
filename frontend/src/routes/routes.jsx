@@ -73,10 +73,6 @@ const SearchPage = loadable(
   () => import("../shared/pages/SearchPage"),
   loadingFallback
 );
-const TestPage = loadable(
-  () => import("../shared/pages/TestPage"),
-  loadingFallback
-);
 
 export function RouteCreate() {
   //Redux
@@ -143,7 +139,6 @@ export function RouteCreate() {
           <Route path="/about" element={<AboutPage />} />
           {authRoute}
           <Route path="/search/:searchItem" element={<SearchPage />}></Route>
-          <Route path="/test" element={<TestPage />} />
           <Route path="/*" element={<NotFoundPage />} />
           {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}
         </Route>

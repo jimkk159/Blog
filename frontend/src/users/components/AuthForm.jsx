@@ -37,7 +37,7 @@ const passwordKey = "password";
 function AuthForm(props) {
   const [isDrag, setIsDrag] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  
+
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
