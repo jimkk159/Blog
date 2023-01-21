@@ -289,17 +289,19 @@ export const history = {
 
 export const toolbar = {
   options: [
-    ["blockTypeFlat"],
-    ["remove", "history"],
-    [
-      "inline",
-      "blockTypeDrop",
-      "fontSize",
-      "colorPicker",
-      "fontFamily",
-      "textAlign",
-    ],
-    ["image", "map", "embedded", "link"],
+    "blockTypeFlat",
+    "remove",
+    "history",
+    "inline",
+    "blockTypeDrop",
+    "fontSize",
+    "colorPicker",
+    "fontFamily",
+    "textAlign",
+    "image",
+    "map",
+    "embedded",
+    "link",
   ],
   features: {
     inline: inline,

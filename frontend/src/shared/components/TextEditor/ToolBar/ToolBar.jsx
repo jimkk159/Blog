@@ -1,22 +1,52 @@
 import React from "react";
 
-//Custom Function
-import { toolbar } from "../../../util/toolbar-setting";
+//Custom Hook
+import useMediaQuery from "../../../hooks/media-query-hook";
 
 //Custom Component
-import ToolBarBundle from "./ToolBarBundle";
+import ToolBarLayout from "./ToolBarLayout/ToolBarLayout";
+import ToolBarLayout768 from "./ToolBarLayout/ToolBarLayout768";
+import ToolBarLayout1024 from "./ToolBarLayout/ToolBarLayout1024";
 
 //CSS
 import classes from "./ToolBar.module.css";
 
 function ToolBar(props) {
-  const { editorState, setEditorState } = props;
+  const { matches: matches_768 } = useMediaQuery("min", "768");
+  const { matches: matches_1024 } = useMediaQuery("min", "1024");
 
   //Very Import to prevent the Text editor force when chooseing
   //the tool bar to keep Selection text on text editor
   const preventDefaultHandler = (event) => {
     event.preventDefault();
   };
+  if (matches_1024)
+    return (
+      <div
+        className={`${classes["container"]} ${
+          props.isDarkMode
+            ? classes["container-dark"]
+            : classes["container-light"]
+        } `}
+        onMouseDown={preventDefaultHandler}
+      >
+        <ToolBarLayout1024 {...props} />
+      </div>
+    );
+
+  if (matches_768)
+    return (
+      <div
+        className={`${classes["container"]} ${
+          props.isDarkMode
+            ? classes["container-dark"]
+            : classes["container-light"]
+        } `}
+        onMouseDown={preventDefaultHandler}
+      >
+        <ToolBarLayout768 {...props} />
+      </div>
+    );
 
   return (
     <div
@@ -27,38 +57,7 @@ function ToolBar(props) {
       } `}
       onMouseDown={preventDefaultHandler}
     >
-      <div className={classes["toolbar-row-1"]}>
-        <ToolBarBundle
-          key={"toolbar-bundle-1"}
-          toolbar={toolbar}
-          options={toolbar.options[0]}
-          editorState={editorState}
-          onChange={setEditorState}
-        />
-        <ToolBarBundle
-          key={"toolbar-bundle-2"}
-          toolbar={toolbar}
-          options={toolbar.options[1]}
-          editorState={editorState}
-          onChange={setEditorState}
-        />
-      </div>
-      <div className={classes["toolbar-row-2"]}>
-        <ToolBarBundle
-          key={"toolbar-bundle-3"}
-          toolbar={toolbar}
-          options={toolbar.options[2]}
-          editorState={editorState}
-          onChange={setEditorState}
-        />
-        <ToolBarBundle
-          key={"toolbar-bundle-4"}
-          toolbar={toolbar}
-          options={toolbar.options[3]}
-          editorState={editorState}
-          onChange={setEditorState}
-        />
-      </div>
+      <ToolBarLayout {...props} />
     </div>
   );
 }
