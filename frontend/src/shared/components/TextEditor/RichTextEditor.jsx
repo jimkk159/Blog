@@ -17,6 +17,7 @@ import { createLinkDecorator } from "./decorators/LinkDecorator";
 import Button2 from "../Form/Button2";
 import Backdrop from "../UI/Backdrop";
 import ToolBar from "./ToolBar/ToolBar";
+import ErrorModal from "../UI/Modal/ErrorModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
 //Custom Hook
@@ -71,6 +72,7 @@ function RichTextEditor(props) {
     return getDefaultKeyBinding(event);
   };
 
+  //Save the Post
   const savePostHandler = async () => {
     console.log("Click");
     try {
@@ -84,12 +86,13 @@ function RichTextEditor(props) {
           "Content-Type": "application/json",
         }
       );
-      setRawData(rawData);
+      // setRawData(rawData);
     } catch (err) {}
   };
 
   return (
     <>
+      <ErrorModal error={error} onClear={clearError} />
       {isLoading && (
         <>
           <Backdrop />

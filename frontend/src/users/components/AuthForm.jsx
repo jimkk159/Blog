@@ -26,7 +26,6 @@ import {
 
 //CSS
 import classes from "./AuthForm.module.css";
-import "./test.css";
 
 //Constant Variable
 const nameKey = "name";
@@ -128,6 +127,7 @@ function AuthForm(props) {
         formData.append(imageKey, formState.inputs[imageKey].value);
         formData.append(emailKey, formState.inputs[emailKey].value);
         formData.append(passwordKey, formState.inputs[passwordKey].value);
+        console.log(JSON.stringify(formData));
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + "/users/signup",
           "POST",
@@ -138,6 +138,9 @@ function AuthForm(props) {
             uid: responseData.userId,
             avatar: responseData.avatar,
             token: responseData.token,
+            expiration: new Date(
+              new Date().getTime() + 1000 * 60 * 60 //Token Lifecycle is 1h
+            ).toISOString(),
           })
         );
         onSubmit();
@@ -150,8 +153,9 @@ function AuthForm(props) {
     event.preventDefault();
     event.stopPropagation();
     if (event.type === "dragenter") {
+      console.log("dragEnter", isDrag);
       setIsDrag(true);
-    }
+    } 
   };
 
   return (

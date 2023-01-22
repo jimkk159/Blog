@@ -60,6 +60,7 @@ function UploadImage(props) {
       setIsValid(false);
       fileIsValid = false;
     }
+    console.log("dropHandler");
   };
 
   //Update preview when image upload
@@ -100,7 +101,7 @@ function UploadImage(props) {
       </div>
       {isDrag && (
         <div
-          id="drag-file-element"
+          className={`${classes["upload-drag-element"]}`}
           onDrop={dropHandler}
           onDragEnter={dragHandler}
           onDragOver={dragHandler}
