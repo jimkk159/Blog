@@ -14,12 +14,18 @@ import { getBlockStyle, getCustomStyleFn } from "./CustomStyleFn";
 import { createLinkDecorator } from "./decorators/LinkDecorator";
 
 //Custom Component
-import ToolBar from "./ToolBar/ToolBar";
 import Button2 from "../Form/Button2";
+import Backdrop from "../UI/Backdrop";
+import ToolBar from "./ToolBar/ToolBar";
+import LoadingSpinner from "../UI/LoadingSpinner";
+
+//Custom Hook
+import useHttp from "../../hooks/http-hook";
 
 //CSS
 import "draft-js/dist/Draft.css";
 import "./RichTextEditor.css";
+import classes from "./RichTextEditor.module.css";
 
 const decorator = createLinkDecorator();
 
@@ -31,6 +37,9 @@ function RichTextEditor(props) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const dispatch = useDispatch();
+
+  //Custom Hook
+  const { isLoading, error, sendRequest, clearError } = useHttp();
 
   const focusEditorHandler = () => {
     editor.current.focus();
@@ -45,7 +54,7 @@ function RichTextEditor(props) {
     }
     return false;
   };
-  
+
   const mapKeyToEditorCommandHandler = (event) => {
     if (event.keyCode === 9 /* TAB */) {
       const newEditorState = RichUtils.onTab(
@@ -62,10 +71,35 @@ function RichTextEditor(props) {
     return getDefaultKeyBinding(event);
   };
 
+  const savePostHandler = async () => {
+    console.log("Click");
+    try {
+      const currentContent = editorState.getCurrentContent();
+      const rawData = JSON.stringify(convertToRaw(currentContent));
+      await sendRequest(
+        process.env.REACT_APP_BACKEND_URL + `/posts/new`,
+        "POST",
+        rawData,
+        {
+          "Content-Type": "application/json",
+        }
+      );
+      setRawData(rawData);
+    } catch (err) {}
+  };
+
   return (
     <>
+      {isLoading && (
+        <>
+          <Backdrop />
+          <div className={`${classes["loading-container"]}`}>
+            <LoadingSpinner asOverlay />
+          </div>
+        </>
+      )}
       <div
-        className={`editor-wrapper ${className} ${
+        className={`${classes["editor-wrapper"]} ${className} ${
           isDarkMode ? "editor-wrapper-dark" : "editor-wrapper-light"
         }`}
       >
@@ -92,21 +126,17 @@ function RichTextEditor(props) {
         </div>
         <AlignmentTool />
       </div>
-      <div className={`btn-container`}>
+      <div className={`${classes["btn-container"]}`}>
         <Button2
-          className={`btn`}
-          onClick={() => {
-            console.log("Click");
-            const currentContent = editorState.getCurrentContent();
-            const rawData = convertToRaw(currentContent);
-            const rawJson = JSON.stringify(rawData);
-            setRawData(rawJson);
-          }}
+          className={`${classes["btn"]}`}
+          disabled={isLoading}
+          onClick={savePostHandler}
         >
           SAVE
         </Button2>
         <Button2
-          className={`btn`}
+          className={`${classes["btn"]}`}
+          disabled={isLoading}
           onClick={() => {
             console.log("Click");
             const currentContent = editorState.getCurrentContent();

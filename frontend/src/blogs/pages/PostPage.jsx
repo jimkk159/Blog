@@ -92,7 +92,7 @@ function PostPage(props) {
         isDarkMode={isDarkMode}
       >
         {isLoading && (
-          <LoadingSpinner className={`${classes["loading-container"]}`} />
+          <LoadingSpinner className={`loading-container`} />
         )}
         {!isLoading && post && (
           <>

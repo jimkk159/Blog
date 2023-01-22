@@ -36,6 +36,10 @@ footer {
   text-align: center;
 } */
 
+.loading-container{
+  height: 60vh;
+}
+
 .page {
   min-height: 100vh;
   width: 100%;

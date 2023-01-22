@@ -20,11 +20,11 @@ const Images = [
 ];
 
 function LoadingSpinner(props) {
-  const randomNum = Math.floor(8 * Math.random());
+  const randomNum = Math.floor(7 * Math.random());
 
   //Loading Content
   let loadingContent;
-  if (randomNum === 6) {
+  if (randomNum === Images.length) {
     loadingContent = (
       <div
         className={`${classes["rotating-ring"]} ${

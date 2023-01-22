@@ -68,7 +68,7 @@ function PostSearchPage() {
       <ErrorModal error={error} onClear={clearError} isAnimate />
       <div className={classes["container"]}>
         {isLoading && (
-          <LoadingSpinner className={`${classes["loading-container"]}`} />
+          <LoadingSpinner className={`loading-container`} />
         )}
         {!isLoading && posts.length === 0 && <h1 className="center">Search Not Found</h1>}
         {!isLoading && posts.length > 0 && (

@@ -95,7 +95,7 @@ function PostsPage() {
         </>
       )}
       {isLoading && (
-        <LoadingSpinner className={`${classes["loading-container"]}`} />
+        <LoadingSpinner className={`loading-container`} />
       )}
       {!isLoading && posts && (
         <>
