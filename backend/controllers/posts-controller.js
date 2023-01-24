@@ -1,4 +1,6 @@
 import { Dummy_blogs, Dummy_search } from "./Dummy_data.js";
+import HttpError from "../models/http-error.js";
+
 let count = 0;
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -61,6 +63,15 @@ export const getPostSearch = async (req, res, next) => {
 
   console.log("search", searchTarget, result);
   res.json(result);
+};
+
+export const createNewPost = async (req, res, next) => {
+  try {
+    // throw new HttpError("createNewPost failed!", 403);
+    res.status(200).json({message: `Create post successfully pid:`})
+  } catch (err) {
+    next(err);
+  }
 };
 
 export const deletePost = async (req, res, next) => {
