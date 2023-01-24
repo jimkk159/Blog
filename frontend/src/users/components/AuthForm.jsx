@@ -127,7 +127,6 @@ function AuthForm(props) {
         formData.append(imageKey, formState.inputs[imageKey].value);
         formData.append(emailKey, formState.inputs[emailKey].value);
         formData.append(passwordKey, formState.inputs[passwordKey].value);
-        console.log(JSON.stringify(formData));
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + "/users/signup",
           "POST",
@@ -153,9 +152,8 @@ function AuthForm(props) {
     event.preventDefault();
     event.stopPropagation();
     if (event.type === "dragenter") {
-      console.log("dragEnter", isDrag);
       setIsDrag(true);
-    } 
+    }
   };
 
   return (
@@ -180,7 +178,6 @@ function AuthForm(props) {
                   id={imageKey}
                   isDarkMode={isDarkMode}
                   onInput={inputHandler}
-                  errorMessage={language.validImage}
                   isDrag={isDrag}
                   setIsDrag={setIsDrag}
                 >

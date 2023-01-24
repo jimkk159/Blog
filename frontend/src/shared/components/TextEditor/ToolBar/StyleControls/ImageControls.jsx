@@ -3,14 +3,14 @@ import { AtomicBlockUtils } from "draft-js";
 const ImageControls = (props) => {
   const { editorState, onChange } = props;
 
-  const addImageHandler = (src, height, width) => {
-
+  const addImageHandler = (src, file, height, width) => {
     const entityData = {
+      name: file.name,
       src: src,
-      height: height ? height : "100%",
-      width: width ? width : "100%",
+      height: height ? height : "100",
+      width: width ? width : "100",
     };
-    
+
     const currentContent = editorState.getCurrentContent();
     const contentStateWithEntity = currentContent.createEntity(
       "IMAGE",

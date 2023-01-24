@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
 
@@ -12,6 +12,7 @@ import { styleMap } from "../../util/style-map";
 import plugins, { AlignmentTool } from "./Plugin";
 import { getBlockStyle, getCustomStyleFn } from "./CustomStyleFn";
 import { createLinkDecorator } from "./decorators/LinkDecorator";
+import convertImgURL from "../../util/url-to-blob";
 
 //Custom Component
 import Button2 from "../Form/Button2";
@@ -33,7 +34,7 @@ const decorator = createLinkDecorator();
 function RichTextEditor(props) {
   const { editorState, onChange, className } = props;
   const editor = useRef(null);
-  const [rawData, setRawData] = useState(null);
+  const [blobImg, setBlobImg] = useState(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -74,20 +75,45 @@ function RichTextEditor(props) {
 
   //Save the Post
   const savePostHandler = async () => {
-    console.log("Click");
     try {
       const currentContent = editorState.getCurrentContent();
       const rawData = JSON.stringify(convertToRaw(currentContent));
-      await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/new`,
-        "POST",
-        rawData,
-        {
-          "Content-Type": "application/json",
+      const [imgBlobs, convertedData, data] = convertImgURL(rawData);
+      const createSendForm = (imgArray, draftRawData) => {
+        const formData = new FormData();
+        formData.append("draft", draftRawData);
+        for (let i = 0; i < imgArray.length; i++) {
+          formData.append("images", imgArray[i]);
         }
-      );
-      // setRawData(rawData);
+        return formData;
+      };
+      // const sendForm = createSendForm(imgBlobs, convertedData);
+      // await sendRequest(
+      //   process.env.REACT_APP_BACKEND_URL + `/posts/new`,
+      //   "POST",
+      //   sendForm
+      // );
+
+      // Convert the string to bytes
+      // console.log(data);
+      var bytes = new Uint8Array(data.length / 2);
+
+      for (var i = 0; i < data.length; i += 2) {
+        bytes[i / 2] = parseInt(data.substring(i, i + 2), /* base = */ 16);
+      }
+
+      // Make a Blob from the bytes
+      var myBlob = new Blob([bytes], { type: "image/jpeg" });
+
+      // Use createObjectURL to make a URL for the blob
+      const blobUrl = URL.createObjectURL(myBlob); // blob is the Blob object
+      setBlobImg(blobUrl); // image is the image element from the DOM
     } catch (err) {}
+  };
+
+  //Delete the Post
+  const deletePostHandler = async () => {
+    console.log("Click");
   };
 
   return (
@@ -140,18 +166,12 @@ function RichTextEditor(props) {
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
-          onClick={() => {
-            console.log("Click");
-            const currentContent = editorState.getCurrentContent();
-            const rawData = convertToRaw(currentContent);
-            const rawJson = JSON.stringify(rawData);
-            setRawData(rawJson);
-          }}
+          onClick={deletePostHandler}
         >
           DELETE
         </Button2>
       </div>
-      <p>{rawData}</p>
+      <img src={blobImg} alt="blobImg" />
     </>
   );
 }
@@ -161,3 +181,4 @@ export default RichTextEditor;
 //reference 2:https://www.youtube.com/watch?v=t12a6z090AU
 //reference 3:https://www.youtube.com/watch?v=0pPlbLyeclI
 //reference 4:https://codepen.io/michael_cox/pen/KmQJbZ
+//reference 5:https://stackoverflow.com/questions/65548792/how-to-upload-multiple-file-with-react-node-and-multer

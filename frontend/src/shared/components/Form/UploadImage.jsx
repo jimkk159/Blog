@@ -60,7 +60,6 @@ function UploadImage(props) {
       setIsValid(false);
       fileIsValid = false;
     }
-    console.log("dropHandler");
   };
 
   //Update preview when image upload

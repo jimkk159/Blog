@@ -12,7 +12,6 @@ import cubesImage from "../../assets/img/cubes.png";
 import { removeTargetInlineStyles } from "../../shared/components/TextEditor/ToolBar/StyleControls/RemoveControls";
 
 //Custom Component
-import Card from "../../shared/components/UI/Card";
 import Footer from "../../shared/components/Footer/Footer";
 import Navigation from "../../shared/components/Navigation/Navigation";
 import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";

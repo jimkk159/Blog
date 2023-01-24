@@ -31,7 +31,6 @@ function StyleButton(props) {
     event.preventDefault();
     event.stopPropagation();
     switch (opt) {
-
       //Mouse Click to pick an Image(Pick Image => Update Editor State)
       case "image":
         inputRef.current.click();
@@ -57,14 +56,14 @@ function StyleButton(props) {
   //Image
   const selectImage = (event) => {
     //To Do if the Image is same, it won't update image twice
-    let pickedFile; 
+    let pickedFile;
     const updateImage = (inputImage) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
-        onChange(fileReader.result)
+        onChange(fileReader.result, pickedFile);
       };
       fileReader.readAsDataURL(inputImage);
-      return
+      return;
     };
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];

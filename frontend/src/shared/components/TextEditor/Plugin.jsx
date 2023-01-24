@@ -35,7 +35,10 @@ const uploadImage = (data, success, failed, progress) => {
       const fileReader = new FileReader();
       fileReader.onload = async () => {
         try {
-          resolve({ name: file.name, src: fileReader.result });
+          resolve({
+            name: file.name,
+            src: fileReader.result,
+          });
         } catch (err) {
           reject(err);
         }
