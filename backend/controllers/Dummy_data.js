@@ -30,7 +30,6 @@ export const Dummy_blogs = [
       img: "",
       description: "公司在 wework 辦公時我非常喜歡他們的 slogan",
     },
-
     language: {
       en: {},
       ch: {
