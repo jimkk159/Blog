@@ -22,12 +22,12 @@ export const datatURLtoBlob = (dataURI) => {
   const mimeString = splitdataURI[0].split(":")[1].split(";")[0];
 
   // write the bytes of the string to a typed array
-  let uInt8Array = new Uint8Array(byteString.length);
+  const array =[]
   for (let i = 0; i < byteString.length; i++) {
-    uInt8Array[i] = byteString.charCodeAt(i);
+    array.push(byteString.charCodeAt(i));
   }
 
-  const myBlob = new Blob([uInt8Array], { type: mimeString });
+  const myBlob = new Blob([new Uint8Array(array)], { type: mimeString });
 
   return [myBlob, data];
 };

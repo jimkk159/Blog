@@ -79,14 +79,14 @@ function RichTextEditor(props) {
       const currentContent = editorState.getCurrentContent();
       const rawData = JSON.stringify(convertToRaw(currentContent));
       const [imgBlobs, convertedData, data] = convertImgURL(rawData);
-      const createSendForm = (imgArray, draftRawData) => {
-        const formData = new FormData();
-        formData.append("draft", draftRawData);
-        for (let i = 0; i < imgArray.length; i++) {
-          formData.append("images", imgArray[i]);
-        }
-        return formData;
-      };
+      // const createSendForm = (imgArray, draftRawData) => {
+      //   const formData = new FormData();
+      //   formData.append("draft", draftRawData);
+      //   for (let i = 0; i < imgArray.length; i++) {
+      //     formData.append("images", imgArray[i]);
+      //   }
+      //   return formData;
+      // };
       // const sendForm = createSendForm(imgBlobs, convertedData);
       // await sendRequest(
       //   process.env.REACT_APP_BACKEND_URL + `/posts/new`,
@@ -94,19 +94,9 @@ function RichTextEditor(props) {
       //   sendForm
       // );
 
-      // Convert the string to bytes
-      // console.log(data);
-      var bytes = new Uint8Array(data.length / 2);
-
-      for (var i = 0; i < data.length; i += 2) {
-        bytes[i / 2] = parseInt(data.substring(i, i + 2), /* base = */ 16);
-      }
-
-      // Make a Blob from the bytes
-      var myBlob = new Blob([bytes], { type: "image/jpeg" });
-
       // Use createObjectURL to make a URL for the blob
-      const blobUrl = URL.createObjectURL(myBlob); // blob is the Blob object
+      const blobUrl = URL.createObjectURL(imgBlobs[0]); // blob is the Blob object
+      console.log(blobUrl);
       setBlobImg(blobUrl); // image is the image element from the DOM
     } catch (err) {}
   };
