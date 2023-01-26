@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
 import { validationResult } from "express-validator";
 
-import { Dummy_blogs, Dummy_search } from "./Dummy_data.js";
+import { Dummy_blogs, Dummy_users, Dummy_search } from "./Dummy_data.js";
 import HttpError from "../models/http-error.js";
 
 let count = 0;
@@ -76,26 +76,59 @@ export const createNewPost = async (req, res, next) => {
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors);
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 422)
     );
   }
 
-  const { language, editorState } = req.body;
+  //Find User
+  const { uid, language, editorState } = req.body;
 
-  let postEditorState;
+  let findingUser;
+  try {
+    findingUser = Dummy_users.filter((user) => user.id === uid);
+  } catch (err) {
+    const error = new HttpError(
+      "Finding user failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //User not find
+  if (!findingUser) {
+    const error = new HttpError(
+      "User not exists, singup an account first.",
+      422
+    );
+    return next(error);
+  }
+
   //Replace Images src
+  let postEditorState;
   try {
     const newEditorState = JSON.parse(editorState);
-    const newEntityMap = newEditorState.entityMap;
-    const entityMapSize = Object.keys(newEntityMap).length;
+    const newEntityMap = newEditorState?.entityMap;
+
+    // Unprocessable EditorState
+    if (!newEntityMap) {
+      return next(new HttpError("Create New Post Failed!", 422));
+    }
+
+    //Change Image
     req.files.map((file, index) => {
       newEntityMap[index].data.src = normalize(file.path);
     });
     postEditorState = JSON.stringify(newEditorState);
+
+    // Unprocessable EditorState
+    if (!postEditorState) {
+      return next(new HttpError("Create New Post Failed!", 422));
+    }
   } catch (err) {
     const error = new HttpError("Create New Post Failed!", 500);
-    next(error);
+    return next(error);
   }
 
   //Create New Post
@@ -104,7 +137,7 @@ export const createNewPost = async (req, res, next) => {
     topic: null,
     type: null,
     date: new Date().toLocaleDateString("en-US", options),
-    author: null,
+    author: findingUser.id,
     isPined: false,
     tags: [],
     cover: {
@@ -117,7 +150,7 @@ export const createNewPost = async (req, res, next) => {
     const postContent = {
       title: "",
       support: true,
-      short: "",
+      short: "bra bra bra",
       editorState: postEditorState,
     };
     switch (language) {
@@ -138,8 +171,8 @@ export const createNewPost = async (req, res, next) => {
 
   //Save Post to Database
   try {
-    console.log(newPost);
-    // blogs.push(newPost);
+    // console.log(newPost);
+    blogs.push(newPost);
   } catch (err) {}
 
   res.status(200).json({ message: `Create post successfully pid:` });

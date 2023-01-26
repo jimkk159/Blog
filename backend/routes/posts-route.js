@@ -1,5 +1,5 @@
 import express from "express";
-import { check, oneOf } from "express-validator";
+import { check } from "express-validator";
 
 import checkAuth from "../middleware/check-auth.js";
 import fileUploadToServer from "../middleware/file-upload.js";
@@ -23,8 +23,8 @@ router.use(checkAuth);
 
 router.post(
   "/new",
-  check("editorState").isEmpty(),
   fileUploadToServer.array("images"),
+  [check("editorState").not().isEmpty(), check("uid").not().isEmpty()],
   createNewPost
 );
 router.delete("/:pid", deletePost);
