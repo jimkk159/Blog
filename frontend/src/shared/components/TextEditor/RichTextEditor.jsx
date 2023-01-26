@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
 
@@ -34,10 +34,11 @@ const decorator = createLinkDecorator();
 function RichTextEditor(props) {
   const { editorState, onChange, className } = props;
   const editor = useRef(null);
-  const [blobImg, setBlobImg] = useState(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+  const { userId, isLoggedIn, avatar, token } = useSelector((state) => state.auth);
+  const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
 
   //Custom Hook
@@ -78,26 +79,25 @@ function RichTextEditor(props) {
     try {
       const currentContent = editorState.getCurrentContent();
       const rawData = JSON.stringify(convertToRaw(currentContent));
-      const [imgBlobs, convertedData, data] = convertImgURL(rawData);
-      // const createSendForm = (imgArray, draftRawData) => {
-      //   const formData = new FormData();
-      //   formData.append("draft", draftRawData);
-      //   for (let i = 0; i < imgArray.length; i++) {
-      //     formData.append("images", imgArray[i]);
-      //   }
-      //   return formData;
-      // };
-      // const sendForm = createSendForm(imgBlobs, convertedData);
-      // await sendRequest(
-      //   process.env.REACT_APP_BACKEND_URL + `/posts/new`,
-      //   "POST",
-      //   sendForm
-      // );
-
-      // Use createObjectURL to make a URL for the blob
-      const blobUrl = URL.createObjectURL(imgBlobs[0]); // blob is the Blob object
-      console.log(blobUrl);
-      setBlobImg(blobUrl); // image is the image element from the DOM
+      const [imgBlobs, convertedData] = convertImgURL(rawData);
+      const createSendForm = (imgArray, draftRawData) => {
+        const formData = new FormData();
+        formData.append("language", isEnglish ? "en" : "ch");
+        formData.append("editorState", draftRawData);
+        for (let i = 0; i < imgArray.length; i++) {
+          formData.append("images", imgArray[i]);
+        }
+        return formData;
+      };
+      const sendForm = createSendForm(imgBlobs, convertedData);
+      await sendRequest(
+        process.env.REACT_APP_BACKEND_URL + `/posts/new`,
+        "POST",
+        sendForm,
+        {
+          Authorization: "Bearer " + token,
+        }
+      );
     } catch (err) {}
   };
 
@@ -161,7 +161,6 @@ function RichTextEditor(props) {
           DELETE
         </Button2>
       </div>
-      <img src={blobImg} alt="blobImg" />
     </>
   );
 }

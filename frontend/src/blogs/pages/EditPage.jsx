@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { EditorState } from "draft-js";
 
@@ -23,9 +24,15 @@ function EditPage(props) {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+
+  //Redux
   const dispatch = useDispatch();
-  const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
   const isDarkMode = useSelector((state) => state.theme.value);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
+
+  //React Router
+  const navigate = useNavigate();
 
   const mouseDownHandler = () => {
     if (isLinkModal) {
@@ -34,6 +41,10 @@ function EditPage(props) {
     }
     dispatch(toolbarActions.closeAll());
   };
+
+  useEffect(() => {
+    // if (!isLoggedIn) navigate(`/`);
+  }, [isLoggedIn, navigate]);
 
   return (
     <div
@@ -45,11 +56,7 @@ function EditPage(props) {
     >
       <Navigation />
       <main>
-        {/* <Card className={`page`} isDarkMode={isDarkMode}> */}
-          {/* <a href="https://www.google.com/">123</a>
-          <h1 className={classes["select"]}>Edit Page</h1> */}
-          <RichTextEditor editorState={editorState} onChange={setEditorState} />
-        {/* </Card> */}
+        <RichTextEditor editorState={editorState} onChange={setEditorState} />
       </main>
       <Footer isDarkMode={isDarkMode} />
     </div>
