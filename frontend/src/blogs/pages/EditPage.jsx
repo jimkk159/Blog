@@ -43,7 +43,7 @@ function EditPage(props) {
   };
 
   useEffect(() => {
-    // if (!isLoggedIn) navigate(`/`);
+    if (!isLoggedIn) navigate(`/`);
   }, [isLoggedIn, navigate]);
 
   return (

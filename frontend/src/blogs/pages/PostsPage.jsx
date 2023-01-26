@@ -94,9 +94,7 @@ function PostsPage() {
           <hr className={classes["interval-line"]} />
         </>
       )}
-      {isLoading && (
-        <LoadingSpinner className={`loading-container`} />
-      )}
+      {isLoading && <LoadingSpinner className={`loading-container`} />}
       {!isLoading && posts && (
         <>
           <PostsInfo

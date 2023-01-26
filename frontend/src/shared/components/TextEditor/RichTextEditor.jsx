@@ -37,7 +37,7 @@ function RichTextEditor(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const { userId, isLoggedIn, avatar, token } = useSelector((state) => state.auth);
+  const { userId, avatar, token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
 
@@ -82,6 +82,7 @@ function RichTextEditor(props) {
       const [imgBlobs, convertedData] = convertImgURL(rawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
+        formData.append("uid", userId);
         formData.append("language", isEnglish ? "en" : "ch");
         formData.append("editorState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {
