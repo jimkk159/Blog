@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import HttpError from "../models/http-error";
+import HttpError from "../models/http-error.js";
 
 const checkAuth = (req, res, next) => {
   if (req.method === "OPTIONS") {
@@ -9,14 +9,16 @@ const checkAuth = (req, res, next) => {
   try {
     const token = req.headers.authorization.split(" ")[1]; //Authorization: 'Bearer TOKEN
     if (!token) {
-      throw new HttpError("Aythentication failed!", 403);
+      throw new HttpError("Auythentication failed!", 403);
     }
     const decodeToken = jwt.verify(token, process.env.JWT_KEY);
     req.userData = { userId: decodeToken.userId };
+    console.log(123)
     next();
   } catch (err) {
-    const error = new HttpError("Aythentication failed!", 403);
-    return next(err);
+    console.log(234)
+    const error = new HttpError("Authentication failed!", 403);
+    return next(error);
   }
 };
 

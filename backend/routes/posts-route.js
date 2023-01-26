@@ -1,6 +1,7 @@
 import express from "express";
 import { check, oneOf } from "express-validator";
 
+import checkAuth from "../middleware/check-auth.js";
 import fileUploadToServer from "../middleware/file-upload.js";
 
 import {
@@ -15,13 +16,17 @@ const router = express.Router();
 
 router.get("/", getPosts);
 router.get("/search", getPostSearch);
+router.get("/:pid", getPost);
+
+// check token middleware
+router.use(checkAuth);
+
 router.post(
   "/new",
   check("editorState").isEmpty(),
   fileUploadToServer.array("images"),
   createNewPost
 );
-router.get("/:pid", getPost);
 router.delete("/:pid", deletePost);
 
 export default router;
