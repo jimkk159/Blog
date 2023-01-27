@@ -14,13 +14,25 @@ import UserAvatar from "../../../users/components/UserAvatar";
 import classes from "./PostDetailTitle.module.css";
 
 function PostDetailTitle(props) {
-  const { title, date, author, isPined, isDarkMode, isAdmin } = props;
+  const {
+    title,
+    date,
+    author,
+    isPined,
+    isDarkMode,
+    isAdmin,
+    onEdit,
+    onDelete,
+  } = props;
+  //ToDo add admin
   const editHandler = (event) => {
     event.stopPropagation();
+    onEdit();
     console.log("edit");
   };
   const deleteHandler = (event) => {
     event.stopPropagation();
+    onDelete();
     console.log("delete");
   };
   const togglePinedHandler = (event) => {

@@ -4,9 +4,16 @@ import React from "react";
 import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
 
 function EditPost(props) {
-  const { editorState, setEditorState } = props;
-
-  return <RichTextEditor editorState={editorState} onChange={setEditorState} />;
+  const { editorState, onChange, onRead, originState } = props;
+  
+  return (
+    <RichTextEditor
+      editorState={editorState}
+      onChange={onChange}
+      onRead={onRead}
+      originState={originState}
+    />
+  );
 }
 
 export default EditPost;

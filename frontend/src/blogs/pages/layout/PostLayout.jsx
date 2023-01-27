@@ -33,6 +33,7 @@ function PostLayout(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
 
+  //Todo use forselection
   const mouseDownHandler = () => {
     if (isLinkModal) {
       console.log("remove");

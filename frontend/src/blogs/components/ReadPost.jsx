@@ -21,6 +21,7 @@ import Card from "../../shared/components/UI/Card";
 import Image from "./PostDetail/Widget/Image";
 import Relations from "./PostDetail/Widget/Relations";
 import PostDetailTitle from "./PostDetail/PostDetailTitle";
+import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 
 //CSS
 import classes from "./ReadPost.module.css";
@@ -28,7 +29,15 @@ import classes from "./ReadPost.module.css";
 const isUserAdmin = false;
 const decorator = createLinkDecorator();
 function ReadPost(props) {
-  const { postData, title, topics, editorState, onChange, isLoading } = props;
+  const {
+    postData,
+    title,
+    topics,
+    editorState,
+    onChange,
+    isLoading,
+    onEdit,
+  } = props;
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -36,9 +45,12 @@ function ReadPost(props) {
   return (
     <>
       <Card
-        className={`${classes["page"]} ${classes["post-container"]}`}
+        className={`page ${classes["post-container"]}`}
         isDarkMode={isDarkMode}
       >
+        {isLoading && (
+          <LoadingSpinner className={`loading-container`} />
+        )}
         {!isLoading && postData && (
           <>
             <PostDetailTitle
@@ -48,10 +60,14 @@ function ReadPost(props) {
               isPined={postData?.isPined}
               isAdmin={isUserAdmin}
               isDarkMode={isDarkMode}
+              onEdit={onEdit}
+              onDelete={() => {}}
             />
             <Image
               type="cover"
-              img={postData?.cover?.img ? postData.cover.img : defaultCoverImage}
+              img={
+                postData?.cover?.img ? postData.cover.img : defaultCoverImage
+              }
               description={postData?.description}
               isDarkMode={isDarkMode}
             />

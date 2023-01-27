@@ -32,7 +32,8 @@ import classes from "./RichTextEditor.module.css";
 const decorator = createLinkDecorator();
 
 function RichTextEditor(props) {
-  const { editorState, onChange, className } = props;
+  const { originState, editorState, onChange, onRead, className, isNew } =
+    props;
   const editor = useRef(null);
 
   //Redux
@@ -94,6 +95,7 @@ function RichTextEditor(props) {
         return formData;
       };
       const sendForm = createSendForm(imgBlobs, convertedData);
+      //ToDo change the post type when update
       const response = await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/new`,
         "POST",
@@ -106,10 +108,32 @@ function RichTextEditor(props) {
     } catch (err) {}
   };
 
+  //Cancel the Post
+  const cancelPostHandler = () => {
+    if (isNew) {
+      navigate(-1);
+    } else {
+      onRead();
+      onChange(originState);
+    }
+  };
+
   //ToDo delete a post
   //Delete the Post
   const deletePostHandler = async () => {
-    console.log("Click");
+    console.log("Delete");
+    // try {
+    // } catch (err) {
+    //   const response = await sendRequest(
+    //     process.env.REACT_APP_BACKEND_URL + `/posts/${123}`,
+    //     "DELETE",
+    //     sendForm,
+    //     {
+    //       Authorization: "Bearer " + token,
+    //     }
+    //   );
+    //   navigate(`/`);
+    // }
   };
 
   return (
@@ -166,6 +190,15 @@ function RichTextEditor(props) {
         >
           DELETE
         </Button2>
+        {!isNew && (
+          <Button2
+            className={`${classes["btn"]}`}
+            disabled={isLoading}
+            onClick={cancelPostHandler}
+          >
+            Cancel
+          </Button2>
+        )}
       </div>
     </>
   );

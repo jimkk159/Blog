@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useOutletContext } from "react-router";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 
 //Custom Function
 import { choiceLanguage } from "../util/choiceLanguage";
@@ -13,16 +13,13 @@ import useHttp from "../../shared/hooks/http-hook";
 import ReadPost from "../components/ReadPost";
 import EditPost from "../components/EditPost";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
-import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
-
-//CSS
-import classes from "./PostPage.module.css";
 
 function PostPage() {
   const [postData, setPostData] = useState(null);
   const [topics, setTopics] = useState(null);
   //ToDo need to check if the correct user
   const [title, setTitle] = useState("No Title");
+  const [originState, setOriginState] = useState(null);
   const { edit, postState } = useOutletContext();
   const [isEdit, setIsEdit] = edit;
   const [postEditorState, setPostEditorState] = postState;
@@ -36,19 +33,36 @@ function PostPage() {
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
+  const { isLoadingTopic, errorTopic, sendRequestTopic, clearErrorTopic } =
+    useHttp();
+
+  //Edit
+  const editModeHandler = () => {
+    setIsEdit(true);
+    const currentContent = postEditorState.getCurrentContent();
+    //For deep copy contentState
+    const contentJson = JSON.stringify(convertToRaw(currentContent));
+    const originContent = convertFromRaw(JSON.parse(contentJson));
+    const originEditorState = EditorState.createWithContent(originContent);
+    setOriginState(originEditorState);
+  };
+
+  const readModeHandler = () => {
+    setIsEdit(false);
+  };
 
   //GET Topics
   useEffect(() => {
     const fetchTopics = async () => {
       try {
-        const responseData = await sendRequest(
+        const responseData = await sendRequestTopic(
           process.env.REACT_APP_BACKEND_URL + "/topics"
         );
         setTopics(responseData);
       } catch (err) {}
     };
     fetchTopics();
-  }, [sendRequest]);
+  }, [sendRequestTopic]);
 
   //GET POST
   useEffect(() => {
@@ -90,23 +104,30 @@ function PostPage() {
     };
   }, [isLoggedIn, setIsEdit]);
 
+  //ToDo fix loading and error modal
   return (
-    <div className={classes["flex-container"]}>
+    <>
       <ErrorModal error={error} onClear={clearError} isAnimate />
-      {isLoading && <LoadingSpinner className={`loading-container`} />}
+      <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
       {isEdit ? (
-        <EditPost editorState={postEditorState} onChange={setPostEditorState} />
+        <EditPost
+          originState={originState}
+          editorState={postEditorState}
+          onChange={setPostEditorState}
+          onRead={readModeHandler}
+        />
       ) : (
         <ReadPost
           editorState={postEditorState}
           onChange={setPostEditorState}
+          onEdit={editModeHandler}
           postData={postData}
           topics={topics}
           title={title}
-          isLoading={isLoading}
+          isLoading={isLoading || isLoadingTopic}
         />
       )}
-    </div>
+    </>
   );
 }
 

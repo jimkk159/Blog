@@ -25,6 +25,7 @@ function NewPostPage() {
     <RichTextEditor
       editorState={newPostEditorState}
       onChange={setNewPostEditorState}
+      isNew
     />
   );
 }
