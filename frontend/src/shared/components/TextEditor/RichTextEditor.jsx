@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 
@@ -39,6 +40,9 @@ function RichTextEditor(props) {
   const { userId, avatar, token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
+
+  //React Router
+  const navigate = useNavigate();
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -90,7 +94,7 @@ function RichTextEditor(props) {
         return formData;
       };
       const sendForm = createSendForm(imgBlobs, convertedData);
-      await sendRequest(
+      const response = await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/new`,
         "POST",
         sendForm,
@@ -98,9 +102,11 @@ function RichTextEditor(props) {
           Authorization: "Bearer " + token,
         }
       );
+      navigate(`/blog/${response.pid}`);
     } catch (err) {}
   };
 
+  //ToDo delete a post
   //Delete the Post
   const deletePostHandler = async () => {
     console.log("Click");
