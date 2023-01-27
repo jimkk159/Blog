@@ -37,6 +37,7 @@ function ReadPost(props) {
     onChange,
     isLoading,
     onEdit,
+    onDelete
   } = props;
 
   //Redux
@@ -55,13 +56,14 @@ function ReadPost(props) {
           <>
             <PostDetailTitle
               title={title}
+              postId={postData?.id}
               author={postData?.author}
               date={postData?.date}
               isPined={postData?.isPined}
               isAdmin={isUserAdmin}
               isDarkMode={isDarkMode}
               onEdit={onEdit}
-              onDelete={() => {}}
+              onDelete={onDelete}
             />
             <Image
               type="cover"

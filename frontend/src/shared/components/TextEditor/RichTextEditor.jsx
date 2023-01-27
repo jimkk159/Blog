@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
+import { RichUtils, getDefaultKeyBinding } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
@@ -12,17 +11,9 @@ import { styleMap } from "../../util/style-map";
 import plugins, { AlignmentTool } from "./Plugin";
 import { getBlockStyle, getCustomStyleFn } from "./CustomStyleFn";
 import { createLinkDecorator } from "./decorators/LinkDecorator";
-import convertImgURL from "../../util/url-to-blob";
 
 //Custom Component
-import Button2 from "../Form/Button2";
-import Backdrop from "../UI/Backdrop";
 import ToolBar from "./ToolBar/ToolBar";
-import ErrorModal from "../UI/Modal/ErrorModal";
-import LoadingSpinner from "../UI/LoadingSpinner";
-
-//Custom Hook
-import useHttp from "../../hooks/http-hook";
 
 //CSS
 import "draft-js/dist/Draft.css";
@@ -32,21 +23,16 @@ import classes from "./RichTextEditor.module.css";
 const decorator = createLinkDecorator();
 
 function RichTextEditor(props) {
-  const { originState, editorState, onChange, onRead, className, isNew } =
-    props;
+  const {
+    editorState,
+    onChange,
+    className,
+  } = props;
   const editor = useRef(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const { userId, avatar, token } = useSelector((state) => state.auth);
-  const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
-
-  //React Router
-  const navigate = useNavigate();
-
-  //Custom Hook
-  const { isLoading, error, sendRequest, clearError } = useHttp();
 
   const focusEditorHandler = () => {
     editor.current.focus();
@@ -78,75 +64,8 @@ function RichTextEditor(props) {
     return getDefaultKeyBinding(event);
   };
 
-  //Save the Post
-  const savePostHandler = async () => {
-    try {
-      const currentContent = editorState.getCurrentContent();
-      const rawData = JSON.stringify(convertToRaw(currentContent));
-      const [imgBlobs, convertedData] = convertImgURL(rawData);
-      const createSendForm = (imgArray, draftRawData) => {
-        const formData = new FormData();
-        formData.append("uid", userId);
-        formData.append("language", isEnglish ? "en" : "ch");
-        formData.append("contentState", draftRawData);
-        for (let i = 0; i < imgArray.length; i++) {
-          formData.append("images", imgArray[i]);
-        }
-        return formData;
-      };
-      const sendForm = createSendForm(imgBlobs, convertedData);
-      //ToDo change the post type when update
-      const response = await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/new`,
-        "POST",
-        sendForm,
-        {
-          Authorization: "Bearer " + token,
-        }
-      );
-      navigate(`/blog/${response.pid}`);
-    } catch (err) {}
-  };
-
-  //Cancel the Post
-  const cancelPostHandler = () => {
-    if (isNew) {
-      navigate(-1);
-    } else {
-      onRead();
-      onChange(originState);
-    }
-  };
-
-  //ToDo delete a post
-  //Delete the Post
-  const deletePostHandler = async () => {
-    console.log("Delete");
-    // try {
-    // } catch (err) {
-    //   const response = await sendRequest(
-    //     process.env.REACT_APP_BACKEND_URL + `/posts/${123}`,
-    //     "DELETE",
-    //     sendForm,
-    //     {
-    //       Authorization: "Bearer " + token,
-    //     }
-    //   );
-    //   navigate(`/`);
-    // }
-  };
-
   return (
     <>
-      <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
-        <>
-          <Backdrop />
-          <div className={`${classes["loading-container"]}`}>
-            <LoadingSpinner asOverlay />
-          </div>
-        </>
-      )}
       <div
         className={`${classes["editor-wrapper"]} ${className} ${
           isDarkMode ? "editor-wrapper-dark" : "editor-wrapper-light"
@@ -174,31 +93,6 @@ function RichTextEditor(props) {
           />
         </div>
         <AlignmentTool />
-      </div>
-      <div className={`${classes["btn-container"]}`}>
-        <Button2
-          className={`${classes["btn"]}`}
-          disabled={isLoading}
-          onClick={savePostHandler}
-        >
-          SAVE
-        </Button2>
-        <Button2
-          className={`${classes["btn"]}`}
-          disabled={isLoading}
-          onClick={deletePostHandler}
-        >
-          DELETE
-        </Button2>
-        {!isNew && (
-          <Button2
-            className={`${classes["btn"]}`}
-            disabled={isLoading}
-            onClick={cancelPostHandler}
-          >
-            Cancel
-          </Button2>
-        )}
       </div>
     </>
   );

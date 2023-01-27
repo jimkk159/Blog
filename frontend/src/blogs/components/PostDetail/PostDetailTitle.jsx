@@ -16,6 +16,7 @@ import classes from "./PostDetailTitle.module.css";
 function PostDetailTitle(props) {
   const {
     title,
+    postId,
     date,
     author,
     isPined,
@@ -32,7 +33,7 @@ function PostDetailTitle(props) {
   };
   const deleteHandler = (event) => {
     event.stopPropagation();
-    onDelete();
+    onDelete(postId);
     console.log("delete");
   };
   const togglePinedHandler = (event) => {

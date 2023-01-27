@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, useOutletContext } from "react-router";
+import { useParams, useNavigate, useOutletContext } from "react-router";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 
 //Custom Function
@@ -25,10 +25,11 @@ function PostPage() {
   const [postEditorState, setPostEditorState] = postState;
 
   //Redux
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { isLoggedIn, token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
 
   //React Router
+  const navigate = useNavigate();
   const { blogId } = useParams();
 
   //Custom Hook
@@ -47,8 +48,27 @@ function PostPage() {
     setOriginState(originEditorState);
   };
 
+  //Read
   const readModeHandler = () => {
     setIsEdit(false);
+  };
+
+  //Delete
+  const deleteHandler = async (pid) => {
+    try {
+      if (pid) {
+        await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
+          "DELETE",
+          null,
+          {
+            Authorization: "Bearer " + token,
+          }
+        );
+        navigate("/");
+      }
+    } catch (err) {
+    }
   };
 
   //GET Topics
@@ -111,17 +131,20 @@ function PostPage() {
       <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
       {isEdit ? (
         <EditPost
+          postData={postData}
           originState={originState}
           editorState={postEditorState}
           onChange={setPostEditorState}
           onRead={readModeHandler}
+          onDelete={deleteHandler}
         />
       ) : (
         <ReadPost
+          postData={postData}
           editorState={postEditorState}
           onChange={setPostEditorState}
           onEdit={editModeHandler}
-          postData={postData}
+          onDelete={deleteHandler}
           topics={topics}
           title={title}
           isLoading={isLoading || isLoadingTopic}
