@@ -9,6 +9,7 @@ import {
   getPosts,
   getPostSearch,
   createNewPost,
+  editPost,
   deletePost,
 } from "../controllers/posts-controller.js";
 
@@ -26,6 +27,12 @@ router.post(
   fileUploadToServer.array("images"),
   [check("contentState").not().isEmpty(), check("uid").not().isEmpty()],
   createNewPost
+);
+router.put(
+  "/:pid",
+  fileUploadToServer.array("images"),
+  [check("contentState").not().isEmpty(), check("uid").not().isEmpty()],
+  editPost
 );
 router.delete("/:pid", deletePost);
 

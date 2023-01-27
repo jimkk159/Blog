@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { stringify, v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
 import { validationResult } from "express-validator";
 
@@ -84,7 +84,6 @@ export const createNewPost = async (req, res, next) => {
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors);
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 422)
     );
@@ -183,12 +182,105 @@ export const createNewPost = async (req, res, next) => {
     blogs.push(newPost);
   } catch (err) {}
 
-  res
-    .status(200)
-    .json({
-      pid: newPost.id,
-      message: `Create post successfully!`,
+  res.status(200).json({
+    pid: newPost.id,
+    message: `Create post successfully!`,
+  });
+};
+
+export const editPost = async (req, res, next) => {
+  console.log("Edit Post");
+
+  //Validate the req
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError("Invalid inputs, please check your input is correct", 422)
+    );
+  }
+
+  //Find User
+  const targetPostId = req.params.pid;
+  const { uid, language, contentState } = req.body;
+
+  let findingUser;
+  try {
+    findingUser = Dummy_users.filter((user) => user.id === uid)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding user failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //User not find
+  if (!findingUser) {
+    const error = new HttpError(
+      "User not exists, singup an account first.",
+      422
+    );
+    return next(error);
+  }
+  
+  //Replace Images src
+  let postContentState;
+  try {
+    const newContentState = JSON.parse(contentState);
+    const newEntityMap = newContentState?.entityMap;
+
+    // Unprocessable ContentState
+    if (!newEntityMap) {
+      return next(new HttpError("Edit Post Failed!", 422));
+    }
+
+    //Change Image
+    req.files.map((file, index) => {
+      newEntityMap[index].data.src = normalize(file.path);
     });
+    postContentState = JSON.stringify(newContentState);
+
+    // Unprocessable EditorState
+    if (!postContentState) {
+      return next(new HttpError("Edit Post Failed!", 422));
+    }
+  } catch (err) {
+    const error = new HttpError("Edit Post Failed!", 500);
+    return next(error);
+  }
+  
+  //Edit Post
+  let targetPost;
+  try {
+    targetPost = blogs.filter((blog) => blog.id === targetPostId)[0];
+    const postContent = {
+      title: "",
+      support: true,
+      short: "bra bra bra",
+      contentState: postContentState,
+    };
+    switch (language) {
+      case "en":
+        targetPost.date = new Date().toLocaleDateString("en-US", options)
+        targetPost.language.en = postContent;
+        break;
+      case "ch":
+        targetPost.date = new Date().toLocaleDateString("en-US", options)
+        targetPost.language.ch = postContent;
+        break;
+      default:
+        const error = new HttpError("Unsupport language", 501);
+        return next(error);
+    }
+  } catch (err) {
+    const error = new HttpError("Edit Post Failed!", 500);
+    return next(error);
+  }
+
+  res.status(200).json({
+    pid: targetPost.id,
+    message: `Create post successfully!`,
+  });
 };
 
 export const deletePost = async (req, res, next) => {
@@ -198,7 +290,7 @@ export const deletePost = async (req, res, next) => {
   const deletePostId = req.params.pid;
   try {
     blogs = blogs.filter((blog) => {
-      return blog.id !== +deletePostId;
+      return blog.id !== deletePostId;
     });
   } catch (err) {}
 
