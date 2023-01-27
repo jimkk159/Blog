@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate, useOutletContext } from "react-router-dom";
 
 //Custom Component
-import Card from "../../shared/components/UI/Card";
+import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
 
 function NewPostPage() {
-  const isDarkMode = useSelector((state)=>state.theme.value)
-  return <Card isDarkMode={isDarkMode}>NewPostPage</Card>;
+  const {
+    newPostState: [newPostEditorState, setNewPostEditorState],
+  } = useOutletContext();
+
+  //Redux
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  //React Router
+  const navigate = useNavigate();
+
+  //Create a Post need to Login
+  useEffect(() => {
+    if (!isLoggedIn) navigate(`/`);
+  }, [isLoggedIn, navigate]);
+
+  return (
+    <RichTextEditor
+      editorState={newPostEditorState}
+      onChange={setNewPostEditorState}
+    />
+  );
 }
 
 export default NewPostPage;

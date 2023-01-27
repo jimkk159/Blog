@@ -72,6 +72,7 @@ function PostDetailTitle(props) {
             show={false}
             defaultImg={anonymousUser}
             className={`${classes["avatar"]}`}
+            isDarkMode={isDarkMode}
           />
         </div>
       </div>

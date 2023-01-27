@@ -13,7 +13,11 @@ function UserAvatar(props) {
       <div className={classes["open-up"]}></div>
       <div className={`${classes["user-avatar"]}`} onClick={props.onClick}>
         <Avatar
-          className={classes["user-img"]}
+          className={`${classes["user-img"]} ${
+              props.isDarkMode
+                ? classes["avatar-dark"]
+                : classes["avatar-light"]
+            }`}
           image={props.defaultImg}
           alt="default-avatar"
         />

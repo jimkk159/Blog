@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
-
 import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
@@ -84,7 +83,7 @@ function RichTextEditor(props) {
         const formData = new FormData();
         formData.append("uid", userId);
         formData.append("language", isEnglish ? "en" : "ch");
-        formData.append("editorState", draftRawData);
+        formData.append("contentState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {
           formData.append("images", imgArray[i]);
         }
