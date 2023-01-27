@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams, useNavigate, useOutletContext } from "react-router";
+import {
+  useParams,
+  useNavigate,
+  useOutletContext,
+  useLocation,
+} from "react-router";
 import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 
 //Custom Function
@@ -20,9 +25,6 @@ function PostPage() {
   //ToDo need to check if the correct user
   const [title, setTitle] = useState("No Title");
   const [originState, setOriginState] = useState(null);
-  const { edit, postState } = useOutletContext();
-  const [isEdit, setIsEdit] = edit;
-  const [postEditorState, setPostEditorState] = postState;
 
   //Redux
   const { isLoggedIn, token } = useSelector((state) => state.auth);
@@ -31,6 +33,9 @@ function PostPage() {
   //React Router
   const navigate = useNavigate();
   const { blogId } = useParams();
+  const { edit, postState } = useOutletContext();
+  const [isEdit, setIsEdit] = edit;
+  const [postEditorState, setPostEditorState] = postState;
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -40,35 +45,11 @@ function PostPage() {
   //Edit
   const editModeHandler = () => {
     setIsEdit(true);
-    const currentContent = postEditorState.getCurrentContent();
-    //For deep copy contentState
-    const contentJson = JSON.stringify(convertToRaw(currentContent));
-    const originContent = convertFromRaw(JSON.parse(contentJson));
-    const originEditorState = EditorState.createWithContent(originContent);
-    setOriginState(originEditorState);
   };
 
   //Read
   const readModeHandler = () => {
     setIsEdit(false);
-  };
-
-  //Delete
-  const deleteHandler = async (pid) => {
-    try {
-      if (pid) {
-        await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
-          "DELETE",
-          null,
-          {
-            Authorization: "Bearer " + token,
-          }
-        );
-        navigate("/");
-      }
-    } catch (err) {
-    }
   };
 
   //GET Topics
@@ -110,11 +91,29 @@ function PostPage() {
           )
         );
         const postContentState = convertFromRaw(postJSON);
+        setOriginState(EditorState.createWithContent(postContentState));
         setPostEditorState(EditorState.createWithContent(postContentState));
       } catch (err) {}
     };
     fetchPost();
   }, [setPostEditorState, isEnglish, blogId, sendRequest]);
+
+  //Delete Post
+  const deleteHandler = async (pid) => {
+    try {
+      if (pid) {
+        await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
+          "DELETE",
+          null,
+          {
+            Authorization: "Bearer " + token,
+          }
+        );
+        navigate("/");
+      }
+    } catch (err) {}
+  };
 
   useEffect(() => {
     //Todo Save the Post when auto logout

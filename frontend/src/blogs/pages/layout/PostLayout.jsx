@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { EditorState } from "draft-js";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 //Redux Slice
@@ -19,7 +19,7 @@ import Navigation from "../../../shared/components/Navigation/Navigation";
 //CSS
 import classes from "./PostLayout.module.css";
 
-function PostLayout(props) {
+function PostLayout() {
   const [isEdit, setIsEdit] = useState(false);
   const [postEditorState, setPostEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -33,15 +33,27 @@ function PostLayout(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
 
+  //React Router
+  const location = useLocation();
+  const initIsEdit = location?.state?.isEdit ? location.state.isEdit : false;
+
   //Todo use forselection
   const mouseDownHandler = () => {
     if (isLinkModal) {
       console.log("remove");
-      setPostEditorState(removeTargetInlineStyles(postEditorState, ["FAKE_FOCUS"]));
-      setNewPostEditorState(removeTargetInlineStyles(newPostEditorState, ["FAKE_FOCUS"]));
+      setPostEditorState(
+        removeTargetInlineStyles(postEditorState, ["FAKE_FOCUS"])
+      );
+      setNewPostEditorState(
+        removeTargetInlineStyles(newPostEditorState, ["FAKE_FOCUS"])
+      );
     }
     dispatch(toolbarActions.closeAll());
   };
+
+  useEffect(() => {
+    setIsEdit(initIsEdit);
+  }, [initIsEdit]);
 
   return (
     <div

@@ -26,7 +26,7 @@ import classes from "./PostInfo.module.css";
 function PostInfo(props) {
   const { post, isOdd, onDelete } = props;
   const {
-    id: postId,
+    id: pid,
     topic,
     date,
     author,
@@ -46,6 +46,7 @@ function PostInfo(props) {
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Redux
+  const { token } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.value);
   const { isEnglish, language } = useSelector((state) => state.language);
 
@@ -84,8 +85,15 @@ function PostInfo(props) {
   const navPostHandler = (event) => {
     //Double Click
     if (event.detail === 2) {
-      navigate(`/blog/${postId}`, { state: { toLogin: true } });
+      navigate(`/blog/${pid}`);
     }
+  };
+
+  //Edit
+  const editHandler = (event) => {
+    event.stopPropagation();
+    console.log("edit");
+    navigate(`/blog/${pid}`, { state: { isEdit: true } });
   };
 
   //Delete
@@ -105,10 +113,15 @@ function PostInfo(props) {
     setShowWarning(false);
     try {
       await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/${postId}`,
-        "DELETE"
+        process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + token,
+        }
       );
-      onDelete(postId);
+      onDelete(pid);
+      navigate("/");
     } catch (err) {}
   };
 
@@ -157,13 +170,14 @@ function PostInfo(props) {
               author={author}
               date={date}
               isPined={isPined}
+              onEdit={editHandler}
               onShowDelete={showDeleteHandler}
             />
             <hr />
             <div className={classes["description-container"]}>
               <img src={postCover} alt="blog-cover" />
               <PostInfoDescription
-                postId={postId}
+                postId={pid}
                 short={short}
                 tags={tags}
                 language={language}

@@ -34,6 +34,7 @@ const emailKey = "email";
 const passwordKey = "password";
 
 function AuthForm(props) {
+  const { toLogin } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -53,7 +54,6 @@ function AuthForm(props) {
     false
   );
 
-  const { toLogin } = props;
   useEffect(() => {
     if (toLogin !== undefined) {
       setIsLoginMode(!!toLogin);

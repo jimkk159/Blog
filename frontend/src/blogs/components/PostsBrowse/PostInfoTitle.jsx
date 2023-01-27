@@ -14,12 +14,6 @@ function PostInfoTitle(props) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
 
-  //Edit
-  const editHandler = (event) => {
-    event.stopPropagation();
-    console.log("edit");
-  };
-
   //Toggle Pinned
   const togglePinedHandler = (event) => {
     event.stopPropagation();
@@ -41,7 +35,7 @@ function PostInfoTitle(props) {
           className={`${classes["icon"]} ${
             !isDarkMode && classes["light-pencil"]
           }`}
-          onClick={editHandler}
+          onClick={props.onEdit}
         />
         <AiFillDelete
           className={`${classes["icon"]} ${
