@@ -16,7 +16,15 @@ export const getPost = async (req, res, next) => {
   count += 1;
   console.log("Get Post " + count);
   // await sleep(3000);
-  res.json(blogs[postId]);
+  const targetPost = blogs.filter((post) => post.id === "" + postId)[0];
+
+  //User not find
+  if (!targetPost) {
+    const error = new HttpError("Post not exists", 422);
+    return next(error);
+  }
+
+  res.json(targetPost);
 };
 
 export const getPosts = async (req, res, next) => {
@@ -83,11 +91,11 @@ export const createNewPost = async (req, res, next) => {
   }
 
   //Find User
-  const { uid, language, editorState } = req.body;
+  const { uid, language, contentState } = req.body;
 
   let findingUser;
   try {
-    findingUser = Dummy_users.filter((user) => user.id === uid);
+    findingUser = Dummy_users.filter((user) => user.id === uid)[0];
   } catch (err) {
     const error = new HttpError(
       "Finding user failed, please try again later.",
@@ -106,12 +114,12 @@ export const createNewPost = async (req, res, next) => {
   }
 
   //Replace Images src
-  let postEditorState;
+  let postContentState;
   try {
-    const newEditorState = JSON.parse(editorState);
-    const newEntityMap = newEditorState?.entityMap;
+    const newContentState = JSON.parse(contentState);
+    const newEntityMap = newContentState?.entityMap;
 
-    // Unprocessable EditorState
+    // Unprocessable ContentState
     if (!newEntityMap) {
       return next(new HttpError("Create New Post Failed!", 422));
     }
@@ -120,10 +128,10 @@ export const createNewPost = async (req, res, next) => {
     req.files.map((file, index) => {
       newEntityMap[index].data.src = normalize(file.path);
     });
-    postEditorState = JSON.stringify(newEditorState);
+    postContentState = JSON.stringify(newContentState);
 
     // Unprocessable EditorState
-    if (!postEditorState) {
+    if (!postContentState) {
       return next(new HttpError("Create New Post Failed!", 422));
     }
   } catch (err) {
@@ -151,7 +159,7 @@ export const createNewPost = async (req, res, next) => {
       title: "",
       support: true,
       short: "bra bra bra",
-      editorState: postEditorState,
+      contentState: postContentState,
     };
     switch (language) {
       case "en":
@@ -175,7 +183,12 @@ export const createNewPost = async (req, res, next) => {
     blogs.push(newPost);
   } catch (err) {}
 
-  res.status(200).json({ message: `Create post successfully pid:` });
+  res
+    .status(200)
+    .json({
+      pid: newPost.id,
+      message: `Create post successfully!`,
+    });
 };
 
 export const deletePost = async (req, res, next) => {

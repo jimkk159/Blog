@@ -24,7 +24,7 @@ router.use(checkAuth);
 router.post(
   "/new",
   fileUploadToServer.array("images"),
-  [check("editorState").not().isEmpty(), check("uid").not().isEmpty()],
+  [check("contentState").not().isEmpty(), check("uid").not().isEmpty()],
   createNewPost
 );
 router.delete("/:pid", deletePost);
