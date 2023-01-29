@@ -1,4 +1,4 @@
-import { stringify, v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
 import { validationResult } from "express-validator";
 
@@ -16,11 +16,20 @@ export const getPost = async (req, res, next) => {
   count += 1;
   console.log("Get Post " + count);
   // await sleep(3000);
-  const targetPost = blogs.filter((post) => post.id === "" + postId)[0];
 
-  //User not find
+  let targetPost;
+  try {
+    targetPost = blogs.filter((blog) => blog.id === postId)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  //Post not find
   if (!targetPost) {
-    const error = new HttpError("Post not exists", 422);
+    const error = new HttpError("Post not exists!", 422);
     return next(error);
   }
 
@@ -90,7 +99,8 @@ export const createNewPost = async (req, res, next) => {
   }
 
   //Find User
-  const { uid, language, contentState } = req.body;
+  const { language, contentState } = req.body;
+  const { userId: uid } = req.userData;
 
   let findingUser;
   try {
@@ -199,10 +209,35 @@ export const editPost = async (req, res, next) => {
     );
   }
 
-  //Find User
-  const targetPostId = req.params.pid;
-  const { uid, language, contentState } = req.body;
+  const postId = req.params.pid;
+  const { language, contentState } = req.body;
+  const { userId: uid } = req.userData;
 
+  //Find Post
+  let targetPost;
+  try {
+    targetPost = blogs.filter((blog) => blog.id === postId)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //Post not find
+  if (!targetPost) {
+    const error = new HttpError("Post not exists!", 422);
+    return next(error);
+  }
+
+  //Check Post Owner
+  if (targetPost.author !== uid) {
+    const error = new HttpError("Permissions deny.", 403);
+    return next(error);
+  }
+
+  //Find User
   let findingUser;
   try {
     findingUser = Dummy_users.filter((user) => user.id === uid)[0];
@@ -222,7 +257,7 @@ export const editPost = async (req, res, next) => {
     );
     return next(error);
   }
-  
+
   //Replace Images src
   let postContentState;
   try {
@@ -248,11 +283,9 @@ export const editPost = async (req, res, next) => {
     const error = new HttpError("Edit Post Failed!", 500);
     return next(error);
   }
-  
+
   //Edit Post
-  let targetPost;
   try {
-    targetPost = blogs.filter((blog) => blog.id === targetPostId)[0];
     const postContent = {
       title: "",
       support: true,
@@ -261,11 +294,11 @@ export const editPost = async (req, res, next) => {
     };
     switch (language) {
       case "en":
-        targetPost.date = new Date().toLocaleDateString("en-US", options)
+        targetPost.date = new Date().toLocaleDateString("en-US", options);
         targetPost.language.en = postContent;
         break;
       case "ch":
-        targetPost.date = new Date().toLocaleDateString("en-US", options)
+        targetPost.date = new Date().toLocaleDateString("en-US", options);
         targetPost.language.ch = postContent;
         break;
       default:
@@ -287,12 +320,45 @@ export const deletePost = async (req, res, next) => {
   //For Debug
   console.log("Delete Post");
   // await sleep(3000);
-  const deletePostId = req.params.pid;
+  const postId = req.params.pid;
+  const { userId: uid } = req.userData;
+
+  //Find Post
+  let targetPost;
+  try {
+    targetPost = blogs.filter((blog) => blog.id === postId)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //Post not find
+  if (!targetPost) {
+    const error = new HttpError("Post not exists!", 422);
+    return next(error);
+  }
+
+  //Check Post Owner
+  if (targetPost.author !== uid) {
+    const error = new HttpError("Permissions deny.", 403);
+    return next(error);
+  }
+
+  //Delete Post
   try {
     blogs = blogs.filter((blog) => {
-      return blog.id !== deletePostId;
+      return blog.id !== postId;
     });
-  } catch (err) {}
+  } catch (err) {
+    const error = new HttpError(
+      "Delete post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
 
   res.status(200).json({ message: `Deleted post id:${req.params.pid}` });
 };

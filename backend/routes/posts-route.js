@@ -25,13 +25,13 @@ router.use(checkAuth);
 router.post(
   "/new",
   fileUploadToServer.array("images"),
-  [check("contentState").not().isEmpty(), check("uid").not().isEmpty()],
+  [check("contentState").not().isEmpty()],
   createNewPost
 );
 router.put(
   "/:pid",
   fileUploadToServer.array("images"),
-  [check("contentState").not().isEmpty(), check("uid").not().isEmpty()],
+  [check("contentState").not().isEmpty()],
   editPost
 );
 router.delete("/:pid", deletePost);
