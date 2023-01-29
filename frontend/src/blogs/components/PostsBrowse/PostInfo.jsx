@@ -15,9 +15,8 @@ import { choiceLanguage } from "../../util/choiceLanguage";
 import PostInfoTitle from "./PostInfoTitle";
 import Card from "../../../shared/components/UI/Card";
 import PostInfoDescription from "./PostInfoDescription";
-import Button from "../../../shared/components/Form/Button";
 import ErrorModal from "../../../shared/components/UI/Modal/ErrorModal";
-import WarningModal from "../../../shared/components/UI/Modal/WarningModal";
+import DeleteModal from "../../../shared/components/UI/Modal/DeleteModal";
 import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 
 //CSS
@@ -46,7 +45,6 @@ function PostInfo(props) {
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Redux
-  const { token } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.value);
   const { isEnglish, language } = useSelector((state) => state.language);
 
@@ -103,54 +101,16 @@ function PostInfo(props) {
     setShowWarning(true);
   };
 
-  const cancelDeleteHandler = () => {
-    console.log("canacel");
-    setShowWarning(false);
-  };
-
-  const confirmDeleteHandler = async () => {
-    console.log("delete");
-    setShowWarning(false);
-    try {
-      await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
-        "DELETE",
-        null,
-        {
-          Authorization: "Bearer " + token,
-        }
-      );
-      onDelete(pid);
-      navigate("/");
-    } catch (err) {}
-  };
-
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      <WarningModal
+      <DeleteModal
+        pid={pid}
+        title={title}
+        onDelete={onDelete}
         show={showWarning}
-        className={classes["warning-modal"]}
-        onCancel={cancelDeleteHandler}
-        header={"Warning!"}
-        content={`Are you sure to delete 「${title}」?`}
-        footer={
-          <div className={classes["button-container"]}>
-            <Button
-              className={`${classes["button"]} ${classes["delete-btn"]}`}
-              onClick={confirmDeleteHandler}
-            >
-              DELETE
-            </Button>
-            <Button
-              className={`${classes["button"]} ${classes["cancel-btn"]}`}
-              onClick={cancelDeleteHandler}
-            >
-              CANCEL
-            </Button>
-          </div>
-        }
-        isAnimate
+        setShow={setShowWarning}
+        sendRequest={sendRequest}
       />
       <Card
         className={`${classes["info-container"]} ${cardColor}`}

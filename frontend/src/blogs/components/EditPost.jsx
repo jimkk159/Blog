@@ -60,12 +60,6 @@ function EditPost(props) {
     } catch (err) {}
   };
 
-  //Delete the Post
-  const deletePostHandler = () => {
-    console.log("Delete");
-    onDelete(postData.id);
-  };
-
   //Cancel the Post
   const cancelPostHandler = () => {
     onRead();
@@ -84,12 +78,9 @@ function EditPost(props) {
         </>
       )}
       <RichTextEditor
-        postData={postData}
         originState={originState}
         editorState={editorState}
         onChange={onChange}
-        onRead={onRead}
-        onDelete={onDelete}
       />
       <div className={`${classes["btn-container"]}`}>
         <Button2
@@ -102,7 +93,7 @@ function EditPost(props) {
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
-          onClick={deletePostHandler}
+          onClick={onDelete}
         >
           DELETE
         </Button2>

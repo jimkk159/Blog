@@ -16,9 +16,9 @@ import { createLinkDecorator } from "../../shared/components/TextEditor/decorato
 
 //Custom Comonent
 import Guide from "./BlogGuide/Guide";
+import Image from "./PostDetail/Widget/Image";
 import Tags from "../../shared/components/UI/Tags";
 import Card from "../../shared/components/UI/Card";
-import Image from "./PostDetail/Widget/Image";
 import Relations from "./PostDetail/Widget/Relations";
 import PostDetailTitle from "./PostDetail/PostDetailTitle";
 import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
@@ -56,7 +56,6 @@ function ReadPost(props) {
           <>
             <PostDetailTitle
               title={title}
-              postId={postData?.id}
               author={postData?.author}
               date={postData?.date}
               isPined={postData?.isPined}

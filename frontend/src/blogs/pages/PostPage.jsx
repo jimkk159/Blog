@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  useParams,
-  useNavigate,
-  useOutletContext,
-} from "react-router";
+import { useParams, useOutletContext } from "react-router";
 import { EditorState, convertFromRaw } from "draft-js";
 
 //Custom Function
@@ -17,6 +13,7 @@ import useHttp from "../../shared/hooks/http-hook";
 import ReadPost from "../components/ReadPost";
 import EditPost from "../components/EditPost";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
+import DeleteModal from "../../shared/components/UI/Modal/DeleteModal";
 
 function PostPage() {
   const [postData, setPostData] = useState(null);
@@ -24,13 +21,13 @@ function PostPage() {
   //ToDo need to check if the correct user
   const [title, setTitle] = useState("No Title");
   const [originState, setOriginState] = useState(null);
+  const [showWarning, setShowWarning] = useState(false);
 
   //Redux
-  const { isLoggedIn, token } = useSelector((state) => state.auth);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
 
   //React Router
-  const navigate = useNavigate();
   const { blogId } = useParams();
   const { edit, postState } = useOutletContext();
   const [isEdit, setIsEdit] = edit;
@@ -80,7 +77,7 @@ function PostPage() {
           )
         );
         setPostData(responseData);
-
+        
         const postJSON = JSON.parse(
           choiceLanguage(
             isEnglish,
@@ -97,21 +94,11 @@ function PostPage() {
     fetchPost();
   }, [setPostEditorState, isEnglish, blogId, sendRequest]);
 
-  //Delete Post
-  const deleteHandler = async (pid) => {
-    try {
-      if (pid) {
-        await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
-          "DELETE",
-          null,
-          {
-            Authorization: "Bearer " + token,
-          }
-        );
-        navigate("/");
-      }
-    } catch (err) {}
+  //Delete
+  const showDeleteHandler = (event) => {
+    event.stopPropagation();
+    console.log("delete");
+    setShowWarning(true);
   };
 
   useEffect(() => {
@@ -127,6 +114,13 @@ function PostPage() {
     <>
       <ErrorModal error={error} onClear={clearError} isAnimate />
       <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
+      <DeleteModal
+        pid={postData?.id}
+        title={title}
+        show={showWarning}
+        setShow={setShowWarning}
+        sendRequest={sendRequest}
+      />
       {isEdit ? (
         <EditPost
           postData={postData}
@@ -134,17 +128,17 @@ function PostPage() {
           editorState={postEditorState}
           onChange={setPostEditorState}
           onRead={readModeHandler}
-          onDelete={deleteHandler}
+          onDelete={showDeleteHandler}
         />
       ) : (
         <ReadPost
+          title={title}
+          topics={topics}
           postData={postData}
           editorState={postEditorState}
           onChange={setPostEditorState}
           onEdit={editModeHandler}
-          onDelete={deleteHandler}
-          topics={topics}
-          title={title}
+          onDelete={showDeleteHandler}
           isLoading={isLoading || isLoadingTopic}
         />
       )}

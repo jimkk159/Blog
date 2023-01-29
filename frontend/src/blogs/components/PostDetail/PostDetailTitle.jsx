@@ -16,7 +16,6 @@ import classes from "./PostDetailTitle.module.css";
 function PostDetailTitle(props) {
   const {
     title,
-    postId,
     date,
     author,
     isPined,
@@ -30,11 +29,6 @@ function PostDetailTitle(props) {
     event.stopPropagation();
     onEdit();
     console.log("edit");
-  };
-  const deleteHandler = (event) => {
-    event.stopPropagation();
-    onDelete(postId);
-    console.log("delete");
   };
   const togglePinedHandler = (event) => {
     event.stopPropagation();
@@ -58,7 +52,7 @@ function PostDetailTitle(props) {
               className={`${classes["icon"]} ${classes["delete"]} ${
                 !isDarkMode && classes["light-trash-can"]
               }`}
-              onClick={deleteHandler}
+              onClick={onDelete}
             />
             <Pin
               className={`${classes["icon"]} ${classes["pin"]} ${
