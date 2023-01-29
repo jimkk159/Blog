@@ -27,7 +27,7 @@ function NewPostPage() {
   //Redux
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
-  const { userId, avatar, token } = useSelector((state) => state.auth);
+  const { avatar, token } = useSelector((state) => state.auth);
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -43,7 +43,6 @@ function NewPostPage() {
       const [imgBlobs, convertedData] = convertImgURL(rawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
-        formData.append("uid", userId);
         formData.append("language", isEnglish ? "en" : "ch");
         formData.append("contentState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {

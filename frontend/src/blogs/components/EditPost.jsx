@@ -23,7 +23,7 @@ function EditPost(props) {
     props;
 
   //Redux
-  const { userId, avatar, token } = useSelector((state) => state.auth);
+  const { avatar, token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
 
   //Custom Hook
@@ -38,7 +38,6 @@ function EditPost(props) {
       const [imgBlobs, convertedData] = convertImgURL(rawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
-        formData.append("uid", userId);
         formData.append("language", isEnglish ? "en" : "ch");
         formData.append("contentState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {

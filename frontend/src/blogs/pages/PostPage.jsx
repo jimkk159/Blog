@@ -4,9 +4,8 @@ import {
   useParams,
   useNavigate,
   useOutletContext,
-  useLocation,
 } from "react-router";
-import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import { EditorState, convertFromRaw } from "draft-js";
 
 //Custom Function
 import { choiceLanguage } from "../util/choiceLanguage";
