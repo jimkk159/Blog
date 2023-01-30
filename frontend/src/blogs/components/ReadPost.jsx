@@ -40,7 +40,6 @@ function ReadPost(props) {
   } = props;
 
   //Redux
-  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -59,7 +58,6 @@ function ReadPost(props) {
               authorAvatar={postData?.authorAvatar}
               date={postData?.date}
               isPined={postData?.isPined}
-              isAdmin={isAdmin}
               isDarkMode={isDarkMode}
               onEdit={onEdit}
               onDelete={onDelete}

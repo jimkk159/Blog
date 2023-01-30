@@ -23,13 +23,12 @@ function PostDetailTitle(props) {
     authorAvatar,
     isPined,
     isDarkMode,
-    isAdmin,
     onEdit,
     onDelete,
   } = props;
 
   //Redux
-  const userId = useSelector((state) => state.auth.userId);
+  const { isAdmin, userId } = useSelector((state) => state.auth);
 
   //ToDo add admin
   const editHandler = (event) => {
@@ -43,41 +42,43 @@ function PostDetailTitle(props) {
     console.log("toggle pinned!");
   };
 
-  let content;
+  let editContent;
   if (authorId === userId) {
-    content = (
-      <>
-        <AiOutlineEdit
-          className={`${classes["icon"]} ${classes["edit"]} ${
-            !isDarkMode && classes["light-pencil"]
-          }`}
-          onClick={editHandler}
-        />
-        <AiFillDelete
-          className={`${classes["icon"]} ${classes["delete"]} ${
-            !isDarkMode && classes["light-trash-can"]
-          }`}
-          onClick={onDelete}
-        />
-      </>
+    editContent = (
+      <AiOutlineEdit
+        className={`${classes["icon"]} ${classes["edit"]} ${
+          !isDarkMode && classes["light-pencil"]
+        }`}
+        onClick={editHandler}
+      />
+    );
+  }
+
+  let deleteContent;
+  if (isAdmin || authorId === userId) {
+    deleteContent = (
+      <AiFillDelete
+        className={`${classes["icon"]} ${classes["delete"]} ${
+          !isDarkMode && classes["light-trash-can"]
+        }`}
+        onClick={onDelete}
+      />
     );
   }
 
   let pinContent;
-  if (props.isAdmin) {
-    pinContent = (
-      <Pin
-        className={`${classes["icon"]} ${classes["pin"]} ${
-          !isDarkMode && classes["light-pin"]
-        }`}
-        show={isAdmin}
-        isPined={isPined}
-        isAdmin={isAdmin}
-        onToggle={togglePinedHandler}
-      />
-    );
-  }
-  
+  pinContent = (
+    <Pin
+      className={`${classes["icon"]} ${classes["pin"]} ${
+        !isDarkMode && classes["light-pin"]
+      }`}
+      show={isAdmin}
+      isPined={isPined}
+      isAdmin={isAdmin}
+      onToggle={togglePinedHandler}
+    />
+  );
+
   return (
     <>
       <h1 className={classes["title"]}>{title}</h1>
@@ -86,7 +87,8 @@ function PostDetailTitle(props) {
           <div
             className={`${classes["flex-container"]} ${classes["icon-left"]}`}
           >
-            {content}
+            {editContent}
+            {deleteContent}
             {pinContent}
           </div>
           <div

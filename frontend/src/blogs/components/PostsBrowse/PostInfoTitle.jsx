@@ -32,33 +32,37 @@ function PostInfoTitle(props) {
     />
   );
 
-  let content;
+  let editContent;
   if (props.authorId === userId) {
-    content = (
-      <>
-        <AiOutlineEdit
-          className={`${classes["icon"]} ${
-            !isDarkMode && classes["light-pencil"]
-          }`}
-          onClick={props.onEdit}
-        />
-        <AiFillDelete
-          className={`${classes["icon"]} ${
-            !isDarkMode && classes["light-trash-can"]
-          }`}
-          onClick={props.onShowDelete}
-        />
-      </>
+    editContent = (
+      <AiOutlineEdit
+        className={`${classes["icon"]} ${
+          !isDarkMode && classes["light-pencil"]
+        }`}
+        onClick={props.onEdit}
+      />
     );
   }
 
+  let deleteContent;
+  if (isAdmin || props.authorId === userId) {
+    deleteContent = (
+      <AiFillDelete
+        className={`${classes["icon"]} ${
+          !isDarkMode && classes["light-trash-can"]
+        }`}
+        onClick={props.onShowDelete}
+      />
+    );
+  }
   return (
     <div className={classes["container"]}>
       <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
       <p className={classes["author"]}>{props.authorName}&nbsp;&nbsp;</p>
       <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
       {pinContent}
-      {content}
+      {editContent}
+      {deleteContent}
     </div>
   );
 }
