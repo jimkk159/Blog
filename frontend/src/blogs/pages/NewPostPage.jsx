@@ -51,7 +51,6 @@ function NewPostPage() {
         return formData;
       };
       const sendForm = createSendForm(imgBlobs, convertedData);
-      //ToDo change the post type when update
       const response = await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/new`,
         "POST",

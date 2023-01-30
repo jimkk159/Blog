@@ -46,8 +46,6 @@ function EditPost(props) {
         return formData;
       };
       const sendForm = createSendForm(imgBlobs, convertedData);
-      //ToDo change the post type when update
-      //ToDo need to check user
       await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/${postData.id}`,
         "PUT",

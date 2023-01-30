@@ -68,9 +68,7 @@ const SearchPage = loadable(
 
 export function RouteCreate() {
   //Redux
-  const { isLoggedIn, token, expiration, login, logout } = useSelector(
-    (state) => state.auth
-  );
+  const { isLoggedIn, token, expiration } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   //Set token automatically logout life cycle
@@ -88,7 +86,7 @@ export function RouteCreate() {
         clearTimeout(logoutTimer);
       }
     };
-  }, [dispatch, token, expiration, logout]);
+  }, [dispatch, token, expiration]);
 
   //Automatically login
   useEffect(() => {
@@ -97,13 +95,14 @@ export function RouteCreate() {
       dispatch(
         loginAuto({
           uid: userData.userId,
+          isAdmin: userData.isAdmin,
           avatar: userData.avatar,
           token: userData.token,
           expiration: userData.expiration,
         })
       );
     }
-  }, [dispatch, login]);
+  }, [dispatch]);
 
   //Custom Hook
   const { matches } = useMediaQuery("min", "768");
@@ -113,6 +112,7 @@ export function RouteCreate() {
   // let editBlogRoute = null;
   let authRoute = null;
   if (isLoggedIn) {
+    //ToDo
     // newBlogRoute = <Route path="new-blog" element={<NewPostPage />} />;
     // editBlogRoute = <Route path="edit-blog" element={<NewPostPage />} />;
   } else {

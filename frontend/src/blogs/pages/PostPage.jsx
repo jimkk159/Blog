@@ -18,7 +18,6 @@ import DeleteModal from "../../shared/components/UI/Modal/DeleteModal";
 function PostPage() {
   const [postData, setPostData] = useState(null);
   const [topics, setTopics] = useState(null);
-  //ToDo need to check if the correct user
   const [title, setTitle] = useState("No Title");
   const [originState, setOriginState] = useState(null);
   const [showWarning, setShowWarning] = useState(false);

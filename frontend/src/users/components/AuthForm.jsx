@@ -110,6 +110,7 @@ function AuthForm(props) {
         dispatch(
           loginAuto({
             uid: responseData.userId,
+            isAdmin: responseData.admin,
             avatar: responseData.avatar,
             token: responseData.token,
             expiration: new Date(
@@ -135,6 +136,7 @@ function AuthForm(props) {
         dispatch(
           loginAuto({
             uid: responseData.userId,
+            isAdmin: responseData.admin,
             avatar: responseData.avatar,
             token: responseData.token,
             expiration: new Date(

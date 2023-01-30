@@ -12,7 +12,7 @@ import classes from "./PostInfoTitle.module.css";
 
 function PostInfoTitle(props) {
   //Redux
-  const userId = useSelector((state) => state.auth.userId);
+  const { userId, isAdmin } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   //Toggle Pinned
@@ -22,16 +22,15 @@ function PostInfoTitle(props) {
   };
 
   let pinContent;
-  if (props.isAdmin) {
-    pinContent = (
-      <Pin
-        className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
-        isPined={props.isPined}
-        isAdmin={props.isAdmin}
-        onToggle={togglePinedHandler}
-      />
-    );
-  }
+  pinContent = (
+    <Pin
+      show={true}
+      className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
+      isPined={props.isPined}
+      isAdmin={isAdmin}
+      onToggle={togglePinedHandler}
+    />
+  );
 
   let content;
   if (props.authorId === userId) {

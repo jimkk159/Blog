@@ -26,7 +26,6 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 //CSS
 import classes from "./ReadPost.module.css";
 
-const isUserAdmin = false;
 const decorator = createLinkDecorator();
 function ReadPost(props) {
   const {
@@ -37,10 +36,11 @@ function ReadPost(props) {
     onChange,
     isLoading,
     onEdit,
-    onDelete
+    onDelete,
   } = props;
 
   //Redux
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -49,9 +49,7 @@ function ReadPost(props) {
         className={`page ${classes["post-container"]}`}
         isDarkMode={isDarkMode}
       >
-        {isLoading && (
-          <LoadingSpinner className={`loading-container`} />
-        )}
+        {isLoading && <LoadingSpinner className={`loading-container`} />}
         {!isLoading && postData && (
           <>
             <PostDetailTitle
@@ -61,7 +59,7 @@ function ReadPost(props) {
               authorAvatar={postData?.authorAvatar}
               date={postData?.date}
               isPined={postData?.isPined}
-              isAdmin={isUserAdmin}
+              isAdmin={isAdmin}
               isDarkMode={isDarkMode}
               onEdit={onEdit}
               onDelete={onDelete}

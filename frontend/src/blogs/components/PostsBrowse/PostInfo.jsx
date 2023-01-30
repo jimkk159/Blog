@@ -23,7 +23,7 @@ import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 import classes from "./PostInfo.module.css";
 
 function PostInfo(props) {
-  const { post, isOdd, onDelete, isAdmin } = props;
+  const { post, isOdd, onDelete } = props;
   const {
     id: pid,
     topic,
@@ -132,7 +132,6 @@ function PostInfo(props) {
               authorName={authorName}
               date={date}
               isPined={isPined}
-              isAdmin={isAdmin}
               onEdit={editHandler}
               onShowDelete={showDeleteHandler}
             />

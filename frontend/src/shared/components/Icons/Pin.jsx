@@ -5,8 +5,9 @@ import { BsFillPinAngleFill, BsFillPinFill } from "react-icons/bs";
 // import classes from "./Pin.module.css";
 
 function Pin(props) {
-  const {show=true, isPined, isAdmin} = props
+  const {show, isPined, isAdmin} = props
   if (!show) return;
+  //ToDo send request to change isPined
   if (isPined)
     return (
       <BsFillPinFill

@@ -77,6 +77,7 @@ function PostDetailTitle(props) {
       />
     );
   }
+  
   return (
     <>
       <h1 className={classes["title"]}>{title}</h1>
