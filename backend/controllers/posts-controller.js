@@ -91,7 +91,7 @@ export const getPosts = async (req, res, next) => {
       const authorId = findingUsers[i].id;
       userObj[authorId] = findingUsers[i];
     }
-    
+
     for (let i = 0; i < queryResponse.length; i++) {
       const targetAuthor = queryResponse[i].authorId;
       if (targetAuthor in userObj) {
@@ -404,8 +404,14 @@ export const deletePost = async (req, res, next) => {
     return next(error);
   }
 
+  //Check Admin
+  let isAdmin = false;
+  if (Dummy_users.length > 0 && Dummy_users[0].id === uid) {
+    isAdmin = true;
+  }
+
   //Check Post Owner
-  if (targetPost.authorId !== uid) {
+  if (targetPost.authorId !== uid && !isAdmin) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
