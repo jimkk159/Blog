@@ -27,13 +27,29 @@ export const getPost = async (req, res, next) => {
     );
     return next(error);
   }
+
   //Post not find
   if (!targetPost) {
     const error = new HttpError("Post not exists!", 422);
     return next(error);
   }
 
-  res.json(targetPost);
+  let author;
+  try {
+    author = Dummy_users.filter((user) => user.id === targetPost.authorId)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding author failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.json({
+    ...targetPost,
+    authorName: author.name,
+    authorAvatar: author.avatar,
+  });
 };
 
 export const getPosts = async (req, res, next) => {
@@ -41,15 +57,62 @@ export const getPosts = async (req, res, next) => {
   count += 1;
   console.log("Get All Posts " + count);
   // await sleep(3000);
-  const queryNumber = req.query.number >= 1 ? req.query.number : 1;
-  const queryStartPage = req.query.start >= 0 ? req.query.start : 0;
-  const queryResponse = blogs.slice(
-    queryStartPage,
-    queryStartPage + queryNumber
-  );
+  let queryResponse;
+  try {
+    const queryNumber = req.query.number >= 1 ? req.query.number : 1;
+    const queryStartPage = req.query.start >= 0 ? req.query.start : 0;
+    queryResponse = blogs.slice(queryStartPage, queryStartPage + queryNumber);
+  } catch (err) {
+    const error = new HttpError(
+      "Get Posts Error!, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //Prepare the users need to query to database
+
+  //Get the usersInfo
+  try {
+    //Remove the duplication user
+    const userSet = new Set();
+    queryResponse.map((item) => {
+      userSet.add(item?.authorId);
+    });
+
+    //Remove the duplication user
+    const userArray = [...userSet];
+    const findingUsers = Dummy_users.filter((user) =>
+      userArray.includes(user.id)
+    );
+
+    let userObj = {};
+    for (let i = 0; i < findingUsers.length; i++) {
+      const authorId = findingUsers[i].id;
+      userObj[authorId] = findingUsers[i];
+    }
+    
+    for (let i = 0; i < queryResponse.length; i++) {
+      const targetAuthor = queryResponse[i].authorId;
+      if (targetAuthor in userObj) {
+        queryResponse[i] = {
+          ...queryResponse[i],
+          authorName: userObj[targetAuthor].name,
+          authorAvatar: userObj[targetAuthor].avatar,
+        };
+      }
+    }
+  } catch (err) {
+    const error = new HttpError(
+      "Get Posts Error!, please try again later.",
+      500
+    );
+    return next(error);
+  }
   res.json(queryResponse);
 };
 
+//ToDo author
 export const getPostSearch = async (req, res, next) => {
   //For Debug
   console.log("Get Post Search");
@@ -58,8 +121,8 @@ export const getPostSearch = async (req, res, next) => {
 
   //Level 1 Search Author
   if (result.length < 150) {
-    const searchAuthor = blogs.filter((x) => {
-      return x.author.toLowerCase() === searchTarget.toLowerCase();
+    const searchAuthor = blogs.filter((item) => {
+      return item.author.toLowerCase() === searchTarget.toLowerCase();
     });
     result.push(...searchAuthor);
   }
@@ -67,16 +130,16 @@ export const getPostSearch = async (req, res, next) => {
   //Level 2 Search topic
   if (result.length < 150) {
     const searchTopics = blogs.filter(
-      (x) => x.topic.toLowerCase() === searchTarget.toLowerCase()
+      (item) => item.topic.toLowerCase() === searchTarget.toLowerCase()
     );
     result.push(...searchTopics);
   }
 
   //Level 3 Search include title
   if (result.length < 150) {
-    const searchTitles = blogs.filter((x) => {
-      if (x.language?.title?.ch?.include(searchTarget)) return true;
-      return x.language?.title?.en
+    const searchTitles = blogs.filter((item) => {
+      if (item.language?.title?.ch?.include(searchTarget)) return true;
+      return item.language?.title?.en
         ?.toLowerCase()
         .include(searchTarget.toLowerCase());
     });
@@ -154,7 +217,7 @@ export const createNewPost = async (req, res, next) => {
     topic: null,
     type: null,
     date: new Date().toLocaleDateString("en-US", options),
-    author: findingUser.id,
+    authorId: findingUser.id,
     isPined: false,
     tags: [],
     cover: {
@@ -163,6 +226,7 @@ export const createNewPost = async (req, res, next) => {
     },
     language: { en: {}, ch: {} },
   };
+
   try {
     const postContent = {
       title: "",
@@ -232,7 +296,7 @@ export const editPost = async (req, res, next) => {
   }
 
   //Check Post Owner
-  if (targetPost.author !== uid) {
+  if (targetPost.authorId !== uid) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
@@ -342,7 +406,7 @@ export const deletePost = async (req, res, next) => {
   }
 
   //Check Post Owner
-  if (targetPost.author !== uid) {
+  if (targetPost.authorId !== uid) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
