@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 //Image
 import anonymousUser from "../../../assets/img/anonymous_user.png";
@@ -17,6 +18,7 @@ function PostDetailTitle(props) {
   const {
     title,
     date,
+    authorId,
     authorName,
     authorAvatar,
     isPined,
@@ -25,16 +27,56 @@ function PostDetailTitle(props) {
     onEdit,
     onDelete,
   } = props;
+
+  //Redux
+  const userId = useSelector((state) => state.auth.userId);
+
   //ToDo add admin
   const editHandler = (event) => {
     event.stopPropagation();
     onEdit();
     console.log("edit");
   };
+
   const togglePinedHandler = (event) => {
     event.stopPropagation();
     console.log("toggle pinned!");
   };
+
+  let content;
+  if (authorId === userId) {
+    content = (
+      <>
+        <AiOutlineEdit
+          className={`${classes["icon"]} ${classes["edit"]} ${
+            !isDarkMode && classes["light-pencil"]
+          }`}
+          onClick={editHandler}
+        />
+        <AiFillDelete
+          className={`${classes["icon"]} ${classes["delete"]} ${
+            !isDarkMode && classes["light-trash-can"]
+          }`}
+          onClick={onDelete}
+        />
+      </>
+    );
+  }
+
+  let pinContent;
+  if (props.isAdmin) {
+    pinContent = (
+      <Pin
+        className={`${classes["icon"]} ${classes["pin"]} ${
+          !isDarkMode && classes["light-pin"]
+        }`}
+        show={isAdmin}
+        isPined={isPined}
+        isAdmin={isAdmin}
+        onToggle={togglePinedHandler}
+      />
+    );
+  }
   return (
     <>
       <h1 className={classes["title"]}>{title}</h1>
@@ -43,27 +85,8 @@ function PostDetailTitle(props) {
           <div
             className={`${classes["flex-container"]} ${classes["icon-left"]}`}
           >
-            <AiOutlineEdit
-              className={`${classes["icon"]} ${classes["edit"]} ${
-                !isDarkMode && classes["light-pencil"]
-              }`}
-              onClick={editHandler}
-            />
-            <AiFillDelete
-              className={`${classes["icon"]} ${classes["delete"]} ${
-                !isDarkMode && classes["light-trash-can"]
-              }`}
-              onClick={onDelete}
-            />
-            <Pin
-              className={`${classes["icon"]} ${classes["pin"]} ${
-                !isDarkMode && classes["light-pin"]
-              }`}
-              show={isAdmin}
-              isPined={isPined}
-              isAdmin={isAdmin}
-              onToggle={togglePinedHandler}
-            />
+            {content}
+            {pinContent}
           </div>
           <div
             className={`${classes["flex-container"]} ${classes["direction-coloum"]} ${classes["flex-end"]}`}

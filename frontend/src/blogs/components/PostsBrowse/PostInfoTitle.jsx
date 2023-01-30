@@ -12,6 +12,7 @@ import classes from "./PostInfoTitle.module.css";
 
 function PostInfoTitle(props) {
   //Redux
+  const userId = useSelector((state) => state.auth.userId);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   //Toggle Pinned
@@ -20,17 +21,22 @@ function PostInfoTitle(props) {
     console.log("toggle pinned!");
   };
 
-  return (
-      <div className={classes["container"]}>
-        <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
-        <p className={classes["author"]}>{props.authorName}&nbsp;&nbsp;</p>
-        <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
-        <Pin
-          className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
-          isPined={props.isPined}
-          isAdmin={props.isAdmin}
-          onToggle={togglePinedHandler}
-        />
+  let pinContent;
+  if (props.isAdmin) {
+    pinContent = (
+      <Pin
+        className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
+        isPined={props.isPined}
+        isAdmin={props.isAdmin}
+        onToggle={togglePinedHandler}
+      />
+    );
+  }
+
+  let content;
+  if (props.authorId === userId) {
+    content = (
+      <>
         <AiOutlineEdit
           className={`${classes["icon"]} ${
             !isDarkMode && classes["light-pencil"]
@@ -43,7 +49,18 @@ function PostInfoTitle(props) {
           }`}
           onClick={props.onShowDelete}
         />
-      </div>
+      </>
+    );
+  }
+
+  return (
+    <div className={classes["container"]}>
+      <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
+      <p className={classes["author"]}>{props.authorName}&nbsp;&nbsp;</p>
+      <p className={classes["statement"]}>on {props.date}&nbsp;&nbsp;</p>
+      {pinContent}
+      {content}
+    </div>
   );
 }
 
