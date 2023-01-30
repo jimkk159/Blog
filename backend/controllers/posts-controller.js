@@ -252,7 +252,6 @@ export const createNewPost = async (req, res, next) => {
 
   //Save Post to Database
   try {
-    // console.log(newPost);
     blogs.push(newPost);
   } catch (err) {}
 

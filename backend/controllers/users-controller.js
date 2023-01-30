@@ -61,12 +61,19 @@ export const signup = async (req, res, next) => {
     return next(error);
   }
 
+  //Check Admin
+  let admin = false;
+  if (dummy_users.length === 0) {
+    admin = true;
+  }
+
   //Create User
   let newUser;
   const avatarPath = normalize(req.file.path);
   try {
     newUser = {
       id: uuidv4(),
+      admin,
       name,
       email,
       avatar: avatarPath,
@@ -99,6 +106,7 @@ export const signup = async (req, res, next) => {
   console.log(newUser);
   res.status(201).json({
     userId: newUser.id,
+    admin: newUser.admin,
     email: newUser.email,
     avatar: newUser.avatar,
     token: token,
@@ -155,6 +163,7 @@ export const login = async (req, res, next) => {
 
   res.json({
     userId: existingUser.id,
+    admin: existingUser.admin,
     email: existingUser.email,
     avatar: existingUser.avatar,
     token: token,
