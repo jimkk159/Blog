@@ -27,7 +27,7 @@ function NewPostPage() {
   //Redux
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
-  const { avatar, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();

@@ -28,14 +28,14 @@ function PostInfo(props) {
     id: pid,
     topic,
     date,
-    author,
+    authorName,
     cover,
     language: postLanguage,
     tags,
     isPined,
   } = post;
   const postCover = cover.img ? cover.img : defaultCoverImage;
-
+  
   const [title, setTitle] = useState("No Title");
   const [showWarning, setShowWarning] = useState(false);
   const [short, setShort] = useState("No Description...");
@@ -127,7 +127,7 @@ function PostInfo(props) {
           <div className={classes["info-content"]}>
             <h1>{`[ ${topic ? topic : "  "} ] ${title}`}</h1>
             <PostInfoTitle
-              author={author}
+              authorName={authorName}
               date={date}
               isPined={isPined}
               onEdit={editHandler}

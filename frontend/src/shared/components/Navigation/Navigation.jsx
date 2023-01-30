@@ -121,6 +121,7 @@ function Navigation(props) {
               isDarkMode={isDarkMode}
               onClick={showAuthHandler}
               img={`${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
+              isAnimate
             />
           )}
         </div>

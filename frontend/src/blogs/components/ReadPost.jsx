@@ -56,7 +56,8 @@ function ReadPost(props) {
           <>
             <PostDetailTitle
               title={title}
-              author={postData?.author}
+              authorName={postData?.authorName}
+              authorAvatar={postData?.authorAvatar}
               date={postData?.date}
               isPined={postData?.isPined}
               isAdmin={isUserAdmin}

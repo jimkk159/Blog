@@ -23,7 +23,7 @@ function EditPost(props) {
     props;
 
   //Redux
-  const { avatar, token } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
 
   //Custom Hook
