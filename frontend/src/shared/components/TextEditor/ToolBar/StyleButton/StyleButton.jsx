@@ -87,7 +87,7 @@ function StyleButton(props) {
           ref={inputRef}
           type="file"
           style={{ display: "none" }}
-          accept=".jpg,.png,.jpeg,.jfif"
+          accept=".jpg,.png,.jpeg,.jfif,.gif"
           onChange={selectImage}
         />
       )}

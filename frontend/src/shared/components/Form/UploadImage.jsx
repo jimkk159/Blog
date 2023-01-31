@@ -80,7 +80,7 @@ function UploadImage(props) {
           ref={inputRef}
           style={{ display: "none" }}
           type="file"
-          accept=".jpg,.png,.jpeg,.jfif"
+          accept=".jpg,.png,.jpeg,.jfif,.gif"
           onChange={iputImageHandler}
         />
         <div className={`${classes["upload-container"]}`}>

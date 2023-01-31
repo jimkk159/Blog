@@ -41,10 +41,10 @@ const AboutPage = loadable(
   () => import("../shared/pages/AboutPage"),
   loadingFallback
 );
-const NotFoundPage = loadable(
-  () => import("../shared/pages/NotFoundPage"),
-  loadingFallback
-);
+// const NotFoundPage = loadable(
+//   () => import("../shared/pages/NotFoundPage"),
+//   loadingFallback
+// );
 const ErrorPage = loadable(
   () => import("../shared/pages/ErrorPage"),
   loadingFallback

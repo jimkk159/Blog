@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useOutletContext } from "react-router";
-import { EditorState, convertFromRaw } from "draft-js";
+import { EditorState, convertToRaw, convertFromRaw } from "draft-js";
 
 //Custom Function
 import { choiceLanguage } from "../util/choiceLanguage";
+import convertImgURL from "../../shared/util/url-to-blob";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
@@ -21,9 +22,10 @@ function PostPage() {
   const [title, setTitle] = useState("No Title");
   const [originState, setOriginState] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
+  const [prevToken, setPrevToken] = useState(null);
 
   //Redux
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
 
   //React Router
@@ -34,8 +36,18 @@ function PostPage() {
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
-  const { isLoadingTopic, errorTopic, sendRequestTopic, clearErrorTopic } =
-    useHttp();
+  const {
+    isLoading: isLoadingSave,
+    error: errorSave,
+    sendRequest: sendRequestSave,
+    clearError: clearErrorSave,
+  } = useHttp();
+  const {
+    isLoading: isLoadingTopic,
+    error: errorTopic,
+    sendRequest: sendRequestTopic,
+    clearError: clearErrorTopic,
+  } = useHttp();
 
   //Edit
   const editModeHandler = () => {
@@ -45,6 +57,46 @@ function PostPage() {
   //Read
   const readModeHandler = () => {
     setIsEdit(false);
+  };
+
+  //Save the Post
+  const postId = postData?.id;
+  const savePostHandler = useCallback(
+    async (token) => {
+      try {
+        if (!postId) return;
+        const currentContent = postEditorState.getCurrentContent();
+        const rawData = JSON.stringify(convertToRaw(currentContent));
+        const [imgBlobs, convertedData] = convertImgURL(rawData);
+        const createSendForm = (imgArray, draftRawData) => {
+          const formData = new FormData();
+          formData.append("language", isEnglish ? "en" : "ch");
+          formData.append("contentState", draftRawData);
+          for (let i = 0; i < imgArray.length; i++) {
+            formData.append("images", imgArray[i]);
+          }
+          return formData;
+        };
+        const sendForm = createSendForm(imgBlobs, convertedData);
+        await sendRequestSave(
+          process.env.REACT_APP_BACKEND_URL + `/posts/${postId}`,
+          "PUT",
+          sendForm,
+          {
+            Authorization: "Bearer " + token,
+          }
+        );
+        setIsEdit(false);
+      } catch (err) {}
+    },
+    [isEnglish, postId, postEditorState, sendRequestSave, setIsEdit]
+  );
+
+  //Delete
+  const showDeleteHandler = (event) => {
+    event.stopPropagation();
+    console.log("delete");
+    setShowWarning(true);
   };
 
   //GET Topics
@@ -76,7 +128,7 @@ function PostPage() {
           )
         );
         setPostData(responseData);
-        
+
         const postJSON = JSON.parse(
           choiceLanguage(
             isEnglish,
@@ -93,22 +145,18 @@ function PostPage() {
     fetchPost();
   }, [setPostEditorState, isEnglish, blogId, sendRequest]);
 
-  //Delete
-  const showDeleteHandler = (event) => {
-    event.stopPropagation();
-    console.log("delete");
-    setShowWarning(true);
-  };
+  useEffect(() => {
+    setPrevToken(token);
+  }, [token]);
 
   useEffect(() => {
-    //Todo Save the Post when auto logout
-    if (!isLoggedIn) setIsEdit(false);
-    return () => {
+    if (!isLoggedIn) {
+      savePostHandler(prevToken);
+      setPrevToken(null);
       setIsEdit(false);
-    };
-  }, [isLoggedIn, setIsEdit]);
+    }
+  }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
 
-  //ToDo fix loading and error modal
   return (
     <>
       <ErrorModal error={error} onClear={clearError} isAnimate />
@@ -125,9 +173,14 @@ function PostPage() {
           postData={postData}
           originState={originState}
           editorState={postEditorState}
+          isLoading={isLoadingSave}
+          token={token}
           onChange={setPostEditorState}
+          onSave={savePostHandler}
           onRead={readModeHandler}
           onDelete={showDeleteHandler}
+          error={errorSave}
+          clearError={clearErrorSave}
         />
       ) : (
         <ReadPost

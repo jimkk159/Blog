@@ -53,7 +53,6 @@ function Pin(props) {
   };
 
   if (!show) return;
-  //ToDo send request to change isPined
   if (isPin)
     return (
       <BsFillPinFill

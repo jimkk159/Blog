@@ -74,7 +74,7 @@ function DropDown(props) {
           onMouseDown={toggleExpandedHandler}
           title={title}
         >
-          {currentOption ? currentOption : config.options[0]}
+          <div className={classes["dropdown-name"]}>{currentOption ? currentOption : config.options[0]}</div>
           <div
             className={`${classes["dropdown-caretto"]} ${
               isExpand
