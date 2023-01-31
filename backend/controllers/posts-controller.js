@@ -379,6 +379,63 @@ export const editPost = async (req, res, next) => {
   });
 };
 
+export const pinPost = async (req, res, next) => {
+  //For Debug
+  console.log("Pin Post");
+  // await sleep(3000);
+  const postId = req.params.pid;
+  const queryPin = req.query.pin;
+  const { userId: uid } = req.userData;
+
+  if (queryPin === undefined || queryPin === null) {
+    const error = new HttpError("Query Pin state Error!", 422);
+    return next(error);
+  }
+
+  //Find Post
+  let targetPost;
+  try {
+    targetPost = blogs.filter((blog) => blog.id === postId)[0];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //Post not find
+  if (!targetPost) {
+    const error = new HttpError("Post not exists!", 422);
+    return next(error);
+  }
+
+  //Check Admin
+  if (Dummy_users[0].id !== uid) {
+    const error = new HttpError("Permissions deny.", 422);
+    return next(error);
+  }
+
+
+  //Pin Post
+  try {
+    for (let i = 0; i < blogs.length; i++) {
+      if (blogs[i].id === postId) {
+        blogs[i].isPined = !!+queryPin;
+        break;
+      }
+    }
+  } catch (err) {
+    const error = new HttpError(
+      "Pin post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ message: `Pin post successfully!` });
+};
+
 export const deletePost = async (req, res, next) => {
   //For Debug
   console.log("Delete Post");
@@ -406,7 +463,7 @@ export const deletePost = async (req, res, next) => {
 
   //Check Admin
   let isAdmin = false;
-  if (Dummy_users.length > 0 && Dummy_users[0].id === uid) {
+  if (Dummy_users[0].id === uid) {
     isAdmin = true;
   }
 

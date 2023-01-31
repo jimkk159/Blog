@@ -10,6 +10,7 @@ import {
   getPostSearch,
   createNewPost,
   editPost,
+  pinPost,
   deletePost,
 } from "../controllers/posts-controller.js";
 
@@ -34,6 +35,12 @@ router.put(
   [check("contentState").not().isEmpty()],
   editPost
 );
+
+router.patch(
+  "/:pid/pin",
+  pinPost
+);
+
 router.delete("/:pid", deletePost);
 
 export default router;
