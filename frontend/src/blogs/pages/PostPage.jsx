@@ -114,6 +114,7 @@ function PostPage() {
 
   //GET POST
   useEffect(() => {
+    console.log("GET POST");
     const fetchPost = async () => {
       try {
         const responseData = await sendRequest(
@@ -150,10 +151,9 @@ function PostPage() {
   }, [token]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn && isEdit) {
       savePostHandler(prevToken);
       setPrevToken(null);
-      setIsEdit(false);
     }
   }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
 

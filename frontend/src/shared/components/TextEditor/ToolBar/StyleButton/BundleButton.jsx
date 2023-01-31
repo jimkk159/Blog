@@ -72,7 +72,11 @@ function BundleButton(props) {
             isDarkMode={props.isDarkMode}
           />
           {option === "link" && isLinkModal && (
-            <LinkModal onClose={closeHandler} onAddLink={props.onAddLink} />
+            <LinkModal
+              onClose={closeHandler}
+              onAddLink={props.onAddLink}
+              onForce={props.onForce}
+            />
           )}
         </div>
       );

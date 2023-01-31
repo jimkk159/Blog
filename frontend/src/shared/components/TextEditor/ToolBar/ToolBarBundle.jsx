@@ -1,4 +1,5 @@
 import React from "react";
+import { EditorState } from "draft-js";
 
 //Custom Component
 import BundleButton from "./StyleButton/BundleButton";
@@ -17,6 +18,12 @@ import classes from "./ToolBarBundle.module.css";
 
 function ToolBarBundle(props) {
   const { className, toolbar, options, editorState, onChange } = props;
+
+  const forceSelection = () => {
+    onChange(
+      EditorState.forceSelection(editorState, editorState.getSelection())
+    );
+  };
 
   return (
     <div className={`${className} ${classes["line-container"]}`}>
@@ -138,6 +145,7 @@ function ToolBarBundle(props) {
             isDarkMode={props.isDarkMode}
             choicesCreator={choicesCreator}
             onAddLink={onAddLink}
+            onForce={forceSelection}
             onChange={onButtonTrigger}
           />
         );

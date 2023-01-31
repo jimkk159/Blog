@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { EditorState, SelectionState, Modifier, RichUtils } from "draft-js";
+import { EditorState, SelectionState, Modifier } from "draft-js";
 
 //Redux Slicer
 import { toolbarActions } from "../../../../../store/toolbar-slice.js";
@@ -70,8 +70,10 @@ const LinkControls = (props) => {
   const { editorState, onChange } = props;
   const dispatch = useDispatch();
 
-  const fakeFocusHandler = () => {
-    onChange(RichUtils.toggleInlineStyle(editorState, "FAKE_FOCUS"));
+  const forceSelection = () => {
+    onChange(
+      EditorState.forceSelection(editorState, editorState.getSelection())
+    );
   };
 
   const addLinkHandler = (hyperLink) => {
@@ -158,7 +160,7 @@ const LinkControls = (props) => {
   };
 
   const toggleLinkModalHandler = () => {
-    fakeFocusHandler();
+    forceSelection();
     dispatch(toolbarActions.toggleLinkModal());
   };
 

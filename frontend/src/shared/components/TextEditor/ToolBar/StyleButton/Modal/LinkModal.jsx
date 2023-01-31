@@ -15,18 +15,19 @@ function LinkModal(props) {
     setUrl(event.target.value);
   };
   const startChangeUrlHandler = () => {
+    props.onForce();
     urlRef.current.focus();
   };
 
   const addLinkHandler = (event) => {
     event.stopPropagation();
-    props.onAddLink(url)
-    setUrl("")
+    props.onAddLink(url);
+    setUrl("");
     props.onClose();
   };
   const cancelHandler = (event) => {
     event.stopPropagation();
-    setUrl("")
+    setUrl("");
     props.onClose();
   };
 

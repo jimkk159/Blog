@@ -9,9 +9,6 @@ import { toolbarActions } from "../../../store/toolbar-slice";
 //Image
 import cubesImage from "../../../assets/img/cubes.png";
 
-//Custom Function
-import { removeTargetInlineStyles } from "../../../shared/components/TextEditor/ToolBar/StyleControls/RemoveControls";
-
 //Custom Component
 import Footer from "../../../shared/components/Footer/Footer";
 import Navigation from "../../../shared/components/Navigation/Navigation";
@@ -31,7 +28,6 @@ function PostLayout() {
   //Redux
   const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.value);
-  const isLinkModal = useSelector((state) => state.toolbar.isLinkModal);
 
   //React Router
   const location = useLocation();
@@ -39,15 +35,6 @@ function PostLayout() {
 
   //Todo use forselection
   const mouseDownHandler = () => {
-    if (isLinkModal) {
-      console.log("remove");
-      setPostEditorState(
-        removeTargetInlineStyles(postEditorState, ["FAKE_FOCUS"])
-      );
-      setNewPostEditorState(
-        removeTargetInlineStyles(newPostEditorState, ["FAKE_FOCUS"])
-      );
-    }
     dispatch(toolbarActions.closeAll());
   };
 

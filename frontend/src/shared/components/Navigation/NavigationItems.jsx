@@ -47,6 +47,7 @@ function NavigationItems(props) {
       <NavigationItem
         key={"blog_" + uuidKeys[2]}
         to="/blog/new"
+        show={isLoggedIn}
         content={language.blog}
         icon={<CreateIcon />}
         iconClassName={props.iconClassName}

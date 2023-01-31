@@ -23,10 +23,6 @@ export const styleMap = {
   Verdana: {
     fontFamily: "Verdana",
   },
-  FAKE_FOCUS: {
-    color: "white",
-    backgroundColor: "#2fa6ff",
-  },
   SUPERSCRIPT: {
     verticalAlign: "super",
     fontSize: "medium",
