@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useOutletContext } from "react-router-dom";
-import { convertToRaw } from "draft-js";
+import { EditorState, convertToRaw } from "draft-js";
 
 //Custom Function
 import convertImgURL from "../../shared/util/url-to-blob";
@@ -14,26 +14,28 @@ import Button2 from "../../shared/components/Form/Button2";
 import Backdrop from "../../shared/components/UI/Backdrop";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
-import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
+import PostEditor from "../../shared/components/TextEditor/PostEditor";
 
 //CSS
 import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
-  const {
-    newPostState: [editorState, setEditorState],
-  } = useOutletContext();
-
+  const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
   //Redux
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const { token } = useSelector((state) => state.auth);
 
-  //Custom Hook
-  const { isLoading, error, sendRequest, clearError } = useHttp();
-
   //React Router
   const navigate = useNavigate();
+  const { edit } = useOutletContext();
+  const setIsEdit = edit[1];
+
+  //Custom Hook
+  const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Save the Post
   const savePostHandler = async () => {
@@ -59,19 +61,24 @@ function NewPostPage() {
           Authorization: "Bearer " + token,
         }
       );
+      setIsEdit(false);
       navigate(`/blog/${response.pid}`);
     } catch (err) {}
   };
 
   //Cancel the Post
   const cancelPostHandler = () => {
-      navigate(-1);
+    navigate(-1);
   };
 
   //Create a Post need to Login
   useEffect(() => {
     if (!isLoggedIn) navigate(`/`);
   }, [isLoggedIn, navigate]);
+
+  useEffect(() => {
+    setIsEdit(true);
+  }, [setIsEdit]);
 
   return (
     <>
@@ -84,9 +91,11 @@ function NewPostPage() {
           </div>
         </>
       )}
-      <RichTextEditor
+      <PostEditor
         editorState={editorState}
         onChange={setEditorState}
+        titleState={titleState}
+        onTitle={setTitleState}
       />
       <div className={`${classes["btn-container"]}`}>
         <Button2

@@ -4,13 +4,13 @@ import React from "react";
 import classes from "./Image.module.css";
 
 function Image(props) {
-  const { type, alt, img, description, isDarkMode } = props;
+  const { img, description, isDarkMode } = props;
   return (
     <>
       <img
         src={img}
-        alt={type === "cover" ? "Cover" : alt ? alt : "User Image"}
-        className={`${type === "cover" ? classes["cover"] : classes["img"]}`}
+        alt="Cover"
+        className={`${ classes["cover"]}`}
       />
       <p
         className={`${classes["comment"]} ${

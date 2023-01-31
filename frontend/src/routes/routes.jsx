@@ -96,6 +96,7 @@ export function RouteCreate() {
         loginAuto({
           uid: userData.userId,
           isAdmin: userData.isAdmin,
+          name: userData.name,
           avatar: userData.avatar,
           token: userData.token,
           expiration: userData.expiration,
@@ -116,7 +117,8 @@ export function RouteCreate() {
     authRoute = !matches ? (
       <Route path="/auth" element={<AuthPage />} />
     ) : (
-      <Route path="/auth" element={<Navigate replace to="/" />} />
+      <Route path="/auth" element={<AuthPage />} />
+      // <Route path="/auth" element={<Navigate replace to="/" />} />
     );
   }
 

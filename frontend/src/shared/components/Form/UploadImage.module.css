@@ -2,20 +2,30 @@
   margin: 1rem 0;
 }
 .upload-container {
-  align-items: center;
+  /* align-items: center; */
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /* flex-direction: column; */
+  /* justify-content: center; */
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  width: 50%;
+}
+.upload-dummy {
+  margin-top: 100%;
 }
 .upload-preview {
   align-items: center;
   border: 1px solid #ccc;
+  bottom: 0;
   display: flex;
-  height: 10rem;
   justify-content: center;
+  left: 0;
   margin-top: 1rem;
+  position: absolute;
+  right: 0;
   text-align: center;
-  width: 10rem;
+  top: 0;
 }
 .upload-preview-dark {
   background-color: transparent;

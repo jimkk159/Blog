@@ -4,6 +4,7 @@ const initialState = {
   isLoggedIn: false,
   isAdmin: false,
   userId: null,
+  name:null,
   avatar: null,
   token: null,
 };
@@ -16,6 +17,7 @@ const authSlice = createSlice({
       state.userId = action.payload.uid;
       state.isAdmin = action.payload.isAdmin;
       state.isLoggedIn = true;
+      state.name = action.payload.name;
       state.avatar = action.payload.avatar;
       state.token = action.payload.token;
       state.expiration = action.payload.expiration;
@@ -24,6 +26,7 @@ const authSlice = createSlice({
       state.userId = null;
       state.isAdmin = false;
       state.isLoggedIn = false;
+      state.name = null;
       state.avatar = null;
       state.token = null;
       state.expiration = null;

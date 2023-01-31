@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { EditorState } from "draft-js";
 import { Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -18,12 +17,6 @@ import classes from "./PostLayout.module.css";
 
 function PostLayout() {
   const [isEdit, setIsEdit] = useState(false);
-  const [postEditorState, setPostEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
-  const [newPostEditorState, setNewPostEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
 
   //Redux
   const dispatch = useDispatch();
@@ -32,7 +25,7 @@ function PostLayout() {
   //React Router
   const location = useLocation();
   const initIsEdit = location?.state?.isEdit ? location.state.isEdit : false;
-
+  
   //Todo use forselection
   const mouseDownHandler = () => {
     dispatch(toolbarActions.closeAll());
@@ -55,8 +48,6 @@ function PostLayout() {
         <Outlet
           context={{
             edit: [isEdit, setIsEdit],
-            postState: [postEditorState, setPostEditorState],
-            newPostState: [newPostEditorState, setNewPostEditorState],
           }}
         />
       </main>

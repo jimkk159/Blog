@@ -4,7 +4,15 @@ import React, { useRef, useState, useEffect } from "react";
 import classes from "./UploadImage.module.css";
 
 function UploadImage(props) {
-  const { isDrag, setIsDrag } = props;
+  const {
+    id: inputId,
+    className,
+    isDarkMode,
+    isDrag,
+    onDrag,
+    onInput,
+    errorMessage,
+  } = props;
 
   const inputRef = useRef(null);
   const [image, setImage] = useState();
@@ -17,7 +25,7 @@ function UploadImage(props) {
   };
 
   //Handle Select to upload image
-  const iputImageHandler = (event) => {
+  const inputImageHandler = (event) => {
     let pickedFile;
     let fileIsValid = isValid; //State not update instantly
     if (event.target.files && event.target.files.length === 1) {
@@ -25,7 +33,7 @@ function UploadImage(props) {
       setImage(pickedFile);
       setIsValid(true);
       fileIsValid = true;
-      props.onInput(props.id, pickedFile, fileIsValid);
+      onInput(inputId, pickedFile, fileIsValid);
     } else {
       setIsValid(false);
       fileIsValid = false;
@@ -37,9 +45,9 @@ function UploadImage(props) {
     event.preventDefault();
     event.stopPropagation();
     if (event.type === "dragenter" || event.type === "dragover") {
-      setIsDrag(true);
+      onDrag(true);
     } else if (event.type === "dragleave") {
-      setIsDrag(false);
+      onDrag(false);
     }
   };
 
@@ -49,13 +57,13 @@ function UploadImage(props) {
     event.stopPropagation();
     let pickedFile;
     let fileIsValid = isValid; //State not update instantly
-    setIsDrag(false);
+    onDrag(false);
     if (event.dataTransfer.files && event.dataTransfer.files.length === 1) {
       pickedFile = event.dataTransfer.files[0];
       setImage(pickedFile);
       setIsValid(true);
       fileIsValid = true;
-      props.onInput(props.id, pickedFile, fileIsValid);
+      onInput(inputId, pickedFile, fileIsValid);
     } else {
       setIsValid(false);
       fileIsValid = false;
@@ -76,17 +84,18 @@ function UploadImage(props) {
     <>
       <div className={classes["input-control"]}>
         <input
-          id={props.id}
+          id={inputId}
           ref={inputRef}
           style={{ display: "none" }}
           type="file"
           accept=".jpg,.png,.jpeg,.jfif,.gif"
-          onChange={iputImageHandler}
+          onChange={inputImageHandler}
         />
-        <div className={`${classes["upload-container"]}`}>
+        <div className={`${classes["upload-container"]} ${className}`}>
+          <div className={`${classes["upload-dummy"]}`}></div>
           <div
             className={`${classes["upload-preview"]} ${
-              props.isDarkMode
+              isDarkMode
                 ? classes["upload-preview-dark"]
                 : classes["upload-preview-light"]
             }`}
@@ -96,7 +105,7 @@ function UploadImage(props) {
             {!previewUrl && <p className={`${classes["upload-img"]}`}>+</p>}
           </div>
         </div>
-        {!isValid && <p>{props.errorMessage}</p>}
+        {!isValid && <p>{errorMessage}</p>}
       </div>
       {isDrag && (
         <div

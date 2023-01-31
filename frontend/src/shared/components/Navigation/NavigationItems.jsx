@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //Icon
 import HomeIcon from "@mui/icons-material/Home";
+import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import CreateIcon from "@mui/icons-material/Create";
 import ContactSupportIcon from "@mui/icons-material/ContactSupport";
@@ -25,8 +27,11 @@ function NavigationItems(props) {
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
+  //React Router
+  const navigate = useNavigate();
+
   //Custom Hook
-  const uuidKeys = useUuid(4);
+  const uuidKeys = useUuid(5);
 
   return (
     <ul className={classes["nav-links"]}>
@@ -53,7 +58,18 @@ function NavigationItems(props) {
         iconClassName={props.iconClassName}
       />
       <NavigationItem
-        key={"logout_" + uuidKeys[3]}
+        key={"login_" + uuidKeys[3]}
+        type="li-button"
+        onClick={() => {
+          navigate("/auth");
+        }}
+        show={!isLoggedIn}
+        content={language.login}
+        icon={<LoginIcon />}
+        iconClassName={`${props.iconClassName} ${props.login}`}
+      />
+      <NavigationItem
+        key={"logout_" + uuidKeys[4]}
         type="li-button"
         onClick={() => {
           dispatch(logoutAuto());

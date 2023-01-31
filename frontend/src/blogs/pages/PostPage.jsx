@@ -23,6 +23,9 @@ function PostPage() {
   const [originState, setOriginState] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
   const [prevToken, setPrevToken] = useState(null);
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
 
   //Redux
   const { token, isLoggedIn } = useSelector((state) => state.auth);
@@ -30,9 +33,8 @@ function PostPage() {
 
   //React Router
   const { blogId } = useParams();
-  const { edit, postState } = useOutletContext();
+  const { edit } = useOutletContext();
   const [isEdit, setIsEdit] = edit;
-  const [postEditorState, setPostEditorState] = postState;
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -65,7 +67,7 @@ function PostPage() {
     async (token) => {
       try {
         if (!postId) return;
-        const currentContent = postEditorState.getCurrentContent();
+        const currentContent = editorState.getCurrentContent();
         const rawData = JSON.stringify(convertToRaw(currentContent));
         const [imgBlobs, convertedData] = convertImgURL(rawData);
         const createSendForm = (imgArray, draftRawData) => {
@@ -89,7 +91,7 @@ function PostPage() {
         setIsEdit(false);
       } catch (err) {}
     },
-    [isEnglish, postId, postEditorState, sendRequestSave, setIsEdit]
+    [isEnglish, postId, editorState, sendRequestSave, setIsEdit]
   );
 
   //Delete
@@ -140,11 +142,11 @@ function PostPage() {
         );
         const postContentState = convertFromRaw(postJSON);
         setOriginState(EditorState.createWithContent(postContentState));
-        setPostEditorState(EditorState.createWithContent(postContentState));
+        setEditorState(EditorState.createWithContent(postContentState));
       } catch (err) {}
     };
     fetchPost();
-  }, [setPostEditorState, isEnglish, blogId, sendRequest]);
+  }, [setEditorState, isEnglish, blogId, sendRequest]);
 
   useEffect(() => {
     setPrevToken(token);
@@ -172,10 +174,10 @@ function PostPage() {
         <EditPost
           postData={postData}
           originState={originState}
-          editorState={postEditorState}
+          editorState={editorState}
           isLoading={isLoadingSave}
           token={token}
-          onChange={setPostEditorState}
+          onChange={setEditorState}
           onSave={savePostHandler}
           onRead={readModeHandler}
           onDelete={showDeleteHandler}
@@ -187,8 +189,8 @@ function PostPage() {
           title={title}
           topics={topics}
           postData={postData}
-          editorState={postEditorState}
-          onChange={setPostEditorState}
+          editorState={editorState}
+          onChange={setEditorState}
           onEdit={editModeHandler}
           onDelete={showDeleteHandler}
           isLoading={isLoading || isLoadingTopic}

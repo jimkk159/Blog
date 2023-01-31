@@ -111,6 +111,7 @@ function AuthForm(props) {
           loginAuto({
             uid: responseData.userId,
             isAdmin: responseData.admin,
+            name: responseData.name,
             avatar: responseData.avatar,
             token: responseData.token,
             expiration: new Date(
@@ -137,6 +138,7 @@ function AuthForm(props) {
           loginAuto({
             uid: responseData.userId,
             isAdmin: responseData.admin,
+            name: responseData.name,
             avatar: responseData.avatar,
             token: responseData.token,
             expiration: new Date(
@@ -181,7 +183,7 @@ function AuthForm(props) {
                   isDarkMode={isDarkMode}
                   onInput={inputHandler}
                   isDrag={isDrag}
-                  setIsDrag={setIsDrag}
+                  onDrag={setIsDrag}
                 >
                   {language.uploadImage}
                 </UploadImage>

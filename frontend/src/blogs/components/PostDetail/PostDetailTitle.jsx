@@ -22,6 +22,7 @@ function PostDetailTitle(props) {
     authorId,
     authorName,
     authorAvatar,
+    isNew,
     isPined,
     isDarkMode,
     onEdit,
@@ -47,6 +48,14 @@ function PostDetailTitle(props) {
         onClick={editHandler}
       />
     );
+  } else if (isNew) {
+    editContent = (
+      <AiOutlineEdit
+        className={`${classes["icon"]} ${classes["edit"]} ${
+          !isDarkMode && classes["light-pencil"]
+        }`}
+      />
+    );
   }
 
   let deleteContent;
@@ -59,6 +68,14 @@ function PostDetailTitle(props) {
         onClick={onDelete}
       />
     );
+  } else if (isNew) {
+    deleteContent = (
+      <AiFillDelete
+        className={`${classes["icon"]} ${classes["delete"]} ${
+          !isDarkMode && classes["light-trash-can"]
+        }`}
+      />
+    );
   }
 
   let pinContent;
@@ -67,7 +84,7 @@ function PostDetailTitle(props) {
       className={`${classes["icon"]} ${classes["pin"]} ${
         !isDarkMode && classes["light-pin"]
       }`}
-      show={isAdmin}
+      show={isAdmin && !isNew}
       token={token}
       postId={postId}
       isPined={isPined}

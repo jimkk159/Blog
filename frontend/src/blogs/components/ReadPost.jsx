@@ -64,7 +64,6 @@ function ReadPost(props) {
               onDelete={onDelete}
             />
             <Image
-              type="cover"
               img={
                 postData?.cover?.img ? postData.cover.img : defaultCoverImage
               }

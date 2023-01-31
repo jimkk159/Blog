@@ -10,6 +10,7 @@ export const loginAuto = (userData) => {
       JSON.stringify({
         userId: userData.uid,
         isAdmin: userData.isAdmin,
+        name: userData.name,
         avatar: userData.avatar,
         token: userData.token,
         expiration: userData.expiration,
