@@ -6,6 +6,7 @@ const MIME_TYPE_MAP = {
   "image/jpg": "jpg",
   "image/jpeg": "jpeg",
   "image/jfif": "jfif",
+  "image/gif": "gif",
 };
 
 const fileUploadToServer = multer({
