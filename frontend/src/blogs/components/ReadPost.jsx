@@ -38,7 +38,7 @@ function ReadPost(props) {
     onEdit,
     onDelete,
   } = props;
-
+  
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
 
@@ -53,6 +53,7 @@ function ReadPost(props) {
           <>
             <PostDetailTitle
               title={title}
+              postId={postData?.id}
               authorId={postData?.authorId}
               authorName={postData?.authorName}
               authorAvatar={postData?.authorAvatar}

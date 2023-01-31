@@ -128,6 +128,7 @@ function PostInfo(props) {
           <div className={classes["info-content"]}>
             <h1>{`[ ${topic ? topic : "  "} ] ${title}`}</h1>
             <PostInfoTitle
+              postId={pid}
               authorId={authorId}
               authorName={authorName}
               date={date}

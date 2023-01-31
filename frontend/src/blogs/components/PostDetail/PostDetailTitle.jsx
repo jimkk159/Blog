@@ -16,6 +16,7 @@ import classes from "./PostDetailTitle.module.css";
 
 function PostDetailTitle(props) {
   const {
+    postId,
     title,
     date,
     authorId,
@@ -28,18 +29,13 @@ function PostDetailTitle(props) {
   } = props;
 
   //Redux
-  const { isAdmin, userId } = useSelector((state) => state.auth);
+  const { isAdmin, userId, token } = useSelector((state) => state.auth);
 
   //ToDo add admin
   const editHandler = (event) => {
     event.stopPropagation();
     onEdit();
     console.log("edit");
-  };
-
-  const togglePinedHandler = (event) => {
-    event.stopPropagation();
-    console.log("toggle pinned!");
   };
 
   let editContent;
@@ -73,9 +69,11 @@ function PostDetailTitle(props) {
         !isDarkMode && classes["light-pin"]
       }`}
       show={isAdmin}
+      token={token}
+      postId={postId}
       isPined={isPined}
       isAdmin={isAdmin}
-      onToggle={togglePinedHandler}
+      isDarkMode={isDarkMode}
     />
   );
 

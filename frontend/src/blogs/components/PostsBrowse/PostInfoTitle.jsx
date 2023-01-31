@@ -12,23 +12,19 @@ import classes from "./PostInfoTitle.module.css";
 
 function PostInfoTitle(props) {
   //Redux
-  const { userId, isAdmin } = useSelector((state) => state.auth);
+  const { userId, isAdmin, token } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.value);
-
-  //Toggle Pinned
-  const togglePinedHandler = (event) => {
-    event.stopPropagation();
-    console.log("toggle pinned!");
-  };
 
   let pinContent;
   pinContent = (
     <Pin
       show={true}
+      postId={props.postId}
+      token={token}
       className={`${classes["pin"]} ${!isDarkMode && classes["light-pin"]}`}
       isPined={props.isPined}
       isAdmin={isAdmin}
-      onToggle={togglePinedHandler}
+      isDarkMode={isDarkMode}
     />
   );
 
@@ -55,6 +51,7 @@ function PostInfoTitle(props) {
       />
     );
   }
+
   return (
     <div className={classes["container"]}>
       <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>

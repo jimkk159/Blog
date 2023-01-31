@@ -46,18 +46,14 @@
 .icon:hover {
   color: #c0c0c0;
 }
-.pin:hover {
-  color: #c0c0c0;
-}
+
 .light-trash-can {
   color: #42a69d;
 }
 .light-pencil {
   color: #a87554;
 }
-.light-pin {
-  color: #f05f72;
-}
+
 .light-trash-can:hover {
   color: #4abdb3;
 }
