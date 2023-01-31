@@ -108,13 +108,10 @@ export function RouteCreate() {
   const { matches } = useMediaQuery("min", "768");
 
   // Route Setting
-  // let newBlogRoute = null;
-  // let editBlogRoute = null;
+  let newBlogRoute = null;
   let authRoute = null;
   if (isLoggedIn) {
-    //ToDo
-    // newBlogRoute = <Route path="new-blog" element={<NewPostPage />} />;
-    // editBlogRoute = <Route path="edit-blog" element={<NewPostPage />} />;
+    newBlogRoute = <Route path="new" element={<NewPostPage />} />;
   } else {
     authRoute = !matches ? (
       <Route path="/auth" element={<AuthPage />} />
@@ -131,14 +128,14 @@ export function RouteCreate() {
           <Route path="/about" element={<AboutPage />} />
           {authRoute}
           <Route path="/search/:searchItem" element={<SearchPage />}></Route>
-          <Route path="/*" element={<NotFoundPage />} />
-          {/* <Route path="/*" element={<Navigate replace to="/" />} loader={null} /> */}
         </Route>
         <Route path="/blog" element={<PostLayout />}>
           <Route index element={<Navigate replace to="/" />} />
-          <Route path="new" element={<NewPostPage />} />
+          {newBlogRoute}
           <Route path=":blogId" element={<PostPage />} />
+          {/* <Route path="/*" element={<NotFoundPage />} /> */}
         </Route>
+        <Route path="/*" element={<Navigate replace to="/" />} loader={null} />
       </Route>
     )
   );

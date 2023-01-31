@@ -31,7 +31,6 @@ function PostDetailTitle(props) {
   //Redux
   const { isAdmin, userId, token } = useSelector((state) => state.auth);
 
-  //ToDo add admin
   const editHandler = (event) => {
     event.stopPropagation();
     onEdit();
