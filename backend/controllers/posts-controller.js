@@ -1,22 +1,14 @@
 import { v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
-import { validationResult } from "express-validator";
 
-import { Dummy_blogs, Dummy_users, Dummy_search } from "./Dummy_data.js";
+import { users, blogs } from "./blogs.js";
 import HttpError from "../models/http-error.js";
 
-let count = 0;
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 const options = { year: "numeric", month: "short", day: "numeric" };
 
-let blogs = Dummy_blogs;
 export const getPost = async (req, res, next) => {
   const postId = req.params.pid;
-  //For Debug
-  count += 1;
-  console.log("Get Post " + count);
-  // await sleep(3000);
-
   let targetPost;
   try {
     targetPost = blogs.filter((blog) => blog.id === postId)[0];
@@ -33,10 +25,32 @@ export const getPost = async (req, res, next) => {
     const error = new HttpError("Post not exists!", 422);
     return next(error);
   }
+  res.locals.post = targetPost;
+  next();
+};
 
+export const getPosts = async (req, res, next) => {
+  let targetPosts;
+  try {
+    const queryNumber = req.query.number >= 1 ? req.query.number : 1;
+    const queryStartPage = req.query.start >= 0 ? req.query.start : 0;
+    targetPosts = blogs.slice(queryStartPage, queryStartPage + queryNumber);
+  } catch (err) {
+    const error = new HttpError(
+      "Get Posts Error!, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.locals.posts = targetPosts;
+  next();
+};
+
+export const getPostAuthor = async (req, res, next) => {
+  const targetPost = res.locals.post;
   let author;
   try {
-    author = Dummy_users.filter((user) => user.id === targetPost.authorId)[0];
+    author = users.filter((user) => user.id === targetPost.authorId)[0];
   } catch (err) {
     const error = new HttpError(
       "Finding author failed, please try again later.",
@@ -44,6 +58,38 @@ export const getPost = async (req, res, next) => {
     );
     return next(error);
   }
+  res.locals.author = author;
+  next();
+};
+
+export const getPostsAuthor = async (req, res, next) => {
+  const targetPosts = res.locals.posts;
+
+  let findingAhthors = [];
+  try {
+    //Remove the duplication user
+    const userSet = new Set();
+    targetPosts.map((item) => {
+      userSet.add(item?.authorId);
+    });
+
+    //Remove the duplication user
+    const usersArray = [...userSet];
+    findingAhthors = users.filter((user) => usersArray.includes(user.id));
+  } catch (err) {
+    const error = new HttpError(
+      "Finding authors failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+  res.locals.authors = findingAhthors;
+  next();
+};
+
+export const addPostAuthor = async (req, res, next) => {
+  const author = res.locals.author;
+  const targetPost = res.locals.post;
 
   res.json({
     ...targetPost,
@@ -52,51 +98,23 @@ export const getPost = async (req, res, next) => {
   });
 };
 
-export const getPosts = async (req, res, next) => {
-  //For Debug
-  count += 1;
-  console.log("Get All Posts " + count);
-  // await sleep(3000);
-  let queryResponse;
+export const addPostsAuthor = async (req, res, next) => {
+  const targetPosts = res.locals.posts;
+  const findingAhthors = res.locals.authors;
   try {
-    const queryNumber = req.query.number >= 1 ? req.query.number : 1;
-    const queryStartPage = req.query.start >= 0 ? req.query.start : 0;
-    queryResponse = blogs.slice(queryStartPage, queryStartPage + queryNumber);
-  } catch (err) {
-    const error = new HttpError(
-      "Get Posts Error!, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //Prepare the users need to query to database
-
-  //Get the usersInfo
-  try {
-    //Remove the duplication user
-    const userSet = new Set();
-    queryResponse.map((item) => {
-      userSet.add(item?.authorId);
-    });
-
-    //Remove the duplication user
-    const userArray = [...userSet];
-    const findingUsers = Dummy_users.filter((user) =>
-      userArray.includes(user.id)
-    );
-
+    //Create the Obj with userid as key
     let userObj = {};
-    for (let i = 0; i < findingUsers.length; i++) {
-      const authorId = findingUsers[i].id;
-      userObj[authorId] = findingUsers[i];
+    for (let i = 0; i < findingAhthors.length; i++) {
+      const authorId = findingAhthors[i].id;
+      userObj[authorId] = findingAhthors[i];
     }
 
-    for (let i = 0; i < queryResponse.length; i++) {
-      const targetAuthor = queryResponse[i].authorId;
+    //loop through the post and add the author information
+    for (let i = 0; i < targetPosts.length; i++) {
+      const targetAuthor = targetPosts[i].authorId;
       if (targetAuthor in userObj) {
-        queryResponse[i] = {
-          ...queryResponse[i],
+        targetPosts[i] = {
+          ...targetPosts[i],
           authorName: userObj[targetAuthor].name,
           authorAvatar: userObj[targetAuthor].avatar,
         };
@@ -109,14 +127,25 @@ export const getPosts = async (req, res, next) => {
     );
     return next(error);
   }
-  console.log(queryResponse);
-  res.json(queryResponse);
+  res.json(targetPosts);
+};
+
+export const checkPostAuthor = (req, res, next) => {
+  //Find User
+  const { userId } = req.userData;
+  const targetPost = res.locals.post;
+
+  //Check Post Owner
+  if (targetPost.authorId !== userId) {
+    const error = new HttpError("Permissions deny.", 403);
+    return next(error);
+  }
+  next();
 };
 
 //ToDo author
 export const getPostSearch = async (req, res, next) => {
   //For Debug
-  console.log("Get Post Search");
   const searchTarget = req.query.search;
   const result = [];
 
@@ -153,65 +182,9 @@ export const getPostSearch = async (req, res, next) => {
 
 export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
-
-  //Validate the req
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(
-      new HttpError("Invalid inputs, please check your input is correct", 422)
-    );
-  }
-
-  //Find User
-  const { userId: uid } = req.userData;
-  const { title, language, contentState } = req.body;
-  let findingUser;
-  try {
-    findingUser = Dummy_users.filter((user) => user.id === uid)[0];
-  } catch (err) {
-    const error = new HttpError(
-      "Finding user failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //User not find
-  if (!findingUser) {
-    const error = new HttpError(
-      "User not exists, singup an account first.",
-      422
-    );
-    return next(error);
-  }
-
-  //Replace Images src
-  let postContentState;
-  try {
-    const newContentState = JSON.parse(contentState);
-    const newEntityMap = newContentState?.entityMap;
-
-    // Unprocessable ContentState
-    if (!newEntityMap) {
-      return next(new HttpError("Create New Post Failed!", 422));
-    }
-
-    //Change Image
-    if (req?.files?.images) {
-      req.files.images.map((file, index) => {
-        newEntityMap[index].data.src = normalize(file.path);
-      });
-    }
-    postContentState = JSON.stringify(newContentState);
-
-    // Unprocessable EditorState
-    if (!postContentState) {
-      return next(new HttpError("Create New Post Failed!", 422));
-    }
-  } catch (err) {
-    const error = new HttpError("Create New Post Failed!", 500);
-    return next(error);
-  }
+  const { title, language } = req.body;
+  const findingUser = res.locals.user;
+  const contentState = res.locals.contentState;
 
   //Create New Post
   let coverPath;
@@ -229,12 +202,13 @@ export const createNewPost = async (req, res, next) => {
     date: new Date().toLocaleDateString("en-US", options),
     authorId: findingUser.id,
     isPined: false,
-    tags: [],
     cover: {
       img: coverPath,
       description: null,
     },
     language: { en: {}, ch: {} },
+    comments: [],
+    tags: [],
   };
 
   try {
@@ -242,7 +216,7 @@ export const createNewPost = async (req, res, next) => {
       title,
       support: true,
       short: "bra bra bra",
-      contentState: postContentState,
+      contentState,
     };
     switch (language) {
       case "en":
@@ -273,89 +247,9 @@ export const createNewPost = async (req, res, next) => {
 
 export const editPost = async (req, res, next) => {
   console.log("Edit Post");
-
-  //Validate the req
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(
-      new HttpError("Invalid inputs, please check your input is correct", 422)
-    );
-  }
-
-  const postId = req.params.pid;
-  const { language, contentState } = req.body;
-  const { userId: uid } = req.userData;
-
-  //Find Post
-  let targetPost;
-  try {
-    targetPost = blogs.filter((blog) => blog.id === postId)[0];
-  } catch (err) {
-    const error = new HttpError(
-      "Finding post failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //Post not find
-  if (!targetPost) {
-    const error = new HttpError("Post not exists!", 422);
-    return next(error);
-  }
-
-  //Check Post Owner
-  if (targetPost.authorId !== uid) {
-    const error = new HttpError("Permissions deny.", 403);
-    return next(error);
-  }
-
-  //Find User
-  let findingUser;
-  try {
-    findingUser = Dummy_users.filter((user) => user.id === uid)[0];
-  } catch (err) {
-    const error = new HttpError(
-      "Finding user failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //User not find
-  if (!findingUser) {
-    const error = new HttpError(
-      "User not exists, singup an account first.",
-      422
-    );
-    return next(error);
-  }
-
-  //Replace Images src
-  let postContentState;
-  try {
-    const newContentState = JSON.parse(contentState);
-    const newEntityMap = newContentState?.entityMap;
-
-    // Unprocessable ContentState
-    if (!newEntityMap) {
-      return next(new HttpError("Edit Post Failed!", 422));
-    }
-
-    //Change Image
-    req.files.map((file, index) => {
-      newEntityMap[index].data.src = normalize(file.path);
-    });
-    postContentState = JSON.stringify(newContentState);
-
-    // Unprocessable EditorState
-    if (!postContentState) {
-      return next(new HttpError("Edit Post Failed!", 422));
-    }
-  } catch (err) {
-    const error = new HttpError("Edit Post Failed!", 500);
-    return next(error);
-  }
+  const { language } = req.body;
+  const targetPost = res.locals.post;
+  const contentState = res.locals.contentState;
 
   //Edit Post
   try {
@@ -363,7 +257,7 @@ export const editPost = async (req, res, next) => {
       title: "",
       support: true,
       short: "bra bra bra",
-      contentState: postContentState,
+      contentState,
     };
     switch (language) {
       case "en":
@@ -390,50 +284,19 @@ export const editPost = async (req, res, next) => {
 };
 
 export const pinPost = async (req, res, next) => {
-  //For Debug
   console.log("Pin Post");
-  // await sleep(3000);
-  const postId = req.params.pid;
   const queryPin = req.query.pin;
-  const { userId: uid } = req.userData;
+  const targetPost = res.locals.post;
+  const admin = res.locals.admin;
 
-  if (queryPin === undefined || queryPin === null) {
-    const error = new HttpError("Query Pin state Error!", 422);
-    return next(error);
-  }
-
-  //Find Post
-  let targetPost;
-  try {
-    targetPost = blogs.filter((blog) => blog.id === postId)[0];
-  } catch (err) {
-    const error = new HttpError(
-      "Finding post failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //Post not find
-  if (!targetPost) {
-    const error = new HttpError("Post not exists!", 422);
-    return next(error);
-  }
-
-  //Check Admin
-  if (Dummy_users[0].id !== uid) {
+  if (!admin) {
     const error = new HttpError("Permissions deny.", 422);
     return next(error);
   }
 
   //Pin Post
   try {
-    for (let i = 0; i < blogs.length; i++) {
-      if (blogs[i].id === postId) {
-        blogs[i].isPined = !!+queryPin;
-        break;
-      }
-    }
+    targetPost.isPined = !!+queryPin;
   } catch (err) {
     const error = new HttpError(
       "Pin post failed, please try again later.",
@@ -448,45 +311,26 @@ export const pinPost = async (req, res, next) => {
 export const deletePost = async (req, res, next) => {
   //For Debug
   console.log("Delete Post");
-  // await sleep(3000);
   const postId = req.params.pid;
-  const { userId: uid } = req.userData;
-
-  //Find Post
-  let targetPost;
-  try {
-    targetPost = blogs.filter((blog) => blog.id === postId)[0];
-  } catch (err) {
-    const error = new HttpError(
-      "Finding post failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  //Post not find
-  if (!targetPost) {
-    const error = new HttpError("Post not exists!", 422);
-    return next(error);
-  }
-
-  //Check Admin
-  let isAdmin = false;
-  if (Dummy_users[0].id === uid) {
-    isAdmin = true;
-  }
+  const { userId } = req.userData;
+  const targetPost = res.locals.post;
+  const admin = res.locals.admin;
 
   //Check Post Owner
-  if (targetPost.authorId !== uid && !isAdmin) {
+  if (targetPost.authorId !== userId && !admin) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
 
   //Delete Post
   try {
-    blogs = blogs.filter((blog) => {
-      return blog.id !== postId;
+    let target;
+    blogs.map((blog, index) => {
+      if (blog.id === postId) target = index;
     });
+    if (target > -1) {
+      blogs.splice(target, 1);
+    }
   } catch (err) {
     const error = new HttpError(
       "Delete post failed, please try again later.",
