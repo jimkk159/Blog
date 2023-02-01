@@ -7,11 +7,14 @@ function UploadImage(props) {
   const {
     id: inputId,
     className,
+    ratioClassName,
     isDarkMode,
     isDrag,
     onDrag,
     onInput,
+    onUpdate,
     errorMessage,
+    placeholder,
   } = props;
 
   const inputRef = useRef(null);
@@ -33,7 +36,12 @@ function UploadImage(props) {
       setImage(pickedFile);
       setIsValid(true);
       fileIsValid = true;
-      onInput(inputId, pickedFile, fileIsValid);
+      if (onInput) {
+        onInput(inputId, pickedFile, fileIsValid);
+      }
+      if (onUpdate) {
+        onUpdate(pickedFile);
+      }
     } else {
       setIsValid(false);
       fileIsValid = false;
@@ -63,7 +71,12 @@ function UploadImage(props) {
       setImage(pickedFile);
       setIsValid(true);
       fileIsValid = true;
-      onInput(inputId, pickedFile, fileIsValid);
+      if (onInput) {
+        onInput(inputId, pickedFile, fileIsValid);
+      }
+      if (onUpdate) {
+        onUpdate(pickedFile);
+      }
     } else {
       setIsValid(false);
       fileIsValid = false;
@@ -92,7 +105,7 @@ function UploadImage(props) {
           onChange={inputImageHandler}
         />
         <div className={`${classes["upload-container"]} ${className}`}>
-          <div className={`${classes["upload-dummy"]}`}></div>
+          <div className={`${classes["upload-dummy"]} ${ratioClassName}`}></div>
           <div
             className={`${classes["upload-preview"]} ${
               isDarkMode
@@ -102,7 +115,9 @@ function UploadImage(props) {
             onClick={pickHandler}
           >
             {previewUrl && <img src={previewUrl} alt="preview" />}
-            {!previewUrl && <p className={`${classes["upload-img"]}`}>+</p>}
+            {!previewUrl && (
+              <p className={`${classes["upload-img"]}`}>{placeholder}</p>
+            )}
           </div>
         </div>
         {!isValid && <p>{errorMessage}</p>}

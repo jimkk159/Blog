@@ -20,10 +20,12 @@ import PostEditor from "../../shared/components/TextEditor/PostEditor";
 import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
+  const [postCover, setPostCover] = useState();
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+
   //Redux
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
@@ -37,14 +39,31 @@ function NewPostPage() {
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
+  //Save the Post Title
+  const savePostTitleHandler = () => {
+    const currentContent = titleState.getCurrentContent();
+    const contentBlock = currentContent.getFirstBlock();
+    const postTitle = contentBlock.getText();
+    return postTitle;
+  };
+
+  //Save the Post Editor
+  const savePostContentHandler = () => {
+    const currentContent = editorState.getCurrentContent();
+    const rawData = JSON.stringify(convertToRaw(currentContent));
+    return rawData;
+  };
+
   //Save the Post
   const savePostHandler = async () => {
     try {
-      const currentContent = editorState.getCurrentContent();
-      const rawData = JSON.stringify(convertToRaw(currentContent));
-      const [imgBlobs, convertedData] = convertImgURL(rawData);
+      const title = savePostTitleHandler();
+      const contentRawData = savePostContentHandler();
+      const [imgBlobs, convertedData] = convertImgURL(contentRawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
+        formData.append("title", title);
+        formData.append("cover", postCover);
         formData.append("language", isEnglish ? "en" : "ch");
         formData.append("contentState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {
@@ -52,6 +71,7 @@ function NewPostPage() {
         }
         return formData;
       };
+
       const sendForm = createSendForm(imgBlobs, convertedData);
       const response = await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/new`,
@@ -96,6 +116,7 @@ function NewPostPage() {
         onChange={setEditorState}
         titleState={titleState}
         onTitle={setTitleState}
+        onCover={setPostCover}
       />
       <div className={`${classes["btn-container"]}`}>
         <Button2

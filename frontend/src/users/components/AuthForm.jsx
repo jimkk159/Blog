@@ -184,6 +184,7 @@ function AuthForm(props) {
                   onInput={inputHandler}
                   isDrag={isDrag}
                   onDrag={setIsDrag}
+                  placeholder={"+"}
                 >
                   {language.uploadImage}
                 </UploadImage>

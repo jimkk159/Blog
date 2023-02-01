@@ -65,7 +65,7 @@ function ReadPost(props) {
             />
             <Image
               img={
-                postData?.cover?.img ? postData.cover.img : defaultCoverImage
+                postData?.cover?.img ? `${process.env.REACT_APP_BACKEND_URL}/${postData.cover.img}` : defaultCoverImage
               }
               description={postData?.description}
               isDarkMode={isDarkMode}

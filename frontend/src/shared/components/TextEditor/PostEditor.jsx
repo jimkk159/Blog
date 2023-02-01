@@ -27,7 +27,8 @@ const decorator = createLinkDecorator();
 const options = { year: "numeric", month: "short", day: "numeric" };
 
 function PostEditor(props) {
-  const { editorState, onChange, titleState, onTitle, className } = props;
+  const { editorState, onChange, titleState, onTitle, onCover, className } =
+    props;
   const [isDrag, setIsDrag] = useState(false);
   const titleEditor = useRef(null);
   const editor = useRef(null);
@@ -114,10 +115,12 @@ function PostEditor(props) {
         <div onDragEnter={dragHandler}>
           <UploadImage
             className={classes["cover"]}
+            ratioClassName={classes["cover-ratio"]}
             isDarkMode={isDarkMode}
             isDrag={isDrag}
+            placeholder={"+"}
             onDrag={setIsDrag}
-            onInput={()=>{}}
+            onUpdate={onCover}
           />
         </div>
         <Editor

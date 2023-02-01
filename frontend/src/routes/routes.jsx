@@ -114,6 +114,7 @@ export function RouteCreate() {
   if (isLoggedIn) {
     newBlogRoute = <Route path="new" element={<NewPostPage />} />;
   } else {
+    newBlogRoute = <Route path="new" element={<Navigate replace to="/" />} />;
     authRoute = !matches ? (
       <Route path="/auth" element={<AuthPage />} />
     ) : (
