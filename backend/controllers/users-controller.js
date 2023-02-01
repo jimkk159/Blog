@@ -107,7 +107,7 @@ export const signup = async (req, res, next) => {
   res.status(201).json({
     userId: newUser.id,
     admin: newUser.admin,
-    email: newUser.email,
+    name: newUser.name,
     avatar: newUser.avatar,
     token: token,
   });
@@ -164,7 +164,7 @@ export const login = async (req, res, next) => {
   res.json({
     userId: existingUser.id,
     admin: existingUser.admin,
-    email: existingUser.email,
+    name: existingUser.name,
     avatar: existingUser.avatar,
     token: token,
   });
