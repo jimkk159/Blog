@@ -35,7 +35,7 @@ function PostInfo(props) {
     tags,
     isPined,
   } = post;
-  const postCover = cover.img ? cover.img : defaultCoverImage;
+  const postCover = cover.img ? `${process.env.REACT_APP_BACKEND_URL}/${cover.img}` : defaultCoverImage;
 
   const [title, setTitle] = useState("No Title");
   const [showWarning, setShowWarning] = useState(false);
