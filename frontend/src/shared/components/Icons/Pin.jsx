@@ -4,6 +4,9 @@ import { BsFillPinAngleFill, BsFillPinFill } from "react-icons/bs";
 //Custom Hook
 import useHttp from "../../hooks/http-hook";
 
+//Custom Component
+import ErrorModal from "../UI/Modal/ErrorModal";
+
 //CSS
 import classes from "./Pin.module.css";
 
@@ -12,7 +15,7 @@ function Pin(props) {
   const [isPin, setIsPin] = useState(false);
 
   //Custom Hook
-  const { sendRequest } = useHttp();
+  const { error, sendRequest, clearError } = useHttp();
 
   useEffect(() => {
     setIsPin(isPined);
@@ -55,21 +58,27 @@ function Pin(props) {
   if (!show) return;
   if (isPin)
     return (
-      <BsFillPinFill
-        className={`${isAdmin && classes["pin"]} ${
-          !isDarkMode && classes["light-pin"]
-        } ${props.className}`}
-        onClick={unpinedHandler}
-      />
+      <>
+        <ErrorModal error={error} onClear={clearError} />
+        <BsFillPinFill
+          className={`${isAdmin && classes["pin"]} ${
+            !isDarkMode && classes["light-pin"]
+          } ${props.className}`}
+          onClick={unpinedHandler}
+        />
+      </>
     );
   if (isAdmin)
     return (
-      <BsFillPinAngleFill
-        className={`${isAdmin && classes["pin"]} ${
-          !isDarkMode && classes["light-pin"]
-        } ${props.className}`}
-        onClick={PinedHandler}
-      />
+      <>
+        <ErrorModal error={error} onClear={clearError} />
+        <BsFillPinAngleFill
+          className={`${isAdmin && classes["pin"]} ${
+            !isDarkMode && classes["light-pin"]
+          } ${props.className}`}
+          onClick={PinedHandler}
+        />
+      </>
     );
   return;
 }

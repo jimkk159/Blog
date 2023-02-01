@@ -26,7 +26,6 @@ function PostLayout() {
   const location = useLocation();
   const initIsEdit = location?.state?.isEdit ? location.state.isEdit : false;
   
-  //Todo use forselection
   const mouseDownHandler = () => {
     dispatch(toolbarActions.closeAll());
   };

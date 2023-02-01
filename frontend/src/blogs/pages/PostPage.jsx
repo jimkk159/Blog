@@ -89,7 +89,7 @@ function PostPage() {
           }
         );
         setIsEdit(false);
-      } catch (err) {}
+      } catch (err) {;}
     },
     [isEnglish, postId, editorState, sendRequestSave, setIsEdit]
   );

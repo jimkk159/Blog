@@ -50,7 +50,7 @@ function PostEditor(props) {
       ref={titleEditor}
       editorState={titleState}
       onChange={onTitle}
-      placeholder="Title..."
+      placeholder="Click to add Title..."
       textAlignment="center"
     />
   );
@@ -88,7 +88,7 @@ function PostEditor(props) {
       setIsDrag(true);
     }
   };
-  //todo Add image upload function
+
   return (
     <div
       className={`${classes["editor-wrapper"]} ${className} ${
