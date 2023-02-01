@@ -109,6 +109,7 @@ export const getPosts = async (req, res, next) => {
     );
     return next(error);
   }
+  console.log(queryResponse);
   res.json(queryResponse);
 };
 
@@ -214,7 +215,11 @@ export const createNewPost = async (req, res, next) => {
 
   //Create New Post
   let coverPath;
-  if (req?.files?.cover[0]?.path) {
+  if (
+    req?.files?.cover &&
+    req?.files?.cover.length > 0 &&
+    req?.files?.cover[0]?.path
+  ) {
     coverPath = normalize(req.files?.cover[0]?.path);
   }
   const newPost = {

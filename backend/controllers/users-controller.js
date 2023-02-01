@@ -103,7 +103,7 @@ export const signup = async (req, res, next) => {
     );
     return next(error);
   }
-  console.log(newUser);
+
   res.status(201).json({
     userId: newUser.id,
     admin: newUser.admin,
