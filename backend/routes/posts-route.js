@@ -25,10 +25,14 @@ router.use(checkAuth);
 
 router.post(
   "/new",
-  fileUploadToServer.array("images"),
+  fileUploadToServer.fields([
+    { name: "cover", maxCount: 1 },
+    { name: "images" },
+  ]),
   [check("contentState").not().isEmpty()],
   createNewPost
 );
+
 router.put(
   "/:pid",
   fileUploadToServer.array("images"),
@@ -36,10 +40,7 @@ router.put(
   editPost
 );
 
-router.patch(
-  "/:pid/pin",
-  pinPost
-);
+router.patch("/:pid/pin", pinPost);
 
 router.delete("/:pid", deletePost);
 

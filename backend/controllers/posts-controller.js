@@ -162,9 +162,8 @@ export const createNewPost = async (req, res, next) => {
   }
 
   //Find User
-  const { language, contentState } = req.body;
   const { userId: uid } = req.userData;
-
+  const { title, language, contentState } = req.body;
   let findingUser;
   try {
     findingUser = Dummy_users.filter((user) => user.id === uid)[0];
@@ -197,9 +196,11 @@ export const createNewPost = async (req, res, next) => {
     }
 
     //Change Image
-    req.files.map((file, index) => {
-      newEntityMap[index].data.src = normalize(file.path);
-    });
+    if (req?.files?.images) {
+      req.files.images.map((file, index) => {
+        newEntityMap[index].data.src = normalize(file.path);
+      });
+    }
     postContentState = JSON.stringify(newContentState);
 
     // Unprocessable EditorState
@@ -212,6 +213,10 @@ export const createNewPost = async (req, res, next) => {
   }
 
   //Create New Post
+  let coverPath;
+  if (req?.files?.cover[0]?.path) {
+    coverPath = normalize(req.files?.cover[0]?.path);
+  }
   const newPost = {
     id: uuidv4(),
     topic: null,
@@ -221,7 +226,7 @@ export const createNewPost = async (req, res, next) => {
     isPined: false,
     tags: [],
     cover: {
-      img: null,
+      img: coverPath,
       description: null,
     },
     language: { en: {}, ch: {} },
@@ -229,7 +234,7 @@ export const createNewPost = async (req, res, next) => {
 
   try {
     const postContent = {
-      title: "",
+      title,
       support: true,
       short: "bra bra bra",
       contentState: postContentState,
@@ -415,7 +420,6 @@ export const pinPost = async (req, res, next) => {
     const error = new HttpError("Permissions deny.", 422);
     return next(error);
   }
-
 
   //Pin Post
   try {
