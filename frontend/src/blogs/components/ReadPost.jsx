@@ -29,6 +29,7 @@ import classes from "./ReadPost.module.css";
 const decorator = createLinkDecorator();
 function ReadPost(props) {
   const {
+    tagsClassName,
     postData,
     title,
     topics,
@@ -89,7 +90,7 @@ function ReadPost(props) {
                 "影像分割 Image Segmentation — 語義分割 Semantic Segmentation(1)",
               ]}
             />
-            <div className={classes["tags-container"]}>
+            <div className={tagsClassName}>
               <Tags content={postData?.tags} />
             </div>
           </>

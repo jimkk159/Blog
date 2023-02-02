@@ -1,6 +1,7 @@
 import React from "react";
 
 //Custom Component
+import Tags from "../../shared/components/UI/Tags";
 import Button2 from "../../shared/components/Form/Button2";
 import Backdrop from "../../shared/components/UI/Backdrop";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
@@ -12,6 +13,8 @@ import classes from "./EditPost.module.css";
 
 function EditPost(props) {
   const {
+    tagsClassName,
+    postData,
     originState,
     editorState,
     isLoading,
@@ -51,6 +54,9 @@ function EditPost(props) {
         editorState={editorState}
         onChange={onChange}
       />
+      <div className={tagsClassName}>
+        <Tags content={postData?.tags} />
+      </div>
       <div className={`${classes["btn-container"]}`}>
         <Button2
           className={`${classes["btn"]}`}

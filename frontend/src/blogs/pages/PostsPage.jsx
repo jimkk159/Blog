@@ -62,7 +62,6 @@ function PostsPage() {
   //Fetch Posts
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log("get Post");
       try {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL +

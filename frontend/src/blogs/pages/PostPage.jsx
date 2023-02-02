@@ -16,6 +16,9 @@ import EditPost from "../components/EditPost";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import DeleteModal from "../../shared/components/UI/Modal/DeleteModal";
 
+//CSS
+import classes from "./PostPage.module.css"
+
 function PostPage() {
   const [postData, setPostData] = useState(null);
   const [topics, setTopics] = useState(null);
@@ -89,7 +92,7 @@ function PostPage() {
           }
         );
         setIsEdit(false);
-      } catch (err) {;}
+      } catch (err) {}
     },
     [isEnglish, postId, editorState, sendRequestSave, setIsEdit]
   );
@@ -172,6 +175,7 @@ function PostPage() {
       />
       {isEdit ? (
         <EditPost
+          tagsClassName={classes["tags-container"]}
           postData={postData}
           originState={originState}
           editorState={editorState}
@@ -186,6 +190,7 @@ function PostPage() {
         />
       ) : (
         <ReadPost
+          tagsClassName={classes["tags-container"]}
           title={title}
           topics={topics}
           postData={postData}

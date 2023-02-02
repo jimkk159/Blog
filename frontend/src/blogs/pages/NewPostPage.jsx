@@ -14,15 +14,19 @@ import Button2 from "../../shared/components/Form/Button2";
 import Backdrop from "../../shared/components/UI/Backdrop";
 import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
-import PostEditor from "../../shared/components/TextEditor/PostEditor";
+import PostEditor from "../../blogs/components/PostEditor";
 
 //CSS
 import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
   const [postCover, setPostCover] = useState();
+  const [tags, setTags] = useState([]);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const [tagsEditorState, setTagsEditorState] = useState(() =>
     EditorState.createEmpty()
   );
 
@@ -54,10 +58,21 @@ function NewPostPage() {
     return rawData;
   };
 
+  //Save the Post Tags
+  const savePostTagsHandler = () => {
+    const currentContent = tagsEditorState.getCurrentContent();
+    const contentBlock = currentContent.getFirstBlock();
+    const tag = contentBlock.getText();
+    return tag;
+  };
+
   //Save the Post
   const savePostHandler = async () => {
     try {
       const title = savePostTitleHandler();
+      const tag = savePostTagsHandler().trim();
+      console.log(`1${tag}1`)
+      const newTags = tag ? [...tags, tag] : [...tags];
       const contentRawData = savePostContentHandler();
       const [imgBlobs, convertedData] = convertImgURL(contentRawData);
       const createSendForm = (imgArray, draftRawData) => {
@@ -68,6 +83,9 @@ function NewPostPage() {
         formData.append("contentState", draftRawData);
         for (let i = 0; i < imgArray.length; i++) {
           formData.append("images", imgArray[i]);
+        }
+        for (let i = 0; i < newTags.length; i++) {
+          formData.append("tags", newTags[i]);
         }
         return formData;
       };
@@ -112,10 +130,14 @@ function NewPostPage() {
         </>
       )}
       <PostEditor
+        tags={tags}
+        onTags={setTags}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}
-        onTitle={setTitleState}
+        onChangeTitle={setTitleState}
+        tagsState={tagsEditorState}
+        onChangeTags={setTagsEditorState}
         onCover={setPostCover}
       />
       <div className={`${classes["btn-container"]}`}>

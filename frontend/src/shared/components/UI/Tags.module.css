@@ -4,13 +4,9 @@
   font-size: 20px;
   height: 15%;
 }
-.detail-bottom a {
-  border-radius: 100px;
-  font-size: 10px;
-  margin: 0 4px;
-  padding: 2px 8px;
-  text-decoration: none;
-}
 .icon {
   margin-right: 0.5rem;
+}
+.editor-tag{
+  min-width: 30px;
 }

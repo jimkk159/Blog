@@ -5,12 +5,27 @@ import { Link } from "react-router-dom";
 import classes from "./Tag.module.css";
 
 function Tag(props) {
-  const { tag, isDarkMode } = props;
+  const { className, tag, isEdit, isDarkMode, onKeyDown } = props;
+  if (isEdit)
+    return (
+      <div
+        className={`${className} ${classes["tag"]} ${
+          isDarkMode ? classes["dark"] : classes["light"]
+        }`}
+        onKeyDown={onKeyDown}
+      >
+        {tag}
+      </div>
+    );
   return (
     <Link
       to={`/search/${tag}`}
-      className={`${isDarkMode ? classes["dark"] : classes["light"]}`}
-      onClick={(event)=>{event.stopPropagation();}}
+      className={`${className} ${classes["tag"]} ${
+        isDarkMode ? classes["dark"] : classes["light"]
+      }`}
+      onClick={(event) => {
+        event.stopPropagation();
+      }}
     >
       {tag}
     </Link>

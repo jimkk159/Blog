@@ -1,22 +1,32 @@
 import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RichUtils, getDefaultKeyBinding } from "draft-js";
+import {
+  RichUtils,
+  EditorState,
+  getDefaultKeyBinding,
+} from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
-import { toolbarActions } from "../../../store/toolbar-slice";
+import { toolbarActions } from "../../store/toolbar-slice";
 
 //Custom Function
-import Card from "../UI/Card";
-import { styleMap } from "../../util/style-map";
-import plugins, { AlignmentTool } from "./Plugin";
-import { getBlockStyle, getCustomStyleFn } from "./CustomStyleFn";
-import { createLinkDecorator } from "./decorators/LinkDecorator";
-import UploadImage from "../../components/Form/UploadImage";
-import PostDetailTitle from "../../../blogs/components/PostDetail/PostDetailTitle";
+import { styleMap } from "../../shared/util/style-map";
+import plugins, {
+  AlignmentTool,
+} from "../../shared/components/TextEditor/Plugin";
+import { createLinkDecorator } from "../../shared/components/TextEditor/decorators/LinkDecorator";
+import {
+  getBlockStyle,
+  getCustomStyleFn,
+} from "../../shared/components/TextEditor/CustomStyleFn";
 
 //Custom Component
-import ToolBar from "./ToolBar/ToolBar";
+import Card from "../../shared/components/UI/Card";
+import Tags from "../../shared/components/UI/Tags";
+import ToolBar from "../../shared/components/TextEditor/ToolBar/ToolBar";
+import UploadImage from "../../shared/components/Form/UploadImage";
+import PostDetailTitle from "./PostDetail/PostDetailTitle";
 
 //CSS
 import "draft-js/dist/Draft.css";
@@ -27,11 +37,22 @@ const decorator = createLinkDecorator();
 const options = { year: "numeric", month: "short", day: "numeric" };
 
 function PostEditor(props) {
-  const { editorState, onChange, titleState, onTitle, onCover, className } =
-    props;
+  const {
+    className,
+    tags,
+    titleState,
+    editorState,
+    tagsState,
+    onTags,
+    onChangeTitle,
+    onChange,
+    onChangeTags,
+    onCover,
+  } = props;
+
+  const editorRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
-  const titleEditor = useRef(null);
-  const editor = useRef(null);
+
 
   //Redux
   const { name: authorName, avatar: authorAvatar } = useSelector(
@@ -40,20 +61,48 @@ function PostEditor(props) {
   const isDarkMode = useSelector((state) => state.theme.value);
   const dispatch = useDispatch();
 
-  const focusEditorHandler = () => {
-    editor.current.focus();
-    dispatch(toolbarActions.closeAll());
-  };
-
   const titleContent = (
     <Editor
-      ref={titleEditor}
       editorState={titleState}
-      onChange={onTitle}
+      onChange={onChangeTitle}
       placeholder="Click to add Title..."
       textAlignment="center"
     />
   );
+
+  const tagsContent = (
+    <Editor
+      editorState={tagsState}
+      onChange={onChangeTags}
+      placeholder="+..."
+    />
+  );
+
+  //When Drag in trigger upload area
+  const dragHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "dragenter") {
+      setIsDrag(true);
+    }
+  };
+
+  const focusEditorHandler = () => {
+    editorRef.current.focus();
+    dispatch(toolbarActions.closeAll());
+  };
+
+  const addTagHandler = (event) => {
+    if (event.key === "Enter") {
+      const currentContent = tagsState.getCurrentContent();
+      const contentBlock = currentContent.getFirstBlock();
+      const tag = contentBlock.getText().trim();
+      if (!!tag) {
+        onTags((prev) => [...prev, tag]);
+      }
+      onChangeTags(() => EditorState.createEmpty());
+    }
+  };
 
   const handleKeyCommandHandler = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
@@ -78,15 +127,6 @@ function PostEditor(props) {
       return;
     }
     return getDefaultKeyBinding(event);
-  };
-
-  //When Drag in trigger upload area
-  const dragHandler = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (event.type === "dragenter") {
-      setIsDrag(true);
-    }
   };
 
   return (
@@ -124,7 +164,7 @@ function PostEditor(props) {
           />
         </div>
         <Editor
-          ref={editor}
+          ref={editorRef}
           editorState={editorState}
           onChange={onChange}
           decorators={[decorator]}
@@ -138,6 +178,14 @@ function PostEditor(props) {
           plugins={plugins}
           onClick={focusEditorHandler}
         />
+        <div className={classes["tags-container"]}>
+          <Tags
+            isEdit
+            isDarkMode={isDarkMode}
+            content={[...tags, tagsContent]}
+            onKeyDown={addTagHandler}
+          />
+        </div>
       </Card>
       <AlignmentTool />
     </div>

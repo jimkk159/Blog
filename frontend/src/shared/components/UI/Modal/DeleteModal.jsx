@@ -40,7 +40,6 @@ function DeleteModal(props) {
       if (onDelete) {
         onDelete(pid);
       }
-      console.log("navigate");
       navigate("/");
     } catch (err) {}
   };
