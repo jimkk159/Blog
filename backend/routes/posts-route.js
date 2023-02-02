@@ -54,7 +54,7 @@ router.put(
   fileUploadToServer.array("images"),
   [check("contentState").not().isEmpty()],
   validation,
-  addPostAuthor,
+  getPost,
   getUser,
   checkPostAuthor,
   replaceImageSrc,
@@ -65,11 +65,11 @@ router.patch(
   "/:pid/pin",
   [check("pin").not().isEmpty()],
   validation,
-  addPostAuthor,
+  getPost,
   checkAdmin,
   pinPost
 );
 
-router.delete("/:pid", addPostAuthor, checkAdmin, deletePost);
+router.delete("/:pid", getPost, checkAdmin, deletePost);
 
 export default router;

@@ -90,7 +90,7 @@ export const getPostsAuthor = async (req, res, next) => {
 export const addPostAuthor = async (req, res, next) => {
   const author = res.locals.author;
   const targetPost = res.locals.post;
-
+  
   res.json({
     ...targetPost,
     authorName: author.name,
@@ -182,7 +182,7 @@ export const getPostSearch = async (req, res, next) => {
 
 export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
-  const { title, language } = req.body;
+  const { title, language, tags } = req.body;
   const findingUser = res.locals.user;
   const contentState = res.locals.contentState;
 
@@ -195,6 +195,7 @@ export const createNewPost = async (req, res, next) => {
   ) {
     coverPath = normalize(req.files?.cover[0]?.path);
   }
+
   const newPost = {
     id: uuidv4(),
     topic: null,
@@ -208,7 +209,7 @@ export const createNewPost = async (req, res, next) => {
     },
     language: { en: {}, ch: {} },
     comments: [],
-    tags: [],
+    tags: tags ? (Array.isArray(tags) ? [...tags] : [tags]) : [],
   };
 
   try {
