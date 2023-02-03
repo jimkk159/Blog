@@ -85,16 +85,15 @@ function PostEditor(props) {
 
   const editorTag = (
     <>
-      {isTag && (
-        <TagsToolTip
-          className={`${classes["tool-tip-light"]}`}
-          show
-          topics={topics}
-          tags={tags}
-          isDarkMode={isDarkMode}
-          onTag={addTagHandler}
-        />
-      )}
+      <TagsToolTip
+        className={`${classes["tool-tip-light"]}`}
+        show={isTag}
+        topics={topics}
+        tags={tags}
+        isAnimate
+        isDarkMode={isDarkMode}
+        onTag={addTagHandler}
+      />
       <div onClick={tagFocusHandler}>
         <Editor
           ref={tagRef}

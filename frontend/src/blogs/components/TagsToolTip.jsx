@@ -7,7 +7,15 @@ import ToolTip from "../../shared/components/UI/ToolTip";
 //CSS
 import classes from "./TagsToolTip.module.css";
 
-function TagsToolTip({ className, show, isDarkMode, topics, tags, onTag }) {
+function TagsToolTip({
+  className,
+  show,
+  isAnimate,
+  isDarkMode,
+  topics,
+  tags,
+  onTag,
+}) {
   const [searchItem, setSearchItem] = useState("");
   const tagsToLower = tags.map((tag) => tag.toLowerCase());
 
@@ -22,7 +30,7 @@ function TagsToolTip({ className, show, isDarkMode, topics, tags, onTag }) {
           key={index}
           tag={topic}
           isEdit
-          isDarkMode={!isDarkMode}
+          isDarkMode={isDarkMode}
           onClick={() => {
             onTag(topic);
           }}
@@ -35,9 +43,8 @@ function TagsToolTip({ className, show, isDarkMode, topics, tags, onTag }) {
   const searchChangeHandler = (event) => {
     setSearchItem(event.target.value);
   };
-  if (!show) return;
   return (
-    <ToolTip className={`${className}`} show>
+    <ToolTip className={`${className}`} show={show} isAnimate={isAnimate}>
       <div
         className={`${classes["container"]} ${
           isDarkMode ? classes["container-dark"] : classes["container-light"]
@@ -45,14 +52,20 @@ function TagsToolTip({ className, show, isDarkMode, topics, tags, onTag }) {
       >
         <input
           type="text"
-          className={`${
+          className={`${classes["tag-input"]} ${
             isDarkMode ? classes["input-dark"] : classes["input-light"]
           }`}
           placeholder={"Search..."}
           onChange={searchChangeHandler}
         />
-        <hr />
-        {tagsChoice}
+        <hr className={`${classes["tag-hr"]}`} />
+        <div
+          className={`${classes["tags-container"]} ${
+            isDarkMode ? classes["tags-dark"] : classes["tags-light"]
+          }`}
+        >
+          {tagsChoice}
+        </div>
       </div>
     </ToolTip>
   );

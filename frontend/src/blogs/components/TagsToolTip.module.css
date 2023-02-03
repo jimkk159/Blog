@@ -6,17 +6,19 @@
   width: 100%;
 }
 .container-light {
-  background-color: #8b8b8b;
+  background-color: #fc94af;
 }
-.container input {
+.tag-input {
   border: none;
+  color: white;
+  font-size: 10px;
   margin: 0;
   outline: none;
-  padding-bottom: 0;
+  padding: 0.25rem 1rem 0.1rem;
   width: 100%;
 }
 .input-light {
-  background-color: #8b8b8b;
+  background-color: #fc94af;
 }
 .input-dark::placeholder {
   color: #ababab;
@@ -24,9 +26,22 @@
 .input-light::placeholder {
   color: white;
 }
-.container hr {
+.tag-hr {
   border-left: 0;
   border-right: 0;
+  margin-bottom: 0;
   margin-top: 0;
   width: 100%;
+}
+.tags-container {
+  cursor: default;
+  height: 100%;
+  padding: 0.5rem;
+  width: 100%;
+}
+.tags-light {
+  background-color: #fff;
+}
+.tags-dark {
+  background-color: #444;
 }
