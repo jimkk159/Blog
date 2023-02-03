@@ -1,13 +1,10 @@
 import React, { useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  RichUtils,
-  EditorState,
-  getDefaultKeyBinding,
-} from "draft-js";
+import { RichUtils, EditorState, getDefaultKeyBinding } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
+import { tagActions } from "../../store/tag-slice";
 import { toolbarActions } from "../../store/toolbar-slice";
 
 //Custom Function
@@ -22,6 +19,7 @@ import {
 } from "../../shared/components/TextEditor/CustomStyleFn";
 
 //Custom Component
+import TagsToolTip from "./TagsToolTip";
 import Card from "../../shared/components/UI/Card";
 import Tags from "../../shared/components/UI/Tags";
 import ToolBar from "../../shared/components/TextEditor/ToolBar/ToolBar";
@@ -40,6 +38,7 @@ function PostEditor(props) {
   const {
     className,
     tags,
+    topics,
     titleState,
     editorState,
     tagsState,
@@ -51,14 +50,15 @@ function PostEditor(props) {
   } = props;
 
   const editorRef = useRef(null);
+  const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
 
-
   //Redux
+  const isTag = useSelector((state) => state.tag.isTag);
+  const isDarkMode = useSelector((state) => state.theme.value);
   const { name: authorName, avatar: authorAvatar } = useSelector(
     (state) => state.auth
   );
-  const isDarkMode = useSelector((state) => state.theme.value);
   const dispatch = useDispatch();
 
   const titleContent = (
@@ -70,12 +70,40 @@ function PostEditor(props) {
     />
   );
 
-  const tagsContent = (
-    <Editor
-      editorState={tagsState}
-      onChange={onChangeTags}
-      placeholder="+..."
-    />
+  //Add Tag
+  const addTagHandler = (tag) => {
+    if (!!tag) {
+      onTags((prev) => [...prev, tag]);
+    }
+  };
+
+  //Focus Tag Editor
+  const tagFocusHandler = () => {
+    tagRef.current.focus();
+    dispatch(tagActions.show());
+  };
+
+  const editorTag = (
+    <>
+      {isTag && (
+        <TagsToolTip
+          className={`${classes["tool-tip-light"]}`}
+          show
+          topics={topics}
+          tags={tags}
+          isDarkMode={isDarkMode}
+          onTag={addTagHandler}
+        />
+      )}
+      <div onClick={tagFocusHandler}>
+        <Editor
+          ref={tagRef}
+          editorState={tagsState}
+          onChange={onChangeTags}
+          placeholder="+..."
+        />
+      </div>
+    </>
   );
 
   //When Drag in trigger upload area
@@ -87,21 +115,26 @@ function PostEditor(props) {
     }
   };
 
+  //ToDo add article reference
   const focusEditorHandler = () => {
     editorRef.current.focus();
     dispatch(toolbarActions.closeAll());
   };
 
-  const addTagHandler = (event) => {
+  //Add Tag by type
+  const addTypeTagHandler = (event) => {
     if (event.key === "Enter") {
       const currentContent = tagsState.getCurrentContent();
       const contentBlock = currentContent.getFirstBlock();
       const tag = contentBlock.getText().trim();
-      if (!!tag) {
-        onTags((prev) => [...prev, tag]);
-      }
+      addTagHandler(tag);
       onChangeTags(() => EditorState.createEmpty());
     }
+  };
+
+  //Remove Tag
+  const removeTagHandler = (targetTag) => {
+    onTags(tags.filter((tag) => tag !== targetTag));
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
@@ -163,27 +196,30 @@ function PostEditor(props) {
             onUpdate={onCover}
           />
         </div>
-        <Editor
-          ref={editorRef}
-          editorState={editorState}
-          onChange={onChange}
-          decorators={[decorator]}
-          blockStyleFn={getBlockStyle}
-          customStyleMap={styleMap}
-          customStyleFn={getCustomStyleFn}
-          handleKeyCommand={handleKeyCommandHandler}
-          keyBindingFn={mapKeyToEditorCommandHandler}
-          placeholder="Tell a story..."
-          spellCheck={true}
-          plugins={plugins}
-          onClick={focusEditorHandler}
-        />
+        <div className={classes["editor-container"]}>
+          <Editor
+            ref={editorRef}
+            editorState={editorState}
+            onChange={onChange}
+            decorators={[decorator]}
+            blockStyleFn={getBlockStyle}
+            customStyleMap={styleMap}
+            customStyleFn={getCustomStyleFn}
+            handleKeyCommand={handleKeyCommandHandler}
+            keyBindingFn={mapKeyToEditorCommandHandler}
+            placeholder="Tell a story..."
+            spellCheck={true}
+            plugins={plugins}
+            onClick={focusEditorHandler}
+          />
+        </div>
         <div className={classes["tags-container"]}>
           <Tags
             isEdit
             isDarkMode={isDarkMode}
-            content={[...tags, tagsContent]}
-            onKeyDown={addTagHandler}
+            content={[...tags, editorTag]}
+            onRemove={removeTagHandler}
+            onKeyDown={addTypeTagHandler}
           />
         </div>
       </Card>

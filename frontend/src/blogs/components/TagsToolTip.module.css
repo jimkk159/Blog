@@ -1,0 +1,32 @@
+.container {
+  cursor: default;
+  height: 100%;
+  padding: 0.5rem 1rem;
+  position: relative;
+  width: 100%;
+}
+.container-light {
+  background-color: #8b8b8b;
+}
+.container input {
+  border: none;
+  margin: 0;
+  outline: none;
+  padding-bottom: 0;
+  width: 100%;
+}
+.input-light {
+  background-color: #8b8b8b;
+}
+.input-dark::placeholder {
+  color: #ababab;
+}
+.input-light::placeholder {
+  color: white;
+}
+.container hr {
+  border-left: 0;
+  border-right: 0;
+  margin-top: 0;
+  width: 100%;
+}

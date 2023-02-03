@@ -3,7 +3,7 @@ import { BsFillMoonFill } from "react-icons/bs";
 import { BsSunFill } from "react-icons/bs";
 
 //Custom Component
-import Circle from "../UI/Circle";
+import Circle from "./Circle";
 
 //CSS
 import classes from "./Theme.module.css";

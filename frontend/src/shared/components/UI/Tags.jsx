@@ -10,7 +10,7 @@ import Tag from "./Tag";
 import classes from "./Tags.module.css";
 
 function Tags(props) {
-  const { isEdit, isDarkMode, content, onKeyDown } = props;
+  const { content,isEdit, isDarkMode,  onKeyDown, onRemove } = props;
   const [editTag, setEditTag] = useState(null);
   const [tags, setTags] = useState([]);
 
@@ -28,15 +28,21 @@ function Tags(props) {
     <div className={classes["detail-bottom"]}>
       <AiOutlineTag className={classes["icon"]} />
       {tags?.map((tag, index) => (
-        <Tag key={index} tag={tag} isDarkMode={isDarkMode} isEdit={isEdit}/>
+        <Tag
+          key={index}
+          tag={tag}
+          isDarkMode={isDarkMode}
+          isEdit={isEdit}
+          onClick={() => onRemove(tag)}
+        />
       ))}
       {isEdit && (
         <Tag
+          isEdit
           key={"editor-tag"}
           className={classes["editor-tag"]}
           tag={editTag}
           isDarkMode={isDarkMode}
-          isEdit
           onKeyDown={onKeyDown}
         />
       )}

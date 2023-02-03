@@ -10,9 +10,9 @@ import { themeActions } from "../../../store/theme-slice";
 import { languageActions } from "../../../store/language-slice";
 
 //Custom Component
-import Theme from "./Theme";
-import Search from "./Search";
-import Languae from "./Laguage";
+import Theme from "../UI/Theme";
+import Search from "../UI/Search";
+import Languae from "../UI/Laguage";
 import NavigationHeader from "./NavigationHeader";
 import NavigationItems from "./NavigationItems";
 import Hamburger from "../UI/Hamburger";

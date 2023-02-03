@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 //Redux Slice
+import { tagActions } from "../../../store/tag-slice";
 import { toolbarActions } from "../../../store/toolbar-slice";
 
 //Image
@@ -19,8 +20,8 @@ function PostLayout() {
   const [isEdit, setIsEdit] = useState(false);
 
   //Redux
-  const dispatch = useDispatch();
   const isDarkMode = useSelector((state) => state.theme.value);
+  const dispatch = useDispatch();
 
   //React Router
   const location = useLocation();
@@ -28,8 +29,9 @@ function PostLayout() {
   
   const mouseDownHandler = () => {
     dispatch(toolbarActions.closeAll());
+    dispatch(tagActions.close());
   };
-
+  
   useEffect(() => {
     setIsEdit(initIsEdit);
   }, [initIsEdit]);

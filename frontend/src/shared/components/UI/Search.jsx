@@ -80,7 +80,7 @@ function Search(props) {
         className={`${!isSearch && classes["input-hide"]} ${classes.input} ${
           props.isDarkMode ? classes.dark : classes.light
         }`}
-        placeholder={isSearch ? "Search..." : null}
+        placeholder={!isSearch ? null : "Search..."}
         onFocus={openSearchHandler}
         onChange={searchChangeHandler}
         onKeyDown={searchHandler}

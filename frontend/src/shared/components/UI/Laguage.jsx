@@ -1,7 +1,7 @@
 import React from "react";
 
 //Custom Component
-import Toggle from "../UI/Toggle";
+import Toggle from "./Toggle";
 
 //CSS
 // import classes from "./Laguage.module.css";

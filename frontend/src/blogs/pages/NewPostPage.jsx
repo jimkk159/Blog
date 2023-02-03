@@ -20,8 +20,10 @@ import PostEditor from "../../blogs/components/PostEditor";
 import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
-  const [postCover, setPostCover] = useState();
   const [tags, setTags] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [topicsInfo, setTopicsInfo] = useState([]);
+  const [postCover, setPostCover] = useState(null);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
@@ -42,6 +44,12 @@ function NewPostPage() {
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
+  const {
+    isLoading: isLoadingTopic,
+    error: errorTopic,
+    sendRequest: sendRequestTopic,
+    clearError: clearErrorTopic,
+  } = useHttp();
 
   //Save the Post Title
   const savePostTitleHandler = () => {
@@ -71,7 +79,6 @@ function NewPostPage() {
     try {
       const title = savePostTitleHandler();
       const tag = savePostTagsHandler().trim();
-      console.log(`1${tag}1`)
       const newTags = tag ? [...tags, tag] : [...tags];
       const contentRawData = savePostContentHandler();
       const [imgBlobs, convertedData] = convertImgURL(contentRawData);
@@ -114,6 +121,21 @@ function NewPostPage() {
     if (!isLoggedIn) navigate(`/`);
   }, [isLoggedIn, navigate]);
 
+  //GET Topics
+  useEffect(() => {
+    const fetchTopics = async () => {
+      try {
+        const responseData = await sendRequestTopic(
+          process.env.REACT_APP_BACKEND_URL + "/topics"
+        );
+        setTopicsInfo(responseData);
+        const topicsTextArray = responseData.map((item)=>item.topic)
+        setTopics(topicsTextArray)
+      } catch (err) {}
+    };
+    fetchTopics();
+  }, [sendRequestTopic]);
+
   useEffect(() => {
     setIsEdit(true);
   }, [setIsEdit]);
@@ -121,7 +143,8 @@ function NewPostPage() {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
+      <ErrorModal error={errorTopic} onClear={clearErrorTopic} />
+      {(isLoading || isLoadingTopic) && (
         <>
           <Backdrop />
           <div className={`${classes["loading-container"]}`}>
@@ -131,6 +154,7 @@ function NewPostPage() {
       )}
       <PostEditor
         tags={tags}
+        topics={topics}
         onTags={setTags}
         editorState={editorState}
         onChange={setEditorState}
