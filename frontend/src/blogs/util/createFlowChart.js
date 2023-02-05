@@ -83,7 +83,7 @@ export function createSvgElement(
         r: radius,
         width: width,
         height: height,
-        elementAttr: { fill: colors[i] },
+        elementAttr: { fill: colors[i % colors.length] },
       });
     }
   }

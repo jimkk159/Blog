@@ -21,7 +21,7 @@ import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
   const [tags, setTags] = useState([]);
-  const [postTopic, setPostTopic] = useState([]);
+  const [currentTopicInfo, setCurrentTopicInfo] = useState([]);
   const [topics, setTopics] = useState([]);
   const [topicsInfo, setTopicsInfo] = useState([]);
   const [postCover, setPostCover] = useState(null);
@@ -85,6 +85,7 @@ function NewPostPage() {
       const [imgBlobs, convertedData] = convertImgURL(contentRawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
+        formData.append("topicInfo", JSON.stringify(currentTopicInfo));
         formData.append("title", title);
         formData.append("cover", postCover);
         formData.append("language", isEnglish ? "en" : "ch");
@@ -156,10 +157,10 @@ function NewPostPage() {
       <PostEditor
         tags={tags}
         topicsInfo={topicsInfo}
-        topic={postTopic}
+        topicInfo={currentTopicInfo}
         topics={topics}
         onTags={setTags}
-        onTopic={setPostTopic}
+        onTopic={setCurrentTopicInfo}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}

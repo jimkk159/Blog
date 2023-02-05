@@ -54,7 +54,7 @@ const topicReducer = (state, action) => {
   }
 };
 
-function PostTopic({ topics, topicsInfo, isDarkMode, onChange }) {
+function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
   const searchRef = useRef(null);
   const [searchItem, setSearchItem] = useState("");
   const [topicState, dispatch] = useReducer(topicReducer, initialState);
@@ -88,6 +88,7 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange }) {
           parent: topicInfo?.parent,
           childs: topicInfo?.childs,
         });
+        onTag(topicInfo?.topic);
         return dispatch({
           type: "SET",
           topic: topicInfo?.topic,
@@ -145,6 +146,7 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange }) {
         parent: topicInfo?.parent,
         childs: topicInfo?.childs,
       });
+      onTag(topicInfo?.topic);
       return dispatch({
         type: "SET",
         topic: topicInfo?.topic,
@@ -212,7 +214,7 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange }) {
     const newChilds = topicState.childs.filter((item) => item !== child);
     onChange({
       ...topicState,
-      child: newChilds,
+      childs: newChilds,
     });
     dispatch({
       type: "REMOVE_CHILD",
@@ -242,9 +244,9 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange }) {
       >
         <div className={classes["topic-tags"]}>
           {topics.map((topic, index) => {
-            const topicToLower = topic.toLowerCase();
+            const topicToLower = topic?.toLowerCase();
             if (
-              topicToLower.includes(searchItem.toLowerCase()) &&
+              topicToLower.includes(searchItem?.toLowerCase()) &&
               topicToLower !== "root"
             )
               return (

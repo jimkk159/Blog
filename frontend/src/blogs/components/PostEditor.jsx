@@ -44,7 +44,7 @@ function PostEditor(props) {
   const {
     className,
     tags,
-    topic,
+    topicInfo,
     topics,
     topicsInfo,
     titleState,
@@ -61,7 +61,7 @@ function PostEditor(props) {
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-console.log(topic)
+
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -195,11 +195,12 @@ console.log(topic)
       }`}
     >
       <PostTopic
-        topic={topic}
+        topic={topicInfo}
         topics={topics}
         topicsInfo={topicsInfo}
         isDarkMode={isDarkMode}
         onChange={onTopic}
+        onTag={addTagHandler}
       />
       <ToolBar
         editorState={editorState}
