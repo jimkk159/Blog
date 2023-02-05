@@ -104,7 +104,7 @@ export const generateToken = (req, res, next) => {
     token = jwt.sign(
       { userId: user.id, email: user.email },
       process.env.JWT_KEY,
-      { expiresIn: "1h" }
+      { expiresIn: "3h" }
     );
   } catch (err) {
     const error = new HttpError(

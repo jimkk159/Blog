@@ -3,6 +3,7 @@ import normalize from "normalize-path";
 
 import { users, blogs } from "./blogs.js";
 import HttpError from "../models/http-error.js";
+import { DUMMY_Structure } from "./Dummy_data.js";
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 const options = { year: "numeric", month: "short", day: "numeric" };
@@ -90,11 +91,11 @@ export const getPostsAuthor = async (req, res, next) => {
 export const addPostAuthor = async (req, res, next) => {
   const author = res.locals.author;
   const targetPost = res.locals.post;
-  
+
   res.json({
     ...targetPost,
-    authorName: author.name,
-    authorAvatar: author.avatar,
+    authorName: author?.name,
+    authorAvatar: author?.avatar,
   });
 };
 
@@ -183,8 +184,7 @@ export const getPostSearch = async (req, res, next) => {
 export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
   const { title, language, tags } = req.body;
-  const findingUser = res.locals.user;
-  const contentState = res.locals.contentState;
+  const { topic, user: findingUser, contentState } = res.locals;
 
   //Create New Post
   let coverPath;
@@ -196,23 +196,23 @@ export const createNewPost = async (req, res, next) => {
     coverPath = normalize(req.files?.cover[0]?.path);
   }
 
-  const newPost = {
-    id: uuidv4(),
-    topic: null,
-    type: null,
-    date: new Date().toLocaleDateString("en-US", options),
-    authorId: findingUser.id,
-    isPined: false,
-    cover: {
-      img: coverPath,
-      description: null,
-    },
-    language: { en: {}, ch: {} },
-    comments: [],
-    tags: tags ? (Array.isArray(tags) ? [...tags] : [tags]) : [],
-  };
-
+  let newPost;
   try {
+    newPost = {
+      id: uuidv4(),
+      topic,
+      type: null,
+      date: new Date().toLocaleDateString("en-US", options),
+      authorId: findingUser.id,
+      isPined: false,
+      cover: {
+        img: coverPath,
+        description: null,
+      },
+      language: { en: {}, ch: {} },
+      comments: [],
+      tags: tags ? (Array.isArray(tags) ? [...tags] : [tags]) : [],
+    };
     const postContent = {
       title,
       support: true,
@@ -231,6 +231,7 @@ export const createNewPost = async (req, res, next) => {
         return next(error);
     }
   } catch (err) {
+    console.log(err);
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }

@@ -8,6 +8,10 @@ import {
   getUser,
 } from "../controllers/users-controller.js";
 import {
+  checkTargetTopic,
+  createNewTopic
+} from "../controllers/topics-controller.js";
+import {
   getPost,
   getPosts,
   getPostAuthor,
@@ -46,6 +50,8 @@ router.post(
   validation,
   getUser,
   replaceImageSrc,
+  checkTargetTopic,
+  createNewTopic,
   createNewPost
 );
 
