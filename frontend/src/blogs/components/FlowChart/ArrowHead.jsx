@@ -24,8 +24,8 @@ function ArrowHead(props) {
     " " +
     arrowY;
   const arrowHeadAttr = {
-    fill: props.isDarkMode ? "#000" : "#333333",
-    stroke: props.isDarkMode ? "#000" : "#333333",
+    fill: props.isDarkMode ? "#000" : "#000",
+    stroke: props.isDarkMode ? "#000" : "#000",
     "stroke-width": 2,
     "stroke-linecap": "round",
     "stroke-linejoin": "round",

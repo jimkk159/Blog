@@ -134,7 +134,6 @@ function PostPage() {
           )
         );
         setPostData(responseData);
-
         const postJSON = JSON.parse(
           choiceLanguage(
             isEnglish,

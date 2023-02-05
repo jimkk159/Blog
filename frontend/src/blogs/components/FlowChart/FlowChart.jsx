@@ -13,7 +13,7 @@ const rectWidth = 80;
 const rectHeight = 30;
 const rectRadius = 10;
 function FlowChart(props) {
-  const { type, width, height, offsetX, offsetY, topics } = props;
+  const { type, width, height, offsetX, offsetY, isEdit, topics, onEdit } = props;
 
   //React-Router
   const navigate = useNavigate();
@@ -41,6 +41,10 @@ function FlowChart(props) {
     ...typePorperty,
   });
 
+  const editHandler = (topic) => {
+    onEdit(topic);
+  };
+
   const navTopicHandler = (topic) => {
     navigate(`/search/${topic}`);
   };
@@ -53,7 +57,7 @@ function FlowChart(props) {
         height={height}
         data={data}
         linkData={linkData}
-        onNavTopic={navTopicHandler}
+        onNavTopic={isEdit ? editHandler : navTopicHandler}
       />
     );
 

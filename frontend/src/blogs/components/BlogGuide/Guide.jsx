@@ -28,6 +28,9 @@ function Guide(props) {
 
   return (
     <GuideOpen
+      isHome
+      isScroll
+      isCancel
       className={classes["position"]}
       isDarkMode={props.isDarkMode}
       onClose={closeGuideHandler}

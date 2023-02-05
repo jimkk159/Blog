@@ -17,7 +17,17 @@ import classes from "./GuideOpen.module.css";
 
 const cardWidth = 16 * 20 - 16;
 const cardHeight = 16 * 20 - 16 - 16 * 5;
-function GuideOpen(props) {
+function GuideOpen({
+  className,
+  topics,
+  isEdit,
+  isHome,
+  isScroll,
+  isCancel,
+  isDarkMode,
+  onEdit,
+  onClose,
+}) {
   const {
     dragState,
     mouseUpHandler,
@@ -26,51 +36,109 @@ function GuideOpen(props) {
     mouseMoveHandler,
     resetHandler,
   } = useDrag();
+
+  if (isScroll)
+    return (
+      <ScrollAnimation className={`${className}`} top="20%">
+        <Card
+          className={`${classes["flow-chart-container"]}`}
+          isDarkMode={isDarkMode}
+          onMouseUp={mouseUpHandler}
+          onMouseDown={mouseDownHandler}
+          onMouseMove={mouseMoveHandler}
+          onMouseLeave={mouseLeaveHandler}
+        >
+          <h1
+            className={`${classes["title"]} ${
+              isDarkMode ? classes["title-dark"] : classes["title-light"]
+            }`}
+          >
+            Topic Map
+          </h1>
+          <div
+            className={`${classes["chart"]} ${
+              isDarkMode ? classes["chart-dark"] : classes["chart-light"]
+            }`}
+          >
+            <FlowChart
+              type="rect"
+              width={cardWidth}
+              height={cardHeight}
+              offsetX={dragState.offset.x}
+              offsetY={dragState.offset.y}
+              topics={topics}
+              isEdit={isEdit}
+            />
+          </div>
+          {isHome && (
+            <AiFillHome
+              className={`${classes["home"]} ${
+                isDarkMode ? classes["home-dark"] : classes["home-light"]
+              }`}
+              onClick={resetHandler}
+            />
+          )}
+          {isCancel && (
+            <RxCross2
+              className={`${classes["cross"]} ${
+                isDarkMode ? classes["cross-dark"] : classes["cross-light"]
+              }`}
+              onClick={onClose}
+            />
+          )}
+        </Card>
+      </ScrollAnimation>
+    );
+
   return (
-    <ScrollAnimation className={`${props.className}`} top="20%">
-      <Card
-        className={`${classes["flow-chart-container"]}`}
-        isDarkMode={props.isDarkMode}
-        onMouseUp={mouseUpHandler}
-        onMouseDown={mouseDownHandler}
-        onMouseMove={mouseMoveHandler}
-        onMouseLeave={mouseLeaveHandler}
+    <Card
+      className={`${className} ${classes["flow-chart-container"]}`}
+      isDarkMode={isDarkMode}
+      onMouseUp={mouseUpHandler}
+      onMouseDown={mouseDownHandler}
+      onMouseMove={mouseMoveHandler}
+      onMouseLeave={mouseLeaveHandler}
+    >
+      <h1
+        className={`${classes["title"]} ${
+          isDarkMode ? classes["title-dark"] : classes["title-light"]
+        }`}
       >
-        <h1
-          className={`${classes["title"]} ${
-            props.isDarkMode ? classes["title-dark"] : classes["title-light"]
-          }`}
-        >
-          Topic Map
-        </h1>
-        <div
-          className={`${classes["chart"]} ${
-            props.isDarkMode ? classes["chart-dark"] : classes["chart-light"]
-          }`}
-        >
-          <FlowChart
-            type="rect"
-            width={cardWidth}
-            height={cardHeight}
-            offsetX={dragState.offset.x}
-            offsetY={dragState.offset.y}
-            topics={props.topics}
-          />
-        </div>
+        Topic Map
+      </h1>
+      <div
+        className={`${classes["chart"]} ${
+          isDarkMode ? classes["chart-dark"] : classes["chart-light"]
+        }`}
+      >
+        <FlowChart
+          type="rect"
+          width={cardWidth}
+          height={cardHeight}
+          offsetX={dragState.offset.x}
+          offsetY={dragState.offset.y}
+          topics={topics}
+          isEdit={isEdit}
+          onEdit={onEdit}
+        />
+      </div>
+      {isHome && (
         <AiFillHome
           className={`${classes["home"]} ${
-            props.isDarkMode ? classes["home-dark"] : classes["home-light"]
+            isDarkMode ? classes["home-dark"] : classes["home-light"]
           }`}
           onClick={resetHandler}
         />
+      )}
+      {isCancel && (
         <RxCross2
           className={`${classes["cross"]} ${
-            props.isDarkMode ? classes["cross-dark"] : classes["cross-light"]
+            isDarkMode ? classes["cross-dark"] : classes["cross-light"]
           }`}
-          onClick={props.onClose}
+          onClick={onClose}
         />
-      </Card>
-    </ScrollAnimation>
+      )}
+    </Card>
   );
 }
 

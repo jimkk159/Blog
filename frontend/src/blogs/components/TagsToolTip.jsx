@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 //Custom Component
 import Tag from "../../shared/components/UI/Tag";
@@ -10,20 +10,20 @@ import classes from "./TagsToolTip.module.css";
 function TagsToolTip({
   className,
   show,
+  value,
   isAnimate,
   isDarkMode,
   topics,
   tags,
   onTag,
+  onSearch
 }) {
-  const [searchItem, setSearchItem] = useState("");
   const tagsToLower = tags.map((tag) => tag.toLowerCase());
-
   const tagsChoice = topics.map((topic, index) => {
     const topicToLower = topic.toLowerCase();
     if (
       !tagsToLower.includes(topicToLower) &&
-      topicToLower.includes(searchItem.toLowerCase())
+      topicToLower.includes(value.toLowerCase())
     )
       return (
         <Tag
@@ -41,8 +41,9 @@ function TagsToolTip({
 
   //Input Search
   const searchChangeHandler = (event) => {
-    setSearchItem(event.target.value);
+    onSearch(event.target.value);
   };
+
   return (
     <ToolTip className={`${className}`} show={show} isAnimate={isAnimate}>
       <div
@@ -52,6 +53,7 @@ function TagsToolTip({
       >
         <input
           type="text"
+          value={value}
           className={`${classes["tag-input"]} ${
             isDarkMode ? classes["input-dark"] : classes["input-light"]
           }`}

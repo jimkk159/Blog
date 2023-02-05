@@ -1,6 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RichUtils, EditorState, getDefaultKeyBinding } from "draft-js";
+import {
+  RichUtils,
+  EditorState,
+  ContentState,
+  getDefaultKeyBinding,
+} from "draft-js";
 import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
@@ -19,6 +24,7 @@ import {
 } from "../../shared/components/TextEditor/CustomStyleFn";
 
 //Custom Component
+import PostTopic from "./PostTopic";
 import TagsToolTip from "./TagsToolTip";
 import Card from "../../shared/components/UI/Card";
 import Tags from "../../shared/components/UI/Tags";
@@ -38,21 +44,24 @@ function PostEditor(props) {
   const {
     className,
     tags,
+    topic,
     topics,
+    topicsInfo,
     titleState,
     editorState,
     tagsState,
     onTags,
+    onTopic,
     onChangeTitle,
     onChange,
     onChangeTags,
     onCover,
   } = props;
-
   const editorRef = useRef(null);
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
-
+  const [searchItem, setSearchItem] = useState("");
+console.log(topic)
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -83,16 +92,34 @@ function PostEditor(props) {
     dispatch(tagActions.show());
   };
 
+  //Search Handler
+  const searchHandler = (target) => {
+    setSearchItem(target);
+    onChangeTags(
+      EditorState.createWithContent(ContentState.createFromText(target))
+    );
+  };
+
+  //Sync editor and input
+  useEffect(() => {
+    const currentContent = tagsState.getCurrentContent();
+    const contentBlock = currentContent.getFirstBlock();
+    const tag = contentBlock.getText();
+    setSearchItem(tag);
+  }, [tagsState]);
+
   const editorTag = (
     <>
       <TagsToolTip
         className={`${classes["tool-tip-light"]}`}
         show={isTag}
+        value={searchItem}
         topics={topics}
         tags={tags}
         isAnimate
         isDarkMode={isDarkMode}
         onTag={addTagHandler}
+        onSearch={searchHandler}
       />
       <div onClick={tagFocusHandler}>
         <Editor
@@ -167,6 +194,13 @@ function PostEditor(props) {
         isDarkMode ? "editor-wrapper-dark" : "editor-wrapper-light"
       }`}
     >
+      <PostTopic
+        topic={topic}
+        topics={topics}
+        topicsInfo={topicsInfo}
+        isDarkMode={isDarkMode}
+        onChange={onTopic}
+      />
       <ToolBar
         editorState={editorState}
         setEditorState={onChange}

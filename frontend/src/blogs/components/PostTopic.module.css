@@ -1,0 +1,60 @@
+.container {
+  margin-bottom: 0.5rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 1.5rem;
+}
+.title{
+  margin: 0;
+  margin-bottom: 2.5rem;
+}
+.topic-input {
+  background-color: transparent;
+  border: none;
+  font-size: 10px;
+  font-size: 20px;
+  margin: 0;
+  outline: none;
+  width: 100%;
+}
+.input-dark {
+  color: #e4e4e4;
+}
+.input-dark::placeholder {
+  color: #e4e4e4;
+}
+.topic-hr {
+  border-left: 0;
+  border-right: 0;
+  margin-bottom: 0;
+  margin-top: 0;
+  width: 100%;
+}
+.topic-container {
+  display: grid;
+  grid-gap: 0.5rem 1.5rem;
+  grid-template-areas:
+    "tags graphic"
+    "questions  graphic";
+  grid-template-rows: 50fr 50fr;
+  grid-template-columns: 60fr 40fr;
+  overflow: hidden;
+  padding-top: 1rem;
+}
+.topic-tags {
+  grid-area: tags;
+  overflow: hidden;
+  width: 100%;
+}
+.tag {
+  margin-bottom: 0.5rem;
+}
+.topic-description {
+  grid-area: questions;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.topic-graphic {
+  grid-area: graphic;
+}

@@ -21,6 +21,7 @@ import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
   const [tags, setTags] = useState([]);
+  const [postTopic, setPostTopic] = useState([]);
   const [topics, setTopics] = useState([]);
   const [topicsInfo, setTopicsInfo] = useState([]);
   const [postCover, setPostCover] = useState(null);
@@ -129,8 +130,8 @@ function NewPostPage() {
           process.env.REACT_APP_BACKEND_URL + "/topics"
         );
         setTopicsInfo(responseData);
-        const topicsTextArray = responseData.map((item)=>item.topic)
-        setTopics(topicsTextArray)
+        const topicsTextArray = responseData.map((item) => item.topic);
+        setTopics(topicsTextArray);
       } catch (err) {}
     };
     fetchTopics();
@@ -154,8 +155,11 @@ function NewPostPage() {
       )}
       <PostEditor
         tags={tags}
+        topicsInfo={topicsInfo}
+        topic={postTopic}
         topics={topics}
         onTags={setTags}
+        onTopic={setPostTopic}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}
