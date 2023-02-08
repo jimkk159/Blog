@@ -13,14 +13,12 @@ function UploadImage(props) {
     onDrag,
     onInput,
     onUpdate,
-    errorMessage,
     placeholder,
   } = props;
 
   const inputRef = useRef(null);
   const [image, setImage] = useState();
   const [previewUrl, setPreviewUrl] = useState();
-  const [isValid, setIsValid] = useState(false);
 
   //Mouse Click to pick an Image
   const pickHandler = () => {
@@ -30,21 +28,16 @@ function UploadImage(props) {
   //Handle Select to upload image
   const inputImageHandler = (event) => {
     let pickedFile;
-    let fileIsValid = isValid; //State not update instantly
+    // let fileIsValid = isValid; //State not update instantly
     if (event.target.files && event.target.files.length === 1) {
       pickedFile = event.target.files[0];
       setImage(pickedFile);
-      setIsValid(true);
-      fileIsValid = true;
       if (onInput) {
-        onInput(inputId, pickedFile, fileIsValid);
+        onInput(inputId, pickedFile, true);
       }
       if (onUpdate) {
         onUpdate(pickedFile);
       }
-    } else {
-      setIsValid(false);
-      fileIsValid = false;
     }
   };
 
@@ -64,22 +57,17 @@ function UploadImage(props) {
     event.preventDefault();
     event.stopPropagation();
     let pickedFile;
-    let fileIsValid = isValid; //State not update instantly
     onDrag(false);
     if (event.dataTransfer.files && event.dataTransfer.files.length === 1) {
       pickedFile = event.dataTransfer.files[0];
       setImage(pickedFile);
-      setIsValid(true);
-      fileIsValid = true;
       if (onInput) {
-        onInput(inputId, pickedFile, fileIsValid);
+        onInput(inputId, pickedFile, true);
       }
       if (onUpdate) {
         onUpdate(pickedFile);
       }
     } else {
-      setIsValid(false);
-      fileIsValid = false;
     }
   };
 
@@ -120,7 +108,7 @@ function UploadImage(props) {
             )}
           </div>
         </div>
-        {!isValid && <p>{errorMessage}</p>}
+        {/* {!isValid && <p>{errorMessage}</p>} */}
       </div>
       {isDrag && (
         <div

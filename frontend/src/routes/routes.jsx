@@ -94,7 +94,7 @@ export function RouteCreate() {
     if (userData?.token && new Date(userData.expiration) > new Date()) {
       dispatch(
         loginAuto({
-          uid: userData.userId,
+          uid: userData.uid,
           isAdmin: userData.isAdmin,
           name: userData.name,
           avatar: userData.avatar,

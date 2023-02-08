@@ -27,22 +27,19 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 import classes from "./ReadPost.module.css";
 
 const decorator = createLinkDecorator();
-function ReadPost(props) {
-  const {
-    tagsClassName,
-    postData,
-    title,
-    topics,
-    editorState,
-    onChange,
-    isLoading,
-    onEdit,
-    onDelete,
-  } = props;
-  
+function ReadPost({
+  tagsClassName,
+  postData,
+  title,
+  topics,
+  editorState,
+  onChange,
+  isLoading,
+  onEdit,
+  onDelete,
+}) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-
   return (
     <>
       <Card
@@ -66,7 +63,9 @@ function ReadPost(props) {
             />
             <Image
               img={
-                postData?.cover?.img ? `${process.env.REACT_APP_BACKEND_URL}/${postData.cover.img}` : defaultCoverImage
+                postData?.cover?.img
+                  ? `${process.env.REACT_APP_BACKEND_URL}/${postData.cover.img}`
+                  : defaultCoverImage
               }
               description={postData?.description}
               isDarkMode={isDarkMode}

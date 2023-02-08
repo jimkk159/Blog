@@ -7,8 +7,7 @@ import Arrow from "./Arrow";
 import Node from "./Node";
 
 const strokWidth = 2;
-function CirChart(props) {
-  const { width, height, data, linkData, onNavTopic } = props;
+function CirChart({ width, height, data, linkData, onNavTopic }) {
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (

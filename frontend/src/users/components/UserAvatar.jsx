@@ -12,12 +12,12 @@ function UserAvatar(props) {
   const avatar = props.isAnimate ? (
     <CSSTransition
       in={props.show}
-      timeout={{ enter: 2000, exit: 200 }}
+      timeout={{ enter: 2000, exit: 0 }}
       classNames={{
         enter: classes["user-img-enter"],
         enterActive: classes["user-img-enter-active"],
-        exit: classes["user-img-exit"],
-        exitActive: classes["user-img-exit-active"],
+        // exit: classes["user-img-exit"],
+        // exitActive: classes["user-img-exit-active"],
       }}
       mountOnEnter
       unmountOnExit

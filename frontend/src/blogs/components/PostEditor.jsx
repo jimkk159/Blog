@@ -40,28 +40,26 @@ import classes from "./PostEditor.module.css";
 const decorator = createLinkDecorator();
 const options = { year: "numeric", month: "short", day: "numeric" };
 
-function PostEditor(props) {
-  const {
-    className,
-    tags,
-    topicInfo,
-    topics,
-    topicsInfo,
-    titleState,
-    editorState,
-    tagsState,
-    onTags,
-    onTopic,
-    onChangeTitle,
-    onChange,
-    onChangeTags,
-    onCover,
-  } = props;
+function PostEditor({
+  className,
+  tags,
+  topic,
+  topics,
+  topicTags,
+  titleState,
+  editorState,
+  tagsState,
+  onTags,
+  onTopic,
+  onChangeTitle,
+  onChange,
+  onChangeTags,
+  onCover,
+}) {
   const editorRef = useRef(null);
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [searchItem, setSearchItem] = useState("");
-
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -114,7 +112,7 @@ function PostEditor(props) {
         className={`${classes["tool-tip-light"]}`}
         show={isTag}
         value={searchItem}
-        topics={topics}
+        topicTags={topicTags}
         tags={tags}
         isAnimate
         isDarkMode={isDarkMode}
@@ -195,12 +193,13 @@ function PostEditor(props) {
       }`}
     >
       <PostTopic
-        topic={topicInfo}
+        topic={topic}
         topics={topics}
-        topicsInfo={topicsInfo}
+        topicTags={topicTags}
         isDarkMode={isDarkMode}
         onChange={onTopic}
         onTag={addTagHandler}
+        onRemove={removeTagHandler}
       />
       <ToolBar
         editorState={editorState}

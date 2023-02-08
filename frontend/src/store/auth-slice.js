@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoggedIn: false,
   isAdmin: false,
-  userId: null,
+  uid: null,
   name:null,
   avatar: null,
   token: null,
@@ -14,7 +14,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.userId = action.payload.uid;
+      state.uid = action.payload.uid;
       state.isAdmin = action.payload.isAdmin;
       state.isLoggedIn = true;
       state.name = action.payload.name;
@@ -23,7 +23,7 @@ const authSlice = createSlice({
       state.expiration = action.payload.expiration;
     },
     logout: (state) => {
-      state.userId = null;
+      state.uid = null;
       state.isAdmin = false;
       state.isLoggedIn = false;
       state.name = null;

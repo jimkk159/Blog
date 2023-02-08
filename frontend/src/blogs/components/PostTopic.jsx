@@ -12,7 +12,7 @@ import classes from "./PostTopic.module.css";
 const initialState = {
   topic: "",
   parent: "",
-  childs: [],
+  children: [],
 };
 
 const topicReducer = (state, action) => {
@@ -22,7 +22,7 @@ const topicReducer = (state, action) => {
         ...state,
         topic: action.topic,
         parent: action.parent,
-        childs: action.childs,
+        children: action.children,
       };
     case "TOPIC":
       return {
@@ -33,19 +33,21 @@ const topicReducer = (state, action) => {
       return {
         ...state,
         parent: action.parent,
-        childs: [...action.childs],
+        children: [...action.children],
       };
     case "RESET_PARENT":
       return {
         ...state,
         parent: "",
-        childs: [],
+        children: [],
       };
     case "REMOVE_CHILD":
-      const newChilds = state.childs.filter((child) => child !== action.child);
+      const newChilds = state.children.filter(
+        (child) => child !== action.child
+      );
       return {
         ...state,
-        childs: newChilds,
+        children: newChilds,
       };
     case "RESET":
       return initialState;
@@ -54,7 +56,14 @@ const topicReducer = (state, action) => {
   }
 };
 
-function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
+function PostTopic({
+  topics,
+  topicTags,
+  isDarkMode,
+  onChange,
+  onTag,
+  onRemove,
+}) {
   const searchRef = useRef(null);
   const [searchItem, setSearchItem] = useState("");
   const [topicState, dispatch] = useReducer(topicReducer, initialState);
@@ -68,35 +77,32 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
   const searchKeyDownHandler = (event) => {
     if (event.key === "Enter") {
       setSearchItem("");
-      const topicInfo = topicsInfo.filter(
-        (topicInfo) =>
-          topicInfo?.topic.toLowerCase() === event.target.value.toLowerCase()
-      )[0];
-
+      const [topic] = topics.filter((topic) => {
+        return topic?.name.toLowerCase() === event.target.value.toLowerCase();
+      });
       if (
-        topicInfo &&
+        topic &&
         topicState?.topic === "" &&
-        topicInfo?.topic.toLowerCase() === "Root".toLowerCase()
+        topic?.name.toLowerCase() === "Root".toLowerCase()
       )
         return;
 
-      if (topicInfo && topicState.topic === "") {
+      if (topic && topicState.topic === "") {
         //Setting Existed Topic
         onChange({
           ...topicState,
-          topic: topicInfo?.topic,
-          parent: topicInfo?.parent,
-          childs: topicInfo?.childs,
+          topic: topic?.name,
+          parent: topic?.parent,
+          children: topic?.children,
         });
-        onTag(topicInfo?.topic);
+        onTag(topic?.name);
         return dispatch({
           type: "SET",
-          topic: topicInfo?.topic,
-          parent: topicInfo?.parent,
-          childs: topicInfo?.childs,
+          topic: topic?.name,
+          parent: topic?.parent,
+          children: topic?.children,
         });
       }
-
       if (topicState.topic === "") {
         //Setting Topic
         onChange({
@@ -108,18 +114,17 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
           topic: event.target.value,
         });
       }
-
-      if (topicInfo && topicState.parent === "") {
-        //Setting Parent and its childs
+      if (topic && topicState.parent === "") {
+        //Setting Parent and its children
         onChange({
           ...topicState,
-          parent: topicInfo?.topic,
-          childs: [...topicInfo?.childs],
+          parent: topic?.name,
+          children: [...topic?.children],
         });
         return dispatch({
           type: "PARENT",
-          parent: topicInfo?.topic,
-          childs: [...topicInfo?.childs],
+          parent: topic?.name,
+          children: [...topic?.children],
         });
       }
     }
@@ -127,11 +132,11 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
 
   //Topic tag click
   const topicHandler = (choice) => {
-    const topicInfo = topicsInfo.filter(
-      (topicInfo) => topicInfo?.topic.toLowerCase() === choice.toLowerCase()
-    )[0];
+    const [topic] = topics.filter(
+      (topic) => topic?.name.toLowerCase() === choice.toLowerCase()
+    );
 
-    if (!topicInfo) return;
+    if (!topic) return;
     if (
       topicState.topic === "" &&
       choice.toLowerCase() === "Root".toLowerCase()
@@ -142,29 +147,29 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
       setSearchItem("");
       onChange({
         ...topicState,
-        topic: topicInfo?.topic,
-        parent: topicInfo?.parent,
-        childs: topicInfo?.childs,
+        topic: topic?.name,
+        parent: topic?.parent,
+        children: topic?.children,
       });
-      onTag(topicInfo?.topic);
+      onTag(topic?.name);
       return dispatch({
         type: "SET",
-        topic: topicInfo?.topic,
-        parent: topicInfo?.parent,
-        childs: topicInfo?.childs,
+        topic: topic?.name,
+        parent: topic?.parent,
+        children: topic?.children,
       });
     }
     //Setting Parent
     if (topicState.parent === "") {
       onChange({
         ...topicState,
-        parent: topicInfo?.topic,
-        childs: [...topicInfo?.childs],
+        parent: topic?.name,
+        children: [...topic?.children],
       });
       return dispatch({
         type: "PARENT",
-        parent: topicInfo?.topic,
-        childs: [...topicInfo?.childs],
+        parent: topic?.name,
+        children: [...topic?.children],
       });
     }
   };
@@ -179,7 +184,7 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
 
   //Set Parent
   const setParentHandler = (parent) => {
-    if (topics.includes(topicState.topic)) {
+    if (topicTags.includes(topicState.topic)) {
       onChange(initialState);
       return dispatch({
         type: "RESET",
@@ -187,11 +192,11 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
     }
 
     //Reset Parent
-    const topicInfo = topicsInfo.filter(
-      (topicInfo) => topicInfo?.topic.toLowerCase() === parent.toLowerCase()
-    )[0];
-    if (!topicInfo) return;
-    onChange({ ...topicState, parent: "", childs: [] });
+    const [topic] = topics.filter(
+      (topic) => topic?.name.toLowerCase() === parent.toLowerCase()
+    );
+    if (!topic) return;
+    onChange({ ...topicState, parent: "", children: [] });
     dispatch({
       type: "RESET_PARENT",
     });
@@ -199,22 +204,22 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
 
   //Set Child
   const setChildHandler = (child) => {
-    if (topics.includes(topicState.topic)) {
+    if (topicTags.includes(topicState.topic)) {
       onChange(initialState);
       return dispatch({
         type: "RESET",
       });
     }
-    const topicInfo = topicsInfo.filter(
-      (topicInfo) => topicInfo?.topic.toLowerCase() === child.toLowerCase()
-    )[0];
-    if (!topicInfo) return;
+    const [topic] = topics.filter(
+      (topic) => topic?.name.toLowerCase() === child.toLowerCase()
+    );
+    if (!topic) return;
 
-    //Remove child from existed childs
-    const newChilds = topicState.childs.filter((item) => item !== child);
+    //Remove child from existed children
+    const newChildren = topicState.children.filter((item) => item !== child);
     onChange({
       ...topicState,
-      childs: newChilds,
+      children: newChildren,
     });
     dispatch({
       type: "REMOVE_CHILD",
@@ -243,8 +248,8 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
         }`}
       >
         <div className={classes["topic-tags"]}>
-          {topics.map((topic, index) => {
-            const topicToLower = topic?.toLowerCase();
+          {topicTags.map((topicTag, index) => {
+            const topicToLower = topicTag?.toLowerCase();
             if (
               topicToLower.includes(searchItem?.toLowerCase()) &&
               topicToLower !== "root"
@@ -253,10 +258,10 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
                 <Tag
                   key={index}
                   className={classes["tag"]}
-                  tag={topic}
+                  tag={topicTag}
                   isEdit
                   isDarkMode={isDarkMode}
-                  onClick={() => topicHandler(topic)}
+                  onClick={() => topicHandler(topicTag)}
                 />
               );
             else return null;
@@ -269,7 +274,10 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
             showTag={topicState.topic}
             tags={topicState.topic}
             isDarkMode={isDarkMode}
-            onTag={resetTopicHandler}
+            onTag={() => {
+              resetTopicHandler();
+              onRemove(topicState.topic);
+            }}
           />
           <PostTopicQuestion
             key={"parent"}
@@ -280,20 +288,20 @@ function PostTopic({ topics, topicsInfo, isDarkMode, onChange, onTag }) {
             onTag={() => setParentHandler(topicState.parent)}
           />
           <PostTopicQuestion
-            key={"childs"}
+            key={"children"}
             description={"What is the child of this topic?"}
-            tags={topicState.childs}
+            tags={topicState.children}
             isDarkMode={isDarkMode}
             onTag={setChildHandler}
           />
         </div>
-        <GuideOpen
+        {/* <GuideOpen
           className={`${classes["topic-graphic"]}`}
-          topics={topicsInfo}
+          topics={topics}
           isDarkMode={!isDarkMode}
           isEdit
           onEdit={topicHandler}
-        />
+        /> */}
       </div>
     </Card>
   );

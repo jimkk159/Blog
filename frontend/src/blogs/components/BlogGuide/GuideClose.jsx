@@ -13,18 +13,18 @@ import ScrollAnimation from "../../../shared/components/Animation/ScrollAnimatio
 //CSS
 import classes from "./GuideClose.module.css";
 
-function GuideClose(props) {
+function GuideClose({className, onClick}) {
   //Custom Hook
   const { matches: matches_768 } = useMediaQuery("min", "768");
   const { matches: matches_1024 } = useMediaQuery("min", "1024");
 
   return (
-    <ScrollAnimation className={`${props.className}`}>
+    <ScrollAnimation className={`${className}`}>
       <Card
         className={`${classes["map-container"]} ${classes["transparent"]} ${
           matches_1024 ? classes["map-1024"] : matches_768 && classes["map-768"]
         }`}
-        onClick={props.onClick}
+        onClick={onClick}
       >
         <img src={mapImage} alt={"map"} />
       </Card>

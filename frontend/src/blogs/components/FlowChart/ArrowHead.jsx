@@ -2,30 +2,30 @@ import React from "react";
 import { Path } from "react-raphael";
 
 const arrowYSpace = 1;
-function ArrowHead(props) {
-  const arrowY = props.y + arrowYSpace;
+function ArrowHead({ x, y, direction, isDarkMode }) {
+  const arrowY = y + arrowYSpace;
   const arrowHeadSize = 8;
-  const arrowDirectionY = props.direction === "UP" ? 1 : -1;
+  const arrowDirectionY = direction === "UP" ? 1 : -1;
   const arrowHeadPath =
     "M" +
-    props.x +
+    x +
     " " +
     arrowY +
     "L" +
-    (props.x - arrowHeadSize) +
+    (x - arrowHeadSize) +
     " " +
     (arrowY + arrowDirectionY * arrowHeadSize) +
     "L" +
-    (props.x + arrowHeadSize) +
+    (x + arrowHeadSize) +
     " " +
     (arrowY + arrowDirectionY * arrowHeadSize) +
     "L" +
-    props.x +
+    x +
     " " +
     arrowY;
   const arrowHeadAttr = {
-    fill: props.isDarkMode ? "#000" : "#000",
-    stroke: props.isDarkMode ? "#000" : "#000",
+    fill: isDarkMode ? "#000" : "#000",
+    stroke: isDarkMode ? "#000" : "#000",
     "stroke-width": 2,
     "stroke-linecap": "round",
     "stroke-linejoin": "round",

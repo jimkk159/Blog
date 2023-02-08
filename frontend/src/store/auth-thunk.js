@@ -8,7 +8,7 @@ export const loginAuto = (userData) => {
     localStorage.setItem(
       "userData",
       JSON.stringify({
-        userId: userData.uid,
+        uid: userData.uid,
         isAdmin: userData.isAdmin,
         name: userData.name,
         avatar: userData.avatar,

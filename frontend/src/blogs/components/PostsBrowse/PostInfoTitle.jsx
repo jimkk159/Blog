@@ -12,7 +12,7 @@ import classes from "./PostInfoTitle.module.css";
 
 function PostInfoTitle(props) {
   //Redux
-  const { userId, isAdmin, token } = useSelector((state) => state.auth);
+  const { uid, isAdmin, token } = useSelector((state) => state.auth);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   let pinContent;
@@ -29,7 +29,7 @@ function PostInfoTitle(props) {
   );
 
   let editContent;
-  if (props.authorId === userId) {
+  if (props.authorId === uid) {
     editContent = (
       <AiOutlineEdit
         className={`${classes["icon"]} ${
@@ -41,7 +41,7 @@ function PostInfoTitle(props) {
   }
 
   let deleteContent;
-  if (isAdmin || props.authorId === userId) {
+  if (isAdmin || props.authorId === uid) {
     deleteContent = (
       <AiFillDelete
         className={`${classes["icon"]} ${

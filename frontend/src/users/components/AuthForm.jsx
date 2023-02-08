@@ -68,7 +68,7 @@ function AuthForm(props) {
         {
           ...formState.inputs,
           [nameKey]: { value: "", isValid: false },
-          [imageKey]: { value: null, isValid: false },
+          [imageKey]: { value: null, isValid: true },
         },
         false
       );
@@ -109,7 +109,7 @@ function AuthForm(props) {
         );
         dispatch(
           loginAuto({
-            uid: responseData.userId,
+            uid: responseData.uid,
             isAdmin: responseData.admin,
             name: responseData.name,
             avatar: responseData.avatar,
@@ -136,7 +136,7 @@ function AuthForm(props) {
         );
         dispatch(
           loginAuto({
-            uid: responseData.userId,
+            uid: responseData.uid,
             isAdmin: responseData.admin,
             name: responseData.name,
             avatar: responseData.avatar,

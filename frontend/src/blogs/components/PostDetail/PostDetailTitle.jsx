@@ -30,7 +30,7 @@ function PostDetailTitle(props) {
   } = props;
 
   //Redux
-  const { isAdmin, userId, token } = useSelector((state) => state.auth);
+  const { isAdmin, uid, token } = useSelector((state) => state.auth);
 
   const editHandler = (event) => {
     event.stopPropagation();
@@ -39,7 +39,7 @@ function PostDetailTitle(props) {
   };
 
   let editContent;
-  if (authorId === userId) {
+  if (authorId === uid) {
     editContent = (
       <AiOutlineEdit
         className={`${classes["icon"]} ${classes["edit"]} ${
@@ -59,7 +59,7 @@ function PostDetailTitle(props) {
   }
 
   let deleteContent;
-  if (isAdmin || authorId === userId) {
+  if (isAdmin || authorId === uid) {
     deleteContent = (
       <AiFillDelete
         className={`${classes["icon"]} ${classes["delete"]} ${

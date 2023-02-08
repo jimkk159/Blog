@@ -7,7 +7,7 @@ import GuideClose from "./GuideClose";
 //CSS
 import classes from "./Guide.module.css";
 
-function Guide(props) {
+function Guide({isDarkMode, topics}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openGuideHandler = () => {
@@ -21,7 +21,7 @@ function Guide(props) {
     return (
       <GuideClose
         className={classes["position"]}
-        isDarkMode={props.isDarkMode}
+        isDarkMode={isDarkMode}
         onClick={openGuideHandler}
       />
     );
@@ -32,9 +32,9 @@ function Guide(props) {
       isScroll
       isCancel
       className={classes["position"]}
-      isDarkMode={props.isDarkMode}
+      isDarkMode={isDarkMode}
       onClose={closeGuideHandler}
-      topics={props.topics}
+      topics={topics}
     />
   );
 }

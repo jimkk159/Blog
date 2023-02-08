@@ -1,27 +1,27 @@
 import React from "react";
 import { Path } from "react-raphael";
 
-function ArrowLine(props) {
+function ArrowLine({ startX, startY, endX, endY, isDarkMode }) {
   const arrowLinePath =
     "M" +
-    props.endX +
+    endX +
     " " +
-    props.endY +
+    endY +
     "C" +
-    props.endX +
+    endX +
     " " +
-    (props.endY - 50) +
+    (endY - 50) +
     " " +
-    props.startX +
+    startX +
     " " +
-    (props.startY + 50) +
+    (startY + 50) +
     " " +
-    props.startX +
+    startX +
     " " +
-    props.startY;
+    startY;
   const arrowLineAttr = {
     fill: "none",
-    stroke: props.isDarkMode ? "#000" : "#000",
+    stroke: isDarkMode ? "#000" : "#000",
     "stroke-width": 2,
     "stroke-linecap": "round",
     "stroke-linejoin": "round",

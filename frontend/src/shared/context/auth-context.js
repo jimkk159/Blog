@@ -5,23 +5,23 @@ import useAuth from "../hooks/auth-hook";
 
 export const AuthContext = createContext({
   isLoggedIn: false,
-  userId: null,
+  uid: null,
   token: null,
   login: () => {},
   logout: () => {},
 });
 
 function AuthContextProvider(props) {
-  const { userId, isLoggedIn, login, logout } = useAuth();
+  const { uid, isLoggedIn, login, logout } = useAuth();
 
   return (
     <AuthContext.Provider
       value={{
         isLoggedIn: isLoggedIn,
-        userId: userId,
+        uid,
         token: null,
-        login: login,
-        logout: logout,
+        login,
+        logout,
       }}
     >
       {props.children}

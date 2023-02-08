@@ -21,9 +21,9 @@ import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
   const [tags, setTags] = useState([]);
-  const [currentTopicInfo, setCurrentTopicInfo] = useState([]);
+  const [topic, setTopic] = useState([]);
   const [topics, setTopics] = useState([]);
-  const [topicsInfo, setTopicsInfo] = useState([]);
+  const [topicTags, setTopicTags] = useState([]);
   const [postCover, setPostCover] = useState(null);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
@@ -34,9 +34,9 @@ function NewPostPage() {
   );
 
   //Redux
+  const { token } = useSelector((state) => state.auth);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const isEnglish = useSelector((state) => state.language.isEnglish);
-  const { token } = useSelector((state) => state.auth);
 
   //React Router
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ function NewPostPage() {
       const [imgBlobs, convertedData] = convertImgURL(contentRawData);
       const createSendForm = (imgArray, draftRawData) => {
         const formData = new FormData();
-        formData.append("topicInfo", JSON.stringify(currentTopicInfo));
+        formData.append("topic", JSON.stringify(topic));
         formData.append("title", title);
         formData.append("cover", postCover);
         formData.append("language", isEnglish ? "en" : "ch");
@@ -130,9 +130,27 @@ function NewPostPage() {
         const responseData = await sendRequestTopic(
           process.env.REACT_APP_BACKEND_URL + "/topics"
         );
-        setTopicsInfo(responseData);
-        const topicsTextArray = responseData.map((item) => item.topic);
-        setTopics(topicsTextArray);
+        const topicsTags = responseData.map((item) => {
+          return item.name;
+        });
+        const topics = responseData.map((item) => ({
+          ...item,
+          parent: "",
+          children: [],
+        }));
+
+        //Setting parent and children
+        for (let i = 0; i < topics.length; i++) {
+          for (let j = 0; j < topics.length; j++) {
+            if (i === j) continue;
+            if (topics[i].parent_id === topics[j].id) {
+              topics[i].parent = topics[j].name;
+              topics[j].children.push(topics[i].name);
+            }
+          }
+        }
+        setTopics(topics);
+        setTopicTags(topicsTags);
       } catch (err) {}
     };
     fetchTopics();
@@ -156,11 +174,11 @@ function NewPostPage() {
       )}
       <PostEditor
         tags={tags}
-        topicsInfo={topicsInfo}
-        topicInfo={currentTopicInfo}
+        topic={topic}
         topics={topics}
+        topicTags={topicTags}
         onTags={setTags}
-        onTopic={setCurrentTopicInfo}
+        onTopic={setTopic}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}

@@ -65,7 +65,7 @@ function PostsPage() {
       try {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL +
-            `/posts?start=${posts.length}&number=${postsPerRequest}`
+            `/posts?current=${posts.length}&number=${postsPerRequest}`
         );
         const currentPosts = [...posts, ...responseData];
         const currentTotalPage =

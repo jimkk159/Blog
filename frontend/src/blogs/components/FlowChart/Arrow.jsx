@@ -3,39 +3,35 @@ import { Set } from "react-raphael";
 import ArrowHead from "./ArrowHead";
 import ArrowLine from "./ArrowLine";
 
-function Arrow(props) {
-  if (props.direction === "UP") {
+function Arrow({ direction, startX, startY, endX, endY, isDarkMode }) {
+  if (direction === "UP") {
     return (
       <Set>
         <ArrowHead
-          x={props.startX}
-          y={props.startY}
-          isDarkMode={props.isDarkMode}
-          direction={props.direction}
+          x={startX}
+          y={startY}
+          isDarkMode={isDarkMode}
+          direction={direction}
         />
         <ArrowLine
-          startX={props.startX}
-          startY={props.startY}
-          endX={props.endX}
-          endY={props.endY}
-          isDarkMode={props.isDarkMode}
+          startX={startX}
+          startY={startY}
+          endX={endX}
+          endY={endY}
+          isDarkMode={isDarkMode}
         />
       </Set>
     );
   }
   return (
     <Set>
-      <ArrowHead
-        x={props.endX}
-        y={props.endY}
-        isDarkMode={props.isDarkMode}
-      />
+      <ArrowHead x={endX} y={endY} isDarkMode={isDarkMode} />
       <ArrowLine
-        startX={props.startX}
-        startY={props.startY}
-        endX={props.endX}
-        endY={props.endY}
-        isDarkMode={props.isDarkMode}
+        startX={startX}
+        startY={startY}
+        endX={endX}
+        endY={endY}
+        isDarkMode={isDarkMode}
       />
     </Set>
   );

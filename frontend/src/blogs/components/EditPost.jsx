@@ -11,22 +11,20 @@ import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
 //CSS
 import classes from "./EditPost.module.css";
 
-function EditPost(props) {
-  const {
-    tagsClassName,
-    postData,
-    originState,
-    editorState,
-    isLoading,
-    error,
-    clearError,
-    token,
-    onChange,
-    onSave,
-    onRead,
-    onDelete,
-  } = props;
-
+function EditPost({
+  tagsClassName,
+  postData,
+  originState,
+  editorState,
+  isLoading,
+  error,
+  clearError,
+  token,
+  onChange,
+  onSave,
+  onRead,
+  onDelete,
+}) {
   //Save Post
   const savePostHandler = () => {
     onSave(token);
