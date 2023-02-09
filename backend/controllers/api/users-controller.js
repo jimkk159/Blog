@@ -1,16 +1,48 @@
-import normalize from "normalize-path";
-import { v4 as uuidv4 } from "uuid";
+import {
+  getDBUser,
+  getDBUsers,
+  getDBUserByEmail,
+  createDBUser,
+} from "../database/mysql.js";
 
-import { users as dummy_users } from "./blogs.js";
-import HttpError from "../models/http-error.js";
+import HttpError from "../../models/http-error.js";
 
-//Get Specific User
+//Get User
 export const getUser = async (req, res, next) => {
-  //Find User
-  const { userId } = req.userData;
-  let findingUser;
+  const { uid } = req.userData;
+
+  let user;
   try {
-    findingUser = dummy_users.filter((user) => user.id === userId)[0];
+    user = await getDBUser(uid);
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      "Finding user failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  //User not find
+  if (!user) {
+    const error = new HttpError(
+      "User not exists, singup an account first.",
+      422
+    );
+    return next(error);
+  }
+  res.locals.user = user;
+  next();
+};
+
+//Get User Params
+export const getUserbyParams = async (req, res, next) => {
+  //Find User
+  console.log("GET USER");
+  const uid = req.params.uid;
+  let user;
+  try {
+    user = await getDBUser(uid);
   } catch (err) {
     const error = new HttpError(
       "Finding user failed, please try again later.",
@@ -20,22 +52,22 @@ export const getUser = async (req, res, next) => {
   }
 
   //User not find
-  if (!findingUser) {
+  if (!user) {
     const error = new HttpError(
       "User not exists, singup an account first.",
       422
     );
     return next(error);
   }
-  res.locals.user = findingUser;
-  next();
+  res.locals.user = user;
+  res.status(200).json(user);
 };
 
 //Get Random Users
 export const getUsers = async (req, res, next) => {
   let users;
   try {
-    users = dummy_users;
+    users = await getDBUsers();
   } catch (err) {
     const error = new HttpError(
       "Fetching users from database fail, please try again later.",
@@ -43,9 +75,7 @@ export const getUsers = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json({
-    users,
-  });
+  res.json(users);
 };
 
 //Get User by Email
@@ -54,9 +84,9 @@ export const getUserbyEmail = async (req, res, next) => {
   const { email } = req.body;
 
   //Check User if exist
-  let existingUser;
+  let user;
   try {
-    existingUser = dummy_users.filter((user) => email === user.email)[0];
+    user = await getDBUserByEmail(email);
   } catch (err) {
     const error = new HttpError(
       "Finding email failed, please try again later.",
@@ -64,16 +94,17 @@ export const getUserbyEmail = async (req, res, next) => {
     );
     return next(error);
   }
-  res.locals.user_by_email = existingUser;
+  res.locals.user = user;
+  res.locals.is_email = !!user;
   next();
 };
 
 //Check Email if exist
 export const getIsEmailEmpty = async (req, res, next) => {
-  const existingUser = res.locals.user_by_email;
-  if (existingUser) {
+  const is_email = !!res.locals.is_email;
+  if (is_email) {
     const error = new HttpError(
-      "User exists already, please login instead.",
+      "Email existed already, please login instead.",
       422
     );
     return next(error);
@@ -82,11 +113,11 @@ export const getIsEmailEmpty = async (req, res, next) => {
 };
 
 //Check Email if exist
-export const checkUserExist = async (req, res, next) => {
-  const existingUser = res.locals.user_by_email;
+export const getIsEmail = async (req, res, next) => {
+  const is_email = !!res.locals.is_email;
   //Check if the User Exist
-  if (!existingUser) {
-    const error = new HttpError("User not found!", 403);
+  if (!is_email) {
+    const error = new HttpError("Email not found!", 403);
     return next(error);
   }
   next();
@@ -95,28 +126,20 @@ export const checkUserExist = async (req, res, next) => {
 //Create New User
 export const createNewUser = async (req, res, next) => {
   const { name, email } = req.body;
-  const password = res.locals.password;
-
-  //Check Admin
-  let admin = false;
-  if (dummy_users.length === 0) {
-    admin = true;
-  }
+  const { password, avatar } = res.locals;
 
   //Create User
   let newUser;
-  const avatarPath = normalize(req.file.path);
   try {
     newUser = {
-      id: uuidv4(),
-      admin,
       name,
       email,
-      avatar: avatarPath,
+      avatar,
       password,
     };
-    dummy_users.push(newUser);
+    await createDBUser(newUser);
   } catch (err) {
+    console.log(err)
     const error = new HttpError(
       "Create User to database fail, please try again later.",
       500
@@ -127,37 +150,36 @@ export const createNewUser = async (req, res, next) => {
   next();
 };
 
-export const transformUser = async (req, res, next) => {
-  const existingUser = res.locals.user_by_email;
-  res.locals.user = existingUser;
-  next();
-};
-
 //SignUp
 export const signup = async (req, res, next) => {
   console.log("Sign Up");
   const token = res.locals.token;
-  const newUser = res.locals.user;
+  const user = res.locals.user;
 
   res.status(201).json({
-    userId: newUser.id,
-    admin: newUser.admin,
-    name: newUser.name,
-    avatar: newUser.avatar,
+    uid: user.id,
+    admin: user.admin,
+    name: user.name,
+    avatar: user.avatar,
     token: token,
   });
 };
 
+//Login
 export const login = async (req, res, next) => {
   console.log("Login");
   const user = res.locals.user;
   const token = res.locals.token;
 
   res.json({
-    userId: user.id,
+    uid: user.id,
     admin: user.admin,
     name: user.name,
     avatar: user.avatar,
     token: token,
   });
+};
+
+export const responseResult = async (req, res, next) => {
+  res.json({ result: res.locals.is_email });
 };

@@ -5,27 +5,33 @@ import fileUploadToServer from "../middleware/file-upload.js";
 import {
   getUsers,
   getUserbyEmail,
+  getUserbyParams,
   getIsEmailEmpty,
   createNewUser,
-  checkUserExist,
-  transformUser,
+  getIsEmail,
   login,
   signup,
-} from "../controllers/users-controller.js";
+} from "../controllers/api/users-controller.js";
 
 import {
   validation,
   generateToken,
   encryptPassword,
-} from "../controllers/share-controller.js";
+  createAvatar
+} from "../controllers/api/share-controller.js";
 
 const router = express.Router();
 router.get("/", getUsers);
+router.get("/:uid", getUserbyParams);
 router.post(
   "/login",
+  [
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
+  ],
+  validation,
   getUserbyEmail,
-  checkUserExist,
-  transformUser,
+  getIsEmail,
   generateToken,
   login
 );
@@ -41,6 +47,7 @@ router.post(
   getUserbyEmail,
   getIsEmailEmpty,
   encryptPassword,
+  createAvatar,
   createNewUser,
   generateToken,
   signup

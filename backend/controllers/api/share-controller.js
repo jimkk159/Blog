@@ -3,8 +3,8 @@ import normalize from "normalize-path";
 import { validationResult } from "express-validator";
 
 import jwt from "jsonwebtoken";
-import { users } from "./blogs.js";
-import HttpError from "../models/http-error.js";
+import { users } from "../blogs.js";
+import HttpError from "../../models/http-error.js";
 
 export const validation = (req, res, next) => {
   //Validate the req
@@ -52,10 +52,10 @@ export const replaceImageSrc = async (req, res, next) => {
 
 //Check Admin
 export const checkAdmin = async (req, res, next) => {
-  const { userId } = req.userData;
+  const { uid } = req.userData;
 
   let isAdmin = false;
-  if (users[0].id === userId) isAdmin = true;
+  if (users[0].id === uid) isAdmin = true;
   res.locals.admin = isAdmin;
   next();
 };
@@ -65,7 +65,7 @@ export const encryptPassword = async (req, res, next) => {
   const { password } = req.body;
   let hashedPassword;
   try {
-    hashedPassword = await bcrypt.hash(password, 12);
+    hashedPassword = await bcrypt.hash("" + password, 12);
   } catch (err) {
     const error = new HttpError("Encrypt fail, please try again.", 500);
     return next(error);
@@ -102,7 +102,7 @@ export const generateToken = (req, res, next) => {
   let token;
   try {
     token = jwt.sign(
-      { userId: user.id, email: user.email },
+      { uid: user.id, email: user.email },
       process.env.JWT_KEY,
       { expiresIn: "3h" }
     );
@@ -115,4 +115,22 @@ export const generateToken = (req, res, next) => {
   }
   res.locals.token = token;
   next();
+};
+
+//Generate Avatar URI
+export const createAvatar = (req, res, next) => {
+  //Setting Avatar
+  let avatar;
+  if (req.file?.path) {
+    avatar = normalize(req.file.path);
+  } else {
+    avatar = "upload/images/default/default_avatar.png";
+  }
+  res.locals.avatar = avatar;
+  next();
+};
+
+export const responseHttp = async (req, res, next) => {
+  const response = res.locals.response;
+  res.status(200).json(response);
 };

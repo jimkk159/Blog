@@ -1,18 +1,23 @@
 import { v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
 
-import { users, blogs } from "./blogs.js";
-import HttpError from "../models/http-error.js";
-import { DUMMY_Structure } from "./Dummy_data.js";
+import {
+  getDBUser,
+  getDBPost,
+  getDBUsersIn,
+  getDBLastestPosts,
+} from "../database/mysql.js";
+import { users, blogs } from "../blogs.js";
+import HttpError from "../../models/http-error.js";
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 const options = { year: "numeric", month: "short", day: "numeric" };
 
 export const getPost = async (req, res, next) => {
-  const postId = req.params.pid;
-  let targetPost;
+  const pid = req.params.pid;
+  let post;
   try {
-    targetPost = blogs.filter((blog) => blog.id === postId)[0];
+    post = await getDBPost(pid);
   } catch (err) {
     const error = new HttpError(
       "Finding post failed, please try again later.",
@@ -22,20 +27,20 @@ export const getPost = async (req, res, next) => {
   }
 
   //Post not find
-  if (!targetPost) {
-    const error = new HttpError("Post not exists!", 422);
+  if (!post) {
+    const error = new HttpError("Post not Find!", 404);
     return next(error);
   }
-  res.locals.post = targetPost;
+  res.locals.post = post;
   next();
 };
 
 export const getPosts = async (req, res, next) => {
   let targetPosts;
   try {
-    const queryNumber = req.query.number >= 1 ? req.query.number : 1;
-    const queryStartPage = req.query.start >= 0 ? req.query.start : 0;
-    targetPosts = blogs.slice(queryStartPage, queryStartPage + queryNumber);
+    const current = req.query.current >= 0 ? req.query.current : 0;
+    const number = req.query.number >= 1 ? req.query.number : 1;
+    targetPosts = await getDBLastestPosts({ current, number });
   } catch (err) {
     const error = new HttpError(
       "Get Posts Error!, please try again later.",
@@ -51,12 +56,18 @@ export const getPostAuthor = async (req, res, next) => {
   const targetPost = res.locals.post;
   let author;
   try {
-    author = users.filter((user) => user.id === targetPost.authorId)[0];
+    author = await getDBUser(targetPost.author_id);
   } catch (err) {
     const error = new HttpError(
       "Finding author failed, please try again later.",
       500
     );
+    return next(error);
+  }
+
+  //Author not find
+  if (!author) {
+    const error = new HttpError("Author not Find!", 404);
     return next(error);
   }
   res.locals.author = author;
@@ -66,17 +77,13 @@ export const getPostAuthor = async (req, res, next) => {
 export const getPostsAuthor = async (req, res, next) => {
   const targetPosts = res.locals.posts;
 
-  let findingAhthors = [];
+  let users = [];
   try {
     //Remove the duplication user
-    const userSet = new Set();
-    targetPosts.map((item) => {
-      userSet.add(item?.authorId);
-    });
-
+    const userSet = new Set(targetPosts.map((item) => item.author_id));
     //Remove the duplication user
-    const usersArray = [...userSet];
-    findingAhthors = users.filter((user) => usersArray.includes(user.id));
+    const targetUsers = [...userSet];
+    users = await getDBUsersIn(targetUsers);
   } catch (err) {
     const error = new HttpError(
       "Finding authors failed, please try again later.",
@@ -84,7 +91,7 @@ export const getPostsAuthor = async (req, res, next) => {
     );
     return next(error);
   }
-  res.locals.authors = findingAhthors;
+  res.locals.authors = users;
   next();
 };
 
@@ -94,33 +101,36 @@ export const addPostAuthor = async (req, res, next) => {
 
   res.json({
     ...targetPost,
-    authorName: author?.name,
-    authorAvatar: author?.avatar,
+    authorName: author.name,
+    authorAvatar: author.avatar,
   });
 };
 
 export const addPostsAuthor = async (req, res, next) => {
   const targetPosts = res.locals.posts;
-  const findingAhthors = res.locals.authors;
+  const authors = res.locals.authors;
+  let result;
+
   try {
     //Create the Obj with userid as key
     let userObj = {};
-    for (let i = 0; i < findingAhthors.length; i++) {
-      const authorId = findingAhthors[i].id;
-      userObj[authorId] = findingAhthors[i];
-    }
+    authors.forEach((author) => {
+      const uid = author.id;
+      userObj[uid] = author;
+    });
 
     //loop through the post and add the author information
-    for (let i = 0; i < targetPosts.length; i++) {
-      const targetAuthor = targetPosts[i].authorId;
-      if (targetAuthor in userObj) {
-        targetPosts[i] = {
-          ...targetPosts[i],
-          authorName: userObj[targetAuthor].name,
-          authorAvatar: userObj[targetAuthor].avatar,
+    result = targetPosts.map((targetPost) => {
+      const authorId = targetPost.author_id;
+      if (authorId in userObj) {
+        targetPost = {
+          ...targetPost,
+          authorName: userObj[authorId].name,
+          authorAvatar: userObj[authorId].avatar,
         };
       }
-    }
+      return targetPost;
+    });
   } catch (err) {
     const error = new HttpError(
       "Get Posts Error!, please try again later.",
@@ -128,16 +138,16 @@ export const addPostsAuthor = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json(targetPosts);
+  res.json(result);
 };
 
 export const checkPostAuthor = (req, res, next) => {
   //Find User
-  const { userId } = req.userData;
+  const { uid } = req.userData;
   const targetPost = res.locals.post;
 
   //Check Post Owner
-  if (targetPost.authorId !== userId) {
+  if (targetPost.uid !== uid) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
@@ -185,7 +195,7 @@ export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
   const { title, language, tags } = req.body;
   const { topic, user: findingUser, contentState } = res.locals;
-
+  
   //Create New Post
   let coverPath;
   if (
@@ -203,7 +213,7 @@ export const createNewPost = async (req, res, next) => {
       topic,
       type: null,
       date: new Date().toLocaleDateString("en-US", options),
-      authorId: findingUser.id,
+      uid: findingUser.id,
       isPined: false,
       cover: {
         img: coverPath,
@@ -313,13 +323,13 @@ export const pinPost = async (req, res, next) => {
 export const deletePost = async (req, res, next) => {
   //For Debug
   console.log("Delete Post");
-  const postId = req.params.pid;
-  const { userId } = req.userData;
+  const pid = req.params.pid;
+  const { uid } = req.userData;
   const targetPost = res.locals.post;
   const admin = res.locals.admin;
 
   //Check Post Owner
-  if (targetPost.authorId !== userId && !admin) {
+  if (targetPost.uid !== uid && !admin) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
@@ -328,7 +338,7 @@ export const deletePost = async (req, res, next) => {
   try {
     let target;
     blogs.map((blog, index) => {
-      if (blog.id === postId) target = index;
+      if (blog.id === pid) target = index;
     });
     if (target > -1) {
       blogs.splice(target, 1);

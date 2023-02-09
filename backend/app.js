@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 
 //Add Static Folder to save images
 app.use("/upload/images", express.static(path.join("upload", "images")));
+app.use("/upload/images/default", express.static(path.join("upload", "images", "default")));
 
 //Allow CROS
 app.use((req, res, next) => {
@@ -63,4 +64,4 @@ app.use((error, req, res, next) => {
 
 const port = 5000;
 app.listen(port, () => console.log("Server running on port 5000"));
-//reference:https://stackoverflow.com/questions/65384754/error-err-module-not-found-cannot-find-module
+// reference:https://stackoverflow.com/questions/65384754/error-err-module-not-found-cannot-find-module

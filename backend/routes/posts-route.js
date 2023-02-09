@@ -6,11 +6,11 @@ import fileUploadToServer from "../middleware/file-upload.js";
 
 import {
   getUser,
-} from "../controllers/users-controller.js";
+} from "../controllers/api/users-controller.js";
 import {
-  checkTargetTopic,
+  checkTopic,
   createNewTopic
-} from "../controllers/topics-controller.js";
+} from "../controllers/api/topics-controller.js";
 import {
   getPost,
   getPosts,
@@ -24,12 +24,12 @@ import {
   editPost,
   pinPost,
   deletePost,
-} from "../controllers/posts-controller.js";
+} from "../controllers/api/posts-controller.js";
 import {
   validation,
   replaceImageSrc,
   checkAdmin,
-} from "../controllers/share-controller.js";
+} from "../controllers/api/share-controller.js";
 
 const router = express.Router();
 
@@ -50,7 +50,7 @@ router.post(
   validation,
   getUser,
   replaceImageSrc,
-  checkTargetTopic,
+  checkTopic,
   createNewTopic,
   createNewPost
 );

@@ -12,7 +12,7 @@ const checkAuth = (req, res, next) => {
       throw new HttpError("Auythentication failed!", 403);
     }
     const decodeToken = jwt.verify(token, process.env.JWT_KEY);
-    req.userData = { userId: decodeToken.userId };
+    req.userData = { uid: decodeToken.uid };
     next();
   } catch (err) {
     const error = new HttpError("Authentication failed!", 403);
