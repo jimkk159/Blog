@@ -13,7 +13,7 @@ import classes from "./EditPost.module.css";
 
 function EditPost({
   tagsClassName,
-  postData,
+  post,
   originState,
   editorState,
   isLoading,
@@ -53,7 +53,7 @@ function EditPost({
         onChange={onChange}
       />
       <div className={tagsClassName}>
-        <Tags content={postData?.tags} />
+        <Tags content={post?.tags} />
       </div>
       <div className={`${classes["btn-container"]}`}>
         <Button2

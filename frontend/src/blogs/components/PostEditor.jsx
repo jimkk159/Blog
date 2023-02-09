@@ -13,6 +13,7 @@ import { tagActions } from "../../store/tag-slice";
 import { toolbarActions } from "../../store/toolbar-slice";
 
 //Custom Function
+import { options } from "../util/time";
 import { styleMap } from "../../shared/util/style-map";
 import plugins, {
   AlignmentTool,
@@ -38,8 +39,6 @@ import "./PostEditor.css";
 import classes from "./PostEditor.module.css";
 
 const decorator = createLinkDecorator();
-const options = { year: "numeric", month: "short", day: "numeric" };
-
 function PostEditor({
   className,
   tags,

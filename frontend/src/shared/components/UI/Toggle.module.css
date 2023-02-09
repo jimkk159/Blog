@@ -26,8 +26,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  -webkit-transition: 2s;
-  transition: 2s;
+  transition: transform 2s;
 }
 
 .area-light{
@@ -85,7 +84,7 @@
 }
 .slider-enter-active {
   transform: translateX(0);
-  transition: all 400ms;
+  transition: transform 400ms;
 }
 
 .slider-enter-done {
@@ -96,7 +95,7 @@
 }
 .slider-exit-active {
   transform: translateX(-26px);
-  transition: all 400ms;
+  transition: transform 400ms;
 }
 .slider-exit-done {
   transform: translateX(-26px);

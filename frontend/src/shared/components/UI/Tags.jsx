@@ -10,12 +10,13 @@ import Tag from "./Tag";
 import classes from "./Tags.module.css";
 
 function Tags(props) {
-  const { content,isEdit, isDarkMode,  onKeyDown, onRemove } = props;
+  const { content, isEdit, isDarkMode, onKeyDown, onRemove } = props;
   const [editTag, setEditTag] = useState(null);
   const [tags, setTags] = useState([]);
 
   useEffect(() => {
-    if (isEdit && content.length > 0) {
+
+    if (isEdit && content?.length > 0) {
       setEditTag(content[content.length - 1]);
       setTags(content.slice(0, -1));
     } else {
@@ -23,7 +24,7 @@ function Tags(props) {
       setTags(content);
     }
   }, [content, isEdit]);
-
+  
   return (
     <div className={classes["detail-bottom"]}>
       <AiOutlineTag className={classes["icon"]} />

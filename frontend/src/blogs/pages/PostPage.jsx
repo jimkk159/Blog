@@ -17,10 +17,10 @@ import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
 import DeleteModal from "../../shared/components/UI/Modal/DeleteModal";
 
 //CSS
-import classes from "./PostPage.module.css"
+import classes from "./PostPage.module.css";
 
 function PostPage() {
-  const [postData, setPostData] = useState(null);
+  const [post, setPost] = useState(null);
   const [topics, setTopics] = useState(null);
   const [title, setTitle] = useState("No Title");
   const [originState, setOriginState] = useState(null);
@@ -65,7 +65,7 @@ function PostPage() {
   };
 
   //Save the Post
-  const postId = postData?.id;
+  const postId = post?.id;
   const savePostHandler = useCallback(
     async (token) => {
       try {
@@ -125,20 +125,21 @@ function PostPage() {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + `/posts/${blogId}`
         );
+        const postLanguage = JSON.parse(responseData?.language);
         setTitle(
           choiceLanguage(
             isEnglish,
-            responseData?.language.en?.title,
-            responseData?.language.ch?.title,
+            postLanguage?.en?.title,
+            postLanguage?.ch?.title,
             "No Title"
           )
         );
-        setPostData(responseData);
+        setPost(responseData);
         const postJSON = JSON.parse(
           choiceLanguage(
             isEnglish,
-            responseData?.language.en?.contentState,
-            responseData?.language.ch?.contentState,
+            postLanguage?.en?.contentState,
+            postLanguage?.ch?.contentState,
             EditorState.createEmpty()
           )
         );
@@ -166,7 +167,7 @@ function PostPage() {
       <ErrorModal error={error} onClear={clearError} isAnimate />
       <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
       <DeleteModal
-        pid={postData?.id}
+        pid={post?.id}
         title={title}
         show={showWarning}
         setShow={setShowWarning}
@@ -175,7 +176,7 @@ function PostPage() {
       {isEdit ? (
         <EditPost
           tagsClassName={classes["tags-container"]}
-          postData={postData}
+          post={post}
           originState={originState}
           editorState={editorState}
           isLoading={isLoadingSave}
@@ -192,7 +193,7 @@ function PostPage() {
           tagsClassName={classes["tags-container"]}
           title={title}
           topics={topics}
-          postData={postData}
+          post={post}
           editorState={editorState}
           onChange={setEditorState}
           onEdit={editModeHandler}

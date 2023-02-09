@@ -6,6 +6,7 @@ import Editor from "@draft-js-plugins/editor";
 import defaultCoverImage from "../../assets/img/cover/default-cover-2.jpg";
 
 //Custom Function
+import { options } from "../util/time";
 import { styleMap } from "../../shared/util/style-map";
 import plugins from "../../shared/components/TextEditor/Plugin";
 import {
@@ -29,7 +30,7 @@ import classes from "./ReadPost.module.css";
 const decorator = createLinkDecorator();
 function ReadPost({
   tagsClassName,
-  postData,
+  post,
   title,
   topics,
   editorState,
@@ -38,8 +39,11 @@ function ReadPost({
   onEdit,
   onDelete,
 }) {
+  const postTags = post?.tags ? JSON.parse(post?.tags) : [];
+  const postDate = new Date(post?.update).toLocaleDateString("en-US", options);
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
+
   return (
     <>
       <Card
@@ -47,27 +51,27 @@ function ReadPost({
         isDarkMode={isDarkMode}
       >
         {isLoading && <LoadingSpinner className={`loading-container`} />}
-        {!isLoading && postData && (
+        {!isLoading && post && (
           <>
             <PostDetailTitle
               title={title}
-              postId={postData?.id}
-              authorId={postData?.authorId}
-              authorName={postData?.authorName}
-              authorAvatar={postData?.authorAvatar}
-              date={postData?.date}
-              isPined={postData?.isPined}
+              postId={post?.id}
+              authorId={post?.author_id}
+              authorName={post?.authorName}
+              authorAvatar={post?.authorAvatar}
+              date={postDate}
+              isPined={!!post?.pin}
               isDarkMode={isDarkMode}
               onEdit={onEdit}
               onDelete={onDelete}
             />
             <Image
               img={
-                postData?.cover?.img
-                  ? `${process.env.REACT_APP_BACKEND_URL}/${postData.cover.img}`
+                post?.cover
+                  ? `${process.env.REACT_APP_BACKEND_URL}/${post.cover}`
                   : defaultCoverImage
               }
-              description={postData?.description}
+              description={post?.description}
               isDarkMode={isDarkMode}
             />
             <Editor
@@ -90,7 +94,7 @@ function ReadPost({
               ]}
             />
             <div className={tagsClassName}>
-              <Tags content={postData?.tags} />
+              <Tags content={postTags} />
             </div>
           </>
         )}

@@ -9,6 +9,7 @@ import defaultCoverImage from "../../../assets/img/cover/default-cover-2.jpg";
 import useHttp from "../../../shared/hooks/http-hook";
 
 //Custom Function
+import { options } from "../../util/time";
 import { choiceLanguage } from "../../util/choiceLanguage";
 
 //Custom Component
@@ -22,20 +23,25 @@ import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 //CSS
 import classes from "./PostInfo.module.css";
 
-function PostInfo(props) {
-  const { post, isOdd, onDelete } = props;
+function PostInfo({ post, isOdd, onDelete }) {
   const {
     id: pid,
     topic,
-    date,
-    authorId,
+    update,
+    author_id,
     authorName,
     cover,
-    language: postLanguage,
+    language: postLanguageStr,
     tags,
-    isPined,
+    pin,
   } = post;
-  const postCover = cover.img ? `${process.env.REACT_APP_BACKEND_URL}/${cover.img}` : defaultCoverImage;
+
+  const postTags = tags ? JSON.parse(tags) : [];
+  const postLanguage = JSON.parse(postLanguageStr);
+  const postDate = new Date(update).toLocaleDateString("en-US", options);
+  const postCover = cover
+    ? `${process.env.REACT_APP_BACKEND_URL}/${cover}`
+    : defaultCoverImage;
 
   const [title, setTitle] = useState("No Title");
   const [showWarning, setShowWarning] = useState(false);
@@ -129,10 +135,10 @@ function PostInfo(props) {
             <h1>{`[ ${topic ? topic : "  "} ] ${title}`}</h1>
             <PostInfoTitle
               postId={pid}
-              authorId={authorId}
+              authorId={author_id}
               authorName={authorName}
-              date={date}
-              isPined={isPined}
+              date={postDate}
+              isPined={!!pin}
               onEdit={editHandler}
               onShowDelete={showDeleteHandler}
             />
@@ -142,7 +148,7 @@ function PostInfo(props) {
               <PostInfoDescription
                 postId={pid}
                 short={short}
-                tags={tags}
+                tags={postTags}
                 language={language}
               />
             </div>

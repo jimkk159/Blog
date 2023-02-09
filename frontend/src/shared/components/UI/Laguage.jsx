@@ -6,15 +6,11 @@ import Toggle from "./Toggle";
 //CSS
 // import classes from "./Laguage.module.css";
 
-function Languae(props) {
+function Languae({ className, show, onToggle, isDarkMode, children }) {
   return (
-    <div className={props.className}>
-      <Toggle
-        show={props.show}
-        onToggle={props.onToggle}
-        isDarkMode={props.isDarkMode}
-      >
-        {props.children}
+    <div className={className}>
+      <Toggle show={show} onToggle={onToggle} isDarkMode={isDarkMode}>
+        {children}
       </Toggle>
     </div>
   );
