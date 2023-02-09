@@ -137,9 +137,9 @@ export const createNewUser = async (req, res, next) => {
       avatar,
       password,
     };
-    await createDBUser(newUser);
+    newUser = await createDBUser(newUser);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     const error = new HttpError(
       "Create User to database fail, please try again later.",
       500

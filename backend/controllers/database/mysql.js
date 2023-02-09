@@ -39,11 +39,11 @@ export const getDBUsersIn = async (uidArray) => {
 };
 
 export const createDBUser = async ({ name, email, avatar, password }) => {
-  const [users] = await mysql_pool.query(
+  const [result] = await mysql_pool.query(
     "INSERT INTO `user`(`name`, `email`, `avatar`, `password`) VALUES (?, ?, ?, ?)",
     [name, email, avatar, password]
   );
-  return users[0];
+  return getDBUser(result.insertId);
 };
 
 //-----------------Topic---------------------
@@ -147,6 +147,43 @@ export const getDBLastestPosts = async ({ number, current }) => {
   return posts;
 };
 
+export const getDBLastestFullPosts = async ({ number, current }) => {
+  const [posts] = await mysql_pool.query(
+    "SELECT `post`.`id`, `post`.`author_id`,`topic`.`name` as `topic`, `post`.`type`,`post`.`pin`,`post`.`cover`,`post`.`language`,`post`.`tags`,`post`.`update` FROM `post` JOIN `topic` ON `topic`.`id` = `post`.`topic_id` ORDER BY `id` DESC  LIMIT ? OFFSET ?;",
+    [+number, +current]
+  );
+  return posts;
+};
+
+export const createDBPost = async ({
+  author_id,
+  topic_id,
+  type,
+  cover,
+  language,
+  tags,
+}) => {
+  const [result] = await mysql_pool.query(
+    "INSERT INTO `post`(`author_id`, `topic_id`, `type`,`cover`, `language`, `tags`) VALUES (?, ?, ?, ?, ?, ?)",
+    [author_id, topic_id, type, cover, language, tags]
+  );
+  return getDBPost(result.insertId);
+};
+
+export const deleteDBPost = async (uid) => {
+  const [result] = await mysql_pool.query("DELETE FROM `post` WHERE `id`= ?;", [
+    uid,
+  ]);
+  return result;
+};
+
+export const updateDBPostPin = async (pid, pin) => {
+  const [result] = await mysql_pool.query(
+    "UPDATE `post` SET `pin` = ? WHERE `id`= ?;",
+    [+pin, pid]
+  );
+  return result;
+};
 //reference: https://stackoverflow.com/questions/70240102/multiple-transactions-in-mysql-for-node
 //reference: https://stackoverflow.com/questions/4073923/select-last-row-in-mysql
 //reference: https://stackoverflow.com/questions/33957252/node-js-mysql-query-where-id-array

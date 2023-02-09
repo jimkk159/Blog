@@ -57,12 +57,12 @@ export const getTopics = async (req, res, next) => {
 
 export const checkTopic = async (req, res, next) => {
   const { topic, parent, children } = JSON.parse(req.body.topic);
-  console.log({ topic, parent, children });
   let targetTopic;
   let targetParent;
   let targetChildren;
   res.locals.exist = false;
-
+  
+  if (!topic) return next(new HttpError("Must Setting Topic for the Post!!", 422));
   if (topic.toLowerCase() === "root")
     return next(new HttpError("Not allow to set Root for Post Topic.", 422));
 
@@ -103,6 +103,7 @@ export const checkTopic = async (req, res, next) => {
         childrenLower.includes(child)
       );
       if (!result) return next(new HttpError("Children does not match!", 422));
+      res.locals.topic = targetTopic;
       res.locals.response = targetTopic;
     } catch (err) {
       const error = new HttpError(
@@ -166,7 +167,7 @@ export const createNewTopic = async (req, res, next) => {
   //For Debug
   console.log("Create New Topic");
   const targetTopic = res.locals.topic;
-  
+
   if (res.locals.exist) return next();
 
   let newTopic;

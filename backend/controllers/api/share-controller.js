@@ -3,8 +3,9 @@ import normalize from "normalize-path";
 import { validationResult } from "express-validator";
 
 import jwt from "jsonwebtoken";
-import { users } from "../blogs.js";
 import HttpError from "../../models/http-error.js";
+
+import { getDBUser } from "../database/mysql.js";
 
 export const validation = (req, res, next) => {
   //Validate the req
@@ -55,7 +56,18 @@ export const checkAdmin = async (req, res, next) => {
   const { uid } = req.userData;
 
   let isAdmin = false;
-  if (users[0].id === uid) isAdmin = true;
+  let user;
+  try {
+    user = await getDBUser(uid);
+    isAdmin = !!+user.admin;
+  } catch (err) {
+    const error = new HttpError(
+      "Reading user permission from database failed, please try again.",
+      500
+    );
+    return next(error);
+  }
+
   res.locals.admin = isAdmin;
   next();
 };
@@ -101,11 +113,9 @@ export const generateToken = (req, res, next) => {
   //Create Token
   let token;
   try {
-    token = jwt.sign(
-      { uid: user.id, email: user.email },
-      process.env.JWT_KEY,
-      { expiresIn: "3h" }
-    );
+    token = jwt.sign({ uid: user.id, email: user.email }, process.env.JWT_KEY, {
+      expiresIn: "3h",
+    });
   } catch (err) {
     const error = new HttpError(
       "Create Token fail, please try again later.",

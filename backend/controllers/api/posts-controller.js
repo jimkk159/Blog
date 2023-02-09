@@ -5,9 +5,12 @@ import {
   getDBUser,
   getDBPost,
   getDBUsersIn,
-  getDBLastestPosts,
+  getDBLastestFullPosts,
+  createDBPost,
+  deleteDBPost,
+  updateDBPostPin,
 } from "../database/mysql.js";
-import { users, blogs } from "../blogs.js";
+import { blogs } from "../blogs.js";
 import HttpError from "../../models/http-error.js";
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -40,7 +43,7 @@ export const getPosts = async (req, res, next) => {
   try {
     const current = req.query.current >= 0 ? req.query.current : 0;
     const number = req.query.number >= 1 ? req.query.number : 1;
-    targetPosts = await getDBLastestPosts({ current, number });
+    targetPosts = await getDBLastestFullPosts({ current, number });
   } catch (err) {
     const error = new HttpError(
       "Get Posts Error!, please try again later.",
@@ -77,6 +80,9 @@ export const getPostAuthor = async (req, res, next) => {
 export const getPostsAuthor = async (req, res, next) => {
   const targetPosts = res.locals.posts;
 
+  //Not Any Posts
+  if (targetPosts.length === 0) return next();
+
   let users = [];
   try {
     //Remove the duplication user
@@ -109,7 +115,10 @@ export const addPostAuthor = async (req, res, next) => {
 export const addPostsAuthor = async (req, res, next) => {
   const targetPosts = res.locals.posts;
   const authors = res.locals.authors;
-  let result;
+  let result = targetPosts;
+
+  //Not Any Posts
+  if (targetPosts.length === 0) return res.json(result);
 
   try {
     //Create the Obj with userid as key
@@ -194,8 +203,7 @@ export const getPostSearch = async (req, res, next) => {
 export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
   const { title, language, tags } = req.body;
-  const { topic, user: findingUser, contentState } = res.locals;
-  
+  const { topic, user, contentState } = res.locals;
   //Create New Post
   let coverPath;
   if (
@@ -205,23 +213,21 @@ export const createNewPost = async (req, res, next) => {
   ) {
     coverPath = normalize(req.files?.cover[0]?.path);
   }
-
   let newPost;
+
   try {
     newPost = {
-      id: uuidv4(),
-      topic,
-      type: null,
-      date: new Date().toLocaleDateString("en-US", options),
-      uid: findingUser.id,
-      isPined: false,
-      cover: {
-        img: coverPath,
-        description: null,
-      },
+      author_id: user.id,
+      topic_id: topic.id,
+      type: "Post",
+      cover: coverPath ? coverPath : null,
       language: { en: {}, ch: {} },
-      comments: [],
-      tags: tags ? (Array.isArray(tags) ? [...tags] : [tags]) : [],
+      // comments: [],
+      tags: tags
+        ? Array.isArray(tags)
+          ? JSON.stringify([...tags])
+          : JSON.stringify([tags])
+        : JSON.stringify([]),
     };
     const postContent = {
       title,
@@ -241,15 +247,24 @@ export const createNewPost = async (req, res, next) => {
         return next(error);
     }
   } catch (err) {
-    console.log(err);
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }
 
   //Save Post to Database
   try {
-    blogs.push(newPost);
-  } catch (err) {}
+    newPost = await createDBPost({
+      author_id: newPost.author_id,
+      topic_id: newPost.topic_id,
+      type: "Post",
+      cover: newPost.cover,
+      language: JSON.stringify(newPost.language),
+      tags: newPost.tags,
+    });
+  } catch (err) {
+    const error = new HttpError("Create New Post Failed!", 500);
+    return next(error);
+  }
 
   res.status(200).json({
     pid: newPost.id,
@@ -297,18 +312,17 @@ export const editPost = async (req, res, next) => {
 
 export const pinPost = async (req, res, next) => {
   console.log("Pin Post");
+  const pid = req.params.pid;
   const queryPin = req.query.pin;
-  const targetPost = res.locals.post;
   const admin = res.locals.admin;
 
   if (!admin) {
     const error = new HttpError("Permissions deny.", 422);
     return next(error);
   }
-
   //Pin Post
   try {
-    targetPost.isPined = !!+queryPin;
+    await updateDBPostPin(pid, +queryPin);
   } catch (err) {
     const error = new HttpError(
       "Pin post failed, please try again later.",
@@ -329,20 +343,14 @@ export const deletePost = async (req, res, next) => {
   const admin = res.locals.admin;
 
   //Check Post Owner
-  if (targetPost.uid !== uid && !admin) {
+  if (targetPost.author_id !== uid && !admin) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
 
   //Delete Post
   try {
-    let target;
-    blogs.map((blog, index) => {
-      if (blog.id === pid) target = index;
-    });
-    if (target > -1) {
-      blogs.splice(target, 1);
-    }
+    deleteDBPost(pid);
   } catch (err) {
     const error = new HttpError(
       "Delete post failed, please try again later.",
