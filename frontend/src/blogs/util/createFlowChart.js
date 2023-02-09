@@ -11,11 +11,6 @@ const colors = [
   "#66E4FF",
 ];
 
-function compareLevel(a, b) {
-  if (a.level !== b.level) return a.level - b.level;
-  return a.id - b.id;
-}
-
 //Calculate Offset
 export function calOffset(
   inputTreeData,
@@ -129,21 +124,11 @@ export function createFlowChart({
   userOffsetY,
   topicData,
 }) {
-  //Sort Topic by level
-  topicData.sort(compareLevel);
-
   //ReStructure data to Array Tree(Not Node Tree)
-  const treeData = createTree(topicData);
+  const treeData = createTree({ head: "root", topicData });
+  
   //Sort Tree by Parent
-  const initialTreeData = [
-    [
-      {
-        topic: "Root",
-        parent: "",
-      },
-    ],
-  ];
-  const sortTreeData = sortTopicByParent(initialTreeData, treeData);
+  const sortTreeData = sortTopicByParent(treeData);
 
   //Find Present Level Offset
   const [totalOffsetX, totalOffsetY] = calOffset(

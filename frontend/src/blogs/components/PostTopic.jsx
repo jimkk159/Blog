@@ -295,13 +295,13 @@ function PostTopic({
             onTag={setChildHandler}
           />
         </div>
-        {/* <GuideOpen
+        <GuideOpen
           className={`${classes["topic-graphic"]}`}
           topics={topics}
           isDarkMode={!isDarkMode}
           isEdit
           onEdit={topicHandler}
-        /> */}
+        />
       </div>
     </Card>
   );

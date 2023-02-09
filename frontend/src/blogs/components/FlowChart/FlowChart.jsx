@@ -12,8 +12,16 @@ const cirRadius = 24;
 const rectWidth = 80;
 const rectHeight = 30;
 const rectRadius = 10;
-function FlowChart({ type, width, height, offsetX, offsetY, isEdit, topics, onEdit }) {
-
+function FlowChart({
+  type,
+  topics,
+  width,
+  height,
+  offsetX,
+  offsetY,
+  isEdit,
+  onEdit,
+}) {
   //React-Router
   const navigate = useNavigate();
 
