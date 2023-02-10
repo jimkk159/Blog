@@ -7,6 +7,7 @@ function UploadImage(props) {
   const {
     id: inputId,
     className,
+    initImage,
     ratioClassName,
     isDarkMode,
     isDrag,
@@ -14,10 +15,12 @@ function UploadImage(props) {
     onInput,
     onUpdate,
     placeholder,
+    onPreview,
   } = props;
 
   const inputRef = useRef(null);
   const [image, setImage] = useState();
+  const [isUpload, setIsUpload] = useState(false);
   const [previewUrl, setPreviewUrl] = useState();
 
   //Mouse Click to pick an Image
@@ -26,7 +29,7 @@ function UploadImage(props) {
   };
 
   //Handle Select to upload image
-  const inputImageHandler = (event) => {
+  const inputImageHandler = async (event) => {
     let pickedFile;
     // let fileIsValid = isValid; //State not update instantly
     if (event.target.files && event.target.files.length === 1) {
@@ -36,7 +39,7 @@ function UploadImage(props) {
         onInput(inputId, pickedFile, true);
       }
       if (onUpdate) {
-        onUpdate(pickedFile);
+        await onUpdate(pickedFile);
       }
     }
   };
@@ -77,9 +80,20 @@ function UploadImage(props) {
     const fileReader = new FileReader();
     fileReader.onload = () => {
       setPreviewUrl(fileReader.result);
+      setIsUpload(true);
+      if (onPreview) onPreview(fileReader.result);
     };
     fileReader.readAsDataURL(image);
-  }, [image]);
+  }, [image, onPreview]);
+
+  useEffect(() => {
+    if (initImage) {
+      const url = initImage.startsWith("data:image")
+        ? initImage
+        : `${process.env.REACT_APP_BACKEND_URL}/${initImage}`;
+      setPreviewUrl(url);
+    } else setPreviewUrl(null);
+  }, [initImage]);
 
   return (
     <>
@@ -99,12 +113,14 @@ function UploadImage(props) {
               isDarkMode
                 ? classes["upload-preview-dark"]
                 : classes["upload-preview-light"]
-            }`}
+            } ${!isUpload && classes["upload-edit"]}`}
             onClick={pickHandler}
           >
             {previewUrl && <img src={previewUrl} alt="preview" />}
-            {!previewUrl && (
-              <p className={`${classes["upload-img"]}`}>{placeholder}</p>
+            {!isUpload && (
+              <p className={`${classes["upload-placeholder"]}`}>
+                {placeholder}
+              </p>
             )}
           </div>
         </div>

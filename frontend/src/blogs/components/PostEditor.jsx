@@ -10,6 +10,7 @@ import Editor from "@draft-js-plugins/editor";
 
 //Redux Slice
 import { tagActions } from "../../store/tag-slice";
+import { postActions } from "../../store/post-slice";
 import { toolbarActions } from "../../store/toolbar-slice";
 
 //Custom Function
@@ -44,23 +45,24 @@ function PostEditor({
   tags,
   topic,
   topics,
-  topicTags,
   titleState,
   editorState,
-  tagsState,
+  tagState,
   onTags,
   onTopic,
   onChangeTitle,
   onChange,
-  onChangeTags,
+  onChangeTag,
   onCover,
 }) {
   const editorRef = useRef(null);
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [searchItem, setSearchItem] = useState("");
+
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
+  const oriCoverUrl = useSelector((state) => state.post.oriCoverUrl);
   const isDarkMode = useSelector((state) => state.theme.value);
   const { name: authorName, avatar: authorAvatar } = useSelector(
     (state) => state.auth
@@ -92,37 +94,37 @@ function PostEditor({
   //Search Handler
   const searchHandler = (target) => {
     setSearchItem(target);
-    onChangeTags(
+    onChangeTag(
       EditorState.createWithContent(ContentState.createFromText(target))
     );
   };
 
   //Sync editor and input
   useEffect(() => {
-    const currentContent = tagsState.getCurrentContent();
+    const currentContent = tagState.getCurrentContent();
     const contentBlock = currentContent.getFirstBlock();
     const tag = contentBlock.getText();
     setSearchItem(tag);
-  }, [tagsState]);
+  }, [tagState]);
 
   const editorTag = (
     <>
       <TagsToolTip
         className={`${classes["tool-tip-light"]}`}
+        tags={tags}
+        topics={topics}
         show={isTag}
         value={searchItem}
-        topicTags={topicTags}
-        tags={tags}
-        isAnimate
         isDarkMode={isDarkMode}
         onTag={addTagHandler}
         onSearch={searchHandler}
+        isAnimate
       />
       <div onClick={tagFocusHandler}>
         <Editor
           ref={tagRef}
-          editorState={tagsState}
-          onChange={onChangeTags}
+          editorState={tagState}
+          onChange={onChangeTag}
           placeholder="+..."
         />
       </div>
@@ -147,17 +149,21 @@ function PostEditor({
   //Add Tag by type
   const addTypeTagHandler = (event) => {
     if (event.key === "Enter") {
-      const currentContent = tagsState.getCurrentContent();
+      const currentContent = tagState.getCurrentContent();
       const contentBlock = currentContent.getFirstBlock();
       const tag = contentBlock.getText().trim();
       addTagHandler(tag);
-      onChangeTags(() => EditorState.createEmpty());
+      onChangeTag(() => EditorState.createEmpty());
     }
   };
 
   //Remove Tag
   const removeTagHandler = (targetTag) => {
     onTags(tags.filter((tag) => tag !== targetTag));
+  };
+
+  const coverUrlHandler = (url) => {
+    dispatch(postActions.setCurrentUrl({ url }));
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
@@ -194,7 +200,6 @@ function PostEditor({
       <PostTopic
         topic={topic}
         topics={topics}
-        topicTags={topicTags}
         isDarkMode={isDarkMode}
         onChange={onTopic}
         onTag={addTagHandler}
@@ -220,12 +225,14 @@ function PostEditor({
         <div onDragEnter={dragHandler}>
           <UploadImage
             className={classes["cover"]}
+            initImage={oriCoverUrl}
             ratioClassName={classes["cover-ratio"]}
             isDarkMode={isDarkMode}
             isDrag={isDrag}
             placeholder={"+"}
             onDrag={setIsDrag}
             onUpdate={onCover}
+            onPreview={coverUrlHandler}
           />
         </div>
         <div className={classes["editor-container"]}>

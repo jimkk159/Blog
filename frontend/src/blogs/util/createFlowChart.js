@@ -122,10 +122,10 @@ export function createFlowChart({
   radius,
   userOffsetX,
   userOffsetY,
-  topicData,
+  topics,
 }) {
   //ReStructure data to Array Tree(Not Node Tree)
-  const treeData = createTree({ head: "root", topicData });
+  const treeData = createTree({ head: "root", topics });
   
   //Sort Tree by Parent
   const sortTreeData = sortTopicByParent(treeData);

@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { EditorState, convertToRaw } from "draft-js";
+
+//Redux Slice
+import { postActions } from "../../store/post-slice";
 
 //Custom Function
 import convertImgURL from "../../shared/util/url-to-blob";
@@ -21,27 +24,25 @@ import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
   const [tags, setTags] = useState([]);
-  const [topic, setTopic] = useState([]);
+  const [topic, setTopic] = useState(null);
   const [topics, setTopics] = useState([]);
-  const [topicTags, setTopicTags] = useState([]);
-  const [postCover, setPostCover] = useState(null);
+  const [prevToken, setPrevToken] = useState(null);
+  const [cover, setCover] = useState(null);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
-  const [tagsEditorState, setTagsEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
   //Redux
-  const { token } = useSelector((state) => state.auth);
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
+  const dispatch = useDispatch();
 
   //React Router
   const navigate = useNavigate();
   const { edit } = useOutletContext();
-  const setIsEdit = edit[1];
+  const [isEdit, setIsEdit] = edit;
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -52,66 +53,72 @@ function NewPostPage() {
     clearError: clearErrorTopic,
   } = useHttp();
 
-  //Save the Post Title
-  const savePostTitleHandler = () => {
-    const currentContent = titleState.getCurrentContent();
+  //Get EditorState FirstBlock Text
+  const getTextHandler = useCallback((editorState) => {
+    const currentContent = editorState.getCurrentContent();
     const contentBlock = currentContent.getFirstBlock();
-    const postTitle = contentBlock.getText();
-    return postTitle;
-  };
+    return contentBlock.getText();
+  }, []);
 
   //Save the Post Editor
-  const savePostContentHandler = () => {
+  const savePostContentHandler = useCallback((editorState) => {
     const currentContent = editorState.getCurrentContent();
-    const rawData = JSON.stringify(convertToRaw(currentContent));
-    return rawData;
-  };
-
-  //Save the Post Tags
-  const savePostTagsHandler = () => {
-    const currentContent = tagsEditorState.getCurrentContent();
-    const contentBlock = currentContent.getFirstBlock();
-    const tag = contentBlock.getText();
-    return tag;
-  };
+    return JSON.stringify(convertToRaw(currentContent));
+  }, []);
 
   //Save the Post
-  const savePostHandler = async () => {
-    try {
-      const title = savePostTitleHandler();
-      const tag = savePostTagsHandler().trim();
-      const newTags = tag ? [...tags, tag] : [...tags];
-      const contentRawData = savePostContentHandler();
-      const [imgBlobs, convertedData] = convertImgURL(contentRawData);
-      const createSendForm = (imgArray, draftRawData) => {
-        const formData = new FormData();
-        formData.append("topic", JSON.stringify(topic));
-        formData.append("title", title);
-        formData.append("cover", postCover);
-        formData.append("language", isEnglish ? "en" : "ch");
-        formData.append("contentState", draftRawData);
-        for (let i = 0; i < imgArray.length; i++) {
-          formData.append("images", imgArray[i]);
-        }
-        for (let i = 0; i < newTags.length; i++) {
-          formData.append("tags", newTags[i]);
-        }
-        return formData;
-      };
+  const savePostHandler = useCallback(
+    async (token) => {
+      try {
+        const title = getTextHandler(titleState);
+        const tag = getTextHandler(tagState).trim();
+        const newTags = tag ? [...tags, tag] : [...tags];
+        const contentRawData = savePostContentHandler(editorState);
+        const [imgBlobs, convertedData] = convertImgURL(contentRawData);
+        const createSendForm = (imgArray, draftRawData) => {
+          const formData = new FormData();
+          formData.append("topic", JSON.stringify(topic));
+          formData.append("title", title);
+          formData.append("cover", cover);
+          formData.append("language", isEnglish ? "en" : "ch");
+          formData.append("contentState", draftRawData);
+          for (let i = 0; i < imgArray.length; i++) {
+            formData.append("images", imgArray[i]);
+          }
+          for (let i = 0; i < newTags.length; i++) {
+            formData.append("tags", newTags[i]);
+          }
+          return formData;
+        };
 
-      const sendForm = createSendForm(imgBlobs, convertedData);
-      const response = await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/new`,
-        "POST",
-        sendForm,
-        {
-          Authorization: "Bearer " + token,
-        }
-      );
-      setIsEdit(false);
-      navigate(`/blog/${response.pid}`);
-    } catch (err) {}
-  };
+        const sendForm = createSendForm(imgBlobs, convertedData);
+        const response = await sendRequest(
+          process.env.REACT_APP_BACKEND_URL + `/posts/new`,
+          "POST",
+          sendForm,
+          {
+            Authorization: "Bearer " + token,
+          }
+        );
+        setIsEdit(false);
+        navigate(`/blog/${response.pid}`);
+      } catch (err) {}
+    },
+    [
+      topic,
+      tags,
+      setIsEdit,
+      isEnglish,
+      cover,
+      titleState,
+      editorState,
+      tagState,
+      navigate,
+      sendRequest,
+      getTextHandler,
+      savePostContentHandler,
+    ]
+  );
 
   //Cancel the Post
   const cancelPostHandler = () => {
@@ -130,27 +137,23 @@ function NewPostPage() {
         const responseData = await sendRequestTopic(
           process.env.REACT_APP_BACKEND_URL + "/topics"
         );
-        const topicsTags = responseData.map((item) => {
-          return item.name;
-        });
-        const topics = responseData.map((item) => ({
+        const rawTopics = responseData.map((item) => ({
           ...item,
           parent: "",
           children: [],
         }));
 
         //Setting parent and children
-        for (let i = 0; i < topics.length; i++) {
-          for (let j = 0; j < topics.length; j++) {
+        for (let i = 0; i < rawTopics.length; i++) {
+          for (let j = 0; j < rawTopics.length; j++) {
             if (i === j) continue;
-            if (topics[i].parent_id === topics[j].id) {
-              topics[i].parent = topics[j].name;
-              topics[j].children.push(topics[i].name);
+            if (rawTopics[i].parent_id === rawTopics[j].id) {
+              rawTopics[i].parent = rawTopics[j].topic;
+              rawTopics[j].children.push(rawTopics[i].topic);
             }
           }
         }
-        setTopics(topics);
-        setTopicTags(topicsTags);
+        setTopics(rawTopics);
       } catch (err) {}
     };
     fetchTopics();
@@ -158,7 +161,20 @@ function NewPostPage() {
 
   useEffect(() => {
     setIsEdit(true);
-  }, [setIsEdit]);
+    dispatch(postActions.reset());
+  }, [setIsEdit, dispatch]);
+
+  //Rember the previous token when auto logout to save the post
+  useEffect(() => {
+    setPrevToken(token);
+  }, [token]);
+
+  useEffect(() => {
+    if (!isLoggedIn && isEdit) {
+      savePostHandler(prevToken);
+      setPrevToken(null);
+    }
+  }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
 
   return (
     <>
@@ -176,22 +192,21 @@ function NewPostPage() {
         tags={tags}
         topic={topic}
         topics={topics}
-        topicTags={topicTags}
         onTags={setTags}
         onTopic={setTopic}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}
         onChangeTitle={setTitleState}
-        tagsState={tagsEditorState}
-        onChangeTags={setTagsEditorState}
-        onCover={setPostCover}
+        tagState={tagState}
+        onChangeTag={setTagState}
+        onCover={setCover}
       />
       <div className={`${classes["btn-container"]}`}>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
-          onClick={savePostHandler}
+          onClick={() => savePostHandler(prevToken)}
         >
           SAVE
         </Button2>

@@ -44,7 +44,7 @@ function FlowChart({
     graphicHeight: height,
     userOffsetX: offsetX,
     userOffsetY: offsetY,
-    topicData: topics,
+    topics,
     ...typePorperty,
   });
 

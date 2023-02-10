@@ -17,12 +17,10 @@ import { createLinkDecorator } from "../../shared/components/TextEditor/decorato
 
 //Custom Comonent
 import Guide from "./BlogGuide/Guide";
-import Image from "./PostDetail/Widget/Image";
 import Tags from "../../shared/components/UI/Tags";
 import Card from "../../shared/components/UI/Card";
 import Relations from "./PostDetail/Widget/Relations";
 import PostDetailTitle from "./PostDetail/PostDetailTitle";
-import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 
 //CSS
 import classes from "./ReadPost.module.css";
@@ -31,17 +29,19 @@ const decorator = createLinkDecorator();
 function ReadPost({
   tagsClassName,
   post,
+  tags,
   title,
   topics,
   editorState,
   onChange,
-  isLoading,
   onEdit,
   onDelete,
+  isLoading,
 }) {
-  const postTags = post?.tags ? JSON.parse(post?.tags) : [];
   const postDate = new Date(post?.update).toLocaleDateString("en-US", options);
+
   //Redux
+  const { coverUrl } = useSelector((state) => state.post);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -50,7 +50,6 @@ function ReadPost({
         className={`page ${classes["post-container"]}`}
         isDarkMode={isDarkMode}
       >
-        {isLoading && <LoadingSpinner className={`loading-container`} />}
         {!isLoading && post && (
           <>
             <PostDetailTitle
@@ -65,15 +64,21 @@ function ReadPost({
               onEdit={onEdit}
               onDelete={onDelete}
             />
-            <Image
-              img={
-                post?.cover
-                  ? `${process.env.REACT_APP_BACKEND_URL}/${post.cover}`
-                  : defaultCoverImage
-              }
-              description={post?.description}
-              isDarkMode={isDarkMode}
-            />
+            <div className={`${classes["cover-container"]}`}>
+              <div className={`${classes["cover-dummy"]}`}></div>
+              <div className={`${classes["cover"]}`}>
+                <img
+                  src={
+                    coverUrl
+                      ? coverUrl.startsWith("data:image")
+                        ? `${coverUrl}`
+                        : `${process.env.REACT_APP_BACKEND_URL}/${coverUrl}`
+                      : defaultCoverImage
+                  }
+                  alt="cover"
+                />
+              </div>
+            </div>
             <Editor
               editorState={editorState}
               onChange={onChange}
@@ -94,7 +99,7 @@ function ReadPost({
               ]}
             />
             <div className={tagsClassName}>
-              <Tags content={postTags} />
+              <Tags content={tags} />
             </div>
           </>
         )}

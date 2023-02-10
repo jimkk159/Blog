@@ -1,4 +1,4 @@
-import React, { useRef, useState, useReducer } from "react";
+import React, { useRef, useState, useReducer, useEffect } from "react";
 
 //Custom Component
 import GuideOpen from "./BlogGuide/GuideOpen";
@@ -56,15 +56,10 @@ const topicReducer = (state, action) => {
   }
 };
 
-function PostTopic({
-  topics,
-  topicTags,
-  isDarkMode,
-  onChange,
-  onTag,
-  onRemove,
-}) {
+function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
+  const topicArray = topics ? topics.map((topic) => topic.topic) : [];
   const searchRef = useRef(null);
+  const [isInit, setIsInit] = useState(true);
   const [searchItem, setSearchItem] = useState("");
   const [topicState, dispatch] = useReducer(topicReducer, initialState);
 
@@ -78,12 +73,12 @@ function PostTopic({
     if (event.key === "Enter") {
       setSearchItem("");
       const [topic] = topics.filter((topic) => {
-        return topic?.name.toLowerCase() === event.target.value.toLowerCase();
+        return topic?.topic.toLowerCase() === event.target.value.toLowerCase();
       });
       if (
         topic &&
         topicState?.topic === "" &&
-        topic?.name.toLowerCase() === "Root".toLowerCase()
+        topic?.topic.toLowerCase() === "Root".toLowerCase()
       )
         return;
 
@@ -91,14 +86,14 @@ function PostTopic({
         //Setting Existed Topic
         onChange({
           ...topicState,
-          topic: topic?.name,
+          topic: topic?.topic,
           parent: topic?.parent,
           children: topic?.children,
         });
-        onTag(topic?.name);
+        onTag(topic?.topic);
         return dispatch({
           type: "SET",
-          topic: topic?.name,
+          topic: topic?.topic,
           parent: topic?.parent,
           children: topic?.children,
         });
@@ -118,12 +113,12 @@ function PostTopic({
         //Setting Parent and its children
         onChange({
           ...topicState,
-          parent: topic?.name,
+          parent: topic?.topic,
           children: [...topic?.children],
         });
         return dispatch({
           type: "PARENT",
-          parent: topic?.name,
+          parent: topic?.topic,
           children: [...topic?.children],
         });
       }
@@ -133,7 +128,7 @@ function PostTopic({
   //Topic tag click
   const topicHandler = (choice) => {
     const [topic] = topics.filter(
-      (topic) => topic?.name.toLowerCase() === choice.toLowerCase()
+      (topic) => topic?.topic.toLowerCase() === choice.toLowerCase()
     );
 
     if (!topic) return;
@@ -147,14 +142,14 @@ function PostTopic({
       setSearchItem("");
       onChange({
         ...topicState,
-        topic: topic?.name,
+        topic: topic?.topic,
         parent: topic?.parent,
         children: topic?.children,
       });
-      onTag(topic?.name);
+      onTag(topic?.topic);
       return dispatch({
         type: "SET",
-        topic: topic?.name,
+        topic: topic?.topic,
         parent: topic?.parent,
         children: topic?.children,
       });
@@ -163,12 +158,12 @@ function PostTopic({
     if (topicState.parent === "") {
       onChange({
         ...topicState,
-        parent: topic?.name,
+        parent: topic?.topic,
         children: [...topic?.children],
       });
       return dispatch({
         type: "PARENT",
-        parent: topic?.name,
+        parent: topic?.topic,
         children: [...topic?.children],
       });
     }
@@ -184,7 +179,7 @@ function PostTopic({
 
   //Set Parent
   const setParentHandler = (parent) => {
-    if (topicTags.includes(topicState.topic)) {
+    if (topicArray.includes(topicState.topic)) {
       onChange(initialState);
       return dispatch({
         type: "RESET",
@@ -193,7 +188,7 @@ function PostTopic({
 
     //Reset Parent
     const [topic] = topics.filter(
-      (topic) => topic?.name.toLowerCase() === parent.toLowerCase()
+      (topic) => topic?.topic.toLowerCase() === parent.toLowerCase()
     );
     if (!topic) return;
     onChange({ ...topicState, parent: "", children: [] });
@@ -204,14 +199,14 @@ function PostTopic({
 
   //Set Child
   const setChildHandler = (child) => {
-    if (topicTags.includes(topicState.topic)) {
+    if (topicArray.includes(topicState.topic)) {
       onChange(initialState);
       return dispatch({
         type: "RESET",
       });
     }
     const [topic] = topics.filter(
-      (topic) => topic?.name.toLowerCase() === child.toLowerCase()
+      (topic) => topic?.topic.toLowerCase() === child.toLowerCase()
     );
     if (!topic) return;
 
@@ -226,6 +221,18 @@ function PostTopic({
       child,
     });
   };
+
+  useEffect(() => {
+    if (isInit && topic) {
+      dispatch({
+        type: "SET",
+        topic: topic?.topic,
+        parent: topic?.parent,
+        children: topic?.children,
+      });
+      setIsInit(false);
+    }
+  }, [isInit, topic]);
 
   return (
     <Card className={`${classes["container"]}`} isDarkMode={isDarkMode}>
@@ -248,7 +255,7 @@ function PostTopic({
         }`}
       >
         <div className={classes["topic-tags"]}>
-          {topicTags.map((topicTag, index) => {
+          {topicArray.map((topicTag, index) => {
             const topicToLower = topicTag?.toLowerCase();
             if (
               topicToLower.includes(searchItem?.toLowerCase()) &&

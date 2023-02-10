@@ -13,13 +13,14 @@ function TagsToolTip({
   value,
   isAnimate,
   isDarkMode,
-  topicTags,
+  topics,
   tags,
   onTag,
   onSearch
 }) {
   const tagsToLower = tags.map((tag) => tag.toLowerCase());
-  const tagsChoice = topicTags.map((topicTag, index) => {
+  const topicArray = topics.map((topic) => topic.topic);
+  const tagsChoice = topicArray.map((topicTag, index) => {
     const topicToLower = topicTag.toLowerCase();
     if (
       !tagsToLower.includes(topicToLower) &&

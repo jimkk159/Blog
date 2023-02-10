@@ -9,8 +9,7 @@ import Tag from "./Tag";
 //CSS
 import classes from "./Tags.module.css";
 
-function Tags(props) {
-  const { content, isEdit, isDarkMode, onKeyDown, onRemove } = props;
+function Tags({ content, isEdit, isDarkMode, onKeyDown, onRemove }) {
   const [editTag, setEditTag] = useState(null);
   const [tags, setTags] = useState([]);
 
@@ -24,7 +23,7 @@ function Tags(props) {
       setTags(content);
     }
   }, [content, isEdit]);
-  
+
   return (
     <div className={classes["detail-bottom"]}>
       <AiOutlineTag className={classes["icon"]} />

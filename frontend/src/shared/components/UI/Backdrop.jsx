@@ -4,12 +4,11 @@ import ReactDOM from "react-dom";
 //CSS
 import classes from "./Backdrop.module.css";
 
-function Backdrop(props) {
-
+function Backdrop({ onClick }) {
   const clickHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    props.onClick();
+    if (onClick) onClick();
   };
 
   const content = (

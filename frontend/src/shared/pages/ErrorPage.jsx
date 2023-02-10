@@ -18,7 +18,6 @@ function ErrorPage() {
   const isDarkMode = useSelector((state) => state.theme.value);
 
   const error = useRouteError();
-  console.log(error);
   return (
     <div
       className={`${classes["error-layout"]} ${

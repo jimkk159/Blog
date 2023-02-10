@@ -5,12 +5,10 @@
   top: 60vh;
   z-index: 100;
 }
-
 .btn-container {
   margin-top: 0.8rem;
   text-align: right;
 }
-
 .btn {
   margin-left: 0.5rem;
 }

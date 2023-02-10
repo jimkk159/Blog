@@ -1,65 +1,68 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+
+//Redux Slice
+import { postActions } from "../../store/post-slice";
 
 //Custom Component
-import Tags from "../../shared/components/UI/Tags";
 import Button2 from "../../shared/components/Form/Button2";
-import Backdrop from "../../shared/components/UI/Backdrop";
-import ErrorModal from "../../shared/components/UI/Modal/ErrorModal";
-import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
-import RichTextEditor from "../../shared/components/TextEditor/RichTextEditor";
+import PostEditor from "./PostEditor";
 
 //CSS
 import classes from "./EditPost.module.css";
 
 function EditPost({
-  tagsClassName,
-  post,
+  token,
+  topic,
+  topics,
+  tags,
+  isLoading,
   originState,
   editorState,
-  isLoading,
-  error,
-  clearError,
-  token,
   onChange,
-  onSave,
+  tagState,
+  onChangeTag,
+  titleState,
+  onChangeTitle,
+  onTags,
+  onTopic,
   onRead,
+  onSave,
   onDelete,
+  onCover,
 }) {
-  //Save Post
-  const savePostHandler = () => {
-    onSave(token);
-  };
+  //Redux
+  const dispatch = useDispatch();
 
   //Cancel the Post
   const cancelPostHandler = () => {
     onRead();
     onChange(originState);
+    dispatch(postActions.cancel());
+    onCover(null)
   };
 
   return (
     <>
-      <ErrorModal error={error} onClear={clearError} />
-      {isLoading && (
-        <>
-          <Backdrop />
-          <div className={`${classes["loading-container"]}`}>
-            <LoadingSpinner asOverlay />
-          </div>
-        </>
-      )}
-      <RichTextEditor
-        originState={originState}
+      <PostEditor
+        tags={tags}
+        topic={topic}
+        topics={topics}
+        onTags={onTags}
+        onTopic={onTopic}
         editorState={editorState}
         onChange={onChange}
+        titleState={titleState}
+        onChangeTitle={onChangeTitle}
+        tagState={tagState}
+        onChangeTag={onChangeTag}
+        onCover={onCover}
       />
-      <div className={tagsClassName}>
-        <Tags content={post?.tags} />
-      </div>
       <div className={`${classes["btn-container"]}`}>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
-          onClick={savePostHandler}
+          onClick={() => onSave(token)}
         >
           SAVE
         </Button2>

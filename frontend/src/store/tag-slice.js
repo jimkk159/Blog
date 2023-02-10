@@ -14,9 +14,6 @@ const tagSlice = createSlice({
     close: (state) => {
       state.isTag = false;
     },
-    toggle: (state) => {
-      state.isTag = !state.tag;
-    },
   },
 });
 export const tagActions = tagSlice.actions;
