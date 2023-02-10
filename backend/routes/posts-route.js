@@ -57,13 +57,18 @@ router.post(
 
 router.put(
   "/:pid",
-  fileUploadToServer.array("images"),
+  fileUploadToServer.fields([
+    { name: "cover", maxCount: 1 },
+    { name: "images" },
+  ]),
   [check("contentState").not().isEmpty()],
   validation,
   getPost,
   getUser,
   checkPostAuthor,
   replaceImageSrc,
+  checkTopic,
+  createNewTopic,
   editPost
 );
 

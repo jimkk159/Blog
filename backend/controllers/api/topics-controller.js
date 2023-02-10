@@ -41,9 +41,26 @@ export const getTopicByParams = async (req, res, next) => {
 export const getTopics = async (req, res, next) => {
   //For Debug
   console.log("Get Topics");
+
   let topics;
+  let dBTopics;
   try {
-    topics = await getDBTopics();
+    dBTopics = await getDBTopics();
+    topics = dBTopics.map((item) => ({
+      ...item,
+      parent: "",
+      children: [],
+    }));
+    //Setting parent and children
+    for (let i = 0; i < topics.length; i++) {
+      for (let j = 0; j < topics.length; j++) {
+        if (i === j) continue;
+        if (topics[i].parent_id === topics[j].id) {
+          topics[i].parent = topics[j].topic;
+          topics[j].children.push(topics[i].topic);
+        }
+      }
+    }
   } catch (err) {
     const error = new HttpError(
       "Fetching topics from database fail, please try again later.",
@@ -61,8 +78,9 @@ export const checkTopic = async (req, res, next) => {
   let targetParent;
   let targetChildren;
   res.locals.exist = false;
-  
-  if (!topic) return next(new HttpError("Must Setting Topic for the Post!!", 422));
+
+  if (!topic)
+    return next(new HttpError("Must Setting Topic for the Post!!", 422));
   if (topic.toLowerCase() === "root")
     return next(new HttpError("Not allow to set Root for Post Topic.", 422));
 
@@ -83,12 +101,12 @@ export const checkTopic = async (req, res, next) => {
       //Check Parent Match
       targetParent = await getDBTopic(targetTopic.parent_id);
 
-      if (parent !== targetParent.name)
+      if (parent !== targetParent.topic)
         return next(new HttpError("Parent does not match!", 422));
 
       //Check Children Match
       targetChildren = await getDBChildren(targetTopic?.id);
-      targetChildren = targetChildren.map((item) => item.name.toLowerCase());
+      targetChildren = targetChildren.map((item) => item.topic.toLowerCase());
 
       let childrenLower;
       childrenLower = children.map((item) => item.toLowerCase());
@@ -125,7 +143,7 @@ export const checkTopic = async (req, res, next) => {
     targetChildren = await getDBChildren(targetParent.id);
 
     const targetChildrenLower = targetChildren.map((item) =>
-      item.name.toLowerCase()
+      item.topic.toLowerCase()
     );
 
     let childrenLower;
@@ -141,13 +159,13 @@ export const checkTopic = async (req, res, next) => {
     const targetChildrenId = [];
     for (let child of childrenLower) {
       for (let targetChild of targetChildren) {
-        if (targetChild.name.toLowerCase() === child) {
+        if (targetChild.topic.toLowerCase() === child) {
           targetChildrenId.push(targetChild.id);
         }
       }
     }
     res.locals.topic = {
-      name: topic,
+      topic,
       parent_id: targetParent.id,
       children: targetChildrenId,
     };
@@ -167,13 +185,12 @@ export const createNewTopic = async (req, res, next) => {
   //For Debug
   console.log("Create New Topic");
   const targetTopic = res.locals.topic;
-
   if (res.locals.exist) return next();
 
   let newTopic;
   try {
     newTopic = await createDBTopic({
-      name: targetTopic.name,
+      topic: targetTopic.topic,
       parent_id: targetTopic.parent_id,
       children: targetTopic.children, //Childre is an array of topic id
     });

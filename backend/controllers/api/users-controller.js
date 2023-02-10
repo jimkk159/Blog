@@ -15,7 +15,6 @@ export const getUser = async (req, res, next) => {
   try {
     user = await getDBUser(uid);
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Finding user failed, please try again later.",
       500
@@ -139,7 +138,6 @@ export const createNewUser = async (req, res, next) => {
     };
     newUser = await createDBUser(newUser);
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Create User to database fail, please try again later.",
       500

@@ -55,10 +55,10 @@ export const getDBTopic = async (id) => {
   return topics[0];
 };
 
-export const getDBTopicByName = async (name) => {
+export const getDBTopicByName = async (topic) => {
   const [topics] = await mysql_pool.query(
-    "SELECT * FROM `topic` WHERE `name` = ?",
-    [name]
+    "SELECT * FROM `topic` WHERE `topic` = ?",
+    [topic]
   );
   return topics[0];
 };
@@ -103,15 +103,15 @@ export const getDBChildrenByName = async (name) => {
   return topics;
 };
 
-export const createDBTopic = async ({ name, parent_id, children }) => {
+export const createDBTopic = async ({ topic, parent_id, children }) => {
   const connection = await mysql_pool.getConnection();
 
   let result;
   try {
     await connection.beginTransaction();
     [result] = await connection.query(
-      "INSERT INTO `topic`(`name`, `parent_id`) VALUES (?, ?);",
-      [name, parent_id]
+      "INSERT INTO `topic`(`topic`, `parent_id`) VALUES (?, ?);",
+      [topic, parent_id]
     );
     await Promise.all(
       children.map(async (child) => {
@@ -139,6 +139,14 @@ export const getDBPost = async (pid) => {
   return post[0];
 };
 
+export const getDBFullPost = async (pid) => {
+  const [post] = await mysql_pool.query(
+    "SELECT `post`.`id`, `post`.`author_id`, `post`.`topic_id`,`topic`.`topic` as `topic`, `post`.`type`,`post`.`pin`,`post`.`cover`,`post`.`language`,`post`.`tags`,`post`.`update` FROM `post` JOIN `topic` ON `topic`.`id` = `post`.`topic_id` WHERE `post`.`id` = ?",
+    [pid]
+  );
+  return post[0];
+};
+
 export const getDBLastestPosts = async ({ number, current }) => {
   const [posts] = await mysql_pool.query(
     "SELECT * FROM `post` ORDER BY `id` DESC LIMIT ? OFFSET ?;",
@@ -149,7 +157,7 @@ export const getDBLastestPosts = async ({ number, current }) => {
 
 export const getDBLastestFullPosts = async ({ number, current }) => {
   const [posts] = await mysql_pool.query(
-    "SELECT `post`.`id`, `post`.`author_id`,`topic`.`name` as `topic`, `post`.`type`,`post`.`pin`,`post`.`cover`,`post`.`language`,`post`.`tags`,`post`.`update` FROM `post` JOIN `topic` ON `topic`.`id` = `post`.`topic_id` ORDER BY `id` DESC  LIMIT ? OFFSET ?;",
+    "SELECT `post`.`id`, `post`.`author_id`,`topic`.`topic` as `topic`, `post`.`type`,`post`.`pin`,`post`.`cover`,`post`.`language`,`post`.`tags`,`post`.`update` FROM `post` JOIN `topic` ON `topic`.`id` = `post`.`topic_id` ORDER BY `id` DESC  LIMIT ? OFFSET ?;",
     [+number, +current]
   );
   return posts;
@@ -177,7 +185,29 @@ export const deleteDBPost = async (uid) => {
   return result;
 };
 
-export const updateDBPostPin = async (pid, pin) => {
+export const updateDBPost = async ({ pid, topic_id, language, tags }) => {
+  const [result] = await mysql_pool.query(
+    "UPDATE `post` SET `topic_id` = ?, `language` = ?, `tags` = ? WHERE `id`= ?;",
+    [topic_id, language, tags, pid]
+  );
+  return result;
+};
+
+export const updateDBPostWithCover = async ({
+  pid,
+  topic_id,
+  cover,
+  language,
+  tags,
+}) => {
+  const [result] = await mysql_pool.query(
+    "UPDATE `post` SET `topic_id` = ?, `language` = ?, `tags` = ?, `cover` = ? WHERE `id`= ?;",
+    [topic_id, language, tags, cover, pid]
+  );
+  return result;
+};
+
+export const updateDBPostPin = async ({ pid, pin }) => {
   const [result] = await mysql_pool.query(
     "UPDATE `post` SET `pin` = ? WHERE `id`= ?;",
     [+pin, pid]

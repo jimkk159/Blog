@@ -1,26 +1,26 @@
-import { v4 as uuidv4 } from "uuid";
 import normalize from "normalize-path";
 
 import {
   getDBUser,
-  getDBPost,
+  getDBFullPost,
   getDBUsersIn,
   getDBLastestFullPosts,
   createDBPost,
   deleteDBPost,
+  updateDBPost,
+  updateDBPostWithCover,
   updateDBPostPin,
 } from "../database/mysql.js";
 import { blogs } from "../blogs.js";
 import HttpError from "../../models/http-error.js";
 
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
-const options = { year: "numeric", month: "short", day: "numeric" };
 
 export const getPost = async (req, res, next) => {
   const pid = req.params.pid;
   let post;
   try {
-    post = await getDBPost(pid);
+    post = await getDBFullPost(pid);
   } catch (err) {
     const error = new HttpError(
       "Finding post failed, please try again later.",
@@ -156,7 +156,7 @@ export const checkPostAuthor = (req, res, next) => {
   const targetPost = res.locals.post;
 
   //Check Post Owner
-  if (targetPost.uid !== uid) {
+  if (targetPost.author_id !== uid) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }
@@ -204,6 +204,7 @@ export const createNewPost = async (req, res, next) => {
   console.log("Create New Post");
   const { title, language, tags } = req.body;
   const { topic, user, contentState } = res.locals;
+
   //Create New Post
   let coverPath;
   if (
@@ -213,8 +214,8 @@ export const createNewPost = async (req, res, next) => {
   ) {
     coverPath = normalize(req.files?.cover[0]?.path);
   }
-  let newPost;
 
+  let newPost;
   try {
     newPost = {
       author_id: user.id,
@@ -267,45 +268,82 @@ export const createNewPost = async (req, res, next) => {
   }
 
   res.status(200).json({
-    pid: newPost.id,
+    pid: newPost?.id,
     message: `Create post successfully!`,
   });
 };
 
 export const editPost = async (req, res, next) => {
   console.log("Edit Post");
-  const { language } = req.body;
-  const targetPost = res.locals.post;
-  const contentState = res.locals.contentState;
+  const { title, language, tags } = req.body;
+  const { topic, post: targetPost, contentState } = res.locals;
+
+  //Create New Post
+  let coverPath;
+  if (
+    req?.files?.cover &&
+    req?.files?.cover.length > 0 &&
+    req?.files?.cover[0]?.path
+  ) {
+    coverPath = normalize(req.files?.cover[0]?.path);
+  }
 
   //Edit Post
+  let editPost;
+  let postTag;
+  let postCover;
+  let postLanguage;
   try {
+    postCover = coverPath ? coverPath : null;
+    postTag = tags
+      ? Array.isArray(tags)
+        ? JSON.stringify([...tags])
+        : JSON.stringify([tags])
+      : JSON.stringify([]);
     const postContent = {
-      title: "",
+      title,
       support: true,
       short: "bra bra bra",
       contentState,
     };
+
+    postLanguage = JSON.parse(targetPost.language);
     switch (language) {
       case "en":
-        targetPost.date = new Date().toLocaleDateString("en-US", options);
-        targetPost.language.en = postContent;
+        postLanguage.en = postContent;
         break;
       case "ch":
-        targetPost.date = new Date().toLocaleDateString("en-US", options);
-        targetPost.language.ch = postContent;
+        postLanguage.ch = postContent;
         break;
       default:
         const error = new HttpError("Unsupport language", 501);
         return next(error);
     }
+
+    if (postCover) {
+      editPost = await updateDBPostWithCover({
+        pid: targetPost.id,
+        topic_id: topic.id,
+        cover: coverPath,
+        language: JSON.stringify(postLanguage),
+        tags: postTag,
+      });
+    } else {
+      editPost = await updateDBPost({
+        pid: targetPost.id,
+        topic_id: topic.id,
+        language: JSON.stringify(postLanguage),
+        tags: postTag,
+      });
+    }
   } catch (err) {
+    console.log(err);
     const error = new HttpError("Edit Post Failed!", 500);
     return next(error);
   }
 
   res.status(200).json({
-    pid: targetPost.id,
+    // pid: editPost?.id,
     message: `Create post successfully!`,
   });
 };
@@ -320,9 +358,10 @@ export const pinPost = async (req, res, next) => {
     const error = new HttpError("Permissions deny.", 422);
     return next(error);
   }
+
   //Pin Post
   try {
-    await updateDBPostPin(pid, +queryPin);
+    await updateDBPostPin({ pid, pin: +queryPin });
   } catch (err) {
     const error = new HttpError(
       "Pin post failed, please try again later.",

@@ -20,6 +20,7 @@ export const validation = (req, res, next) => {
 
 export const replaceImageSrc = async (req, res, next) => {
   const { contentState } = req.body;
+  
   //Replace Images src
   let postContentState;
   try {
