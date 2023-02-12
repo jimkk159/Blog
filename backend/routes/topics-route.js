@@ -5,8 +5,8 @@ import {
   getTopics,
   checkTopic,
   createNewTopic,
-} from "../controllers/api/topics-controller.js";
-import { responseHttp } from "../controllers/api/share-controller.js";
+} from "../controllers/topic-controller/index.js";
+import { responseHttp } from "../controllers/share-controller/index.js";
 
 const router = express.Router();
 

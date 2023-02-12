@@ -1,11 +1,8 @@
 import bcrypt from "bcryptjs";
-import normalize from "normalize-path";
-import { validationResult } from "express-validator";
-
 import jwt from "jsonwebtoken";
+import normalize from "normalize-path";
 import HttpError from "../../models/http-error.js";
-
-import { getDBUser } from "../database/mysql.js";
+import { validationResult } from "express-validator";
 
 export const validation = (req, res, next) => {
   //Validate the req
@@ -20,7 +17,7 @@ export const validation = (req, res, next) => {
 
 export const replaceImageSrc = async (req, res, next) => {
   const { contentState } = req.body;
-  
+
   //Replace Images src
   let postContentState;
   try {
@@ -49,27 +46,6 @@ export const replaceImageSrc = async (req, res, next) => {
     return next(error);
   }
   res.locals.contentState = postContentState;
-  next();
-};
-
-//Check Admin
-export const checkAdmin = async (req, res, next) => {
-  const { uid } = req.userData;
-
-  let isAdmin = false;
-  let user;
-  try {
-    user = await getDBUser(uid);
-    isAdmin = !!+user.admin;
-  } catch (err) {
-    const error = new HttpError(
-      "Reading user permission from database failed, please try again.",
-      500
-    );
-    return next(error);
-  }
-
-  res.locals.admin = isAdmin;
   next();
 };
 

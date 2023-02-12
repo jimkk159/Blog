@@ -4,13 +4,11 @@ import { check } from "express-validator";
 import checkAuth from "../middleware/check-auth.js";
 import fileUploadToServer from "../middleware/file-upload.js";
 
-import {
-  getUser,
-} from "../controllers/api/users-controller.js";
+import { getUser, checkAdmin } from "../controllers/user-controller/index.js";
 import {
   checkTopic,
-  createNewTopic
-} from "../controllers/api/topics-controller.js";
+  createNewTopic,
+} from "../controllers/topic-controller/index.js";
 import {
   getPost,
   getPosts,
@@ -24,18 +22,18 @@ import {
   editPost,
   pinPost,
   deletePost,
-} from "../controllers/api/posts-controller.js";
+} from "../controllers/post-controller/index.js";
 import {
   validation,
   replaceImageSrc,
-  checkAdmin,
-} from "../controllers/api/share-controller.js";
+  responseHttp,
+} from "../controllers/share-controller/index.js";
 
 const router = express.Router();
 
-router.get("/", getPosts, getPostsAuthor, addPostsAuthor);
-router.get("/search", getPostSearch);
-router.get("/:pid", getPost, getPostAuthor, addPostAuthor);
+router.get("/", getPosts, getPostsAuthor, addPostsAuthor, responseHttp);
+router.get("/search", getPostSearch, responseHttp);
+router.get("/:pid", getPost, getPostAuthor, addPostAuthor, responseHttp);
 
 // check token middleware
 router.use(checkAuth);
@@ -52,7 +50,8 @@ router.post(
   replaceImageSrc,
   checkTopic,
   createNewTopic,
-  createNewPost
+  createNewPost,
+  responseHttp
 );
 
 router.put(
@@ -69,7 +68,8 @@ router.put(
   replaceImageSrc,
   checkTopic,
   createNewTopic,
-  editPost
+  editPost,
+  responseHttp
 );
 
 router.patch(
@@ -78,9 +78,10 @@ router.patch(
   validation,
   getPost,
   checkAdmin,
-  pinPost
+  pinPost,
+  responseHttp
 );
 
-router.delete("/:pid", getPost, checkAdmin, deletePost);
+router.delete("/:pid", getPost, checkAdmin, deletePost, responseHttp);
 
 export default router;

@@ -62,6 +62,6 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-const port = 5000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("Server running on port 5000"));
 // reference:https://stackoverflow.com/questions/65384754/error-err-module-not-found-cannot-find-module

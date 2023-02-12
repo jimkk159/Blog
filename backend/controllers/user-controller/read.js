@@ -1,11 +1,9 @@
+import HttpError from "../../models/http-error.js";
 import {
   getDBUser,
   getDBUsers,
   getDBUserByEmail,
-  createDBUser,
-} from "../database/mysql.js";
-
-import HttpError from "../../models/http-error.js";
+} from "../../database/mysql/user/read.js";
 
 //Get User
 export const getUser = async (req, res, next) => {
@@ -59,7 +57,8 @@ export const getUserbyParams = async (req, res, next) => {
     return next(error);
   }
   res.locals.user = user;
-  res.status(200).json(user);
+  res.locals.response = user;
+  next();
 };
 
 //Get Random Users
@@ -74,7 +73,8 @@ export const getUsers = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json(users);
+  res.locals.response = users;
+  next();
 };
 
 //Get User by Email
@@ -98,86 +98,23 @@ export const getUserbyEmail = async (req, res, next) => {
   next();
 };
 
-//Check Email if exist
-export const getIsEmailEmpty = async (req, res, next) => {
-  const is_email = !!res.locals.is_email;
-  if (is_email) {
-    const error = new HttpError(
-      "Email existed already, please login instead.",
-      422
-    );
-    return next(error);
-  }
-  next();
-};
+//Check Admin
+export const checkAdmin = async (req, res, next) => {
+  const { uid } = req.userData;
 
-//Check Email if exist
-export const getIsEmail = async (req, res, next) => {
-  const is_email = !!res.locals.is_email;
-  //Check if the User Exist
-  if (!is_email) {
-    const error = new HttpError("Email not found!", 403);
-    return next(error);
-  }
-  next();
-};
-
-//Create New User
-export const createNewUser = async (req, res, next) => {
-  const { name, email } = req.body;
-  const { password, avatar } = res.locals;
-
-  //Create User
-  let newUser;
+  let isAdmin = false;
+  let user;
   try {
-    newUser = {
-      name,
-      email,
-      avatar,
-      password,
-    };
-    newUser = await createDBUser(newUser);
+    user = await getDBUser(uid);
+    isAdmin = !!+user.admin;
   } catch (err) {
     const error = new HttpError(
-      "Create User to database fail, please try again later.",
+      "Reading user permission from database failed, please try again.",
       500
     );
     return next(error);
   }
-  res.locals.user = newUser;
+
+  res.locals.admin = isAdmin;
   next();
-};
-
-//SignUp
-export const signup = async (req, res, next) => {
-  console.log("Sign Up");
-  const token = res.locals.token;
-  const user = res.locals.user;
-
-  res.status(201).json({
-    uid: user.id,
-    admin: user.admin,
-    name: user.name,
-    avatar: user.avatar,
-    token: token,
-  });
-};
-
-//Login
-export const login = async (req, res, next) => {
-  console.log("Login");
-  const user = res.locals.user;
-  const token = res.locals.token;
-
-  res.json({
-    uid: user.id,
-    admin: user.admin,
-    name: user.name,
-    avatar: user.avatar,
-    token: token,
-  });
-};
-
-export const responseResult = async (req, res, next) => {
-  res.json({ result: res.locals.is_email });
 };

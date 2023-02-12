@@ -11,18 +11,19 @@ import {
   getIsEmail,
   login,
   signup,
-} from "../controllers/api/users-controller.js";
+} from "../controllers/user-controller/index.js";
 
 import {
   validation,
   generateToken,
   encryptPassword,
-  createAvatar
-} from "../controllers/api/share-controller.js";
+  createAvatar,
+  responseHttp,
+} from "../controllers/share-controller/index.js";
 
 const router = express.Router();
-router.get("/", getUsers);
-router.get("/:uid", getUserbyParams);
+router.get("/", getUsers, responseHttp);
+router.get("/:uid", getUserbyParams, responseHttp);
 router.post(
   "/login",
   [
@@ -33,7 +34,8 @@ router.post(
   getUserbyEmail,
   getIsEmail,
   generateToken,
-  login
+  login,
+  responseHttp
 );
 router.post(
   "/signup",
@@ -50,7 +52,8 @@ router.post(
   createAvatar,
   createNewUser,
   generateToken,
-  signup
+  signup,
+  responseHttp
 );
 
 export default router;
