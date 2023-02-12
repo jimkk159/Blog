@@ -65,21 +65,21 @@ function EditPost({
           disabled={isLoading}
           onClick={() => onSave(token)}
         >
-          {language["save-btn"]}
+          {language["saveBtn"]}
         </Button2>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
           onClick={onDelete}
         >
-          {language["delete-btn"]}
+          {language["deleteBtn"]}
         </Button2>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
           onClick={cancelPostHandler}
         >
-          {language["cancel-btn"]}
+          {language["cancelBtn"]}
         </Button2>
       </div>
     </>

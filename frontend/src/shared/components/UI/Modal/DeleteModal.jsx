@@ -51,20 +51,20 @@ function DeleteModal(props) {
       className={`${classes["warning-modal"]}`}
       onCancel={cancelDeleteHandler}
       header={language.warning}
-      content={`${language["delete-warning"]}「${title}」?`}
+      content={`${language["deleteWarning"]}「${title}」?`}
       footer={
         <div className={classes["button-container"]}>
           <Button
             className={`${classes["button"]} ${classes["delete-btn"]}`}
             onClick={confirmDeleteHandler}
           >
-            {language["delete-btn"]}
+            {language["deleteBtn"]}
           </Button>
           <Button
             className={`${classes["button"]} ${classes["cancel-btn"]}`}
             onClick={cancelDeleteHandler}
           >
-            {language["cancel-btn"]}
+            {language["cancelBtn"]}
           </Button>
         </div>
       }

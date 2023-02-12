@@ -24,8 +24,10 @@
   "topicQ3": "該主題的子主題是?",
   "author": "作者",
   "warning": "警告",
-  "delete-warning": "確定要刪除文章",
-  "save-btn": "儲存",
-  "delete-btn": "刪除",
-  "cancel-btn": "取消"
+  "deleteWarning": "確定要刪除文章",
+  "saveBtn": "儲存",
+  "deleteBtn": "刪除",
+  "cancelBtn": "取消",
+  "addTitle": "新增標題",
+  "addContent": "新增內容"
 }

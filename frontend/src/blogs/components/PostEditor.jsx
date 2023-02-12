@@ -62,8 +62,9 @@ function PostEditor({
 
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
-  const oriCoverUrl = useSelector((state) => state.post.oriCoverUrl);
   const isDarkMode = useSelector((state) => state.theme.value);
+  const language = useSelector((state) => state.language.language);
+  const oriCoverUrl = useSelector((state) => state.post.oriCoverUrl);
   const { name: authorName, avatar: authorAvatar } = useSelector(
     (state) => state.auth
   );
@@ -73,7 +74,7 @@ function PostEditor({
     <Editor
       editorState={titleState}
       onChange={onChangeTitle}
-      placeholder="Click to add Title..."
+      placeholder={language.addTitle}
       textAlignment="center"
     />
   );
@@ -246,7 +247,7 @@ function PostEditor({
             customStyleFn={getCustomStyleFn}
             handleKeyCommand={handleKeyCommandHandler}
             keyBindingFn={mapKeyToEditorCommandHandler}
-            placeholder="Tell a story..."
+            placeholder={language.addContent}
             spellCheck={true}
             plugins={plugins}
             onClick={focusEditorHandler}

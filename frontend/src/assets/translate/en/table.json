@@ -24,8 +24,10 @@
   "topicQ3": "What is the child of this topic?",
   "author": "Created by",
   "warning": "Warning!",
-  "delete-warning": "Are you sure to delete",
-  "save-btn": "SAVE",
-  "delete-btn": "DELETE",
-  "cancel-btn": "CANCEL"
+  "deleteWarning": "Are you sure to delete",
+  "saveBtn": "SAVE",
+  "deleteBtn": "DELETE",
+  "cancelBtn": "CANCEL",
+  "addTitle": "Click to add Title...",
+  "addContent": "Tell a story..."
 }
