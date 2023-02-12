@@ -23,8 +23,6 @@ import PostEditor from "../../blogs/components/PostEditor";
 import classes from "./NewPostPage.module.css";
 
 function NewPostPage() {
-  const [tags, setTags] = useState([]);
-  const [topic, setTopic] = useState(null);
   const [topics, setTopics] = useState([]);
   const [prevToken, setPrevToken] = useState(null);
   const [cover, setCover] = useState(null);
@@ -35,6 +33,7 @@ function NewPostPage() {
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
   //Redux
+  const { topic, parent, children, tags } = useSelector((state) => state.post);
   const { token, isLoggedIn } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
@@ -42,7 +41,7 @@ function NewPostPage() {
   //React Router
   const navigate = useNavigate();
   const { edit } = useOutletContext();
-  const [isEdit, setIsEdit] = edit;
+  const setIsEdit = edit[1];
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -70,6 +69,7 @@ function NewPostPage() {
   const savePostHandler = useCallback(
     async (token) => {
       try {
+        if (!token) return;
         const title = getTextHandler(titleState);
         const tag = getTextHandler(tagState).trim();
         const newTags = tag ? [...tags, tag] : [...tags];
@@ -77,7 +77,7 @@ function NewPostPage() {
         const [imgBlobs, convertedData] = convertImgURL(contentRawData);
         const createSendForm = (imgArray, draftRawData) => {
           const formData = new FormData();
-          formData.append("topic", JSON.stringify(topic));
+          formData.append("topic", JSON.stringify({ topic, parent, children }));
           formData.append("title", title);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
@@ -106,6 +106,8 @@ function NewPostPage() {
     },
     [
       topic,
+      parent,
+      children,
       tags,
       setIsEdit,
       isEnglish,
@@ -124,11 +126,6 @@ function NewPostPage() {
   const cancelPostHandler = () => {
     navigate(-1);
   };
-
-  //Create a Post need to Login
-  useEffect(() => {
-    if (!isLoggedIn) navigate(`/`);
-  }, [isLoggedIn, navigate]);
 
   //GET Topics
   useEffect(() => {
@@ -160,21 +157,24 @@ function NewPostPage() {
   }, [sendRequestTopic]);
 
   useEffect(() => {
-    setIsEdit(true);
     dispatch(postActions.reset());
+    setIsEdit(true);
   }, [setIsEdit, dispatch]);
 
-  //Rember the previous token when auto logout to save the post
+  // Rember the previous token when auto logout to save the post
   useEffect(() => {
     setPrevToken(token);
   }, [token]);
 
+  //Create a Post need to Login
+
   useEffect(() => {
-    if (!isLoggedIn && isEdit) {
+    if (!isLoggedIn) {
       savePostHandler(prevToken);
       setPrevToken(null);
+      setIsEdit(false);
     }
-  }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
+  }, [prevToken, isLoggedIn, setIsEdit, navigate, savePostHandler]);
 
   return (
     <>
@@ -189,11 +189,7 @@ function NewPostPage() {
         </>
       )}
       <PostEditor
-        tags={tags}
-        topic={topic}
         topics={topics}
-        onTags={setTags}
-        onTopic={setTopic}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}
@@ -206,7 +202,7 @@ function NewPostPage() {
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
-          onClick={() => savePostHandler(prevToken)}
+          onClick={() => savePostHandler(token)}
         >
           SAVE
         </Button2>

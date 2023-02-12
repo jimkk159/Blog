@@ -1,18 +1,9 @@
-import { useCallback, useState } from "react";
+import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function useAutoSave(savePostCallback) {
-  const [token, setToken] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  const login = useCallback((uid) => {
-    setUid(uid);
-    setIsLoggedIn(true);
-  }, []);
-
-  const logout = useCallback(() => {
-    setUid(null);
-    setIsLoggedIn(false);
-  }, []);
+  const [prevToken, setPrevToken] = useState(null);
+  const { token, isLoggedIn } = useSelector((state) => state.auth);
 
   //Rember the previous token when auto logout to save the post
   useEffect(() => {
@@ -20,13 +11,18 @@ function useAutoSave(savePostCallback) {
   }, [token]);
 
   useEffect(() => {
-    if (!isLoggedIn && isEdit) {
-      savePostHandler(prevToken);
-      setToken(null);
-    }
-  }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
+    return () => {
+      console.log(123);
+      console.log(isLoggedIn);
+      if (!isLoggedIn) {
+        savePostCallback(prevToken);
+        setPrevToken(null);
+        console.log("reinput");
+      }
+    };
+  }, [prevToken, isLoggedIn, savePostCallback]);
 
-  return { uid, isLoggedIn, login, logout };
+  return { setPrevToken };
 }
 
 export default useAutoSave;

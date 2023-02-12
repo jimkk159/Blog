@@ -28,8 +28,6 @@ import classes from "./ReadPost.module.css";
 const decorator = createLinkDecorator();
 function ReadPost({
   tagsClassName,
-  post,
-  tags,
   title,
   topics,
   editorState,
@@ -38,10 +36,9 @@ function ReadPost({
   onDelete,
   isLoading,
 }) {
-  const postDate = new Date(post?.update).toLocaleDateString("en-US", options);
-
   //Redux
-  const { coverUrl } = useSelector((state) => state.post);
+  const { pid, pin, authorId, authorName, authorAvatar, date, coverUrl, tags } =
+    useSelector((state) => state.post);
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -50,16 +47,16 @@ function ReadPost({
         className={`page ${classes["post-container"]}`}
         isDarkMode={isDarkMode}
       >
-        {!isLoading && post && (
+        {!isLoading && (
           <>
             <PostDetailTitle
               title={title}
-              postId={post?.id}
-              authorId={post?.author_id}
-              authorName={post?.authorName}
-              authorAvatar={post?.authorAvatar}
-              date={postDate}
-              isPined={!!post?.pin}
+              postId={pid}
+              authorId={authorId}
+              authorName={authorName}
+              authorAvatar={authorAvatar}
+              date={new Date(date).toLocaleDateString("en-US", options)}
+              isPined={pin}
               isDarkMode={isDarkMode}
               onEdit={onEdit}
               onDelete={onDelete}
@@ -99,7 +96,7 @@ function ReadPost({
               ]}
             />
             <div className={tagsClassName}>
-              <Tags content={tags} />
+              <Tags isDarkMode={isDarkMode} content={tags} />
             </div>
           </>
         )}

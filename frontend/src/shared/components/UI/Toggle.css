@@ -1,0 +1,40 @@
+.slider {
+  background-color: white;
+  border-radius: 6px;
+  bottom: 4px;
+  content: "";
+  height: 24px;
+  left: 32px;
+  position: absolute;
+  width: 26px;
+}
+.slider-enter {
+  transform: translateX(-26px);
+}
+.slider-enter-active {
+  transform: translateX(0);
+  transition: transform 400ms;
+}
+
+.slider-enter-done {
+  transform: translateX(0);
+}
+.slider-exit {
+  transform: translateX(0);
+}
+.slider-exit-active {
+  transform: translateX(-26px);
+  transition: transform 400ms;
+}
+.slider-exit-done {
+  transform: translateX(-26px);
+}
+
+/* Rounded sliders */
+.area-round {
+  border-radius: 34px;
+}
+
+.slider-round {
+  border-radius: 50%;
+}

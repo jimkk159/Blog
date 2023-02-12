@@ -8,7 +8,6 @@ import Avatar from "../../shared/components/UI/Avatar";
 import classes from "./UserAvatar.module.css";
 
 function UserAvatar(props) {
-  
   const avatar = props.isAnimate ? (
     <CSSTransition
       in={props.show}

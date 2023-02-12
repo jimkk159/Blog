@@ -107,7 +107,7 @@ function PostInfo({ post, isOdd, onDelete }) {
     console.log("delete");
     setShowWarning(true);
   };
-
+  
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />

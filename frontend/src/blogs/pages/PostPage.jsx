@@ -30,38 +30,31 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 import classes from "./PostPage.module.css";
 
 function PostPage() {
-  const [post, setPost] = useState(null);
-  const [topicId, setTopicId] = useState(null);
   const [cover, setCover] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
   const [prevToken, setPrevToken] = useState(null);
-
-  //Post Topic
-  const [topic, setTopic] = useState(null);
   const [topics, setTopics] = useState([]);
-
   //Post Title
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
-
   //Post Content
   const [originState, setOriginState] = useState(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
   //Post Tags
-  const [tags, setTags] = useState([]);
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
-  //Todo POst and postCover
   //Todo auto logout and save the post on New and Edit
-  //Todo checking edit and then cancel is right (originstate)
   //Redux
   const { token, isLoggedIn } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
+  const { topic, topicId, parent, children, tags } = useSelector(
+    (state) => state.post
+  );
   const dispatch = useDispatch();
 
   //React Router
-  const { blogId } = useParams();
+  const { pid } = useParams();
   const { edit } = useOutletContext();
   const [isEdit, setIsEdit] = edit;
 
@@ -104,11 +97,10 @@ function PostPage() {
   }, []);
 
   //Save the Post
-  const postId = post?.id;
   const savePostHandler = useCallback(
     async (token) => {
       try {
-        if (!postId) return;
+        if (!pid || !token) return;
         const title = getTextHandler(titleState);
         const tag = getTextHandler(tagState).trim();
         const newTags = tag ? [...tags, tag] : [...tags];
@@ -116,7 +108,7 @@ function PostPage() {
         const [imgBlobs, convertedData] = convertImgURL(contentRawData);
         const createSendForm = (imgArray, draftRawData) => {
           const formData = new FormData();
-          formData.append("topic", JSON.stringify(topic));
+          formData.append("topic", JSON.stringify({ topic, parent, children }));
           formData.append("title", title);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
@@ -131,7 +123,7 @@ function PostPage() {
         };
         const sendForm = createSendForm(imgBlobs, convertedData);
         await sendRequestSave(
-          process.env.REACT_APP_BACKEND_URL + `/posts/${postId}`,
+          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
           "PUT",
           sendForm,
           {
@@ -145,9 +137,11 @@ function PostPage() {
       } catch (err) {}
     },
     [
+      pid,
       topic,
+      parent,
+      children,
       tags,
-      postId,
       isEnglish,
       setIsEdit,
       cover,
@@ -187,7 +181,7 @@ function PostPage() {
     const fetchPost = async () => {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + `/posts/${blogId}`
+          process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`
         );
         const postLanguage = JSON.parse(responseData?.language);
         let titleText = choiceLanguage(
@@ -205,32 +199,42 @@ function PostPage() {
             EditorState.createEmpty()
           )
         );
-        const postTags = JSON.parse(responseData.tags);
-        setPost(responseData);
         const postContentState = convertFromRaw(postJSON);
         setOriginState(EditorState.createWithContent(postContentState));
         setEditorState(EditorState.createWithContent(postContentState));
         setTitleState(
           EditorState.createWithContent(ContentState.createFromText(titleText))
         );
-        setTopicId(responseData.topic_id);
-        dispatch(postActions.setUrl({ url: responseData.cover }));
-        setTags(postTags);
+        dispatch(
+          postActions.setInit({
+            id: responseData.id,
+            date: responseData.update,
+            authorId: responseData.author_id,
+            authorName: responseData.authorName,
+            authorAvatar: responseData.authorAvatar,
+            topicId: responseData.topic_id,
+            pin: responseData.pin,
+            url: responseData.cover,
+            tags: JSON.parse(responseData.tags),
+          })
+        );
       } catch (err) {}
     };
     fetchPost();
-  }, [isEnglish, blogId, dispatch, setEditorState, sendRequest]);
+  }, [isEnglish, pid, dispatch, setEditorState, sendRequest]);
 
   useEffect(() => {
     const targetTopic = topics.filter((topic) => topic.id === topicId)[0];
     if (targetTopic) {
-      setTopic({
-        topic: targetTopic?.topic,
-        parent: targetTopic?.parent,
-        children: targetTopic?.children,
-      });
+      dispatch(
+        postActions.setInitTopic({
+          topic: targetTopic?.topic,
+          parent: targetTopic?.parent,
+          children: targetTopic?.children,
+        })
+      );
     }
-  }, [topicId, topics]);
+  }, [topicId, topics, dispatch]);
 
   //Rember the previous token when auto logout to save the post
   useEffect(() => {
@@ -241,6 +245,7 @@ function PostPage() {
     if (!isLoggedIn && isEdit) {
       savePostHandler(prevToken);
       setPrevToken(null);
+      setIsEdit(false);
     }
   }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
 
@@ -258,7 +263,7 @@ function PostPage() {
         </>
       )}
       <DeleteModal
-        pid={post?.id}
+        pid={pid}
         title={getTextHandler(titleState)}
         show={showWarning}
         setShow={setShowWarning}
@@ -266,17 +271,12 @@ function PostPage() {
       />
       {isEdit ? (
         <EditPost
-          token={token}
-          topic={topic}
           topics={topics}
-          onTopic={setTopic}
           titleState={titleState}
           onChangeTitle={setTitleState}
           originState={originState}
           editorState={editorState}
           onChange={setEditorState}
-          tags={tags}
-          onTags={setTags}
           tagState={tagState}
           onChangeTag={setTagState}
           onRead={readModeHandler}
@@ -288,11 +288,8 @@ function PostPage() {
       ) : (
         <ReadPost
           tagsClassName={classes["tags-container"]}
-          title={getTextHandler(titleState)}
           topics={topics}
-          cover={cover}
-          post={post}
-          tags={tags}
+          title={getTextHandler(titleState)}
           editorState={editorState}
           onChange={setEditorState}
           onEdit={editModeHandler}

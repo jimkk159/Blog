@@ -4,14 +4,23 @@ import { CSSTransition } from "react-transition-group";
 //CSS
 import classes from "./Toggle.module.css";
 
-function Toggle(props) {
-  const toggleTime = props.toggleTime ? props.toggleTime : 400;
+function Toggle({
+  className,
+  type,
+  show,
+  toggleTime,
+  isToggle,
+  isDarkMode,
+  onToggle,
+  children,
+}) {
+  const setToggleTime = toggleTime ? toggleTime : 400;
 
   //Type
   let area_class;
   let slider_class;
-  if (props.type && props.type === "round") {
-    if (props.show) {
+  if (type && type === "round") {
+    if (show) {
       area_class = `${classes["area"]} ${classes["area-light-en"]} ${classes["area-round"]}`;
     } else {
       area_class = `${classes["area"]} ${classes["area-light-ch"]} ${classes["area-round"]}`;
@@ -19,7 +28,7 @@ function Toggle(props) {
 
     slider_class = `${classes["slider"]} ${classes["slider-round"]}`;
   } else {
-    if (props.show) {
+    if (show) {
       area_class = `${classes["area"]} ${classes["area-light-en"]}`;
     } else {
       area_class = `${classes["area"]} ${classes["area-light-ch"]}`;
@@ -28,15 +37,11 @@ function Toggle(props) {
   }
 
   return (
-    <label className={`${classes["switch"]} ${props.className}`}>
-      <input
-        type="checkbox"
-        defaultChecked={props.isToggle}
-        onClick={props.onToggle}
-      />
+    <label className={`${classes["switch"]} ${className}`}>
+      <input type="checkbox" defaultChecked={isToggle} onClick={onToggle} />
       <CSSTransition
-        in={props.show}
-        timeout={toggleTime}
+        in={show}
+        timeout={setToggleTime}
         classNames={{
           enter: classes["area-enter"],
           enterActive: classes["area-enter-active"],
@@ -48,15 +53,16 @@ function Toggle(props) {
       >
         <span
           className={`${area_class} ${
-            props.isDarkMode ? classes["area-dark"] : classes["area-light"]
+            isDarkMode ? classes["area-dark"] : classes["area-light"]
           }`}
         >
-          {props.children}
+          {children}
         </span>
       </CSSTransition>
       <CSSTransition
-        in={props.show}
-        timeout={toggleTime}
+        key={"test"}
+        in={show}
+        timeout={setToggleTime}
         classNames={{
           enter: classes["slider-enter"],
           enterActive: classes["slider-enter-active"],

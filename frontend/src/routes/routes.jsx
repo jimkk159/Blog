@@ -114,7 +114,8 @@ export function RouteCreate() {
   if (isLoggedIn) {
     newBlogRoute = <Route path="new" element={<NewPostPage />} />;
   } else {
-    newBlogRoute = <Route path="new" element={<Navigate replace to="/" />} />;
+    // newBlogRoute = <Route path="new" element={<Navigate replace to="/" />} />;
+    newBlogRoute = <Route path="new" element={<NewPostPage />} />;
     authRoute = !matches ? (
       <Route path="/auth" element={<AuthPage />} />
     ) : (
@@ -135,7 +136,7 @@ export function RouteCreate() {
         <Route path="/blog" element={<PostLayout />}>
           <Route index element={<Navigate replace to="/" />} />
           {newBlogRoute}
-          <Route path=":blogId" element={<PostPage />} />
+          <Route path=":pid" element={<PostPage />} />
           {/* <Route path="/*" element={<NotFoundPage />} /> */}
         </Route>
         <Route path="/*" element={<Navigate replace to="/" />} loader={null} />

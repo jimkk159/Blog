@@ -121,7 +121,10 @@ function PostDetailTitle(props) {
             defaultImg={anonymousUser}
             className={`${classes["avatar"]}`}
             isDarkMode={isDarkMode}
-            img={`${process.env.REACT_APP_BACKEND_URL}/${authorAvatar}`}
+            img={
+              authorAvatar &&
+              `${process.env.REACT_APP_BACKEND_URL}/${authorAvatar}`
+            }
           />
         </div>
       </div>

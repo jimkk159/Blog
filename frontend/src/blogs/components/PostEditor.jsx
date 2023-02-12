@@ -42,14 +42,10 @@ import classes from "./PostEditor.module.css";
 const decorator = createLinkDecorator();
 function PostEditor({
   className,
-  tags,
-  topic,
   topics,
   titleState,
   editorState,
   tagState,
-  onTags,
-  onTopic,
   onChangeTitle,
   onChange,
   onChangeTag,
@@ -64,7 +60,7 @@ function PostEditor({
   const isTag = useSelector((state) => state.tag.isTag);
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
-  const oriCoverUrl = useSelector((state) => state.post.oriCoverUrl);
+  const { oriCoverUrl, tags } = useSelector((state) => state.post);
   const { name: authorName, avatar: authorAvatar } = useSelector(
     (state) => state.auth
   );
@@ -81,9 +77,7 @@ function PostEditor({
 
   //Add Tag
   const addTagHandler = (tag) => {
-    if (!!tag) {
-      onTags((prev) => [...prev, tag]);
-    }
+    if (!!tag) dispatch(postActions.addTag({ tag }));
   };
 
   //Focus Tag Editor
@@ -112,7 +106,6 @@ function PostEditor({
     <>
       <TagsToolTip
         className={`${classes["tool-tip-light"]}`}
-        tags={tags}
         topics={topics}
         show={isTag}
         value={searchItem}
@@ -159,12 +152,9 @@ function PostEditor({
   };
 
   //Remove Tag
-  const removeTagHandler = (targetTag) => {
-    onTags(tags.filter((tag) => tag !== targetTag));
-  };
-
+  const removeTagHandler = (tag) => dispatch(postActions.removeTag({ tag }));
   const coverUrlHandler = (url) => {
-    dispatch(postActions.setCurrentUrl({ url }));
+    dispatch(postActions.setUrl({ url }));
   };
 
   const handleKeyCommandHandler = (command, editorState) => {
@@ -199,10 +189,8 @@ function PostEditor({
       }`}
     >
       <PostTopic
-        topic={topic}
         topics={topics}
         isDarkMode={isDarkMode}
-        onChange={onTopic}
         onTag={addTagHandler}
         onRemove={removeTagHandler}
       />
@@ -257,9 +245,10 @@ function PostEditor({
           <Tags
             isEdit
             isDarkMode={isDarkMode}
-            content={[...tags, editorTag]}
+            content={tags}
             onRemove={removeTagHandler}
             onKeyDown={addTypeTagHandler}
+            editContent={editorTag}
           />
         </div>
       </Card>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import Tag from "../../shared/components/UI/Tag";
@@ -14,10 +15,12 @@ function TagsToolTip({
   isAnimate,
   isDarkMode,
   topics,
-  tags,
   onTag,
-  onSearch
+  onSearch,
 }) {
+  //Redux
+  const tags = useSelector((state) => state.post.tags);
+
   const tagsToLower = tags.map((tag) => tag.toLowerCase());
   const topicArray = topics.map((topic) => topic.topic);
   const tagsChoice = topicArray.map((topicTag, index) => {

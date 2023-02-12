@@ -34,7 +34,9 @@ function Navigation(props) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
   const { avatar, isLoggedIn } = useSelector((state) => state.auth);
-  const { isEnglish, language } = useSelector((state) => state.language);
+  const { isSetted, isEnglish, language } = useSelector(
+    (state) => state.language
+  );
   const dispatch = useDispatch();
 
   //CustomHook
@@ -68,13 +70,14 @@ function Navigation(props) {
   //Localization
   useEffect(() => {
     const userLanguae = navigator.language || navigator.userLanguae;
+    if (isSetted) return;
     if (userLanguae === "zh-TW" || userLanguae === "zh-CH") {
       dispatch(languageActions.setChinese());
     } else {
       dispatch(languageActions.setEnglish());
     }
-  }, [dispatch]);
-  
+  }, [dispatch, isSetted]);
+
   return (
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
@@ -83,7 +86,6 @@ function Navigation(props) {
         setShowModal={setShowModal}
         isAnimate
       />
-
       <NavigationHeader>
         <div className={classes.navigation__title}>
           <Hamburger onClick={openDrawerHandler} isDarkMode={isDarkMode} />
@@ -120,7 +122,7 @@ function Navigation(props) {
               defaultImg={anonymousUser}
               isDarkMode={isDarkMode}
               onClick={showAuthHandler}
-              img={`${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
+              img={avatar && `${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
               isAnimate
             />
           )}

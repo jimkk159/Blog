@@ -12,10 +12,7 @@ import PostEditor from "./PostEditor";
 import classes from "./EditPost.module.css";
 
 function EditPost({
-  token,
-  topic,
   topics,
-  tags,
   isLoading,
   originState,
   editorState,
@@ -24,14 +21,13 @@ function EditPost({
   onChangeTag,
   titleState,
   onChangeTitle,
-  onTags,
-  onTopic,
   onRead,
   onSave,
   onDelete,
   onCover,
 }) {
   //Redux
+  const token = useSelector((state) => state.auth.token);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
@@ -46,11 +42,7 @@ function EditPost({
   return (
     <>
       <PostEditor
-        tags={tags}
-        topic={topic}
         topics={topics}
-        onTags={onTags}
-        onTopic={onTopic}
         editorState={editorState}
         onChange={onChange}
         titleState={titleState}

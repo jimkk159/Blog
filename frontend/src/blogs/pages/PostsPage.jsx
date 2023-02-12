@@ -97,7 +97,6 @@ function PostsPage() {
         <>
           <PostsInfo
             posts={currentPosts}
-            loading={null}
             isDarkMode={isDarkMode}
             onDelete={deletePostHandler}
           />
