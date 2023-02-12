@@ -28,11 +28,11 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 
 //CSS
 import classes from "./PostPage.module.css";
+import useAutoSave from "../../shared/hooks/save-post-hook";
 
 function PostPage() {
   const [cover, setCover] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
-  const [prevToken, setPrevToken] = useState(null);
   const [topics, setTopics] = useState([]);
   //Post Title
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
@@ -46,7 +46,6 @@ function PostPage() {
 
   //Todo auto logout and save the post on New and Edit
   //Redux
-  const { token, isLoggedIn } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const { topic, topicId, parent, children, tags } = useSelector(
     (state) => state.post
@@ -236,18 +235,8 @@ function PostPage() {
     }
   }, [topicId, topics, dispatch]);
 
-  //Rember the previous token when auto logout to save the post
-  useEffect(() => {
-    setPrevToken(token);
-  }, [token]);
-
-  useEffect(() => {
-    if (!isLoggedIn && isEdit) {
-      savePostHandler(prevToken);
-      setPrevToken(null);
-      setIsEdit(false);
-    }
-  }, [prevToken, isLoggedIn, isEdit, setIsEdit, savePostHandler]);
+  //Custom Hook
+  useAutoSave(savePostHandler);
 
   return (
     <>

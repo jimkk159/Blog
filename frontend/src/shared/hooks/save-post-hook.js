@@ -11,18 +11,11 @@ function useAutoSave(savePostCallback) {
   }, [token]);
 
   useEffect(() => {
-    return () => {
-      console.log(123);
-      console.log(isLoggedIn);
-      if (!isLoggedIn) {
-        savePostCallback(prevToken);
-        setPrevToken(null);
-        console.log("reinput");
-      }
-    };
+    if (!isLoggedIn) {
+      savePostCallback(prevToken);
+      setPrevToken(null);
+    }
   }, [prevToken, isLoggedIn, savePostCallback]);
-
-  return { setPrevToken };
 }
 
 export default useAutoSave;

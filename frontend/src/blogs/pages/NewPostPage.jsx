@@ -21,10 +21,10 @@ import PostEditor from "../../blogs/components/PostEditor";
 
 //CSS
 import classes from "./NewPostPage.module.css";
+import useAutoSave from "../../shared/hooks/save-post-hook";
 
 function NewPostPage() {
   const [topics, setTopics] = useState([]);
-  const [prevToken, setPrevToken] = useState(null);
   const [cover, setCover] = useState(null);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
@@ -34,14 +34,14 @@ function NewPostPage() {
 
   //Redux
   const { topic, parent, children, tags } = useSelector((state) => state.post);
-  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
 
   //React Router
   const navigate = useNavigate();
   const { edit } = useOutletContext();
-  const setIsEdit = edit[1];
+  const [setIsEdit] = edit[1];
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -51,7 +51,7 @@ function NewPostPage() {
     sendRequest: sendRequestTopic,
     clearError: clearErrorTopic,
   } = useHttp();
-
+  
   //Get EditorState FirstBlock Text
   const getTextHandler = useCallback((editorState) => {
     const currentContent = editorState.getCurrentContent();
@@ -161,20 +161,8 @@ function NewPostPage() {
     setIsEdit(true);
   }, [setIsEdit, dispatch]);
 
-  // Rember the previous token when auto logout to save the post
-  useEffect(() => {
-    setPrevToken(token);
-  }, [token]);
-
-  //Create a Post need to Login
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      savePostHandler(prevToken);
-      setPrevToken(null);
-      setIsEdit(false);
-    }
-  }, [prevToken, isLoggedIn, setIsEdit, navigate, savePostHandler]);
+  //Custom Hook
+  useAutoSave(savePostHandler);
 
   return (
     <>
