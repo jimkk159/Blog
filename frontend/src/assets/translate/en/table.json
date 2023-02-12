@@ -17,5 +17,15 @@
   "uploadImage": "upload Image",
   "validName": "Please enter your name.",
   "validEmail": "Please enter a valid email.",
-  "validPassword": "Enter at least 6 characters."
+  "validPassword": "Enter at least 6 characters.",
+  "topic": "Setting Your Post Topic",
+  "topicQ1": "What is your post topic?",
+  "topicQ2": "What is the parent of this topic?",
+  "topicQ3": "What is the child of this topic?",
+  "author": "Created by",
+  "warning": "Warning!",
+  "delete-warning": "Are you sure to delete",
+  "save-btn": "SAVE",
+  "delete-btn": "DELETE",
+  "cancel-btn": "CANCEL"
 }

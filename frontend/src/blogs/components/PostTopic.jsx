@@ -1,4 +1,5 @@
 import React, { useRef, useState, useReducer, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import GuideOpen from "./BlogGuide/GuideOpen";
@@ -62,6 +63,9 @@ function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
   const [isInit, setIsInit] = useState(true);
   const [searchItem, setSearchItem] = useState("");
   const [topicState, dispatch] = useReducer(topicReducer, initialState);
+
+  //Redux
+  const language = useSelector((state) => state.language.language);
 
   //Input Search
   const searchChangeHandler = (event) => {
@@ -236,7 +240,7 @@ function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
 
   return (
     <Card className={`${classes["container"]}`} isDarkMode={isDarkMode}>
-      <h1 className={`${classes["title"]}`}>Setting Your Post Topic</h1>
+      <h1 className={`${classes["title"]}`}>{language.topic}</h1>
       <input
         ref={searchRef}
         type="text"
@@ -277,7 +281,7 @@ function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
         <div className={classes["topic-description"]}>
           <PostTopicQuestion
             key={"topic"}
-            description={"What is your post topic?"}
+            description={language.topicQ1}
             showTag={topicState.topic}
             tags={topicState.topic}
             isDarkMode={isDarkMode}
@@ -288,7 +292,7 @@ function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
           />
           <PostTopicQuestion
             key={"parent"}
-            description={"What is the parent of this topic?"}
+            description={language.topicQ2}
             showTag={topicState.parent}
             tags={topicState.parent}
             isDarkMode={isDarkMode}
@@ -296,7 +300,7 @@ function PostTopic({ topic, topics, isDarkMode, onChange, onTag, onRemove }) {
           />
           <PostTopicQuestion
             key={"children"}
-            description={"What is the child of this topic?"}
+            description={language.topicQ3}
             tags={topicState.children}
             isDarkMode={isDarkMode}
             onTag={setChildHandler}

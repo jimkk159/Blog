@@ -13,7 +13,8 @@ function DeleteModal(props) {
   const { pid, title, onDelete, show, setShow, sendRequest } = props;
 
   //Redux
-  const { token } = useSelector((state) => state.auth);
+  const token = useSelector((state) => state.auth.token);
+  const language = useSelector((state) => state.language.language);
 
   //React Router
   const navigate = useNavigate();
@@ -47,23 +48,23 @@ function DeleteModal(props) {
   return (
     <WarningModal
       show={show}
-      className={classes["warning-modal"]}
+      className={`${classes["warning-modal"]}`}
       onCancel={cancelDeleteHandler}
-      header={"Warning!"}
-      content={`Are you sure to delete 「${title}」?`}
+      header={language.warning}
+      content={`${language["delete-warning"]}「${title}」?`}
       footer={
         <div className={classes["button-container"]}>
           <Button
             className={`${classes["button"]} ${classes["delete-btn"]}`}
             onClick={confirmDeleteHandler}
           >
-            DELETE
+            {language["delete-btn"]}
           </Button>
           <Button
             className={`${classes["button"]} ${classes["cancel-btn"]}`}
             onClick={cancelDeleteHandler}
           >
-            CANCEL
+            {language["cancel-btn"]}
           </Button>
         </div>
       }

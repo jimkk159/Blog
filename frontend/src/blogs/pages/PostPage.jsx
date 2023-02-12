@@ -30,7 +30,6 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 import classes from "./PostPage.module.css";
 
 function PostPage() {
-
   const [post, setPost] = useState(null);
   const [topicId, setTopicId] = useState(null);
   const [cover, setCover] = useState(null);
@@ -214,7 +213,7 @@ function PostPage() {
         setTitleState(
           EditorState.createWithContent(ContentState.createFromText(titleText))
         );
-        setTopicId(responseData.topic_id)
+        setTopicId(responseData.topic_id);
         dispatch(postActions.setUrl({ url: responseData.cover }));
         setTags(postTags);
       } catch (err) {}
@@ -224,11 +223,13 @@ function PostPage() {
 
   useEffect(() => {
     const targetTopic = topics.filter((topic) => topic.id === topicId)[0];
-    setTopic({
-      topic: targetTopic?.topic,
-      parent: targetTopic?.parent,
-      children: targetTopic?.children,
-    });
+    if (targetTopic) {
+      setTopic({
+        topic: targetTopic?.topic,
+        parent: targetTopic?.parent,
+        children: targetTopic?.children,
+      });
+    }
   }, [topicId, topics]);
 
   //Rember the previous token when auto logout to save the post

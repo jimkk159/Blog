@@ -17,5 +17,15 @@
   "uploadImage": "請上傳圖片",
   "validName": "請輸入名稱",
   "validEmail": "無效電子信箱",
-  "validPassword": "密碼至少需要六位數"
+  "validPassword": "密碼至少需要六位數",
+  "topic": "主題設定",
+  "topicQ1": "你的主題是?",
+  "topicQ2": "該主題的母主題是?",
+  "topicQ3": "該主題的子主題是?",
+  "author": "作者",
+  "warning": "警告",
+  "delete-warning": "確定要刪除文章",
+  "save-btn": "儲存",
+  "delete-btn": "刪除",
+  "cancel-btn": "取消"
 }

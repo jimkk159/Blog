@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 //Redux Slice
 import { postActions } from "../../store/post-slice";
@@ -32,6 +32,7 @@ function EditPost({
   onCover,
 }) {
   //Redux
+  const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
   //Cancel the Post
@@ -39,7 +40,7 @@ function EditPost({
     onRead();
     onChange(originState);
     dispatch(postActions.cancel());
-    onCover(null)
+    onCover(null);
   };
 
   return (
@@ -64,21 +65,21 @@ function EditPost({
           disabled={isLoading}
           onClick={() => onSave(token)}
         >
-          SAVE
+          {language["save-btn"]}
         </Button2>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
           onClick={onDelete}
         >
-          DELETE
+          {language["delete-btn"]}
         </Button2>
         <Button2
           className={`${classes["btn"]}`}
           disabled={isLoading}
           onClick={cancelPostHandler}
         >
-          Cancel
+          {language["cancel-btn"]}
         </Button2>
       </div>
     </>
