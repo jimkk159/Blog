@@ -6,7 +6,7 @@ import {
   getDBChildren,
 } from "../../database/mysql/topic/read.js";
 
-export const getTopicByParams = async (req, res, next) => {
+export const getTopic = async (req, res, next) => {
   //For Debug
   console.log("Get Topic");
 
@@ -64,7 +64,8 @@ export const getTopics = async (req, res, next) => {
 };
 
 export const checkTopic = async (req, res, next) => {
-  const { topic, parent, children } = JSON.parse(req.body.topic);
+  //To Seperate the tiouc and parent and children
+  const { topic, parent, children } = req.body;
   let targetTopic;
   let targetParent;
   let targetChildren;
@@ -72,6 +73,7 @@ export const checkTopic = async (req, res, next) => {
 
   if (!topic)
     return next(new HttpError("Must Setting Topic for the Post!!", 422));
+
   if (topic.toLowerCase() === "root")
     return next(new HttpError("Not allow to set Root for Post Topic.", 422));
 
@@ -100,8 +102,11 @@ export const checkTopic = async (req, res, next) => {
       targetChildren = targetChildren.map((item) => item.topic.toLowerCase());
 
       let childrenLower;
-      childrenLower = children.map((item) => item.toLowerCase());
-      childrenLower = [...new Set(childrenLower)]; //Remmove duplicate items
+      if (!children) childrenLower = [];
+      else if (Array.isArray(children)) {
+        childrenLower = children.map((item) => item.toLowerCase());
+        childrenLower = [...new Set(childrenLower)]; //Remmove duplicate items
+      } else childrenLower = [children.toLowerCase()];
 
       //Remmove children more than case
       if (targetChildren.length !== childrenLower.length)
@@ -138,8 +143,11 @@ export const checkTopic = async (req, res, next) => {
     );
 
     let childrenLower;
-    childrenLower = children.map((item) => item.toLowerCase());
-    childrenLower = [...new Set(childrenLower)]; //Remmove duplicate items
+    if (!children) childrenLower = [];
+    else if (Array.isArray(children)) {
+      childrenLower = children.map((item) => item.toLowerCase());
+      childrenLower = [...new Set(childrenLower)]; //Remmove duplicate items
+    } else childrenLower = [children.toLowerCase()];
 
     const result = childrenLower.every((child) =>
       targetChildrenLower.includes(child)
@@ -161,6 +169,7 @@ export const checkTopic = async (req, res, next) => {
       children: targetChildrenId,
     };
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Checking Topic failed, please try again later.",
       500

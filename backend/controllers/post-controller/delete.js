@@ -9,11 +9,11 @@ export const deletePost = async (req, res, next) => {
   console.log("Delete Post");
   const pid = req.params.pid;
   const { uid } = req.userData;
-  const targetPost = res.locals.post;
+  const post = res.locals.post;
   const admin = res.locals.admin;
 
   //Check Post Owner
-  if (targetPost.author_id !== uid && !admin) {
+  if (post.author_id !== uid && !admin) {
     const error = new HttpError("Permissions deny.", 403);
     return next(error);
   }

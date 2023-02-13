@@ -8,8 +8,8 @@ import HttpError from "../../models/http-error.js";
 
 export const editPost = async (req, res, next) => {
   console.log("Edit Post");
-  const { title, language, tags } = req.body;
-  const { topic, post: targetPost, contentState } = res.locals;
+  const { language, title, short, tags } = req.body;
+  const { topic, post: targetPost, content } = res.locals;
 
   //Create New Post
   let coverPath;
@@ -35,9 +35,8 @@ export const editPost = async (req, res, next) => {
       : JSON.stringify([]);
     const postContent = {
       title,
-      support: true,
-      short: "bra bra bra",
-      contentState,
+      short,
+      content,
     };
 
     postLanguage = JSON.parse(targetPost.language);
@@ -103,6 +102,6 @@ export const pinPost = async (req, res, next) => {
     return next(error);
   }
 
-  res.locals.response = { message: `Pin post successfully!` }
+  res.locals.response = { message: `Pin post successfully!` };
   next();
 };

@@ -11,11 +11,8 @@ import {
 } from "../controllers/topic-controller/index.js";
 import {
   getPost,
-  getPosts,
-  getPostAuthor,
-  getPostsAuthor,
-  addPostAuthor,
-  addPostsAuthor,
+  getFullPost,
+  getFullPosts,
   checkPostAuthor,
   getPostSearch,
   createNewPost,
@@ -31,9 +28,9 @@ import {
 
 const router = express.Router();
 
-router.get("/", getPosts, getPostsAuthor, addPostsAuthor, responseHttp);
+router.get("/", getFullPosts, responseHttp);
 router.get("/search", getPostSearch, responseHttp);
-router.get("/:pid", getPost, getPostAuthor, addPostAuthor, responseHttp);
+router.get("/:pid", getFullPost, responseHttp);
 
 // check token middleware
 router.use(checkAuth);
@@ -44,7 +41,7 @@ router.post(
     { name: "cover", maxCount: 1 },
     { name: "images" },
   ]),
-  [check("contentState").not().isEmpty()],
+  [check("content").not().isEmpty()],
   validation,
   getUser,
   replaceImageSrc,
@@ -60,7 +57,7 @@ router.put(
     { name: "cover", maxCount: 1 },
     { name: "images" },
   ]),
-  [check("contentState").not().isEmpty()],
+  [check("content").not().isEmpty()],
   validation,
   getPost,
   getUser,
@@ -73,7 +70,7 @@ router.put(
 );
 
 router.patch(
-  "/:pid/pin",
+  "/pin/:pid",
   [check("pin").not().isEmpty()],
   validation,
   getPost,

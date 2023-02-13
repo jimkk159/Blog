@@ -8,6 +8,7 @@ export const validation = (req, res, next) => {
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors)
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 422)
     );
@@ -16,13 +17,13 @@ export const validation = (req, res, next) => {
 };
 
 export const replaceImageSrc = async (req, res, next) => {
-  const { contentState } = req.body;
+  const { content } = req.body;
 
   //Replace Images src
-  let postContentState;
+  let postContent;
   try {
-    const newContentState = JSON.parse(contentState);
-    const newEntityMap = newContentState?.entityMap;
+    const newContent = JSON.parse(content);
+    const newEntityMap = newContent?.entityMap;
 
     // Unprocessable ContentState
     if (!newEntityMap) {
@@ -35,17 +36,17 @@ export const replaceImageSrc = async (req, res, next) => {
         newEntityMap[index].data.src = normalize(file.path);
       });
     }
-    postContentState = JSON.stringify(newContentState);
+    postContent = JSON.stringify(newContent);
 
     // Unprocessable EditorState
-    if (!postContentState) {
+    if (!postContent) {
       return next(new HttpError("Create New Post Failed!", 422));
     }
   } catch (err) {
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }
-  res.locals.contentState = postContentState;
+  res.locals.content = postContent;
   next();
 };
 

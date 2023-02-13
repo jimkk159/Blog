@@ -1,7 +1,7 @@
 import express from "express";
 
 import {
-  getTopicByParams,
+  getTopic,
   getTopics,
   checkTopic,
   createNewTopic,
@@ -11,7 +11,7 @@ import { responseHttp } from "../controllers/share-controller/index.js";
 const router = express.Router();
 
 router.get("/", getTopics, responseHttp);
-router.get("/:topic_id", getTopicByParams, responseHttp);
+router.get("/:topic_id", getTopic, responseHttp);
 router.post("/new", checkTopic, createNewTopic, responseHttp);
 // router.post("/test", checkExistedTopic);
 
