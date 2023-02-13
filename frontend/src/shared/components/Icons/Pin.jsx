@@ -27,7 +27,7 @@ function Pin(props) {
     console.log("Pinned!");
     try {
       await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/${postId}/pin?pin=1`,
+        process.env.REACT_APP_BACKEND_URL + `/posts/pin/${postId}?pin=1`,
         "PATCH",
         "",
         {
@@ -44,7 +44,7 @@ function Pin(props) {
     console.log("Unpinned!");
     try {
       await sendRequest(
-        process.env.REACT_APP_BACKEND_URL + `/posts/${postId}/pin?pin=0`,
+        process.env.REACT_APP_BACKEND_URL + `/posts/pin/${postId}?pin=0`,
         "PATCH",
         "",
         {

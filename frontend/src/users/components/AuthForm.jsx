@@ -115,7 +115,7 @@ function AuthForm(props) {
             avatar: responseData.avatar,
             token: responseData.token,
             expiration: new Date(
-              new Date().getTime() + 3 * 1 * 5 * 1000 //Token Lifecycle is 1h
+              new Date().getTime() + 3 * 60 * 60 * 1000 //Token Lifecycle is 1h
             ).toISOString(),
           })
         );

@@ -20,8 +20,8 @@ function PostDetailTitle(props) {
     title,
     date,
     authorId,
-    authorName,
-    authorAvatar,
+    author,
+    avatar,
     isNew,
     isPined,
     isDarkMode,
@@ -110,7 +110,7 @@ function PostDetailTitle(props) {
           >
             <div>
               <p className={classes["statement"]}>Created by&nbsp;&nbsp;</p>
-              <p className={classes["author"]}>{authorName}&nbsp;&nbsp;</p>
+              <p className={classes["author"]}>{author}&nbsp;&nbsp;</p>
             </div>
             <div>
               <p className={classes["statement"]}>on {date}&nbsp;&nbsp;</p>
@@ -121,10 +121,7 @@ function PostDetailTitle(props) {
             defaultImg={anonymousUser}
             className={`${classes["avatar"]}`}
             isDarkMode={isDarkMode}
-            img={
-              authorAvatar &&
-              `${process.env.REACT_APP_BACKEND_URL}/${authorAvatar}`
-            }
+            img={avatar && `${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
           />
         </div>
       </div>

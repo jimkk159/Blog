@@ -37,8 +37,9 @@ function ReadPost({
   isLoading,
 }) {
   //Redux
-  const { pid, pin, authorId, authorName, authorAvatar, date, coverUrl, tags } =
+  const { pid, pin, authorId, author, avatar, date, coverUrl, tags } =
     useSelector((state) => state.post);
+
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -53,8 +54,8 @@ function ReadPost({
               title={title}
               postId={pid}
               authorId={authorId}
-              authorName={authorName}
-              authorAvatar={authorAvatar}
+              author={author}
+              avatar={avatar}
               date={new Date(date).toLocaleDateString("en-US", options)}
               isPined={pin}
               isDarkMode={isDarkMode}

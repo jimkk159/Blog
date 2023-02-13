@@ -4,8 +4,8 @@ const initialState = {
   id: null,
   date: null,
   authorId: null,
-  authorName: null,
-  authorAvatar: null,
+  author: null,
+  avatar: null,
   coverUrl: null,
   topic: null,
   topicId: null,
@@ -28,8 +28,8 @@ const postSlice = createSlice({
       state.id = action.payload.id;
       state.date = action.payload.date;
       state.authorId = action.payload.authorId;
-      state.authorName = action.payload.authorName;
-      state.authorAvatar = action.payload.authorAvatar;
+      state.author = action.payload.author;
+      state.avatar = action.payload.avatar;
       state.pin = !!action.payload.pin;
       state.topicId = action.payload.topicId;
       state.coverUrl = action.payload.url;

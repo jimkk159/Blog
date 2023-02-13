@@ -27,18 +27,18 @@ function PostInfo({ post, isOdd, onDelete }) {
   const {
     id: pid,
     topic,
-    update,
+    date,
     author_id,
-    authorName,
+    author,
     cover,
-    language: postLanguageStr,
+    content,
     tags,
     pin,
   } = post;
 
-  const postTags = tags ? JSON.parse(tags) : [];
-  const postLanguage = JSON.parse(postLanguageStr);
-  const postDate = new Date(update).toLocaleDateString("en-US", options);
+  const postTags = tags ? tags : [];
+  const postContent = content;
+  const postDate = new Date(date).toLocaleDateString("en-US", options);
   const postCover = cover
     ? `${process.env.REACT_APP_BACKEND_URL}/${cover}`
     : defaultCoverImage;
@@ -72,20 +72,20 @@ function PostInfo({ post, isOdd, onDelete }) {
     setTitle(
       choiceLanguage(
         isEnglish,
-        postLanguage.en.title,
-        postLanguage.ch.title,
+        postContent.en.title,
+        postContent.ch.title,
         "No Title"
       )
     );
     setShort(
       choiceLanguage(
         isEnglish,
-        postLanguage.en.short,
-        postLanguage.ch.short,
+        postContent.en.short,
+        postContent.ch.short,
         "No Description..."
       )
     );
-  }, [isEnglish, postLanguage]);
+  }, [isEnglish, postContent]);
 
   const navPostHandler = (event) => {
     //Double Click
@@ -136,7 +136,7 @@ function PostInfo({ post, isOdd, onDelete }) {
             <PostInfoTitle
               postId={pid}
               authorId={author_id}
-              authorName={authorName}
+              author={author}
               date={postDate}
               isPined={!!pin}
               onEdit={editHandler}

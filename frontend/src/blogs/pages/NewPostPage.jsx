@@ -41,7 +41,8 @@ function NewPostPage() {
   //React Router
   const navigate = useNavigate();
   const { edit } = useOutletContext();
-  const [setIsEdit] = edit[1];
+
+  const setIsEdit = edit[1];
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
@@ -51,7 +52,7 @@ function NewPostPage() {
     sendRequest: sendRequestTopic,
     clearError: clearErrorTopic,
   } = useHttp();
-  
+
   //Get EditorState FirstBlock Text
   const getTextHandler = useCallback((editorState) => {
     const currentContent = editorState.getCurrentContent();
@@ -71,17 +72,25 @@ function NewPostPage() {
       try {
         if (!token) return;
         const title = getTextHandler(titleState);
+        const type = "Problem";
+        const short = "bra bra bra";
         const tag = getTextHandler(tagState).trim();
-        const newTags = tag ? [...tags, tag] : [...tags];
         const contentRawData = savePostContentHandler(editorState);
         const [imgBlobs, convertedData] = convertImgURL(contentRawData);
+        const newTags = tag ? [...tags, tag] : [...tags];
         const createSendForm = (imgArray, draftRawData) => {
           const formData = new FormData();
-          formData.append("topic", JSON.stringify({ topic, parent, children }));
-          formData.append("title", title);
+          formData.append("topic", topic);
+          formData.append("type", type);
+          formData.append("parent", parent);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
-          formData.append("contentState", draftRawData);
+          formData.append("title", title);
+          formData.append("short", short);
+          formData.append("content", draftRawData);
+          for (let i = 0; i < children.length; i++) {
+            formData.append("children", children[i]);
+          }
           for (let i = 0; i < imgArray.length; i++) {
             formData.append("images", imgArray[i]);
           }

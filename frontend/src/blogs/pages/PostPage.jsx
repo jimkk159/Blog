@@ -44,7 +44,6 @@ function PostPage() {
   //Post Tags
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
-  //Todo auto logout and save the post on New and Edit
   //Redux
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const { topic, topicId, parent, children, tags } = useSelector(
@@ -107,7 +106,9 @@ function PostPage() {
         const [imgBlobs, convertedData] = convertImgURL(contentRawData);
         const createSendForm = (imgArray, draftRawData) => {
           const formData = new FormData();
-          formData.append("topic", JSON.stringify({ topic, parent, children }));
+          formData.append("topic", topic);
+          formData.append("parent", parent);
+          formData.append("children", children);
           formData.append("title", title);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
@@ -182,21 +183,19 @@ function PostPage() {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`
         );
-        const postLanguage = JSON.parse(responseData?.language);
+        const postContent = responseData?.content;
         let titleText = choiceLanguage(
           isEnglish,
-          postLanguage?.en?.title,
-          postLanguage?.ch?.title,
+          postContent?.en?.title,
+          postContent?.ch?.title,
           ""
         );
         titleText = titleText ? titleText : "";
-        const postJSON = JSON.parse(
-          choiceLanguage(
-            isEnglish,
-            postLanguage?.en?.contentState,
-            postLanguage?.ch?.contentState,
-            EditorState.createEmpty()
-          )
+        const postJSON = choiceLanguage(
+          isEnglish,
+          postContent?.en?.contentState,
+          postContent?.ch?.contentState,
+          convertToRaw(ContentState.createFromText(""))
         );
         const postContentState = convertFromRaw(postJSON);
         setOriginState(EditorState.createWithContent(postContentState));
@@ -207,17 +206,18 @@ function PostPage() {
         dispatch(
           postActions.setInit({
             id: responseData.id,
-            date: responseData.update,
+            date: responseData.date,
             authorId: responseData.author_id,
-            authorName: responseData.authorName,
-            authorAvatar: responseData.authorAvatar,
+            author: responseData.author,
+            avatar: responseData.avatar,
             topicId: responseData.topic_id,
             pin: responseData.pin,
             url: responseData.cover,
-            tags: JSON.parse(responseData.tags),
+            tags: responseData.tags,
           })
         );
-      } catch (err) {}
+      } catch (err) {
+      }
     };
     fetchPost();
   }, [isEnglish, pid, dispatch, setEditorState, sendRequest]);

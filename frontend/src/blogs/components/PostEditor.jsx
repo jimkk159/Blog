@@ -61,7 +61,7 @@ function PostEditor({
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
   const { oriCoverUrl, tags } = useSelector((state) => state.post);
-  const { name: authorName, avatar: authorAvatar } = useSelector(
+  const { name: author, avatar } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
@@ -205,8 +205,8 @@ function PostEditor({
       >
         <PostDetailTitle
           title={titleContent}
-          authorName={authorName}
-          authorAvatar={authorAvatar}
+          author={author}
+          avatar={avatar}
           date={new Date().toLocaleDateString("en-US", options)}
           isDarkMode={isDarkMode}
           isNew
