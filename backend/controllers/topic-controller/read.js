@@ -169,7 +169,6 @@ export const checkTopic = async (req, res, next) => {
       children: targetChildrenId,
     };
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Checking Topic failed, please try again later.",
       500

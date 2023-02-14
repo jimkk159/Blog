@@ -50,7 +50,6 @@ export const editPost = async (req, res, next) => {
       tags: tagsArray,
     });
   } catch (err) {
-    console.log(err);
     const error = new HttpError("Edit Post Failed!", 500);
     return next(error);
   }

@@ -8,7 +8,7 @@ export const validation = (req, res, next) => {
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors)
+    console.log(errors);
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 422)
     );
@@ -17,7 +17,17 @@ export const validation = (req, res, next) => {
 };
 
 export const replaceImageSrc = async (req, res, next) => {
-  const { content } = req.body;
+  const { content, map } = req.body;
+
+  //No need to replace Image
+  if (!map) {
+    res.locals.content = content;
+    return next();
+  }
+  let imgMap = map;
+  if (!Array.isArray(map)) {
+    imgMap = [map];
+  }
 
   //Replace Images src
   let postContent;
@@ -32,10 +42,24 @@ export const replaceImageSrc = async (req, res, next) => {
 
     //Change Image
     if (req?.files?.images) {
-      req.files.images.map((file, index) => {
-        newEntityMap[index].data.src = normalize(file.path);
-      });
+      let count = 0;
+      let imgCount = 0;
+      console.log(imgMap);
+      console.log(newEntityMap);
+      for (let i = 0; i < Object.keys(newEntityMap).length; i++) {
+        if (newEntityMap[i]?.type === "IMAGE") {
+          if (+imgMap[count] === 1) {
+            newEntityMap[i].data.src = `${process.env.SERVER_URL}${
+              process.env.port
+            }/${normalize(req.files.images[imgCount].path)}`;
+            imgCount++;
+          }
+          count++;
+        }
+      }
     }
+    console.log(newEntityMap);
+
     postContent = JSON.stringify(newContent);
 
     // Unprocessable EditorState
@@ -43,9 +67,11 @@ export const replaceImageSrc = async (req, res, next) => {
       return next(new HttpError("Create New Post Failed!", 422));
     }
   } catch (err) {
+    console.log(err);
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }
+
   res.locals.content = postContent;
   next();
 };

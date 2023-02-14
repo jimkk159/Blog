@@ -24,7 +24,6 @@ export const createNewPost = async (req, res, next) => {
     else if (!Array.isArray(tags)) {
       tagsArray = [tags];
     } else tagsArray = tags;
-
     const postContent = { en: null, ch: null };
     switch (language) {
       case "en":
@@ -47,7 +46,6 @@ export const createNewPost = async (req, res, next) => {
       tags: tagsArray,
     });
   } catch (err) {
-    console.log(err);
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }
