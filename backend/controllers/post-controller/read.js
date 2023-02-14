@@ -7,6 +7,7 @@ import HttpError from "../../models/http-error.js";
 
 export const getPost = async (req, res, next) => {
   const pid = req.params.pid;
+  
   let post;
   try {
     post = await getDBPost(pid);
@@ -35,14 +36,13 @@ export const getFullPost = async (req, res, next) => {
   try {
     post = await getDBFullPost(pid);
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Finding post failed, please try again later.",
       500
     );
     return next(error);
   }
-
+  
   //Post not find
   if (!post) {
     const error = new HttpError("Post not Find!", 404);
@@ -88,7 +88,6 @@ export const getFullPosts = async (req, res, next) => {
     const number = req.query.number >= 1 ? req.query.number : 1;
     posts = await getDBLastestFullPosts({ current, number });
   } catch (err) {
-    console.log(err);
     const error = new HttpError(
       "Get Posts Error!, please try again later.",
       500

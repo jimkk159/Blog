@@ -71,7 +71,7 @@ export const checkTopic = async (req, res, next) => {
   let targetChildren;
   res.locals.exist = false;
 
-  if (!topic)
+  if (!topic || topic === "null")
     return next(new HttpError("Must Setting Topic for the Post!!", 422));
 
   if (topic.toLowerCase() === "root")

@@ -13,7 +13,9 @@ export const createDBPost = async ({
   const connection = await mysql_pool.getConnection();
 
   let result;
+  let nestedTags;
   let tagIds = [];
+  nestedTags = tags.map((tag) => [tag]);
   try {
     await connection.beginTransaction();
     [result] = await connection.query(
@@ -42,23 +44,24 @@ export const createDBPost = async ({
           content.ch?.content,
         ]
       );
-      
-    await Promise.all(
-      tags.map(async (tag) => {
-        const [result] = await connection.query(
-          "INSERT IGNORE INTO `tag`(`tag`) VALUES (?);",
-          tag
-        );
-        tagIds.push(result.insertId);
-      })
-    );
 
-    await connection.query(
-      "INSERT INTO `postTag`(`post_id`, `tag_id`) SELECT `post`.`id`, `tag`.`id` " +
-        "FROM `post` INNER JOIN `tag` ON 1=1 " +
-        "WHERE `post`.`id` = ?;",
-      [result.insertId]
-    );
+    //Handle with Tags
+    if (Array.isArray(tags) && tags.length > 0) {
+      await connection.query("INSERT IGNORE INTO `tag`(`tag`) VALUES ?;", [
+        nestedTags,
+      ]);
+      const [tagDBIds] = await connection.query(
+        "SELECT `tag`.`id` FROM `tag` WHERE `tag`.`tag` IN (?);",
+        [tags]
+      );
+      tagIds = tagDBIds.map((tagId) => tagId.id);
+      await connection.query(
+        "INSERT INTO `postTag`(`post_id`, `tag_id`) " +
+          "SELECT `post`.`id`, `tag`.`id` FROM `post` INNER JOIN `tag` ON `post`.`id` = ? " +
+          "WHERE `tag`.`id` IN (?);",
+        [result.insertId, tagIds]
+      );
+    }
 
     await connection.commit();
     connection.release();

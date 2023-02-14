@@ -10,7 +10,7 @@ export const getDBLastestPosts = async ({ number, current }) => {
 
 export const getDBLastestFullPosts = async ({ number, current }) => {
   const [posts] = await mysql_pool.query(
-    "SELECT `post`.`id`, `post`.`update`, `post`.`cover`, `post`.`topic_id`, " +
+    "SELECT `post`.`id`, `post`.`update`, `post`.`pin`, `post`.`cover`, `post`.`topic_id`, " +
       "`topic`.`topic`, " +
       "`user`.`id` as `author_id`, `user`.`name` as `author`, `user`.`avatar` as `avatar`, " +
       "`postEn`.`title` as `en_title`, `postEn`.`short` as `en_short`, `postEn`.`content` as `en_content`, " +
@@ -40,7 +40,7 @@ export const getDBPost = async (pid) => {
 
 export const getDBFullPost = async (pid) => {
   const [post] = await mysql_pool.query(
-    "SELECT `post`.`id`, `post`.`update`, `post`.`cover`, `post`.`topic_id`, " +
+    "SELECT `post`.`id`, `post`.`update`, `post`.`pin`, `post`.`cover`, `post`.`topic_id`, " +
       "`topic`.`topic`, " +
       "`user`.`id` as `author_id`, `user`.`name` as `author`, `user`.`avatar` as `avatar`, " +
       "`postEn`.`title` as `en_title`, `postEn`.`short` as `en_short`, `postEn`.`content` as `en_content`, " +

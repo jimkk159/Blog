@@ -2,79 +2,61 @@ import normalize from "normalize-path";
 import {
   updateDBPost,
   updateDBPostPin,
-  updateDBPostWithCover,
 } from "../../database/mysql/post/update.js";
 import HttpError from "../../models/http-error.js";
 
 export const editPost = async (req, res, next) => {
   console.log("Edit Post");
-  const { language, title, short, tags } = req.body;
-  const { topic, post: targetPost, content } = res.locals;
-
-  //Create New Post
-  let coverPath;
-  if (
-    req?.files?.cover &&
-    req?.files?.cover.length > 0 &&
-    req?.files?.cover[0]?.path
-  ) {
-    coverPath = normalize(req.files?.cover[0]?.path);
-  }
+  const { language, type, title, short, tags } = req.body;
+  const { topic, post, content } = res.locals;
 
   //Edit Post
   let editPost;
-  let postTag;
-  let postCover;
-  let postLanguage;
+  let coverPath;
+  let tagsArray;
   try {
-    postCover = coverPath ? coverPath : null;
-    postTag = tags
-      ? Array.isArray(tags)
-        ? JSON.stringify([...tags])
-        : JSON.stringify([tags])
-      : JSON.stringify([]);
-    const postContent = {
-      title,
-      short,
-      content,
-    };
+    if (
+      req?.files?.cover &&
+      req?.files?.cover.length > 0 &&
+      req?.files?.cover[0]?.path
+    ) {
+      coverPath = normalize(req.files?.cover[0]?.path);
+    }
 
-    postLanguage = JSON.parse(targetPost.language);
+    if (!tags) tagsArray = [];
+    else if (!Array.isArray(tags)) {
+      tagsArray = [tags];
+    } else tagsArray = tags;
+
+    const postContent = { en: null, ch: null };
     switch (language) {
       case "en":
-        postLanguage.en = postContent;
+        postContent.en = { title, short, content };
         break;
       case "ch":
-        postLanguage.ch = postContent;
+        postContent.ch = { title, short, content };
         break;
       default:
         const error = new HttpError("Unsupport language", 501);
         return next(error);
     }
 
-    if (postCover) {
-      editPost = await updateDBPostWithCover({
-        pid: targetPost.id,
-        topic_id: topic.id,
-        cover: coverPath,
-        language: JSON.stringify(postLanguage),
-        tags: postTag,
-      });
-    } else {
-      editPost = await updateDBPost({
-        pid: targetPost.id,
-        topic_id: topic.id,
-        language: JSON.stringify(postLanguage),
-        tags: postTag,
-      });
-    }
+    editPost = await updateDBPost({
+      id: post.id,
+      topic_id: topic.id,
+      type,
+      cover: coverPath,
+      content: postContent,
+      tags: tagsArray,
+    });
   } catch (err) {
+    console.log(err);
     const error = new HttpError("Edit Post Failed!", 500);
     return next(error);
   }
 
   res.locals.response = {
-    pid: editPost?.id,
+    pid: post?.id,
     message: `Create post successfully!`,
   };
   next();

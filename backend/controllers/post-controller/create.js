@@ -11,7 +11,6 @@ export const createNewPost = async (req, res, next) => {
   let coverPath;
   let tagsArray;
   let responsePost;
-  //Save Post to Database
   try {
     if (
       req?.files?.cover &&
