@@ -171,7 +171,7 @@ function NewPostPage() {
   }, [setIsEdit, dispatch]);
 
   //Custom Hook
-  useAutoSave(savePostHandler);
+  useAutoSave(savePostHandler, true);
 
   return (
     <>
