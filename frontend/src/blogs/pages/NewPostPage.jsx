@@ -76,9 +76,9 @@ function NewPostPage() {
         const short = "bra bra bra";
         const tag = getTextHandler(tagState).trim();
         const contentRawData = savePostContentHandler(editorState);
-        const [imgBlobs, convertedData] = convertImgURL(contentRawData);
+        const [convertedData, imgBlobs, imgMap] = convertImgURL(contentRawData);
         const newTags = tag ? [...tags, tag] : [...tags];
-        const createSendForm = (imgArray, draftRawData) => {
+        const createSendForm = (imgMap, imgArray, draftRawData, tags) => {
           const formData = new FormData();
           formData.append("topic", topic);
           formData.append("parent", parent);
@@ -91,16 +91,19 @@ function NewPostPage() {
           for (let i = 0; i < children.length; i++) {
             formData.append("children", children[i]);
           }
+          for (let i = 0; i < imgMap.length; i++) {
+            formData.append("map", imgMap[i]);
+          }
           for (let i = 0; i < imgArray.length; i++) {
             formData.append("images", imgArray[i]);
           }
-          for (let i = 0; i < newTags.length; i++) {
-            formData.append("tags", newTags[i]);
+          for (let i = 0; i < tags.length; i++) {
+            formData.append("tags", tags[i]);
           }
           return formData;
         };
 
-        const sendForm = createSendForm(imgBlobs, convertedData);
+        const sendForm = createSendForm(imgMap, imgBlobs, convertedData, newTags);
         const response = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + `/posts/new`,
           "POST",

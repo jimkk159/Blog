@@ -1,5 +1,4 @@
 export const datatURLtoBlob = (dataURI) => {
-
   // convert base64/URLEncoded data component to raw binary data held in a string
   const splitdataURI = dataURI.split(",");
   let byteString;
@@ -23,21 +22,26 @@ export const datatURLtoBlob = (dataURI) => {
 
 const convertImgURL = (draftRawData) => {
   const imgBlobs = [];
+  const imgMap = [];
   let newRawData = JSON.parse(draftRawData);
   const newEntityMap = newRawData.entityMap;
-  
+
   for (const entity in newEntityMap) {
     const item = newEntityMap[entity];
-    
-    if (item?.type === "IMAGE" && item?.data?.src) {
-      const [dataBlob] = datatURLtoBlob(item.data.src);
-      imgBlobs.push(dataBlob);
-      newEntityMap[entity].data.src = "";
+    const dataURI = item?.data?.src;
+    if (item?.type === "IMAGE" && dataURI) {
+      if (dataURI.startsWith("data:image")) {
+        const [dataBlob] = datatURLtoBlob(item.data.src);
+        imgMap.push(1);
+        imgBlobs.push(dataBlob);
+        newEntityMap[entity].data.src = "";
+      } else {
+        imgMap.push(0);
+      }
     }
   }
   newRawData.entityMap = newEntityMap;
-  
-  return [imgBlobs, JSON.stringify(newRawData)];
+  return [JSON.stringify(newRawData), imgBlobs, imgMap];
 };
 
 export default convertImgURL;
