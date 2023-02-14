@@ -81,8 +81,8 @@ function NewPostPage() {
         const createSendForm = (imgArray, draftRawData) => {
           const formData = new FormData();
           formData.append("topic", topic);
-          formData.append("type", type);
           formData.append("parent", parent);
+          formData.append("type", type);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
           formData.append("title", title);

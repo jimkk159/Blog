@@ -51,6 +51,7 @@ function PostEditor({
   onChangeTag,
   onCover,
 }) {
+  const titleRef = useRef(null);
   const editorRef = useRef(null);
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
@@ -61,18 +62,32 @@ function PostEditor({
   const isDarkMode = useSelector((state) => state.theme.value);
   const language = useSelector((state) => state.language.language);
   const { oriCoverUrl, tags } = useSelector((state) => state.post);
-  const { name: author, avatar } = useSelector(
-    (state) => state.auth
-  );
+  const { name: author, avatar } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  //Set tilte when press Enter
+  const titleKeyDownHandler = (event) => {
+    if (event.key === "Enter") {
+      const currentContent = titleState.getCurrentContent();
+      const contentBlock = currentContent.getFirstBlock();
+      const title = contentBlock.getText().trim();
+      titleRef.current.blur();
+      onChangeTitle(
+        EditorState.createWithContent(ContentState.createFromText(title))
+      );
+    }
+  };
+
   const titleContent = (
-    <Editor
-      editorState={titleState}
-      onChange={onChangeTitle}
-      placeholder={language.addTitle}
-      textAlignment="center"
-    />
+    <div onKeyDown={titleKeyDownHandler}>
+      <Editor
+        ref={titleRef}
+        editorState={titleState}
+        onChange={onChangeTitle}
+        placeholder={language.addTitle}
+        textAlignment="center"
+      />
+    </div>
   );
 
   //Add Tag

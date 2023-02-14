@@ -49,6 +49,7 @@ function PostPage() {
   const { topic, topicId, parent, children, tags } = useSelector(
     (state) => state.post
   );
+
   const dispatch = useDispatch();
 
   //React Router
@@ -100,6 +101,8 @@ function PostPage() {
       try {
         if (!pid || !token) return;
         const title = getTextHandler(titleState);
+        const type = "Problem";
+        const short = "bra bra bra";
         const tag = getTextHandler(tagState).trim();
         const newTags = tag ? [...tags, tag] : [...tags];
         const contentRawData = savePostContentHandler(editorState);
@@ -108,11 +111,15 @@ function PostPage() {
           const formData = new FormData();
           formData.append("topic", topic);
           formData.append("parent", parent);
-          formData.append("children", children);
-          formData.append("title", title);
+          formData.append("type", type);
           formData.append("cover", cover);
           formData.append("language", isEnglish ? "en" : "ch");
-          formData.append("contentState", draftRawData);
+          formData.append("title", title);
+          formData.append("short", short);
+          formData.append("content", draftRawData);
+          for (let i = 0; i < children.length; i++) {
+            formData.append("children", children[i]);
+          }
           for (let i = 0; i < imgArray.length; i++) {
             formData.append("images", imgArray[i]);
           }
@@ -177,13 +184,14 @@ function PostPage() {
 
   //GET POST
   useEffect(() => {
-    console.log("GET POST");
+    console.log("GET POST Edit");
     const fetchPost = async () => {
       try {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`
         );
         const postContent = responseData?.content;
+
         let titleText = choiceLanguage(
           isEnglish,
           postContent?.en?.title,
@@ -193,8 +201,8 @@ function PostPage() {
         titleText = titleText ? titleText : "";
         const postJSON = choiceLanguage(
           isEnglish,
-          postContent?.en?.contentState,
-          postContent?.ch?.contentState,
+          JSON.parse(postContent?.en?.content),
+          JSON.parse(postContent?.ch?.content),
           convertToRaw(ContentState.createFromText(""))
         );
         const postContentState = convertFromRaw(postJSON);
