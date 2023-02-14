@@ -29,6 +29,12 @@ function PostDetailTitle(props) {
     onDelete,
   } = props;
 
+  const authorAvatar = avatar
+    ? avatar.startsWith("https://") || avatar.startsWith("http://")
+      ? avatar
+      : `${process.env.REACT_APP_BACKEND_URL}/${avatar}`
+    : null;
+
   //Redux
   const { isAdmin, uid, token } = useSelector((state) => state.auth);
 
@@ -121,7 +127,7 @@ function PostDetailTitle(props) {
             defaultImg={anonymousUser}
             className={`${classes["avatar"]}`}
             isDarkMode={isDarkMode}
-            img={avatar && `${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
+            img={authorAvatar}
           />
         </div>
       </div>

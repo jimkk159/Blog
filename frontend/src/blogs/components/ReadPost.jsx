@@ -37,8 +37,17 @@ function ReadPost({
   isLoading,
 }) {
   //Redux
-  const { id, pin, authorId, author, avatar, date, coverUrl, tags } =
-    useSelector((state) => state.post);
+  const {
+    id,
+    pin,
+    authorId,
+    author,
+    avatar,
+    date,
+    coverUrl,
+    topicCover,
+    tags,
+  } = useSelector((state) => state.post);
 
   const isDarkMode = useSelector((state) => state.theme.value);
 
@@ -68,9 +77,9 @@ function ReadPost({
                 <img
                   src={
                     coverUrl
-                      ? coverUrl.startsWith("data:image")
-                        ? `${coverUrl}`
-                        : `${process.env.REACT_APP_BACKEND_URL}/${coverUrl}`
+                      ? coverUrl
+                      : topicCover
+                      ? topicCover
                       : defaultCoverImage
                   }
                   alt="cover"

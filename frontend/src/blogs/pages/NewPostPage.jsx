@@ -11,6 +11,7 @@ import convertImgURL from "../../shared/util/url-to-blob";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
+import useTopic from "../../shared/hooks/get-topics-hook";
 
 //Custom Component
 import Button2 from "../../shared/components/Form/Button2";
@@ -24,7 +25,6 @@ import classes from "./NewPostPage.module.css";
 import useAutoSave from "../../shared/hooks/save-post-hook";
 
 function NewPostPage() {
-  const [topics, setTopics] = useState([]);
   const [cover, setCover] = useState(null);
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   const [editorState, setEditorState] = useState(() =>
@@ -47,11 +47,11 @@ function NewPostPage() {
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
   const {
+    topics,
     isLoading: isLoadingTopic,
     error: errorTopic,
-    sendRequest: sendRequestTopic,
     clearError: clearErrorTopic,
-  } = useHttp();
+  } = useTopic();
 
   //Get EditorState FirstBlock Text
   const getTextHandler = useCallback((editorState) => {
@@ -135,35 +135,6 @@ function NewPostPage() {
   const cancelPostHandler = () => {
     navigate(-1);
   };
-
-  //GET Topics
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const responseData = await sendRequestTopic(
-          process.env.REACT_APP_BACKEND_URL + "/topics"
-        );
-        const rawTopics = responseData.map((item) => ({
-          ...item,
-          parent: "",
-          children: [],
-        }));
-
-        //Setting parent and children
-        for (let i = 0; i < rawTopics.length; i++) {
-          for (let j = 0; j < rawTopics.length; j++) {
-            if (i === j) continue;
-            if (rawTopics[i].parent_id === rawTopics[j].id) {
-              rawTopics[i].parent = rawTopics[j].topic;
-              rawTopics[j].children.push(rawTopics[i].topic);
-            }
-          }
-        }
-        setTopics(rawTopics);
-      } catch (err) {}
-    };
-    fetchTopics();
-  }, [sendRequestTopic]);
 
   useEffect(() => {
     dispatch(postActions.reset());

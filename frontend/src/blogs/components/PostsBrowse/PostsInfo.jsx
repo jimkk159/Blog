@@ -3,16 +3,18 @@ import React from "react";
 //Custom Component
 import PostInfo from "./PostInfo";
 
-function PostsInfo(props) {
-  if (props.isLoading) return <h2>Loading...</h2>;
+function PostsInfo({ isLoading, posts, topics, onDelete }) {
+  if (isLoading) return <h2>Loading...</h2>;
 
-  return props.posts.map((post, index) => {
+  return posts.map((post, index) => {
+    const [topic] = topics.filter((topic) => post.topic === topic.topic);
     return (
       <PostInfo
         key={index}
+        topic={topic}
         post={post}
         isOdd={index % 2 ? true : false}
-        onDelete={props.onDelete}
+        onDelete={onDelete}
       />
     );
   });

@@ -8,6 +8,7 @@ const initialState = {
   avatar: null,
   coverUrl: null,
   topic: "",
+  topicCover: null,
   topicId: null,
   parent: "",
   children: [],
@@ -52,6 +53,9 @@ const postSlice = createSlice({
       if (action.payload.children) {
         state.children = action.payload.children;
         state.oriChildren = action.payload.children;
+      }
+      if (action.payload.cover) {
+        state.topicCover = action.payload.cover;
       }
     },
     setTopic: (state, action) => {

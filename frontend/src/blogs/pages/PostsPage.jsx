@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
+import useTopic from "../../shared/hooks/get-topics-hook";
 
 //Custom Component
 import Quote from "../../shared/components/Quote";
@@ -30,6 +31,12 @@ function PostsPage() {
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
+  const {
+    topics,
+    isLoading: isLoadingTopic,
+    error: errorTopic,
+    clearError: clearErrorTopic,
+  } = useTopic();
 
   //Setting Page of Posts
   let indexOfFirstPost, indexOfLastPost, currentPosts;
@@ -62,7 +69,7 @@ function PostsPage() {
   //Fetch Posts
   useEffect(() => {
     const fetchPosts = async () => {
-      console.log("Get Posts")
+      console.log("Get Posts");
       try {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL +
@@ -86,16 +93,20 @@ function PostsPage() {
   return (
     <div className={classes["container"]}>
       <ErrorModal error={error} onClear={clearError} isAnimate />
+      <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
       {isHome && (
         <>
           <Quote />
           <hr className={classes["interval-line"]} />
         </>
       )}
-      {isLoading && <LoadingSpinner className={`loading-container`} />}
-      {!isLoading && posts && (
+      {(isLoading || isLoadingTopic) && (
+        <LoadingSpinner className={`loading-container`} />
+      )}
+      {!(isLoading || isLoadingTopic) && posts && topics && (
         <>
           <PostsInfo
+            topics={topics}
             posts={currentPosts}
             isDarkMode={isDarkMode}
             onDelete={deletePostHandler}

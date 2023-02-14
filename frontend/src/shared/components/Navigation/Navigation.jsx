@@ -39,6 +39,14 @@ function Navigation(props) {
   );
   const dispatch = useDispatch();
 
+  const userAvatar = avatar
+    ? avatar.startsWith("https://") ||
+      avatar.startsWith("http://") ||
+      avatar.startsWith("data:image")
+      ? `${avatar}`
+      : `${process.env.REACT_APP_BACKEND_URL}/${avatar}`
+    : null;
+
   //CustomHook
   const { scrollPosition, isScrollingUp } = useScroll();
   const { matches } = useMediaQuery("min", "768");
@@ -122,7 +130,7 @@ function Navigation(props) {
               defaultImg={anonymousUser}
               isDarkMode={isDarkMode}
               onClick={showAuthHandler}
-              img={avatar && `${process.env.REACT_APP_BACKEND_URL}/${avatar}`}
+              img={userAvatar}
               isAnimate
             />
           )}

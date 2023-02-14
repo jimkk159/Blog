@@ -18,7 +18,6 @@ function useAutoSave(savePostCallback, isToHome = false) {
     if (!isLoggedIn) {
       savePostCallback(prevToken);
       setPrevToken(null);
-      console.log(isToHome);
       if (isToHome) {
         navigate("/");
       }

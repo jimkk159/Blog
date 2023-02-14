@@ -23,10 +23,10 @@ import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 //CSS
 import classes from "./PostInfo.module.css";
 
-function PostInfo({ post, isOdd, onDelete }) {
+function PostInfo({ post, topic, isOdd, onDelete }) {
   const {
     id: pid,
-    topic,
+    topic: topicText,
     date,
     author_id,
     author,
@@ -39,8 +39,18 @@ function PostInfo({ post, isOdd, onDelete }) {
   const postTags = tags ? tags : [];
   const postContent = content;
   const postDate = new Date(date).toLocaleDateString("en-US", options);
+  const topicCover = topic?.cover
+    ? topic?.cover?.startsWith("https://") ||
+    topic?.cover?.startsWith("http://")
+      ? `${topic?.cover}`
+      : `${process.env.REACT_APP_BACKEND_URL}/${topic?.cover}`
+    : null;
   const postCover = cover
-    ? `${process.env.REACT_APP_BACKEND_URL}/${cover}`
+    ? cover.startsWith("https://") || cover.startsWith("http://")
+      ? `${cover}`
+      : `${process.env.REACT_APP_BACKEND_URL}/${cover}`
+    : topicCover
+    ? topicCover
     : defaultCoverImage;
 
   const [title, setTitle] = useState("No Title");
@@ -107,7 +117,7 @@ function PostInfo({ post, isOdd, onDelete }) {
     console.log("delete");
     setShowWarning(true);
   };
-  
+
   return (
     <>
       <ErrorModal error={error} onClear={clearError} />
@@ -132,7 +142,7 @@ function PostInfo({ post, isOdd, onDelete }) {
         )}
         {!isLoading && (
           <div className={classes["info-content"]}>
-            <h1>{`[ ${topic ? topic : "  "} ] ${title}`}</h1>
+            <h1>{`[ ${topicText ? topicText : "  "} ] ${title}`}</h1>
             <PostInfoTitle
               postId={pid}
               authorId={author_id}

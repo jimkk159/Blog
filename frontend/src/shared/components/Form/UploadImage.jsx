@@ -88,9 +88,7 @@ function UploadImage(props) {
 
   useEffect(() => {
     if (initImage) {
-      const url = initImage.startsWith("data:image")
-        ? initImage
-        : `${process.env.REACT_APP_BACKEND_URL}/${initImage}`;
+      const url = initImage;
       setPreviewUrl(url);
     } else setPreviewUrl(null);
   }, [initImage]);

@@ -17,6 +17,7 @@ import convertImgURL from "../../shared/util/url-to-blob";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
+import useTopic from "../../shared/hooks/get-topics-hook";
 
 //Custom Comonent
 import ReadPost from "../components/ReadPost";
@@ -33,7 +34,6 @@ import useAutoSave from "../../shared/hooks/save-post-hook";
 function PostPage() {
   const [cover, setCover] = useState(null);
   const [showWarning, setShowWarning] = useState(false);
-  const [topics, setTopics] = useState([]);
   //Post Title
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
   //Post Content
@@ -45,8 +45,9 @@ function PostPage() {
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
   //Redux
+  const uid = useSelector((state) => state.auth.uid);
   const isEnglish = useSelector((state) => state.language.isEnglish);
-  const { topic, topicId, parent, children, tags } = useSelector(
+  const { topic, topicId, authorId, parent, children, tags } = useSelector(
     (state) => state.post
   );
 
@@ -66,11 +67,11 @@ function PostPage() {
     clearError: clearErrorSave,
   } = useHttp();
   const {
+    topics,
     isLoading: isLoadingTopic,
     error: errorTopic,
-    sendRequest: sendRequestTopic,
     clearError: clearErrorTopic,
-  } = useHttp();
+  } = useTopic();
 
   //Edit
   const editModeHandler = () => {
@@ -99,7 +100,7 @@ function PostPage() {
   const savePostHandler = useCallback(
     async (token) => {
       try {
-        if (!pid || !token) return;
+        if (!pid || !token || authorId !== uid) return;
         const title = getTextHandler(titleState);
         const type = "Problem";
         const short = "bra bra bra";
@@ -144,6 +145,8 @@ function PostPage() {
       } catch (err) {}
     },
     [
+      uid,
+      authorId,
       pid,
       topic,
       parent,
@@ -168,19 +171,6 @@ function PostPage() {
     console.log("delete");
     setShowWarning(true);
   };
-
-  //GET Topics
-  useEffect(() => {
-    const fetchTopics = async () => {
-      try {
-        const responseData = await sendRequestTopic(
-          process.env.REACT_APP_BACKEND_URL + "/topics"
-        );
-        setTopics(responseData);
-      } catch (err) {}
-    };
-    fetchTopics();
-  }, [sendRequestTopic]);
 
   //GET POST
   useEffect(() => {
@@ -211,6 +201,14 @@ function PostPage() {
         setTitleState(
           EditorState.createWithContent(ContentState.createFromText(titleText))
         );
+        const responseCover = responseData.cover;
+        const cover = responseCover
+          ? responseCover.startsWith("https://") ||
+            responseCover.startsWith("http://") ||
+            responseCover.startsWith("data:image")
+            ? `${responseCover}`
+            : `${process.env.REACT_APP_BACKEND_URL}/${responseCover}`
+          : null;
         dispatch(
           postActions.setInit({
             id: responseData.id,
@@ -220,24 +218,24 @@ function PostPage() {
             avatar: responseData.avatar,
             topicId: responseData.topic_id,
             pin: responseData.pin,
-            url: responseData.cover,
+            url: cover,
             tags: responseData.tags,
           })
         );
-      } catch (err) {
-      }
+      } catch (err) {}
     };
     fetchPost();
   }, [isEnglish, pid, dispatch, setEditorState, sendRequest]);
 
   useEffect(() => {
-    const targetTopic = topics.filter((topic) => topic.id === topicId)[0];
-    if (targetTopic) {
+    const topic = topics.filter((topic) => topic.id === topicId)[0];
+    if (topic) {
       dispatch(
         postActions.setInitTopic({
-          topic: targetTopic?.topic,
-          parent: targetTopic?.parent,
-          children: targetTopic?.children,
+          topic: topic?.topic,
+          parent: topic?.parent,
+          children: topic?.children,
+          cover: topic?.cover,
         })
       );
     }
