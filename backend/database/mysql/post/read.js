@@ -2,7 +2,7 @@ import mysql_pool from "../index.js";
 
 export const getDBLastestPosts = async ({ number, current }) => {
   const [posts] = await mysql_pool.query(
-    "SELECT * FROM `post` ORDER BY `id` DESC LIMIT ? OFFSET ?;",
+    "SELECT * FROM `post` ORDER BY `update` DESC LIMIT ? OFFSET ?;",
     [+number, +current]
   );
   return posts;
@@ -24,7 +24,7 @@ export const getDBLastestFullPosts = async ({ number, current }) => {
       "LEFT JOIN `postEn` ON `postEn`.`post_id` = `post`.`id` " +
       "LEFT JOIN `postCh` ON `postCh`.`post_id` = `post`.`id` " +
       "GROUP BY `post`.`id`" +
-      "ORDER BY `id` DESC  LIMIT ? OFFSET ?;",
+      "ORDER BY `pin` DESC, `update` DESC  LIMIT ? OFFSET ?;",
     [+number, +current]
   );
   return posts;
