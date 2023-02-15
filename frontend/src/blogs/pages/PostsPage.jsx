@@ -109,6 +109,7 @@ function PostsPage() {
             topics={topics}
             posts={currentPosts}
             isDarkMode={isDarkMode}
+            onPin={setPosts}
             onDelete={deletePostHandler}
           />
           <Pagination

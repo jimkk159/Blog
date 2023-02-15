@@ -17,6 +17,7 @@ function PostInfoTitle({
   postId,
   isPined,
   onEdit,
+  onPin,
   onShowDelete,
 }) {
   //Redux
@@ -32,6 +33,7 @@ function PostInfoTitle({
       isPined={isPined}
       isAdmin={isAdmin}
       isDarkMode={isDarkMode}
+      onPin={onPin}
     />
   );
 

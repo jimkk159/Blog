@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BsFillPinAngleFill, BsFillPinFill } from "react-icons/bs";
 
 //Custom Hook
@@ -11,20 +11,26 @@ import ErrorModal from "../UI/Modal/ErrorModal";
 import classes from "./Pin.module.css";
 
 function Pin(props) {
-  const { show, token, postId, isPined, isAdmin, isDarkMode } = props;
-  const [isPin, setIsPin] = useState(false);
+  const { show, token, postId, isPined, isAdmin, isDarkMode, onPin } = props;
 
   //Custom Hook
   const { error, sendRequest, clearError } = useHttp();
 
-  useEffect(() => {
-    setIsPin(isPined);
-  }, [isPined]);
+  const pinPostHandler = (posts, pid, pin) => {
+    const pinnedPosts = posts.map((post) => {
+      if (post?.id === pid) return { ...post, pin };
+      else return post;
+    });
+    const pined = pinnedPosts.filter((post) => !!post?.pin);
+    const unpined = pinnedPosts.filter((post) => !post?.pin);
+    return [...pined, ...unpined];
+  };
 
   //Pinned
   const PinedHandler = async (event) => {
     event.stopPropagation();
     console.log("Pinned!");
+    if (!token || !isAdmin) return;
     try {
       await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/pin/${postId}?pin=1`,
@@ -34,7 +40,9 @@ function Pin(props) {
           Authorization: "Bearer " + token,
         }
       );
-      setIsPin(true);
+      if (onPin) {
+        onPin((prev) => pinPostHandler(prev, postId, 1));
+      }
     } catch (err) {}
   };
 
@@ -42,6 +50,7 @@ function Pin(props) {
   const unpinedHandler = async (event) => {
     event.stopPropagation();
     console.log("Unpinned!");
+    if (!token || !isAdmin) return;
     try {
       await sendRequest(
         process.env.REACT_APP_BACKEND_URL + `/posts/pin/${postId}?pin=0`,
@@ -51,12 +60,14 @@ function Pin(props) {
           Authorization: "Bearer " + token,
         }
       );
-      setIsPin(false);
+      if (onPin) {
+        onPin((prev) => pinPostHandler(prev, postId, 0));
+      }
     } catch (err) {}
   };
 
   if (!show) return;
-  if (isPin)
+  if (isPined)
     return (
       <>
         <ErrorModal error={error} onClear={clearError} />

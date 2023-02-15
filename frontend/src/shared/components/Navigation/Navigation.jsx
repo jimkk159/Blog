@@ -33,7 +33,7 @@ function Navigation(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const { avatar, isLoggedIn } = useSelector((state) => state.auth);
+  const { avatar, token } = useSelector((state) => state.auth);
   const { isSetted, isEnglish, language } = useSelector(
     (state) => state.language
   );
@@ -65,7 +65,7 @@ function Navigation(props) {
 
   //Show Auth Modal
   const showAuthHandler = () => {
-    if (!isLoggedIn) {
+    if (!token) {
       setShowModal(true);
     }
   };
@@ -90,7 +90,7 @@ function Navigation(props) {
     <>
       <NavigationSideDrawer onClick={closeDrawerHandler} show={isDrawer} />
       <AuthModal
-        show={!isLoggedIn && showModal && matches}
+        show={!token && showModal && matches}
         setShowModal={setShowModal}
         isAnimate
       />
@@ -126,7 +126,7 @@ function Navigation(props) {
           </Languae>
           {matches && (
             <UserAvatar
-              show={isLoggedIn}
+              show={!!token}
               defaultImg={anonymousUser}
               isDarkMode={isDarkMode}
               onClick={showAuthHandler}

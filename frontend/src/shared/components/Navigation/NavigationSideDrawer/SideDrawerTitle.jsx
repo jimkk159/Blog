@@ -27,7 +27,7 @@ import classes from "./SideDrawerTitle.module.css";
 function SideDrawerTitle(props) {
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const { avatar, isLoggedIn } = useSelector((state) => state.auth);
+  const { avatar, token } = useSelector((state) => state.auth);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
@@ -39,7 +39,7 @@ function SideDrawerTitle(props) {
 
   //Auth
   const showAuthHandler = () => {
-    if (!isLoggedIn) {
+    if (!token) {
       navigate("/auth", { state: { toLogin: true } });
       props.onCancel();
     }
@@ -55,12 +55,12 @@ function SideDrawerTitle(props) {
         className={`${classes["side-drawer__auth"]} ${
           isDarkMode ? classes["dark"] : classes["light"]
         }`}
-        style={isLoggedIn ? { justifyContent: "space-between" } : null}
+        style={!!token ? { justifyContent: "space-between" } : null}
       >
         <UserAvatar
-          show={isLoggedIn}
+          show={!!token}
           className={
-            isLoggedIn
+            !!token
               ? classes["side-drawer__avatar"]
               : classes["side-drawer__anonymous-avatar"]
           }
@@ -73,7 +73,7 @@ function SideDrawerTitle(props) {
           key={"sideDrawer-login_" + uuidKeys[0]}
           type="link"
           to="/auth"
-          show={!isLoggedIn}
+          show={!token}
           content={language.login}
           className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__login"]}`}
           navInitialState={{ toLogin: true }}
@@ -85,7 +85,7 @@ function SideDrawerTitle(props) {
           key={"sideDrawer-signup_" + uuidKeys[1]}
           type="link"
           to="/auth"
-          show={!isLoggedIn}
+          show={!token}
           content={language.signup}
           className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__signup"]}`}
           navInitialState={{ toLogin: false }}
@@ -99,7 +99,7 @@ function SideDrawerTitle(props) {
           onClick={() => {
             dispatch(logoutAuto());
           }}
-          show={isLoggedIn}
+          show={!!token}
           content={language.logout}
           className={`${classes["side-drawer__nav-link"]} ${classes["side-drawer__logout"]}`}
           icon={<LogoutIcon />}

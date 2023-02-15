@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function useAutoSave(savePostCallback, isToHome = false) {
   const [prevToken, setPrevToken] = useState(null);
-  const { token, isLoggedIn } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   //React Router
   const navigate = useNavigate();
@@ -15,14 +15,14 @@ function useAutoSave(savePostCallback, isToHome = false) {
   }, [token]);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!token) {
       savePostCallback(prevToken);
       setPrevToken(null);
       if (isToHome) {
         navigate("/");
       }
     }
-  }, [prevToken, isLoggedIn, savePostCallback, isToHome, navigate]);
+  }, [prevToken, token, savePostCallback, isToHome, navigate]);
 }
 
 export default useAutoSave;

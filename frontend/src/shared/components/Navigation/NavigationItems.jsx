@@ -23,7 +23,7 @@ import classes from "./NavigationItems.module.css";
 
 function NavigationItems(props) {
   //Redux
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const token = useSelector((state) => state.auth.token);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
 
@@ -52,7 +52,7 @@ function NavigationItems(props) {
       <NavigationItem
         key={"blog_" + uuidKeys[2]}
         to="/blog/new"
-        show={isLoggedIn}
+        show={!!token}
         content={language.blog}
         icon={<CreateIcon />}
         iconClassName={props.iconClassName}
@@ -63,7 +63,7 @@ function NavigationItems(props) {
         onClick={() => {
           navigate("/auth");
         }}
-        show={!isLoggedIn}
+        show={!token}
         content={language.login}
         icon={<LoginIcon />}
         iconClassName={`${props.iconClassName} ${props.login}`}
@@ -74,7 +74,7 @@ function NavigationItems(props) {
         onClick={() => {
           dispatch(logoutAuto());
         }}
-        show={isLoggedIn}
+        show={!!token}
         content={language.logout}
         icon={<LogoutIcon />}
         iconClassName={`${props.iconClassName} ${props.logout}`}

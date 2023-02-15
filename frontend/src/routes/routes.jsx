@@ -68,7 +68,7 @@ const SearchPage = loadable(
 
 export function RouteCreate() {
   //Redux
-  const { isLoggedIn, token, expiration } = useSelector((state) => state.auth);
+  const { token, expiration } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   //Set token automatically logout life cycle
@@ -111,7 +111,7 @@ export function RouteCreate() {
   // Route Setting
   let newBlogRoute = null;
   let authRoute = null;
-  if (isLoggedIn) {
+  if (token) {
     newBlogRoute = <Route path="new" element={<NewPostPage />} />;
   } else {
     // newBlogRoute = <Route path="new" element={<Navigate replace to="/" />} />;

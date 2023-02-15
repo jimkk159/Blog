@@ -23,7 +23,7 @@ import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 //CSS
 import classes from "./PostInfo.module.css";
 
-function PostInfo({ post, topic, isOdd, onDelete }) {
+function PostInfo({ post, topic, onPin, onDelete }) {
   const {
     id: pid,
     topic: topicText,
@@ -41,7 +41,7 @@ function PostInfo({ post, topic, isOdd, onDelete }) {
   const postDate = new Date(date).toLocaleDateString("en-US", options);
   const topicCover = topic?.cover
     ? topic?.cover?.startsWith("https://") ||
-    topic?.cover?.startsWith("http://")
+      topic?.cover?.startsWith("http://")
       ? `${topic?.cover}`
       : `${process.env.REACT_APP_BACKEND_URL}/${topic?.cover}`
     : null;
@@ -67,16 +67,17 @@ function PostInfo({ post, topic, isOdd, onDelete }) {
 
   //React Router
   const navigate = useNavigate();
-
   useEffect(() => {
     setCardColor(
       isDarkMode
-        ? classes["dark"]
-        : isOdd
-        ? classes["light-blue"]
-        : classes["light-green"]
+        ? !!pin
+          ? classes["dark-pin"]
+          : classes["dark"]
+        : !!pin
+        ? classes["light-pin"]
+        : classes["light"]
     );
-  }, [isOdd, isDarkMode]);
+  }, [pin, isDarkMode]);
 
   useEffect(() => {
     setTitle(
@@ -150,6 +151,7 @@ function PostInfo({ post, topic, isOdd, onDelete }) {
               date={postDate}
               isPined={!!pin}
               onEdit={editHandler}
+              onPin={onPin}
               onShowDelete={showDeleteHandler}
             />
             <hr />

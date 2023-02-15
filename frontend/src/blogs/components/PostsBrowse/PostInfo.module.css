@@ -30,18 +30,27 @@
   width: 10rem;
 }
 
+.dark-pin {
+  background-color: #3F3F3F;
+}
+.dark-pin:hover {
+  background-color: #4F4F4F;
+}
+.dark {
+  background-color: #5F5F5F;
+}
 .dark:hover {
-  background-color: #555;
+  background-color: #6F6F6F;
 }
-.light-blue {
-  background-color: #effafa;
+.light-pin{
+  background-color: #D7F0E0;
 }
-.light-blue:hover {
-  background-color: #dffafa;
+.light-pin:hover{
+  background-color: #C7E0D0;
 }
-.light-green {
-  background-color: #fafaef;
+.light {
+  background-color: #F0EEED;
 }
-.light-green:hover {
-  background-color: #f8f8df;
+.light:hover {
+  background-color: #E0DEDD;
 }
