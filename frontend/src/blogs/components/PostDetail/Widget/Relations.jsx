@@ -1,25 +1,38 @@
 import React from "react";
+import { useSelector } from "react-redux";
+
+//Custom Function
+import { choiceLanguage } from "../../../util/choiceLanguage";
+
+//Custom Component
+import RelatedArticle from "./RelatedArticle";
 
 //CSS
 import classes from "./Relations.module.css";
 
-function Relations(props) {
-  const { relations } = props;
+function Relations({ related }) {
+  const isEnglish = useSelector((state) => state.language.isEnglish);
+  const isDarkMode = useSelector((state) => state.theme.isDarkMode);
+
   return (
     <>
       <h1
         className={`${classes["title"]} ${
-          props.isDarkMode ? classes["dark"] : classes["light"]
+          isDarkMode ? classes["dark"] : classes["light"]
         }`}
       >
-        Segmentation 相關文章
+        {isEnglish ? "Related Articles" : "相關文章"}
       </h1>
       <ul className={classes["list-items"]}>
-        {relations.map((element, index) => (
-          <li key={index} className={classes["list-item"]}>
-            {element}
-          </li>
-        ))}
+        {related.map((post, index) => {
+          const title = choiceLanguage(
+            isEnglish,
+            post?.en,
+            post?.ch,
+            null
+          );
+          return <RelatedArticle key={index} title={title} />;
+        })}
       </ul>
     </>
   );

@@ -14,6 +14,7 @@ const initialState = {
   children: [],
   pin: false,
   tags: [],
+  related: [],
   oriCoverUrl: null,
   oriTopic: "",
   oriParent: "",
@@ -34,6 +35,7 @@ const postSlice = createSlice({
       state.pin = !!action.payload.pin;
       state.topicId = action.payload.topicId;
       state.coverUrl = action.payload.url;
+      state.related = action.payload.related;
       state.oriCoverUrl = action.payload.url;
       state.tags = action.payload.tags;
       state.oriTags = action.payload.tags;

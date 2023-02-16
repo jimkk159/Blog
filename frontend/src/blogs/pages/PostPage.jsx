@@ -132,7 +132,12 @@ function PostPage() {
           }
           return formData;
         };
-        const sendForm = createSendForm(imgMap, imgBlobs, convertedData, newTags);
+        const sendForm = createSendForm(
+          imgMap,
+          imgBlobs,
+          convertedData,
+          newTags
+        );
         await sendRequestSave(
           process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`,
           "PUT",
@@ -192,10 +197,22 @@ function PostPage() {
           ""
         );
         titleText = titleText ? titleText : "";
+        let enContent;
+        try {
+          enContent = JSON.parse(postContent?.en?.content);
+        } catch (err) {
+          enContent = null;
+        }
+        let chContent;
+        try {
+          chContent = JSON.parse(postContent?.ch?.content);
+        } catch (err) {
+          chContent = null;
+        }
         const postJSON = choiceLanguage(
           isEnglish,
-          JSON.parse(postContent?.en?.content),
-          JSON.parse(postContent?.ch?.content),
+          enContent,
+          chContent,
           convertToRaw(ContentState.createFromText(""))
         );
         const postContentState = convertFromRaw(postJSON);
@@ -222,11 +239,11 @@ function PostPage() {
             topicId: responseData.topic_id,
             pin: responseData.pin,
             url: cover,
+            related: responseData.related,
             tags: responseData.tags,
           })
         );
-      } catch (err) {
-      }
+      } catch (err) {}
     };
     fetchPost();
   }, [isEnglish, pid, dispatch, setEditorState, sendRequest]);

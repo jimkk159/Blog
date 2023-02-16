@@ -46,9 +46,9 @@ function ReadPost({
     date,
     coverUrl,
     topicCover,
+    related,
     tags,
   } = useSelector((state) => state.post);
-
   const isDarkMode = useSelector((state) => state.theme.value);
 
   return (
@@ -97,13 +97,7 @@ function ReadPost({
               readOnly
             />
             <Relations
-              isDarkMode={isDarkMode}
-              relations={[
-                "YOLACT (You Only Look At CoefficienTs) 系列介紹",
-                "YOLACT 訓練教學",
-                "蛤????",
-                "影像分割 Image Segmentation — 語義分割 Semantic Segmentation(1)",
-              ]}
+              related={related}
             />
             <div className={tagsClassName}>
               <Tags isDarkMode={isDarkMode} content={tags} />
