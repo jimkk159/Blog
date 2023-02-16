@@ -10,7 +10,6 @@ import HttpError from "./models/http-error.js";
 import usersRouters from "./routes/users-route.js";
 import postsRouters from "./routes/posts-route.js";
 import topicsRouters from "./routes/topics-route.js";
-import searchRouters from "./routes/search-route.js";
 
 const app = express();
 
@@ -40,7 +39,6 @@ app.use((req, res, next) => {
 app.use("/users", usersRouters);
 app.use("/posts", postsRouters);
 app.use("/topics", topicsRouters);
-app.use("/search", searchRouters);
 
 app.get("/", (req, res, next) => {
   res.json({ hello: "Hello World" });

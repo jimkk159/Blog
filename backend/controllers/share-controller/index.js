@@ -8,7 +8,6 @@ export const validation = (req, res, next) => {
   //Validate the req
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    console.log(errors);
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 422)
     );
@@ -67,7 +66,6 @@ export const replaceImageSrc = async (req, res, next) => {
       return next(new HttpError("Create New Post Failed!", 422));
     }
   } catch (err) {
-    console.log(err);
     const error = new HttpError("Create New Post Failed!", 500);
     return next(error);
   }

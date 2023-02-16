@@ -13,11 +13,12 @@ import {
   getPost,
   getFullPost,
   getFullPosts,
+  getPostSearch,
   checkPostAuthor,
   createNewPost,
   editPost,
   pinPost,
-  deletePost,
+  deletePost
 } from "../controllers/post-controller/index.js";
 import {
   validation,
@@ -27,6 +28,13 @@ import {
 
 const router = express.Router();
 
+router.get(
+  "/search",
+  [check("query").not().isEmpty()],
+  validation,
+  getPostSearch,
+  responseHttp
+);
 router.get("/", getFullPosts, responseHttp);
 router.get("/:pid", getFullPost, responseHttp);
 

@@ -15,7 +15,7 @@ export const getDBLastestFullPosts = async ({ number, current }) => {
       "`user`.`id` as `author_id`, `user`.`name` as `author`, `user`.`avatar` as `avatar`, " +
       "`postEn`.`title` as `en_title`, `postEn`.`short` as `en_short`, `postEn`.`content` as `en_content`, " +
       "`postCh`.`title` as `ch_title`, `postCh`.`short` as `ch_short`, `postCh`.`content` as `ch_content`, " +
-      "GROUP_CONCAT(`tag`.`tag`) " +
+      "GROUP_CONCAT(`tag`.`tag`) as tags " +
       "FROM `post` " +
       "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id` " +
       "LEFT JOIN `tag` ON `postTag`.`tag_id` = `tag`.`id` " +
@@ -28,6 +28,50 @@ export const getDBLastestFullPosts = async ({ number, current }) => {
     [+number, +current]
   );
   return posts;
+};
+
+export const getDBFullPostsByIds = async ({ number, ids, strict = false }) => {
+  let posts = [];
+  const queryString =
+    "SELECT `post`.`id`, `post`.`update`, `post`.`pin`, `post`.`cover`, `post`.`topic_id`, " +
+    "`topic`.`topic`, " +
+    "`user`.`id` as `author_id`, `user`.`name` as `author`, `user`.`avatar` as `avatar`, " +
+    "`postEn`.`title` as `en_title`, `postEn`.`short` as `en_short`, `postEn`.`content` as `en_content`, " +
+    "`postCh`.`title` as `ch_title`, `postCh`.`short` as `ch_short`, `postCh`.`content` as `ch_content`, " +
+    "GROUP_CONCAT(`tag`.`tag`) as tags " +
+    "FROM `post` " +
+    "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id` " +
+    "LEFT JOIN `tag` ON `postTag`.`tag_id` = `tag`.`id` " +
+    "LEFT JOIN `topic` ON `post`.`topic_id` = `topic`.`id` " +
+    "LEFT JOIN `user` ON `post`.`author_id` = `user`.`id` " +
+    "LEFT JOIN `postEn` ON `postEn`.`post_id` = `post`.`id` " +
+    "LEFT JOIN `postCh` ON `postCh`.`post_id` = `post`.`id` " +
+    "GROUP BY `post`.`id`";
+  const queryNumber = number ? number : 0;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    [posts] = await mysql_pool.query(queryString + "LIMIT ?;", [+queryNumber]);
+    return posts ? posts : [];
+  }
+
+  if (!strict) {
+    [posts] = await mysql_pool.query(
+      queryString +
+        "ORDER BY IF(FIELD(`post`.`id`, ?) = 0, 1, 0) " +
+        "LIMIT ?;",
+      [ids, +queryNumber]
+    );
+    return posts ? posts : [];
+  }
+
+  [posts] = await mysql_pool.query(
+    queryString.replace(
+      "FROM `post` ",
+      "FROM (SELECT * FROM `post` WHERE `post`.`id` in (?))`post` "
+    ) + "ORDER BY IF(FIELD(`post`.`id`, ?) = 0, 1, 0) LIMIT ?;",
+    [ids, ids, +queryNumber]
+  );
+  return posts ? posts : [];
 };
 
 //-----------------id---------------------
@@ -45,7 +89,7 @@ export const getDBFullPost = async (pid) => {
       "`user`.`id` as `author_id`, `user`.`name` as `author`, `user`.`avatar` as `avatar`, " +
       "`postEn`.`title` as `en_title`, `postEn`.`short` as `en_short`, `postEn`.`content` as `en_content`, " +
       "`postCh`.`title` as `ch_title`, `postCh`.`short` as `ch_short`, `postCh`.`content` as `ch_content`, " +
-      "GROUP_CONCAT(`tag`.`tag`) " +
+      "GROUP_CONCAT(`tag`.`tag`) as tags " +
       "FROM `post` " +
       "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id` " +
       "LEFT JOIN `tag` ON `postTag`.`tag_id` = `tag`.`id` " +
@@ -60,7 +104,7 @@ export const getDBFullPost = async (pid) => {
   return post[0];
 };
 
-export const getDBRelatedPost = async (pid, number) => {
+export const getDBRelatedPosts = async (pid, number) => {
   let tagIds;
   let post;
   let filter_posts;
@@ -88,12 +132,12 @@ export const getDBRelatedPost = async (pid, number) => {
     [filter_posts] = await mysql_pool.query(
       "SELECT `post`.`id` FROM " +
         "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post` " +
-        // "INNER JOIN " +
-        // "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
-        // "ON `postTag`.`post_id` = `post`.`id` " +
+        "INNER JOIN " +
+        "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
+        "ON `postTag`.`post_id` = `post`.`id` " +
         "WHERE `post`.`author_id` = ? AND `post`.`topic_id` = ? " +
-        "limit ?;",
-      [filterIDs, post?.author_id, post?.topic_id, number]
+        "LIMIT ?;",
+      [filterIDs, tagIds, post?.author_id, post?.topic_id, number]
     );
     if (filter_posts)
       filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
@@ -105,7 +149,7 @@ export const getDBRelatedPost = async (pid, number) => {
       "SELECT `post`.`id` FROM " +
         "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
         "WHERE (`post`.`author_id` = ? AND `post`.`topic_id` = ?) " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, post?.author_id, post?.topic_id, number]
     );
     if (filter_posts)
@@ -120,7 +164,7 @@ export const getDBRelatedPost = async (pid, number) => {
         "INNER JOIN " +
         "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
         "WHERE `post`.`topic_id` = ? " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, tagIds, post?.topic_id, number]
     );
     if (filter_posts)
@@ -135,7 +179,7 @@ export const getDBRelatedPost = async (pid, number) => {
         "INNER JOIN " +
         "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
         "WHERE `post`.`author_id` = ? " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, tagIds, post?.author_id, number]
     );
     if (filter_posts)
@@ -148,7 +192,7 @@ export const getDBRelatedPost = async (pid, number) => {
       "SELECT `post`.`id` FROM " +
         "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
         "WHERE `post`.`topic_id` = ? " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, post?.topic_id, number]
     );
     if (filter_posts)
@@ -162,7 +206,7 @@ export const getDBRelatedPost = async (pid, number) => {
         "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
         "INNER JOIN " +
         "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, tagIds, number]
     );
     if (filter_posts)
@@ -175,7 +219,7 @@ export const getDBRelatedPost = async (pid, number) => {
       "SELECT `post`.`id` FROM " +
         "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
         "WHERE `post`.`author_id` = ? " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, post?.author_id, number]
     );
     if (filter_posts)
@@ -192,28 +236,31 @@ export const getDBRelatedPost = async (pid, number) => {
       "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id` " +
       "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id` " +
       "ORDER BY IF(FIELD(`post`.`id`, ?) = 0, 1, 0) " +
-      "limit ?;",
+      "LIMIT ?;",
     [filterIDs, number]
   );
   search_posts = search_posts.slice(0, 5);
   return search_posts ? [...search_posts] : [];
 };
 
+//ToDo Search by
 export const getDBPostSearch = async (target, number) => {
   let filterIDs = [-1];
   let filter_posts;
   let search_posts;
 
+  const queryString =
+    "SELECT `post`.`id` FROM " +
+    "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` ";
   //Title En
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` FROM " +
-        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `postEn` WHERE `postEn`.`title` LIKE CONCAT('%', ?, '%') )`postEn` " +
         "ON `post`.`id` = `postEn`.`post_id` " +
         "ORDER BY " +
         "CASE WHEN (`postEn`.`title` = ?) THEN 0 ELSE 1 END ASC " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, target, number]
     );
     if (filter_posts)
@@ -223,13 +270,12 @@ export const getDBPostSearch = async (target, number) => {
   //Title Ch
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` FROM " +
-        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `postCh` WHERE `postCh`.`title` LIKE CONCAT('%', ?, '%') )`postCh` " +
         "ON `post`.`id` = `postCh`.`post_id` " +
         "ORDER BY " +
         "CASE WHEN (`postCh`.`title` = ?) THEN 0 ELSE 1 END ASC " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, target, number]
     );
     if (filter_posts)
@@ -239,11 +285,10 @@ export const getDBPostSearch = async (target, number) => {
   //Equal to topic
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` FROM " +
-        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `topic` WHERE `topic`.`topic` = ?)`topic` " +
         "ON `post`.`topic_id` = `topic`.`id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -253,12 +298,11 @@ export const getDBPostSearch = async (target, number) => {
   //Equal to tag
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` FROM " +
-        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "LEFT JOIN `postTag` ON `postTag`.`post_id` = `post`.`id`" +
         "INNER JOIN (SELECT * FROM `tag` WHERE `tag`.`tag` = ?)`tag` " +
         "ON `postTag`.`tag_id` = `tag`.`id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -268,11 +312,10 @@ export const getDBPostSearch = async (target, number) => {
   //Equal to author
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` FROM " +
-        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `user` WHERE `user`.`name` = ?)`user` " +
         "ON  `post`.`author_id` = `user`.`id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -282,11 +325,10 @@ export const getDBPostSearch = async (target, number) => {
   //Include topic
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` " +
-        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `topic` WHERE `topic`.`topic` LIKE CONCAT('%', ?, '%'))`topic` " +
         "ON `post`.`topic_id` = `topic`.`id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -296,12 +338,11 @@ export const getDBPostSearch = async (target, number) => {
   //Include tag
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` " +
-        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "LEFT JOIN `postTag` ON `postTag`.`post_id` = `post`.`id` " +
         "INNER JOIN (SELECT * FROM `tag` WHERE `tag`.`tag` LIKE CONCAT('%', ?, '%'))`tag` " +
         "ON `tag`.`id` = `postTag`.`tag_id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -311,11 +352,10 @@ export const getDBPostSearch = async (target, number) => {
   //Include author
   if (1 + number > filterIDs.length) {
     [filter_posts] = await mysql_pool.query(
-      "SELECT `post`.`id` " +
-        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+      queryString +
         "INNER JOIN (SELECT * FROM `user` WHERE `user`.`name` LIKE CONCAT('%', ?, '%'))`user` " +
         "ON `post`.`author_id` = `user`.`id` " +
-        "limit ?;",
+        "LIMIT ?;",
       [filterIDs, target, number]
     );
     if (filter_posts)
@@ -324,20 +364,11 @@ export const getDBPostSearch = async (target, number) => {
 
   filterIDs.shift();
   if (filterIDs.length === 0) return [];
-  [search_posts] = await mysql_pool.query(
-    "SELECT `post`.`id`, `post`.`author_id`, `user`.`name`, `post`.`topic_id`, `topic`.`topic`, `postEn`.`title` as `en` , `postCh`.`title` as `ch` " +
-      "FROM (SELECT * FROM `post` WHERE `post`.`id` in (?))`post` " +
-      "LEFT JOIN `user` ON  `post`.`author_id` = `user`.`id` " +
-      "LEFT JOIN `topic` ON `post`.`topic_id` = `topic`.`id` " +
-      "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id` " +
-      "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id` " +
-      "ORDER BY IF(FIELD(`post`.`id`,?) = 0, 1, 0) " +
-      "limit ?;",
-    [filterIDs, filterIDs, number]
-  );
-
-  search_posts = search_posts.slice(0, number);
-  return search_posts ? [...search_posts] : [];
+  return await getDBFullPostsByIds({
+    number,
+    ids: filterIDs,
+    strict: true,
+  });
 };
 
 //Reference: https://dba.stackexchange.com/questions/76973/what-is-faster-one-big-query-or-many-small-queries
