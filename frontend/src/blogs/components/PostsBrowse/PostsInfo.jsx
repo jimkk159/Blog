@@ -7,7 +7,7 @@ function PostsInfo({ isLoading, posts, topics, onPin, onDelete }) {
   if (isLoading) return <h2>Loading...</h2>;
 
   return posts.map((post, index) => {
-    const [topic] = topics.filter((topic) => post.topic === topic.topic);
+    const [topic] = topics?.filter((topic) => post.topic === topic.topic);
     return (
       <PostInfo
         key={index}

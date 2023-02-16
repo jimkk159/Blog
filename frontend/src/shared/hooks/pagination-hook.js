@@ -16,10 +16,12 @@ function usePagination({
 }) {
   const pagination = useMemo(() => {
     let totalPage = 0;
+    const offsetPage = !!offsetPosts ? 1 : 0;
     if (totalPosts < offsetPosts) {
       totalPage = 1;
     } else {
-      totalPage = Math.ceil((totalPosts - offsetPosts) / postsPerPage) + 1;
+      totalPage =
+        Math.ceil((totalPosts - offsetPosts) / postsPerPage) + offsetPage;
     }
 
     //Case 1

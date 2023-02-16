@@ -20,7 +20,6 @@ function Pagination(props) {
     offsetPosts=0,
     isDarkMode
   } = props;
-
   const paginationRange = usePagination({
     totalPosts,
     postsPerPage,
@@ -29,6 +28,7 @@ function Pagination(props) {
     offsetPosts,
   });
   const totalPage = paginationRange[paginationRange.length - 1];
+
   const onFirst = () => {
     onNavPage(1);
   };

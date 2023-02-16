@@ -21,15 +21,16 @@ function Tags({
   return (
     <div className={classes["detail-bottom"]}>
       <AiOutlineTag className={classes["icon"]} />
-      {content?.map((tag, index) => (
-        <Tag
-          key={index}
-          tag={tag}
-          isDarkMode={isDarkMode}
-          isEdit={isEdit}
-          onClick={() => onRemove(tag)}
-        />
-      ))}
+      {Array.isArray(content) &&
+        content?.map((tag, index) => (
+          <Tag
+            key={index}
+            tag={tag}
+            isDarkMode={isDarkMode}
+            isEdit={isEdit}
+            onClick={() => onRemove(tag)}
+          />
+        ))}
       {isEdit && (
         <Tag
           isEdit

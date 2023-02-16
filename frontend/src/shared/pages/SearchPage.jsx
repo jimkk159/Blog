@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 
 //Custom Hook
 import useHttp from "../hooks/http-hook";
+import useTopic from "../hooks/get-topics-hook";
 
 //Custom Comonent
 import ErrorModal from "../components/UI/Modal/ErrorModal";
@@ -29,6 +30,12 @@ function PostSearchPage() {
 
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
+  const {
+    topics,
+    isLoading: isLoadingTopic,
+    error: errorTopic,
+    clearError: clearErrorTopic,
+  } = useTopic();
 
   //Setting Page Post
   let indexOfFirstPost, indexOfLastPost, currentPosts;
@@ -55,7 +62,7 @@ function PostSearchPage() {
       try {
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL +
-            `/posts/search?search=${searchItem}`
+            `/posts/search?query=${searchItem}`
         );
         setPosts(responseData);
       } catch (err) {}
@@ -66,14 +73,21 @@ function PostSearchPage() {
   return (
     <>
       <ErrorModal error={error} onClear={clearError} isAnimate />
+      <ErrorModal error={errorTopic} onClear={clearErrorTopic} isAnimate />
       <div className={classes["container"]}>
-        {isLoading && (
+        {(isLoading || isLoadingTopic) && (
           <LoadingSpinner className={`loading-container`} />
         )}
-        {!isLoading && posts.length === 0 && <h1 className="center">Search Not Found</h1>}
+        {!isLoading && posts.length === 0 && (
+          <h1 className="center">Search Not Found</h1>
+        )}
         {!isLoading && posts.length > 0 && (
           <>
-            <PostsInfo posts={currentPosts} isDarkMode={isDarkMode} />
+            <PostsInfo
+              topics={topics}
+              posts={currentPosts}
+              isDarkMode={isDarkMode}
+            />
             <Pagination
               totalPosts={posts.length}
               postsPerPage={postsPerPage}
