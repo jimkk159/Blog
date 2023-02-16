@@ -1,13 +1,14 @@
 import {
   getDBPost,
   getDBFullPost,
+  getDBRelatedPost,
   getDBLastestFullPosts,
 } from "../../database/mysql/post/read.js";
 import HttpError from "../../models/http-error.js";
 
 export const getPost = async (req, res, next) => {
   const pid = req.params.pid;
-  
+
   let post;
   try {
     post = await getDBPost(pid);
@@ -42,10 +43,22 @@ export const getFullPost = async (req, res, next) => {
     );
     return next(error);
   }
-  
+
   //Post not find
   if (!post) {
     const error = new HttpError("Post not Find!", 404);
+    return next(error);
+  }
+
+  let related = [];
+  try {
+    related = await getDBRelatedPost(pid);
+    if (!related) related = [];
+  } catch (err) {
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
     return next(error);
   }
 
@@ -63,6 +76,7 @@ export const getFullPost = async (req, res, next) => {
     tags: post["GROUP_CONCAT(`tag`.`tag`)"]
       ? post["GROUP_CONCAT(`tag`.`tag`)"].split(",")
       : [],
+    related,
     content: {
       en: {
         title: post.en_title,
@@ -78,6 +92,26 @@ export const getFullPost = async (req, res, next) => {
   };
   res.locals.response = postInfo;
   res.locals.post = post;
+  next();
+};
+
+export const getRelatedPost = async (req, res, next) => {
+  const pid = req.params.pid;
+
+  let related;
+  try {
+    related = await getDBRelatedPost(pid);
+    if (!related) related = [];
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError(
+      "Finding post failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.locals.response = related;
   next();
 };
 

@@ -55,7 +55,58 @@ export const getDBFullPost = async (pid) => {
       "LEFT JOIN `postCh` ON `postCh`.`post_id` = `post`.`id` " +
       "WHERE `post`.`id` = ? " +
       "GROUP BY `post`.`id`",
-      [pid]
+    [pid]
   );
   return post[0];
+};
+
+export const getDBRelatedPost = async (pid, number) => {
+  let tags;
+  let post;
+  const [posts] = await mysql_pool.query(
+    "SELECT `post`.*, GROUP_CONCAT(DISTINCT `tag`.`id` SEPARATOR ',') as `tags` FROM `post` " +
+      "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id` " +
+      "LEFT JOIN `tag` ON `tag`.`id` = `postTag`.`tag_id` " +
+      "WHERE `post`.`id` = ?" +
+      "GROUP BY `post`.`id`;",
+    [pid]
+  );
+
+  post = posts[0];
+  if (tags) tags = post.tags.split(",");
+  else tags = [-1];
+  const [search_posts] = await mysql_pool.query(
+    "SELECT `post`.`id`, `post`.`author_id`, `user`.`name`, `post`.`topic_id`, `postEn`.`title` as `en` , `postCh`.`title` as `ch`  FROM `post`" +
+      "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id`" +
+      "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id`" +
+      "LEFT JOIN `user` ON  `post`.`author_id` = `user`.`id`" +
+      "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id`" +
+      "WHERE NOT `post`.`id` = ?" +
+      "GROUP BY `post`.`id` " +
+      "ORDER BY " +
+      "CASE WHEN (`post`.`author_id` = ? AND `post`.`topic_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC, " + //Satisfy the topic, author and tag
+      "CASE WHEN (`post`.`author_id` = ? AND `post`.`topic_id` = ?) THEN 0 ELSE 1 END ASC," + //Satisfy the topic, author
+      "CASE WHEN (`post`.`topic_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC, " + //Satisfy the topic and tag
+      "CASE WHEN (`post`.`author_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC," + //Satisfy the author and tag
+      "CASE WHEN (`post`.`topic_id` = ?)  THEN 0 ELSE 1 END ASC," + //Satisfy the topic
+      "CASE WHEN (`postTag`.`tag_id` IN (?))  THEN 0 ELSE 1 END ASC," + //Satisfy the tags
+      "CASE WHEN (`post`.`author_id` = ?)  THEN 0 ELSE 1 END ASC " + //Satisfy the author
+      "limit 5;",
+    [
+      pid,
+      post.author_id,
+      post.topic_id,
+      tags,
+      post.author_id,
+      post.topic_id,
+      post.topic_id,
+      tags,
+      post.author_id,
+      tags,
+      post.topic_id,
+      tags,
+      post.author_id,
+    ]
+  );
+  return search_posts;
 };
