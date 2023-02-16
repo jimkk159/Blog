@@ -1,18 +1,18 @@
-.detail-container {
-  margin-top: 1rem;
+.container {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  height: 100%;
 }
 
-.detail-upper {
-  height: 85%;
-}
-.detail-upper p {
+.container p {
   font-family: "Times New Roman";
-  font-size: 18px;
+  font-size: 16px;
   letter-spacing: 0.02rem;
-  line-height: 1.2;
+  line-height: 1;
   text-align: justify;
 }
-.detail-upper a {
+
+.container a {
   display: inline;
   text-decoration: none;
 }

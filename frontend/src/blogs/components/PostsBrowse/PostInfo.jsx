@@ -14,6 +14,7 @@ import { choiceLanguage } from "../../util/choiceLanguage";
 
 //Custom Component
 import PostInfoTitle from "./PostInfoTitle";
+import Tags from "../../../shared/components/UI/Tags";
 import Card from "../../../shared/components/UI/Card";
 import PostInfoDescription from "./PostInfoDescription";
 import ErrorModal from "../../../shared/components/UI/Modal/ErrorModal";
@@ -143,26 +144,29 @@ function PostInfo({ post, topic, onPin, onDelete }) {
         )}
         {!isLoading && (
           <div className={classes["info-content"]}>
-            <h1>{`[ ${topicText ? topicText : "  "} ] ${title}`}</h1>
-            <PostInfoTitle
-              postId={pid}
-              authorId={author_id}
-              author={author}
-              date={postDate}
-              isPined={!!pin}
-              onEdit={editHandler}
-              onPin={onPin}
-              onShowDelete={showDeleteHandler}
-            />
-            <hr />
-            <div className={classes["description-container"]}>
+            <div className={classes["cover"]}>
               <img src={postCover} alt="blog-cover" />
+            </div>
+            <div className={classes["description"]}>
+              <h2>{`[ ${topicText ? topicText : "  "} ] ${title}`}</h2>
+              <PostInfoTitle
+                postId={pid}
+                authorId={author_id}
+                author={author}
+                date={postDate}
+                isPined={!!pin}
+                onEdit={editHandler}
+                onPin={onPin}
+                onShowDelete={showDeleteHandler}
+              />
+              <hr />
               <PostInfoDescription
                 postId={pid}
                 short={short}
                 tags={postTags}
                 language={language}
               />
+              <Tags isDarkMode={isDarkMode} content={tags} />
             </div>
           </div>
         )}
