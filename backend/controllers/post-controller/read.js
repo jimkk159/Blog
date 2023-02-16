@@ -52,9 +52,10 @@ export const getFullPost = async (req, res, next) => {
 
   let related = [];
   try {
-    related = await getDBRelatedPost(pid);
+    related = await getDBRelatedPost(pid, 5);
     if (!related) related = [];
   } catch (err) {
+    console.log(err);
     const error = new HttpError(
       "Finding post failed, please try again later.",
       500
@@ -92,26 +93,6 @@ export const getFullPost = async (req, res, next) => {
   };
   res.locals.response = postInfo;
   res.locals.post = post;
-  next();
-};
-
-export const getRelatedPost = async (req, res, next) => {
-  const pid = req.params.pid;
-
-  let related;
-  try {
-    related = await getDBRelatedPost(pid);
-    if (!related) related = [];
-  } catch (err) {
-    console.log(err);
-    const error = new HttpError(
-      "Finding post failed, please try again later.",
-      500
-    );
-    return next(error);
-  }
-
-  res.locals.response = related;
   next();
 };
 
@@ -160,41 +141,4 @@ export const getFullPosts = async (req, res, next) => {
   res.locals.response = postInfos;
   res.locals.posts = posts;
   next();
-};
-
-// ToDo author
-export const getPostSearch = async (req, res, next) => {
-  //For Debug
-  const searchTarget = req.query.search;
-  const result = [];
-
-  //Level 1 Search Author
-  if (result.length < 150) {
-    const searchAuthor = blogs.filter((item) => {
-      return item.author.toLowerCase() === searchTarget.toLowerCase();
-    });
-    result.push(...searchAuthor);
-  }
-
-  //Level 2 Search topic
-  if (result.length < 150) {
-    const searchTopics = blogs.filter(
-      (item) => item.topic.toLowerCase() === searchTarget.toLowerCase()
-    );
-    result.push(...searchTopics);
-  }
-
-  //Level 3 Search include title
-  if (result.length < 150) {
-    const searchTitles = blogs.filter((item) => {
-      if (item.language?.title?.ch?.include(searchTarget)) return true;
-      return item.language?.title?.en
-        ?.toLowerCase()
-        .include(searchTarget.toLowerCase());
-    });
-    result.push(...searchTitles);
-  }
-
-  console.log("search", searchTarget, result);
-  res.json(result);
 };

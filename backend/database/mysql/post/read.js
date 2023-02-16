@@ -61,52 +61,286 @@ export const getDBFullPost = async (pid) => {
 };
 
 export const getDBRelatedPost = async (pid, number) => {
-  let tags;
+  let tagIds;
   let post;
+  let filter_posts;
+  let search_posts;
+
   const [posts] = await mysql_pool.query(
-    "SELECT `post`.*, GROUP_CONCAT(DISTINCT `tag`.`id` SEPARATOR ',') as `tags` FROM `post` " +
+    "SELECT `post`.*, GROUP_CONCAT(DISTINCT `tag`.`id` SEPARATOR ',') as `tags` " +
+      "FROM (SELECT * FROM `post` WHERE `post`.`id` = ?)`post` " +
       "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id` " +
       "LEFT JOIN `tag` ON `tag`.`id` = `postTag`.`tag_id` " +
-      "WHERE `post`.`id` = ?" +
       "GROUP BY `post`.`id`;",
     [pid]
   );
 
+  if (!posts) throw new Error("Finding Target Post Fail!");
+
+  let filterIDs = [+pid];
   post = posts[0];
-  if (tags) tags = post.tags.split(",");
-  else tags = [-1];
-  const [search_posts] = await mysql_pool.query(
-    "SELECT `post`.`id`, `post`.`author_id`, `user`.`name`, `post`.`topic_id`, `postEn`.`title` as `en` , `postCh`.`title` as `ch`  FROM `post`" +
-      "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id`" +
-      "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id`" +
-      "LEFT JOIN `user` ON  `post`.`author_id` = `user`.`id`" +
-      "LEFT JOIN `postTag` ON `post`.`id` = `postTag`.`post_id`" +
-      "WHERE NOT `post`.`id` = ?" +
-      "GROUP BY `post`.`id` " +
-      "ORDER BY " +
-      "CASE WHEN (`post`.`author_id` = ? AND `post`.`topic_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC, " + //Satisfy the topic, author and tag
-      "CASE WHEN (`post`.`author_id` = ? AND `post`.`topic_id` = ?) THEN 0 ELSE 1 END ASC," + //Satisfy the topic, author
-      "CASE WHEN (`post`.`topic_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC, " + //Satisfy the topic and tag
-      "CASE WHEN (`post`.`author_id` = ? AND `postTag`.`tag_id` IN (?)) THEN 0 ELSE 1 END ASC," + //Satisfy the author and tag
-      "CASE WHEN (`post`.`topic_id` = ?)  THEN 0 ELSE 1 END ASC," + //Satisfy the topic
-      "CASE WHEN (`postTag`.`tag_id` IN (?))  THEN 0 ELSE 1 END ASC," + //Satisfy the tags
-      "CASE WHEN (`post`.`author_id` = ?)  THEN 0 ELSE 1 END ASC " + //Satisfy the author
-      "limit 5;",
-    [
-      pid,
-      post.author_id,
-      post.topic_id,
-      tags,
-      post.author_id,
-      post.topic_id,
-      post.topic_id,
-      tags,
-      post.author_id,
-      tags,
-      post.topic_id,
-      tags,
-      post.author_id,
-    ]
+  tagIds = post?.tags;
+  if (tagIds) tagIds = post.tags.split(",");
+  else tagIds = [-1];
+
+  //author + topic + tags
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post` " +
+        // "INNER JOIN " +
+        // "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
+        // "ON `postTag`.`post_id` = `post`.`id` " +
+        "WHERE `post`.`author_id` = ? AND `post`.`topic_id` = ? " +
+        "limit ?;",
+      [filterIDs, post?.author_id, post?.topic_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //author + topic
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "WHERE (`post`.`author_id` = ? AND `post`.`topic_id` = ?) " +
+        "limit ?;",
+      [filterIDs, post?.author_id, post?.topic_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //topic + tags
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "INNER JOIN " +
+        "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
+        "WHERE `post`.`topic_id` = ? " +
+        "limit ?;",
+      [filterIDs, tagIds, post?.topic_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //author + tags
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "INNER JOIN " +
+        "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
+        "WHERE `post`.`author_id` = ? " +
+        "limit ?;",
+      [filterIDs, tagIds, post?.author_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //topic
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "WHERE `post`.`topic_id` = ? " +
+        "limit ?;",
+      [filterIDs, post?.topic_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //tags
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "INNER JOIN " +
+        "(SELECT * FROM `postTag` WHERE `postTag`.`tag_id` IN (?))`postTag` " +
+        "limit ?;",
+      [filterIDs, tagIds, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //author
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT IN (?))`post`" +
+        "WHERE `post`.`author_id` = ? " +
+        "limit ?;",
+      [filterIDs, post?.author_id, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  filterIDs.shift();
+  if (filterIDs.length === 0) return [];
+  [search_posts] = await mysql_pool.query(
+    "SELECT `post`.`id`, `post`.`author_id`, `user`.`name`, `post`.`topic_id`, `postEn`.`title` as `en` , `postCh`.`title` as `ch` " +
+      "FROM `post` " +
+      "LEFT JOIN `user` ON  `post`.`author_id` = `user`.`id` " +
+      "LEFT JOIN `topic` ON `post`.`topic_id` = `topic`.`id` " +
+      "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id` " +
+      "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id` " +
+      "ORDER BY IF(FIELD(`post`.`id`, ?) = 0, 1, 0) " +
+      "limit ?;",
+    [filterIDs, number]
   );
-  return search_posts;
+  search_posts = search_posts.slice(0, 5);
+  return search_posts ? [...search_posts] : [];
 };
+
+export const getDBPostSearch = async (target, number) => {
+  let filterIDs = [-1];
+  let filter_posts;
+  let search_posts;
+
+  //Title En
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `postEn` WHERE `postEn`.`title` LIKE CONCAT('%', ?, '%') )`postEn` " +
+        "ON `post`.`id` = `postEn`.`post_id` " +
+        "ORDER BY " +
+        "CASE WHEN (`postEn`.`title` = ?) THEN 0 ELSE 1 END ASC " +
+        "limit ?;",
+      [filterIDs, target, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Title Ch
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `postCh` WHERE `postCh`.`title` LIKE CONCAT('%', ?, '%') )`postCh` " +
+        "ON `post`.`id` = `postCh`.`post_id` " +
+        "ORDER BY " +
+        "CASE WHEN (`postCh`.`title` = ?) THEN 0 ELSE 1 END ASC " +
+        "limit ?;",
+      [filterIDs, target, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Equal to topic
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `topic` WHERE `topic`.`topic` = ?)`topic` " +
+        "ON `post`.`topic_id` = `topic`.`id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Equal to tag
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "LEFT JOIN `postTag` ON `postTag`.`post_id` = `post`.`id`" +
+        "INNER JOIN (SELECT * FROM `tag` WHERE `tag`.`tag` = ?)`tag` " +
+        "ON `postTag`.`tag_id` = `tag`.`id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Equal to author
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` FROM " +
+        "(SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `user` WHERE `user`.`name` = ?)`user` " +
+        "ON  `post`.`author_id` = `user`.`id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Include topic
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` " +
+        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `topic` WHERE `topic`.`topic` LIKE CONCAT('%', ?, '%'))`topic` " +
+        "ON `post`.`topic_id` = `topic`.`id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Include tag
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` " +
+        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "LEFT JOIN `postTag` ON `postTag`.`post_id` = `post`.`id` " +
+        "INNER JOIN (SELECT * FROM `tag` WHERE `tag`.`tag` LIKE CONCAT('%', ?, '%'))`tag` " +
+        "ON `tag`.`id` = `postTag`.`tag_id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  //Include author
+  if (1 + number > filterIDs.length) {
+    [filter_posts] = await mysql_pool.query(
+      "SELECT `post`.`id` " +
+        "FROM (SELECT * FROM `post` WHERE `post`.`id` NOT in (?))`post` " +
+        "INNER JOIN (SELECT * FROM `user` WHERE `user`.`name` LIKE CONCAT('%', ?, '%'))`user` " +
+        "ON `post`.`author_id` = `user`.`id` " +
+        "limit ?;",
+      [filterIDs, target, number]
+    );
+    if (filter_posts)
+      filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
+  }
+
+  filterIDs.shift();
+  if (filterIDs.length === 0) return [];
+  [search_posts] = await mysql_pool.query(
+    "SELECT `post`.`id`, `post`.`author_id`, `user`.`name`, `post`.`topic_id`, `topic`.`topic`, `postEn`.`title` as `en` , `postCh`.`title` as `ch` " +
+      "FROM (SELECT * FROM `post` WHERE `post`.`id` in (?))`post` " +
+      "LEFT JOIN `user` ON  `post`.`author_id` = `user`.`id` " +
+      "LEFT JOIN `topic` ON `post`.`topic_id` = `topic`.`id` " +
+      "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id` " +
+      "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id` " +
+      "ORDER BY IF(FIELD(`post`.`id`,?) = 0, 1, 0) " +
+      "limit ?;",
+    [filterIDs, filterIDs, number]
+  );
+
+  search_posts = search_posts.slice(0, number);
+  return search_posts ? [...search_posts] : [];
+};
+
+//Reference: https://dba.stackexchange.com/questions/76973/what-is-faster-one-big-query-or-many-small-queries
+//Reference: https://dba.stackexchange.com/questions/36391/is-there-an-execution-difference-between-a-join-condition-and-a-where-condition/36409#36409
+//Reference: https://dba.stackexchange.com/questions/109120/how-does-order-by-field-in-mysql-work-internally
+//Reference: https://stackoverflow.com/questions/67349706/which-one-is-better-iterate-and-sort-data-in-backend-or-let-the-database-handle

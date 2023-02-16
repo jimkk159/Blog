@@ -14,8 +14,6 @@ import {
   getFullPost,
   getFullPosts,
   checkPostAuthor,
-  getPostSearch,
-  getRelatedPost,
   createNewPost,
   editPost,
   pinPost,
@@ -30,9 +28,7 @@ import {
 const router = express.Router();
 
 router.get("/", getFullPosts, responseHttp);
-router.get("/search", getPostSearch, responseHttp);
 router.get("/:pid", getFullPost, responseHttp);
-router.get("/test/:pid", getRelatedPost, responseHttp);
 
 // check token middleware
 router.use(checkAuth);
