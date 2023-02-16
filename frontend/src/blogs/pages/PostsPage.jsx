@@ -15,10 +15,10 @@ import LoadingSpinner from "../../shared/components/UI/LoadingSpinner";
 //CSS
 import classes from "./PostsPage.module.css";
 
-const postsOfHome = 8;
+const postsOfHome = 15;
 const siblingCount = 1;
-const postsPerPage = 10;
-const postsPerRequest = 50;
+const postsPerPage = 20;
+const postsPerRequest = 300;
 function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);

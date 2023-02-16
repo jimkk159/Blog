@@ -25,13 +25,8 @@ function Relations({ related }) {
       </h1>
       <ul className={classes["list-items"]}>
         {related.map((post, index) => {
-          const title = choiceLanguage(
-            isEnglish,
-            post?.en,
-            post?.ch,
-            null
-          );
-          return <RelatedArticle key={index} title={title} />;
+          const title = choiceLanguage(isEnglish, post?.en, post?.ch, null);
+          return <RelatedArticle key={index} pid={post.id} title={title} />;
         })}
       </ul>
     </>
