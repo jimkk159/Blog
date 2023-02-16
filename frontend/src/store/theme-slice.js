@@ -6,6 +6,7 @@ const themeSlice = createSlice({
   initialState,
   reducers: {
     toggle: (state) => {
+      console.log(state.value);
       state.value = !state.value;
     },
   },

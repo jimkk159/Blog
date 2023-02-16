@@ -110,7 +110,7 @@ function PostInfo({ post, topic, onPin, onDelete }) {
   const editHandler = (event) => {
     event.stopPropagation();
     console.log("edit");
-    navigate(`/blog/${pid}`, { state: { isEdit: true } });
+    navigate(`/blog/${pid}`, { state: { isEdit: true, collapse: true } });
   };
 
   //Delete

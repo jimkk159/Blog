@@ -17,7 +17,6 @@ function Tags({
   onKeyDown,
   onRemove,
 }) {
-
   return (
     <div className={classes["detail-bottom"]}>
       <AiOutlineTag className={classes["icon"]} />
@@ -28,7 +27,9 @@ function Tags({
             tag={tag}
             isDarkMode={isDarkMode}
             isEdit={isEdit}
-            onClick={() => onRemove(tag)}
+            onClick={() => {
+              if (onRemove) onRemove(tag);
+            }}
           />
         ))}
       {isEdit && (

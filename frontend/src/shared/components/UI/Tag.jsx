@@ -1,41 +1,32 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 //CSS
 import classes from "./Tag.module.css";
 
 function Tag(props) {
   const { className, tag, isEdit, isDarkMode, onClick, onKeyDown } = props;
-  if (isEdit)
-    return (
-      <div
-        className={`${className} ${classes["tag"]} ${
-          isDarkMode ? classes["dark"] : classes["light"]
-        }`}
-        onKeyDown={onKeyDown}
-        onClick={onClick}
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        {tag}
-      </div>
-    );
+  const navigate = useNavigate();
+  const clickHandler = () => {
+    if (onClick) onClick();
+    if (!isEdit) {
+      navigate(`/search/${tag}`);
+    }
+  };
+
   return (
-    <Link
-      to={`/search/${tag}`}
+    <div
       className={`${className} ${classes["tag"]} ${
         isDarkMode ? classes["dark"] : classes["light"]
       }`}
+      onKeyDown={() => {
+        if (onKeyDown && isEdit) onKeyDown();
+      }}
       onMouseDown={(event) => event.stopPropagation()}
-      onClick={
-        onClick
-          ? onClick
-          : (event) => {
-              event.stopPropagation();
-            }
-      }
+      onClick={clickHandler}
     >
       {tag}
-    </Link>
+    </div>
   );
 }
 

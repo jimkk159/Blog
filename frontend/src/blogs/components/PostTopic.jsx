@@ -1,5 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { BsChevronUp, BsChevronDown } from "react-icons/bs";
 
 //Redux Slice
 import { postActions } from "../../store/post-slice";
@@ -20,8 +22,15 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
 
   //Redux
   const { topic, parent, children } = useSelector((state) => state.post);
+  const [collapse, setCollapse] = useState(!!topic);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
+
+  //React Router
+  const location = useLocation();
+  const initCollapse = location?.state?.collapse
+    ? location.state.collapse
+    : false;
 
   //Input Search
   const searchChangeHandler = (event) => {
@@ -105,8 +114,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
 
   //Set Parent
   const setParentHandler = (parent) => {
-    if (topicArray.includes(topic))
-      return dispatch(postActions.resetTopic());
+    if (topicArray.includes(topic)) return dispatch(postActions.resetTopic());
 
     //Reset Parent
     const [findingTopic] = topics.filter(
@@ -118,8 +126,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
 
   //Set Child
   const setChildHandler = (child) => {
-    if (topicArray.includes(topic))
-      return dispatch(postActions.resetTopic());
+    if (topicArray.includes(topic)) return dispatch(postActions.resetTopic());
 
     const [findingTopic] = topics.filter(
       (topic) => topic?.topic.toLowerCase() === child.toLowerCase()
@@ -135,82 +142,104 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
     );
   };
 
+  useEffect(() => {
+    setCollapse(initCollapse);
+  }, [initCollapse]);
+
   return (
     <Card className={`${classes["container"]}`} isDarkMode={isDarkMode}>
+      {collapse && (
+        <BsChevronUp
+          className={classes["collapse"]}
+          onClick={() => {
+            setCollapse(false);
+          }}
+        />
+      )}
       <h1 className={`${classes["title"]}`}>{language.topic}</h1>
-      <input
-        ref={searchRef}
-        type="text"
-        value={searchItem}
-        className={`${classes["topic-input"]} ${
-          isDarkMode ? classes["input-dark"] : classes["input-light"]
-        }`}
-        placeholder={"Search..."}
-        onChange={searchChangeHandler}
-        onKeyDown={(event) => searchKeyDownHandler(event)}
-      />
-      <hr className={`${classes["topic-hr"]}`} />
-      <div
-        className={`${classes["topic-container"]} ${
-          isDarkMode ? classes["topics-dark"] : classes["topics-light"]
-        }`}
-      >
-        <div className={classes["topic-tags"]}>
-          {topicArray.map((topicTag, index) => {
-            const topicToLower = topicTag?.toLowerCase();
-            if (
-              topicToLower.includes(searchItem?.toLowerCase()) &&
-              topicToLower !== "root"
-            )
-              return (
-                <Tag
-                  key={index}
-                  className={classes["tag"]}
-                  tag={topicTag}
-                  isEdit
-                  isDarkMode={isDarkMode}
-                  onClick={() => topicHandler(topicTag)}
-                />
-              );
-            else return null;
-          })}
-        </div>
-        <div className={classes["topic-description"]}>
-          <PostTopicQuestion
-            key={"topic"}
-            description={language.topicQ1}
-            showTag={topic}
-            tags={topic}
-            isDarkMode={isDarkMode}
-            onTag={() => {
-              resetTopicHandler();
-              onRemove(topic);
+      {!collapse && (
+        <>
+          <BsChevronDown
+            className={classes["collapse"]}
+            onClick={() => {
+              setCollapse(true);
             }}
           />
-          <PostTopicQuestion
-            key={"parent"}
-            description={language.topicQ2}
-            showTag={parent}
-            tags={parent}
-            isDarkMode={isDarkMode}
-            onTag={() => setParentHandler(parent)}
+          <input
+            ref={searchRef}
+            type="text"
+            value={searchItem}
+            className={`${classes["topic-input"]} ${
+              isDarkMode ? classes["input-dark"] : classes["input-light"]
+            }`}
+            placeholder={"Search..."}
+            onChange={searchChangeHandler}
+            onKeyDown={(event) => searchKeyDownHandler(event)}
           />
-          <PostTopicQuestion
-            key={"children"}
-            description={language.topicQ3}
-            tags={children}
-            isDarkMode={isDarkMode}
-            onTag={setChildHandler}
-          />
-        </div>
-        <GuideOpen
-          className={`${classes["topic-graphic"]}`}
-          topics={topics}
-          isDarkMode={!isDarkMode}
-          isEdit
-          onEdit={topicHandler}
-        />
-      </div>
+          <hr className={`${classes["topic-hr"]}`} />
+          <div
+            className={`${classes["topic-container"]} ${
+              isDarkMode ? classes["topics-dark"] : classes["topics-light"]
+            }`}
+          >
+            <div className={classes["topic-tags"]}>
+              {topicArray.map((topicTag, index) => {
+                const topicToLower = topicTag?.toLowerCase();
+                if (
+                  topicToLower.includes(searchItem?.toLowerCase()) &&
+                  topicToLower !== "root"
+                )
+                  return (
+                    <Tag
+                      key={index}
+                      className={classes["tag"]}
+                      tag={topicTag}
+                      isEdit
+                      isDarkMode={isDarkMode}
+                      onClick={() => topicHandler(topicTag)}
+                    />
+                  );
+                else return null;
+              })}
+            </div>
+            <div className={classes["topic-description"]}>
+              <PostTopicQuestion
+                key={"topic"}
+                description={language.topicQ1}
+                showTag={topic}
+                tags={topic}
+                isDarkMode={isDarkMode}
+                onTag={() => {
+                  resetTopicHandler();
+                  onRemove(topic);
+                }}
+              />
+              <PostTopicQuestion
+                key={"parent"}
+                description={language.topicQ2}
+                showTag={parent}
+                tags={parent}
+                isDarkMode={isDarkMode}
+                onTag={() => setParentHandler(parent)}
+              />
+              <PostTopicQuestion
+                key={"children"}
+                description={language.topicQ3}
+                tags={children}
+                isDarkMode={isDarkMode}
+                onTag={setChildHandler}
+              />
+            </div>
+            <GuideOpen
+              className={`${classes["topic-graphic"]}`}
+              topics={topics}
+              isDarkMode={!isDarkMode}
+              isEdit
+              onEdit={topicHandler}
+            />
+          </div>
+        </>
+      )}
     </Card>
   );
 }
