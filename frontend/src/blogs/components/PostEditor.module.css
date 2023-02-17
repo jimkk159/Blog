@@ -1,5 +1,9 @@
 .post-container {
   padding: 1.5rem 3rem 3rem;
+  font-family: "Noto Sans TC", "Segoe UI", "Helvetica Neue", Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "微軟正黑體",
+    "Microsoft JhengHei", Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro",
+    "LiHei Pro";
 }
 .editor-container {
   min-height: 10rem;

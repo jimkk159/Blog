@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  RichUtils,
-  EditorState,
-  ContentState,
-  getDefaultKeyBinding,
-} from "draft-js";
+import { RichUtils, EditorState, getDefaultKeyBinding } from "draft-js";
 import Editor from "@draft-js-plugins/editor";
+import { createEditorStateWithText } from "@draft-js-plugins/editor";
 
 //Redux Slice
 import { tagActions } from "../../store/tag-slice";
@@ -18,6 +14,7 @@ import { options } from "../util/time";
 import { styleMap } from "../../shared/util/style-map";
 import plugins, {
   AlignmentTool,
+  InlineToolbar,
 } from "../../shared/components/TextEditor/Plugin";
 import { createLinkDecorator } from "../../shared/components/TextEditor/decorators/LinkDecorator";
 import {
@@ -67,15 +64,13 @@ function PostEditor({
 
   //Set tilte when press Enter
   const titleKeyDownHandler = (event) => {
-    if (event.key === "Enter") {
-      const currentContent = titleState.getCurrentContent();
-      const contentBlock = currentContent.getFirstBlock();
-      const title = contentBlock.getText().trim();
-      titleRef.current.blur();
-      onChangeTitle(
-        EditorState.createWithContent(ContentState.createFromText(title))
-      );
-    }
+    // if (event.key === "Enter") {
+    //   const currentContent = titleState.getCurrentContent();
+    //   const contentBlock = currentContent.getFirstBlock();
+    //   const title = contentBlock.getText().trim();
+    //   titleRef.current.blur();
+    //   onChangeTitle(createEditorStateWithText(title));
+    // }
   };
 
   const titleContent = (
@@ -104,9 +99,7 @@ function PostEditor({
   //Search Handler
   const searchHandler = (target) => {
     setSearchItem(target);
-    onChangeTag(
-      EditorState.createWithContent(ContentState.createFromText(target))
-    );
+    onChangeTag(createEditorStateWithText(target));
   };
 
   //Sync editor and input
@@ -266,6 +259,7 @@ function PostEditor({
             editContent={editorTag}
           />
         </div>
+        <InlineToolbar />
       </Card>
       <AlignmentTool />
     </div>

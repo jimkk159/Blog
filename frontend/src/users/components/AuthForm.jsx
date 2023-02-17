@@ -264,3 +264,4 @@ function AuthForm(props) {
 }
 
 export default AuthForm;
+//Reference: https://stackoverflow.com/questions/65684070/should-i-use-local-storage-to-store-user-data

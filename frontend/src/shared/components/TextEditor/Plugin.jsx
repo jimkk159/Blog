@@ -5,17 +5,20 @@ import createImagePlugin from "@draft-js-plugins/image";
 import createAlignmentPlugin from "@draft-js-plugins/alignment";
 import createBlockDndPlugin from "@draft-js-plugins/drag-n-drop";
 import createResizeablePlugin from "@draft-js-plugins/resizeable";
+import createInlineToolbarPlugin from "@draft-js-plugins/inline-toolbar";
 import createDragNDropUploadPlugin from "@draft-js-plugins/drag-n-drop-upload";
 
 //CSS
 import "@draft-js-plugins/image/lib/plugin.css";
 import "@draft-js-plugins/alignment/lib/plugin.css";
+import "@draft-js-plugins/inline-toolbar/lib/plugin.css";
 import classes from "./Plugin.module.css";
 
 const focusPlugin = createFocusPlugin();
 const resizeablePlugin = createResizeablePlugin({ vertical: "relative" });
 const blockDndPlugin = createBlockDndPlugin();
 const alignmentPlugin = createAlignmentPlugin();
+const inlineToolbarPlugin = createInlineToolbarPlugin();
 
 const decorator = composeDecorators(
   resizeablePlugin.decorator,
@@ -95,7 +98,9 @@ const plugins = [
   alignmentPlugin,
   resizeablePlugin,
   imagePlugin,
+  inlineToolbarPlugin,
 ];
 
 export default plugins;
 export const { AlignmentTool } = alignmentPlugin;
+export const { InlineToolbar } = inlineToolbarPlugin;

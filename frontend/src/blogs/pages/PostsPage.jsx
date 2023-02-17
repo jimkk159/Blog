@@ -19,6 +19,7 @@ const postsOfHome = 15;
 const siblingCount = 1;
 const postsPerPage = 20;
 const postsPerRequest = 300;
+
 function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [isHome, setIsHome] = useState(true);

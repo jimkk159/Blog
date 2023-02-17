@@ -7,6 +7,7 @@ import {
   convertToRaw,
   convertFromRaw,
 } from "draft-js";
+import { createEditorStateWithText } from "@draft-js-plugins/editor";
 
 //Redux Slice
 import { postActions } from "../../store/post-slice";
@@ -218,9 +219,7 @@ function PostPage() {
         const postContentState = convertFromRaw(postJSON);
         setOriginState(EditorState.createWithContent(postContentState));
         setEditorState(EditorState.createWithContent(postContentState));
-        setTitleState(
-          EditorState.createWithContent(ContentState.createFromText(titleText))
-        );
+        setTitleState(createEditorStateWithText(titleText));
         const responseCover = responseData.cover;
         const cover = responseCover
           ? responseCover.startsWith("https://") ||
