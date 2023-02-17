@@ -13,6 +13,8 @@ export const loginAuto = (userData) => {
         name: userData.name,
         avatar: userData.avatar,
         token: userData.token,
+        theme: userData.theme,
+        language: userData.language,
         expiration: userData.expiration,
       })
     );

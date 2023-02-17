@@ -4,6 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 //Redux Thunk
 import { loginAuto } from "../../store/auth-thunk";
 
+//Redux Slice
+import { themeActions } from "../../store/theme-slice";
+import { languageActions } from "../../store/language-slice";
+
 //Custom Component
 import Card from "../../shared/components/UI/Card";
 import Input from "../../shared/components/Form/Input";
@@ -40,7 +44,7 @@ function AuthForm(props) {
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
-  const language = useSelector((state) => state.language.language);
+  const { language, isEnglish } = useSelector((state) => state.language);
   const dispatch = useDispatch();
 
   //Custom Hook
@@ -107,6 +111,16 @@ function AuthForm(props) {
             "Content-Type": "application/json",
           }
         );
+
+        //Theme
+        if (!!+responseData.theme) dispatch(themeActions.setDark());
+        else dispatch(themeActions.setLight());
+
+        //Language
+        if (responseData.language === "en") dispatch(languageActions.setEnglish());
+        if (responseData.language === "ch") dispatch(languageActions.setChinese());
+
+        //UserInfo
         dispatch(
           loginAuto({
             uid: responseData.uid,
@@ -114,6 +128,8 @@ function AuthForm(props) {
             name: responseData.name,
             avatar: responseData.avatar,
             token: responseData.token,
+            theme: responseData.theme,
+            language: responseData.language,
             expiration: new Date(
               new Date().getTime() + 3 * 60 * 60 * 1000 //Token Lifecycle is 1h
             ).toISOString(),
@@ -129,6 +145,9 @@ function AuthForm(props) {
         formData.append(imageKey, formState.inputs[imageKey].value);
         formData.append(emailKey, formState.inputs[emailKey].value);
         formData.append(passwordKey, formState.inputs[passwordKey].value);
+        formData.append(passwordKey, formState.inputs[passwordKey].value);
+        formData.append("theme", isDarkMode ? 1 : 0);
+        formData.append("language", isEnglish ? "en" : "ch");
         const responseData = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + "/users/signup",
           "POST",
@@ -141,6 +160,8 @@ function AuthForm(props) {
             name: responseData.name,
             avatar: responseData.avatar,
             token: responseData.token,
+            theme: responseData.theme,
+            language: responseData.language,
             expiration: new Date(
               new Date().getTime() + 3 * 60 * 60 * 1000 //Token Lifecycle is 1h
             ).toISOString(),

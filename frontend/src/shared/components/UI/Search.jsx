@@ -47,7 +47,7 @@ function Search(props) {
   //Search
   const searchHandler = (event) => {
     if (isSearch && event.key === "Enter" && searchItem) {
-      navigate(`/search/${searchItem}`);
+      navigate(`/search/${searchItem}`, { state: { search: searchItem } });
       setSearchItem("");
     }
   };

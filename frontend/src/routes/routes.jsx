@@ -12,6 +12,10 @@ import { useSelector, useDispatch } from "react-redux";
 //Redux Thunk
 import { loginAuto, logoutAuto } from "../store/auth-thunk";
 
+//Redux Slice
+import { themeActions } from "../store/theme-slice";
+import { languageActions } from "../store/language-slice";
+
 //Custom Hook
 import useMediaQuery from "../shared/hooks/media-query-hook";
 
@@ -92,6 +96,16 @@ export function RouteCreate() {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (userData?.token && new Date(userData.expiration) > new Date()) {
+
+      //Theme
+      if (!!+userData.theme) dispatch(themeActions.setDark());
+      else dispatch(themeActions.setLight());
+      
+      //Language
+      if (userData.language === "en") dispatch(languageActions.setEnglish());
+      if (userData.language === "ch") dispatch(languageActions.setChinese());
+
+      //UserInfo
       dispatch(
         loginAuto({
           uid: userData.uid,
@@ -99,6 +113,8 @@ export function RouteCreate() {
           name: userData.name,
           avatar: userData.avatar,
           token: userData.token,
+          theme: userData.theme,
+          language: userData.language,
           expiration: userData.expiration,
         })
       );

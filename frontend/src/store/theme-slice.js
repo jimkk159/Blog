@@ -5,8 +5,13 @@ const themeSlice = createSlice({
   name: "theme",
   initialState,
   reducers: {
+    setDark: (state) => {
+      state.value = true;
+    },
+    setLight: (state) => {
+      state.value = false;
+    },
     toggle: (state) => {
-      console.log(state.value);
       state.value = !state.value;
     },
   },
