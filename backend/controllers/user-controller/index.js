@@ -32,11 +32,14 @@ export const signup = async (req, res, next) => {
   console.log("Sign Up");
   const user = res.locals.user;
   const token = res.locals.token;
+
   res.locals.response = {
     uid: user.id,
     admin: user.admin,
     name: user.name,
     avatar: user.avatar,
+    theme: user.theme,
+    language: user.language,
     token: token,
   };
   next();
@@ -52,6 +55,8 @@ export const login = async (req, res, next) => {
     admin: user.admin,
     name: user.name,
     avatar: user.avatar,
+    theme: user.theme,
+    language: user.language,
     token: token,
   };
   next();

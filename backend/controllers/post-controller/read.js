@@ -145,7 +145,6 @@ export const getPostSearch = async (req, res, next) => {
   //For Debug
   const searchTarget = req.query.query;
   let posts = [];
-
   try {
     posts = await getDBPostSearch(searchTarget, 5);
     if (!posts) posts = [];

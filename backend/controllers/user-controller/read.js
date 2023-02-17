@@ -1,9 +1,11 @@
 import HttpError from "../../models/http-error.js";
 import {
   getDBUser,
+  getDBFullUser,
   getDBUsers,
   getDBUserByEmail,
 } from "../../database/mysql/user/read.js";
+import { getDBPrefer } from "../../database/mysql/prefer/read.js";
 
 //Get User
 export const getUser = async (req, res, next) => {
@@ -39,7 +41,7 @@ export const getUserbyParams = async (req, res, next) => {
   const uid = req.params.uid;
   let user;
   try {
-    user = await getDBUser(uid);
+    user = await getDBFullUser(uid);
   } catch (err) {
     const error = new HttpError(
       "Finding user failed, please try again later.",
@@ -93,7 +95,28 @@ export const getUserbyEmail = async (req, res, next) => {
     );
     return next(error);
   }
+
   res.locals.user = user;
+  res.locals.is_email = !!user;
+  next();
+};
+
+//Get Prefer by User
+export const getUserPrefer = async (req, res, next) => {
+  const user = res.locals.user;
+
+  let prefer;
+  try {
+    prefer = await getDBPrefer(user?.prefer_id);
+  } catch (err) {
+    const error = new HttpError(
+      "Finding user prefer failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.locals.user = { ...user, theme: prefer.theme, language: prefer.language };
   res.locals.is_email = !!user;
   next();
 };

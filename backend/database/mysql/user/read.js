@@ -8,6 +8,14 @@ export const getDBUser = async (uid) => {
   return user[0];
 };
 
+export const getDBFullUser = async (uid) => {
+  const [user] = await mysql_pool.query(
+    "SELECT * FROM `user` LEFT JOIN `prefer` ON `user`.`id` = `prefer`.`id` WHERE `user`.`id` = ? ",
+    [uid]
+  );
+  return user[0];
+};
+
 export const getDBUsers = async () => {
   const [users] = await mysql_pool.query("SELECT * FROM `user`");
   return users;

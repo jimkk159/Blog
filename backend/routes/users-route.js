@@ -9,6 +9,7 @@ import {
   getIsEmailEmpty,
   createNewUser,
   getIsEmail,
+  getUserPrefer,
   login,
   signup,
 } from "../controllers/user-controller/index.js";
@@ -33,6 +34,7 @@ router.post(
   validation,
   getUserbyEmail,
   getIsEmail,
+  getUserPrefer,
   generateToken,
   login,
   responseHttp
@@ -44,6 +46,8 @@ router.post(
     check("name").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
     check("password").isLength({ min: 6 }),
+    check("theme").not().isEmpty(),
+    check("language").not().isEmpty(),
   ],
   validation,
   getUserbyEmail,
