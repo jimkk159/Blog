@@ -39,7 +39,6 @@ import classes from "./PostEditor.module.css";
 const decorator = createLinkDecorator();
 function PostEditor({
   className,
-  topics,
   titleState,
   editorState,
   tagState,
@@ -62,19 +61,8 @@ function PostEditor({
   const { name: author, avatar } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  //Set tilte when press Enter
-  const titleKeyDownHandler = (event) => {
-    // if (event.key === "Enter") {
-    //   const currentContent = titleState.getCurrentContent();
-    //   const contentBlock = currentContent.getFirstBlock();
-    //   const title = contentBlock.getText().trim();
-    //   titleRef.current.blur();
-    //   onChangeTitle(createEditorStateWithText(title));
-    // }
-  };
-
   const titleContent = (
-    <div onKeyDown={titleKeyDownHandler}>
+    <div>
       <Editor
         ref={titleRef}
         editorState={titleState}
@@ -114,7 +102,6 @@ function PostEditor({
     <>
       <TagsToolTip
         className={`${classes["tool-tip-light"]}`}
-        topics={topics}
         show={isTag}
         value={searchItem}
         isDarkMode={isDarkMode}
@@ -197,7 +184,6 @@ function PostEditor({
       }`}
     >
       <PostTopic
-        topics={topics}
         isDarkMode={isDarkMode}
         onTag={addTagHandler}
         onRemove={removeTagHandler}

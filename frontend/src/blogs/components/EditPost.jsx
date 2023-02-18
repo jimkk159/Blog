@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //Redux Slice
 import { postActions } from "../../store/post-slice";
+import { topicActions } from "../../store/topic-slice";
 
 //Custom Component
 import Button2 from "../../shared/components/Form/Button2";
@@ -12,7 +13,6 @@ import PostEditor from "./PostEditor";
 import classes from "./EditPost.module.css";
 
 function EditPost({
-  topics,
   isLoading,
   originState,
   editorState,
@@ -36,13 +36,13 @@ function EditPost({
     onRead();
     onChange(originState);
     dispatch(postActions.cancel());
+    dispatch(topicActions.cancel());
     onCover(null);
   };
 
   return (
     <>
       <PostEditor
-        topics={topics}
         editorState={editorState}
         onChange={onChange}
         titleState={titleState}

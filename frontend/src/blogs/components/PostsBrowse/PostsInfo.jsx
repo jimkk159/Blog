@@ -1,9 +1,12 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 //Custom Component
 import PostInfo from "./PostInfo";
 
-function PostsInfo({ isLoading, posts, topics, onPin, onDelete }) {
+function PostsInfo({ isLoading, posts, onPin, onDelete }) {
+  //Redux
+  const { topics } = useSelector((state) => state.topic);
   if (isLoading) return <h2>Loading...</h2>;
 
   return posts.map((post, index) => {

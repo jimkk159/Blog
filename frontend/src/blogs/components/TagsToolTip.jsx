@@ -14,13 +14,12 @@ function TagsToolTip({
   value,
   isAnimate,
   isDarkMode,
-  topics,
   onTag,
   onSearch,
 }) {
   //Redux
   const tags = useSelector((state) => state.post.tags);
-
+  const { topics } = useSelector((state) => state.topic);
   const tagsToLower = tags.map((tag) => tag.toLowerCase());
   const topicArray = topics.map((topic) => topic.topic);
   const tagsChoice = topicArray.map((topicTag, index) => {

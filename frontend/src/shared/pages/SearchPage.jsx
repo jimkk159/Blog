@@ -4,7 +4,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 //Custom Hook
 import useHttp from "../hooks/http-hook";
-import useTopic from "../hooks/get-topics-hook";
+import useTopic from "../hooks/get-topic-hook";
 
 //Custom Comonent
 import ErrorModal from "../components/UI/Modal/ErrorModal";
@@ -36,7 +36,7 @@ function PostSearchPage() {
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
   const {
-    topics,
+    fetchTopics,
     isLoading: isLoadingTopic,
     error: errorTopic,
     clearError: clearErrorTopic,
@@ -59,7 +59,9 @@ function PostSearchPage() {
 
   const searchHandler = (event) => {
     if (event.key === "Enter" && searchContent) {
-      navigate(`/search/${searchContent}`, { state: { search: searchContent } });
+      navigate(`/search/${searchContent}`, {
+        state: { search: searchContent },
+      });
       setSearchContent("");
     }
   };
@@ -85,7 +87,10 @@ function PostSearchPage() {
       } catch (err) {}
     };
     fetchSearchPosts();
-  }, [searchItem, sendRequest]);
+    (async function fetch() {
+      await fetchTopics();
+    })();
+  }, [searchItem, sendRequest, fetchTopics]);
 
   useEffect(() => {
     setSearchContent(search);
@@ -114,11 +119,7 @@ function PostSearchPage() {
         )}
         {!isLoading && posts.length > 0 && (
           <>
-            <PostsInfo
-              topics={topics}
-              posts={currentPosts}
-              isDarkMode={isDarkMode}
-            />
+            <PostsInfo posts={currentPosts} isDarkMode={isDarkMode} />
             <Pagination
               totalPosts={posts.length}
               postsPerPage={postsPerPage}

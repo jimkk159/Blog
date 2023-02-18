@@ -18,6 +18,7 @@ function useHttp() {
           signal: httpAbortCtrl.signal,
         });
         const responseData = await response.json();
+
         //Drop the completed request
         activeHttpRequests.current = activeHttpRequests.current.filter(
           (reqCtrl) => reqCtrl !== httpAbortCtrl

@@ -19,8 +19,8 @@ function Tag(props) {
       className={`${className} ${classes["tag"]} ${
         isDarkMode ? classes["dark"] : classes["light"]
       }`}
-      onKeyDown={() => {
-        if (onKeyDown && isEdit) onKeyDown();
+      onKeyDown={(event) => {
+        if (onKeyDown && isEdit) onKeyDown(event);
       }}
       onMouseDown={(event) => event.stopPropagation()}
       onClick={clickHandler}

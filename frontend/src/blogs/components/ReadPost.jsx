@@ -29,7 +29,6 @@ const decorator = createLinkDecorator();
 function ReadPost({
   tagsClassName,
   title,
-  topics,
   editorState,
   onChange,
   onEdit,
@@ -37,6 +36,7 @@ function ReadPost({
   isLoading,
 }) {
   //Redux
+  const { topics } = useSelector((state) => state.topic);
   const {
     id,
     pin,
@@ -96,9 +96,7 @@ function ReadPost({
               plugins={plugins}
               readOnly
             />
-            <Relations
-              related={related}
-            />
+            <Relations related={related} />
             <div className={tagsClassName}>
               <Tags isDarkMode={isDarkMode} content={tags} />
             </div>

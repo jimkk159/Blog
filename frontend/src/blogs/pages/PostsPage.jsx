@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
-import useTopic from "../../shared/hooks/get-topics-hook";
+import useTopic from "../../shared/hooks/get-topic-hook";
 
 //Custom Component
 import Quote from "../../shared/components/Quote";
@@ -33,7 +33,7 @@ function PostsPage() {
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
   const {
-    topics,
+    fetchTopics,
     isLoading: isLoadingTopic,
     error: errorTopic,
     clearError: clearErrorTopic,
@@ -87,9 +87,13 @@ function PostsPage() {
       } catch (err) {}
     };
 
-    if (!isGetAllPosts && (currentPage === lastPage || posts.length === 0))
-      fetchPosts();
-  }, [posts, currentPage, lastPage, isGetAllPosts, sendRequest]);
+    if (!isGetAllPosts && (currentPage === lastPage || posts.length === 0)) {
+      (async function fetch() {
+        await fetchTopics();
+        await fetchPosts();
+      })();
+    }
+  }, [posts, currentPage, lastPage, isGetAllPosts, sendRequest, fetchTopics]);
 
   return (
     <div className={classes["container"]}>
@@ -104,10 +108,9 @@ function PostsPage() {
       {(isLoading || isLoadingTopic) && (
         <LoadingSpinner className={`loading-container`} />
       )}
-      {!(isLoading || isLoadingTopic) && posts && topics && (
+      {!(isLoading || isLoadingTopic) && posts && (
         <>
           <PostsInfo
-            topics={topics}
             posts={currentPosts}
             isDarkMode={isDarkMode}
             onPin={setPosts}

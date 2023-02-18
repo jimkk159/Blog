@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 //Image
 import defaultCoverImage from "../../../assets/img/cover/default-cover-2.jpg";
 
-//Custom Hook
-import useHttp from "../../../shared/hooks/http-hook";
-
 //Custom Function
 import { options } from "../../util/time";
 import { choiceLanguage } from "../../util/choiceLanguage";
@@ -17,9 +14,7 @@ import PostInfoTitle from "./PostInfoTitle";
 import Tags from "../../../shared/components/UI/Tags";
 import Card from "../../../shared/components/UI/Card";
 import PostInfoDescription from "./PostInfoDescription";
-import ErrorModal from "../../../shared/components/UI/Modal/ErrorModal";
 import DeleteModal from "../../../shared/components/UI/Modal/DeleteModal";
-import LoadingSpinner from "../../../shared/components/UI/LoadingSpinner";
 
 //CSS
 import classes from "./PostInfo.module.css";
@@ -58,9 +53,6 @@ function PostInfo({ post, topic, onPin, onDelete }) {
   const [showWarning, setShowWarning] = useState(false);
   const [short, setShort] = useState("No Description...");
   const [cardColor, setCardColor] = useState(classes["dark"]);
-
-  //Custom Hook
-  const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -122,54 +114,44 @@ function PostInfo({ post, topic, onPin, onDelete }) {
 
   return (
     <>
-      <ErrorModal error={error} onClear={clearError} />
       <DeleteModal
         pid={pid}
         title={title}
         onDelete={onDelete}
         show={showWarning}
         setShow={setShowWarning}
-        sendRequest={sendRequest}
       />
       <Card
         className={`${classes["info-container"]} ${cardColor}`}
         isDarkMode={isDarkMode}
         onClick={navPostHandler}
       >
-        {isLoading && (
-          <div className={classes["loading-content"]}>
-            <h1>Deleteing...</h1>
-            <LoadingSpinner asOverlay />
+        <div className={classes["info-content"]}>
+          <div className={classes["cover"]}>
+            <img src={postCover} alt="blog-cover" />
           </div>
-        )}
-        {!isLoading && (
-          <div className={classes["info-content"]}>
-            <div className={classes["cover"]}>
-              <img src={postCover} alt="blog-cover" />
-            </div>
-            <div className={classes["description"]}>
-              <h2>{`[ ${topicText ? topicText : "  "} ] ${title}`}</h2>
-              <PostInfoTitle
-                postId={pid}
-                authorId={author_id}
-                author={author}
-                date={postDate}
-                isPined={!!pin}
-                onEdit={editHandler}
-                onPin={onPin}
-                onShowDelete={showDeleteHandler}
-              />
-              <hr />
-              <PostInfoDescription
-                postId={pid}
-                short={short}
-                tags={postTags}
-                language={language}
-              />
-              <Tags isDarkMode={isDarkMode} content={tags} />
-            </div>
+          <div className={classes["description"]}>
+            <h2>{`[ ${topicText ? topicText : "  "} ] ${title}`}</h2>
+            <PostInfoTitle
+              postId={pid}
+              authorId={author_id}
+              author={author}
+              date={postDate}
+              isPined={!!pin}
+              onEdit={editHandler}
+              onPin={onPin}
+              onShowDelete={showDeleteHandler}
+            />
+            <hr />
+            <PostInfoDescription
+              postId={pid}
+              short={short}
+              tags={postTags}
+              language={language}
+            />
+            <Tags isDarkMode={isDarkMode} content={tags} />
           </div>
-        )}
+        </div>
       </Card>
     </>
   );

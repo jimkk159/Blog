@@ -1,11 +1,12 @@
 .tag {
-  display: inline-block;
   border-radius: 100px;
+  cursor: pointer;
+  display: inline-block;
+  font-family: "Muli-bold";
   font-size: 10px;
   margin: 2px 4px;
   padding: 2px 8px;
   text-decoration: none;
-  cursor: pointer;
 }
 .dark {
   background-color: rgb(242, 242, 242, 0.8);

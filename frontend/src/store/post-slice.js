@@ -7,18 +7,11 @@ const initialState = {
   author: null,
   avatar: null,
   coverUrl: null,
-  topic: "",
-  topicCover: null,
   topicId: null,
-  parent: "",
-  children: [],
   pin: false,
   tags: [],
   related: [],
   oriCoverUrl: null,
-  oriTopic: "",
-  oriParent: "",
-  oriChildren: [],
   oriTags: [],
 };
 
@@ -43,37 +36,6 @@ const postSlice = createSlice({
     setUrl: (state, action) => {
       state.coverUrl = action.payload.url;
     },
-    setInitTopic: (state, action) => {
-      if (action.payload.topic) {
-        state.topic = action.payload.topic;
-        state.oriTopic = action.payload.topic;
-      }
-      if (action.payload.parent) {
-        state.parent = action.payload.parent;
-        state.oriParent = action.payload.parent;
-      }
-      if (action.payload.children) {
-        state.children = action.payload.children;
-        state.oriChildren = action.payload.children;
-      }
-      if (action.payload.cover) {
-        state.topicCover = action.payload.cover;
-      }
-    },
-    setTopic: (state, action) => {
-      if (action.payload.topic) state.topic = action.payload.topic;
-      if (action.payload.parent) state.parent = action.payload.parent;
-      if (action.payload.children) state.children = action.payload.children;
-    },
-    resetTopic: (state) => {
-      state.topic = null;
-      state.parent = null;
-      state.children = [];
-    },
-    reseRelation: (state) => {
-      state.parent = null;
-      state.children = [];
-    },
     setTags: (state, action) => {
       state.tags = action.payload.tags;
     },
@@ -85,16 +47,10 @@ const postSlice = createSlice({
     },
     save: (state) => {
       state.oriCoverUrl = state.coverUrl;
-      state.oriTopic = state.topic;
-      state.oriParent = state.parent;
-      state.oriChildren = state.children;
       state.oriTags = state.tags;
     },
     cancel: (state) => {
       state.coverUrl = state.oriCoverUrl;
-      state.topic = state.oriTopic;
-      state.parent = state.oriParent;
-      state.children = state.oriChildren;
       state.tags = state.oriTags;
     },
     reset: () => initialState,

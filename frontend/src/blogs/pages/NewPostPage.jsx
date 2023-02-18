@@ -5,13 +5,14 @@ import { EditorState, convertToRaw } from "draft-js";
 
 //Redux Slice
 import { postActions } from "../../store/post-slice";
+import { topicActions } from "../../store/topic-slice";
 
 //Custom Function
 import convertImgURL from "../../shared/util/url-to-blob";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
-import useTopic from "../../shared/hooks/get-topics-hook";
+import useTopic from "../../shared/hooks/get-topic-hook";
 
 //Custom Component
 import Button2 from "../../shared/components/Form/Button2";
@@ -33,7 +34,8 @@ function NewPostPage() {
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
   //Redux
-  const { topic, parent, children, tags } = useSelector((state) => state.post);
+  const { topic, parent, children } = useSelector((state) => state.topic);
+  const { tags } = useSelector((state) => state.post);
   const { token } = useSelector((state) => state.auth);
   const isEnglish = useSelector((state) => state.language.isEnglish);
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ function NewPostPage() {
   //Custom Hook
   const { isLoading, error, sendRequest, clearError } = useHttp();
   const {
-    topics,
+    fetchTopics,
     isLoading: isLoadingTopic,
     error: errorTopic,
     clearError: clearErrorTopic,
@@ -103,7 +105,12 @@ function NewPostPage() {
           return formData;
         };
 
-        const sendForm = createSendForm(imgMap, imgBlobs, convertedData, newTags);
+        const sendForm = createSendForm(
+          imgMap,
+          imgBlobs,
+          convertedData,
+          newTags
+        );
         const response = await sendRequest(
           process.env.REACT_APP_BACKEND_URL + `/posts/new`,
           "POST",
@@ -140,9 +147,16 @@ function NewPostPage() {
   };
 
   useEffect(() => {
+    dispatch(topicActions.reset());
     dispatch(postActions.reset());
     setIsEdit(true);
   }, [setIsEdit, dispatch]);
+
+  useEffect(() => {
+    (async function fetch() {
+      await fetchTopics();
+    })();
+  }, [fetchTopics]);
 
   //Custom Hook
   useAutoSave(savePostHandler, true);
@@ -160,7 +174,6 @@ function NewPostPage() {
         </>
       )}
       <PostEditor
-        topics={topics}
         editorState={editorState}
         onChange={setEditorState}
         titleState={titleState}

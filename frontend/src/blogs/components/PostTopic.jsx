@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { BsChevronUp, BsChevronDown } from "react-icons/bs";
 
 //Redux Slice
-import { postActions } from "../../store/post-slice";
+import { topicActions } from "../../store/topic-slice";
 
 //Custom Component
 import GuideOpen from "./BlogGuide/GuideOpen";
@@ -15,13 +15,13 @@ import PostTopicQuestion from "./PostTopicQuestion";
 //CSS
 import classes from "./PostTopic.module.css";
 
-function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
-  const topicArray = topics ? topics.map((topic) => topic.topic) : [];
+function PostTopic({ isDarkMode, onTag, onRemove }) {
   const searchRef = useRef(null);
   const [searchItem, setSearchItem] = useState("");
 
   //Redux
-  const { topic, parent, children } = useSelector((state) => state.post);
+  const { topics, topic, parent, children } = useSelector((state) => state.topic);
+  const topicArray = topics ? topics.map((topic) => topic.topic) : [];
   const [collapse, setCollapse] = useState(!!topic);
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
@@ -49,7 +49,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
         //Setting Existed Topic
         onTag(findingTopic?.topic);
         return dispatch(
-          postActions.setTopic({
+          topicActions.setTopic({
             topic: findingTopic?.topic,
             parent: findingTopic?.parent,
             children: findingTopic?.children,
@@ -59,7 +59,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
       if (!topic) {
         //Setting Topic
         return dispatch(
-          postActions.setTopic({
+          topicActions.setTopic({
             topic: event.target.value,
           })
         );
@@ -67,7 +67,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
       if (findingTopic && !parent) {
         //Setting Parent and its children
         return dispatch(
-          postActions.setTopic({
+          topicActions.setTopic({
             parent: findingTopic?.topic,
             children: [...findingTopic?.children],
           })
@@ -89,7 +89,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
       setSearchItem("");
       onTag(findingTopic?.topic);
       return dispatch(
-        postActions.setTopic({
+        topicActions.setTopic({
           topic: findingTopic?.topic,
           parent: findingTopic?.parent,
           children: findingTopic?.children,
@@ -99,7 +99,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
     //Setting Parent
     if (!parent) {
       return dispatch(
-        postActions.setTopic({
+        topicActions.setTopic({
           parent: findingTopic?.topic,
           children: [...findingTopic?.children],
         })
@@ -109,24 +109,24 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
 
   //Reset Topic
   const resetTopicHandler = () => {
-    return dispatch(postActions.resetTopic());
+    return dispatch(topicActions.resetTopic());
   };
 
   //Set Parent
   const setParentHandler = (parent) => {
-    if (topicArray.includes(topic)) return dispatch(postActions.resetTopic());
+    if (topicArray.includes(topic)) return dispatch(topicActions.resetTopic());
 
     //Reset Parent
     const [findingTopic] = topics.filter(
       (topic) => topic?.topic.toLowerCase() === parent.toLowerCase()
     );
     if (!findingTopic) return;
-    dispatch(postActions.reseRelation());
+    dispatch(topicActions.reseRelation());
   };
 
   //Set Child
   const setChildHandler = (child) => {
-    if (topicArray.includes(topic)) return dispatch(postActions.resetTopic());
+    if (topicArray.includes(topic)) return dispatch(topicActions.resetTopic());
 
     const [findingTopic] = topics.filter(
       (topic) => topic?.topic.toLowerCase() === child.toLowerCase()
@@ -136,7 +136,7 @@ function PostTopic({ topics, isDarkMode, onTag, onRemove }) {
     //Remove child from existed children
     const newChildren = children.filter((item) => item !== child);
     dispatch(
-      postActions.setTopic({
+      topicActions.setTopic({
         children: newChildren,
       })
     );
