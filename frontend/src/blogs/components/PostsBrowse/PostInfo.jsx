@@ -94,7 +94,7 @@ function PostInfo({ post, topic, onPin, onDelete }) {
   const navPostHandler = (event) => {
     //Double Click
     if (event.detail === 2) {
-      navigate(`/blog/${pid}`);
+      navigate(`/blog/${pid}`, { state: { collapse: true }});
     }
   };
 

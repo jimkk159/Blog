@@ -1,40 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 
 //Custom Comonent
 import GuideOpen from "./GuideOpen";
 import GuideClose from "./GuideClose";
+import ScrollOpenClose from "../../../shared/components/UI/ScrollOpenClose";
 
 //CSS
 import classes from "./Guide.module.css";
 
-function Guide({isDarkMode, topics}) {
-  const [isOpen, setIsOpen] = useState(false);
+function Guide({ isDarkMode, topics }) {
+  const openItem = (
+    <GuideOpen isDarkMode={isDarkMode} topics={topics} isHome isCancel />
+  );
 
-  const openGuideHandler = () => {
-    setIsOpen(true);
-  };
-  const closeGuideHandler = () => {
-    setIsOpen(false);
-  };
-
-  if (!isOpen)
-    return (
-      <GuideClose
-        className={classes["position"]}
-        isDarkMode={isDarkMode}
-        onClick={openGuideHandler}
-      />
-    );
+  const closeItem = <GuideClose  />;
 
   return (
-    <GuideOpen
-      isHome
-      isScroll
-      isCancel
+    <ScrollOpenClose
       className={classes["position"]}
-      isDarkMode={isDarkMode}
-      onClose={closeGuideHandler}
-      topics={topics}
+      openItem={openItem}
+      closeItem={closeItem}
     />
   );
 }

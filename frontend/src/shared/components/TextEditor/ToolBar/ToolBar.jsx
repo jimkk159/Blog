@@ -15,7 +15,7 @@ function ToolBar(props) {
   const { matches: matches_768 } = useMediaQuery("min", "768");
   const { matches: matches_1024 } = useMediaQuery("min", "1024");
 
-  //Very Import to prevent the Text editor force when chooseing
+  //prevent the Text editor force when chooseing
   //the tool bar to keep Selection text on text editor
   const preventDefaultHandler = (event) => {
     event.preventDefault();

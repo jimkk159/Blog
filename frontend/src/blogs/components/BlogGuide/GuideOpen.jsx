@@ -10,7 +10,6 @@ import useDrag from "../../../shared/hooks/drag-hook";
 //Custom Comonent
 import Card from "../../../shared/components/UI/Card";
 import FlowChart from "../FlowChart/FlowChart";
-import ScrollAnimation from "../../../shared/components/Animation/ScrollAnimation";
 
 //CSS
 import classes from "./GuideOpen.module.css";
@@ -22,7 +21,6 @@ function GuideOpen({
   topics,
   isEdit,
   isHome,
-  isScroll,
   isCancel,
   isDarkMode,
   onEdit,
@@ -36,59 +34,6 @@ function GuideOpen({
     mouseMoveHandler,
     resetHandler,
   } = useDrag();
-
-  if (isScroll)
-    return (
-      <ScrollAnimation className={`${className}`} top="20%">
-        <Card
-          className={`${classes["flow-chart-container"]}`}
-          isDarkMode={isDarkMode}
-          onMouseUp={mouseUpHandler}
-          onMouseDown={mouseDownHandler}
-          onMouseMove={mouseMoveHandler}
-          onMouseLeave={mouseLeaveHandler}
-        >
-          <h1
-            className={`${classes["title"]} ${
-              isDarkMode ? classes["title-dark"] : classes["title-light"]
-            }`}
-          >
-            Topic Map
-          </h1>
-          <div
-            className={`${classes["chart"]} ${
-              isDarkMode ? classes["chart-dark"] : classes["chart-light"]
-            }`}
-          >
-            <FlowChart
-              type="rect"
-              width={cardWidth}
-              height={cardHeight}
-              offsetX={dragState.offset.x}
-              offsetY={dragState.offset.y}
-              topics={topics}
-              isEdit={isEdit}
-            />
-          </div>
-          {isHome && (
-            <AiFillHome
-              className={`${classes["home"]} ${
-                isDarkMode ? classes["home-dark"] : classes["home-light"]
-              }`}
-              onClick={resetHandler}
-            />
-          )}
-          {isCancel && (
-            <RxCross2
-              className={`${classes["cross"]} ${
-                isDarkMode ? classes["cross-dark"] : classes["cross-light"]
-              }`}
-              onClick={onClose}
-            />
-          )}
-        </Card>
-      </ScrollAnimation>
-    );
 
   return (
     <Card

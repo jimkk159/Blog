@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RichUtils, EditorState, getDefaultKeyBinding } from "draft-js";
@@ -35,6 +36,7 @@ import PostDetailTitle from "./PostDetail/PostDetailTitle";
 import "draft-js/dist/Draft.css";
 import "./PostEditor.css";
 import classes from "./PostEditor.module.css";
+import useScroll from "../../shared/hooks/scorll-hook";
 
 const decorator = createLinkDecorator();
 function PostEditor({
@@ -52,6 +54,7 @@ function PostEditor({
   const tagRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [searchItem, setSearchItem] = useState("");
+  const [collapse, setCollapse] = useState(false);
 
   //Redux
   const isTag = useSelector((state) => state.tag.isTag);
@@ -60,6 +63,12 @@ function PostEditor({
   const { oriCoverUrl, tags } = useSelector((state) => state.post);
   const { name: author, avatar } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
+
+  //React Router
+  const location = useLocation();
+  const initCollapse = location?.state?.collapse
+    ? location.state.collapse
+    : false;
 
   const titleContent = (
     <div>
@@ -91,12 +100,6 @@ function PostEditor({
   };
 
   //Sync editor and input
-  useEffect(() => {
-    const currentContent = tagState.getCurrentContent();
-    const contentBlock = currentContent.getFirstBlock();
-    const tag = contentBlock.getText();
-    setSearchItem(tag);
-  }, [tagState]);
 
   const editorTag = (
     <>
@@ -177,6 +180,17 @@ function PostEditor({
     return getDefaultKeyBinding(event);
   };
 
+  useEffect(() => {
+    const currentContent = tagState.getCurrentContent();
+    const contentBlock = currentContent.getFirstBlock();
+    const tag = contentBlock.getText();
+    setSearchItem(tag);
+  }, [tagState]);
+
+  useEffect(() => {
+    setCollapse(initCollapse);
+  }, [initCollapse]);
+
   return (
     <div
       className={`${classes["editor-wrapper"]} ${className} ${
@@ -184,10 +198,13 @@ function PostEditor({
       }`}
     >
       <PostTopic
+        collapse={collapse}
         isDarkMode={isDarkMode}
         onTag={addTagHandler}
         onRemove={removeTagHandler}
+        onCollapse={setCollapse}
       />
+      {<div></div>}
       <ToolBar
         editorState={editorState}
         setEditorState={onChange}

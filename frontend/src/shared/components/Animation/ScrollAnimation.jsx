@@ -16,6 +16,7 @@ function ScrollAnimation(props) {
 
   //Custom Hook
   const { scrollPosition } = useScroll();
+  
   //Monitor when Scroll
   useEffect(() => {
     if (Math.abs(scrollPosition - currentPosition) > allowOffset) {

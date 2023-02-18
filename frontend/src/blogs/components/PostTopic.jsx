@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BsChevronUp, BsChevronDown } from "react-icons/bs";
 
@@ -15,22 +14,18 @@ import PostTopicQuestion from "./PostTopicQuestion";
 //CSS
 import classes from "./PostTopic.module.css";
 
-function PostTopic({ isDarkMode, onTag, onRemove }) {
+function PostTopic({ collapse, isDarkMode, onTag, onRemove, onCollapse }) {
   const searchRef = useRef(null);
   const [searchItem, setSearchItem] = useState("");
 
   //Redux
-  const { topics, topic, parent, children } = useSelector((state) => state.topic);
+  const { topics, topic, parent, children } = useSelector(
+    (state) => state.topic
+  );
   const topicArray = topics ? topics.map((topic) => topic.topic) : [];
-  const [collapse, setCollapse] = useState(!!topic);
+  
   const language = useSelector((state) => state.language.language);
   const dispatch = useDispatch();
-
-  //React Router
-  const location = useLocation();
-  const initCollapse = location?.state?.collapse
-    ? location.state.collapse
-    : false;
 
   //Input Search
   const searchChangeHandler = (event) => {
@@ -142,17 +137,13 @@ function PostTopic({ isDarkMode, onTag, onRemove }) {
     );
   };
 
-  useEffect(() => {
-    setCollapse(initCollapse);
-  }, [initCollapse]);
-
   return (
     <Card className={`${classes["container"]}`} isDarkMode={isDarkMode}>
       {collapse && (
         <BsChevronUp
           className={classes["collapse"]}
           onClick={() => {
-            setCollapse(false);
+            onCollapse(false);
           }}
         />
       )}
@@ -162,7 +153,7 @@ function PostTopic({ isDarkMode, onTag, onRemove }) {
           <BsChevronDown
             className={classes["collapse"]}
             onClick={() => {
-              setCollapse(true);
+              onCollapse(true);
             }}
           />
           <input
