@@ -1,0 +1,60 @@
+import fs from "fs";
+import path from "path";
+import http from "http";
+import cors from "cors";
+import express from "express";
+import bodyParser from "body-parser";
+
+//Models
+import HttpError from "./models/http-error.js";
+
+//Routes
+import usersRouters from "./routes/users-route.js";
+import postsRouters from "./routes/posts-route.js";
+import topicsRouters from "./routes/topics-route.js";
+
+export const app = express();
+app.use(cors());
+
+app.use(bodyParser.json());
+
+//Add Static Folder to save images
+app.use("/upload/images", express.static(path.join("upload", "images")));
+app.use(
+  "/upload/images/default",
+  express.static(path.join("upload", "images", "default"))
+);
+
+app.use("/users", usersRouters);
+app.use("/posts", postsRouters);
+app.use("/topics", topicsRouters);
+
+app.get("/", (req, res, next) => {
+  res.json({ hello: "Hello World" });
+});
+
+//Undefined Route Case
+app.use((req, res, next) => {
+  const error = new HttpError("Could not find this route", 404);
+  throw error;
+});
+
+//Deal with Error
+app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+      console.log(req.file.path);
+    });
+  }
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occurred!" });
+});
+
+export const server = http.createServer(app);
+
+// Reference:https://stackoverflow.com/questions/65384754/error-err-module-not-found-cannot-find-module
+// Reference:https://stackoverflow.com/questions/65168579/separating-socket-io-calls-for-cleaner-code-in-node-and-express

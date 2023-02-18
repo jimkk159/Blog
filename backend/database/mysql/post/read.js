@@ -225,7 +225,6 @@ export const getDBRelatedPosts = async (pid, number) => {
     if (filter_posts)
       filterIDs = [...filterIDs, ...filter_posts.map((post) => post.id)];
   }
-
   filterIDs.shift();
   if (filterIDs.length === 0) return [];
   [search_posts] = await mysql_pool.query(
@@ -235,9 +234,10 @@ export const getDBRelatedPosts = async (pid, number) => {
       "LEFT JOIN `topic` ON `post`.`topic_id` = `topic`.`id` " +
       "LEFT JOIN `postEn` ON  `post`.`id` = `postEn`.`post_id` " +
       "LEFT JOIN `postCh` ON  `post`.`id` = `postCh`.`post_id` " +
+      "WHERE `post`.`id` != ? " +
       "ORDER BY IF(FIELD(`post`.`id`, ?) = 0, 1, 0) " +
       "LIMIT ?;",
-    [filterIDs, number]
+    [pid, filterIDs, number]
   );
   search_posts = search_posts.slice(0, 5);
   return search_posts ? [...search_posts] : [];
@@ -363,6 +363,7 @@ export const getDBPostSearch = async (target, number) => {
   }
 
   filterIDs.shift();
+  console.log(filterIDs);
   if (filterIDs.length === 0) return [];
   return await getDBFullPostsByIds({
     number,
