@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 10rem;
+  justify-content: center;
+  padding: 1rem;
+  padding-right: 3.5rem;
+  width: 20rem;
+  z-index: 2;
+}
+.cross {
+  font-size: 25px;
+  position: absolute;
+  right: 1rem;
+  top: 1.5rem;
+}
+.cross-dark {
+  color: #e4e4e4;
+}
+.cross-light {
+  color: black;
+}

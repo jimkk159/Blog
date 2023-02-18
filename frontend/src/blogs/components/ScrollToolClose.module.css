@@ -1,0 +1,33 @@
+.toolbar-container {
+  height: 3rem;
+  padding: 0.5rem;
+  width: 3rem;
+  z-index: 2;
+}
+.toolbar-icon {
+  height: 2rem;
+  width: 2rem;
+}
+.transparent {
+  background-color: #e4e4e4;
+  color: black;
+  opacity: 0.2;
+}
+
+.toolbar-1024 {
+  height: 4rem;
+  width: 4rem;
+}
+.toolbar-768 {
+  height: 3.5rem;
+  width: 3.5rem;
+}
+.toolbar-container img {
+  height: 100%;
+  user-select: none;
+  width: 100%;
+}
+
+.toolbar-container:hover {
+  opacity: 0.8;
+}

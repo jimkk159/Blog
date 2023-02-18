@@ -26,17 +26,19 @@ import {
 //Custom Component
 import PostTopic from "./PostTopic";
 import TagsToolTip from "./TagsToolTip";
+import ScrollToolOpen from "./ScrollToolOpen";
+import ScrollToolClose from "./ScrollToolClose";
 import Card from "../../shared/components/UI/Card";
 import Tags from "../../shared/components/UI/Tags";
-import ToolBar from "../../shared/components/TextEditor/ToolBar/ToolBar";
-import UploadImage from "../../shared/components/Form/UploadImage";
 import PostDetailTitle from "./PostDetail/PostDetailTitle";
+import UploadImage from "../../shared/components/Form/UploadImage";
+import ToolBar from "../../shared/components/TextEditor/ToolBar/ToolBar";
+import ScrollOpenClose from "../../shared/components/UI/ScrollOpenClose";
 
 //CSS
 import "draft-js/dist/Draft.css";
 import "./PostEditor.css";
 import classes from "./PostEditor.module.css";
-import useScroll from "../../shared/hooks/scorll-hook";
 
 const decorator = createLinkDecorator();
 function PostEditor({
@@ -204,11 +206,21 @@ function PostEditor({
         onRemove={removeTagHandler}
         onCollapse={setCollapse}
       />
-      {<div></div>}
+      <ScrollOpenClose
+        className={classes["position"]}
+        openItem={
+          <ScrollToolOpen
+            editorState={editorState}
+            onChange={onChange}
+            isDarkMode={isDarkMode}
+          />
+        }
+        closeItem={<ScrollToolClose />}
+      />
       <ToolBar
-        editorState={editorState}
-        setEditorState={onChange}
         isDarkMode={isDarkMode}
+        editorState={editorState}
+        onChange={onChange}
       />
       <Card
         className={`page ${classes["post-container"]}`}

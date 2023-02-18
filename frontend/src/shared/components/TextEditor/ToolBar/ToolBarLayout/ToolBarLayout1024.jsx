@@ -9,8 +9,7 @@ import ToolBarBundle from "../ToolBarBundle";
 //CSS
 import classes from "./ToolBarLayout1024.module.css";
 
-function ToolBarLayout1024(props) {
-  const { editorState, setEditorState } = props;
+function ToolBarLayout1024({ editorState, onChange }) {
   return (
     <>
       <div className={classes["toolbar-row-1"]}>
@@ -19,14 +18,14 @@ function ToolBarLayout1024(props) {
           toolbar={toolbar}
           options={["blockTypeFlat"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
         <ToolBarBundle
           key={"toolbar-bundle-2"}
           toolbar={toolbar}
           options={["remove", "history"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
       </div>
       <div className={classes["toolbar-row-2"]}>
@@ -42,14 +41,14 @@ function ToolBarLayout1024(props) {
             "textAlign",
           ]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
         <ToolBarBundle
           key={"toolbar-bundle-4"}
           toolbar={toolbar}
           options={["image", "map", "embedded", "link"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
       </div>
     </>

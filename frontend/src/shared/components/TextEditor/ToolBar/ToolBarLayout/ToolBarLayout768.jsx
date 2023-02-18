@@ -9,8 +9,7 @@ import ToolBarBundle from "../ToolBarBundle";
 //CSS
 import classes from "./ToolBarLayout768.module.css";
 
-function ToolBarLayout768(props) {
-  const { editorState, setEditorState } = props;
+function ToolBarLayout768({ editorState, onChange }) {
   return (
     <>
       <div className={classes["toolbar-row-1"]}>
@@ -19,14 +18,14 @@ function ToolBarLayout768(props) {
           toolbar={toolbar}
           options={["blockTypeFlat", "image", "map", "embedded", "link"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
         <ToolBarBundle
           key={"toolbar-bundle-2"}
           toolbar={toolbar}
           options={["remove", "history"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
       </div>
       <div className={classes["toolbar-row-2"]}>
@@ -41,14 +40,14 @@ function ToolBarLayout768(props) {
             "fontFamily",
           ]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
         <ToolBarBundle
           key={"toolbar-bundle-4"}
           toolbar={toolbar}
           options={["textAlign"]}
           editorState={editorState}
-          onChange={setEditorState}
+          onChange={onChange}
         />
       </div>
     </>
