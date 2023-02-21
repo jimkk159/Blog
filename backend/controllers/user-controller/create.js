@@ -1,10 +1,10 @@
 import HttpError from "../../models/http-error.js";
-import { createDBUser } from "../../database/mysql/user/create.js";
+import { createDBUserLocal } from "../../database/mysql/user/create.js";
 import { getDBPreferByParams } from "../../database/mysql/prefer/read.js";
 import { createDBPrefer } from "../../database/mysql/prefer/create.js";
 
 //Create New User
-export const createNewUser = async (req, res, next) => {
+export const createLocalUser = async (req, res, next) => {
   const { name, email, theme, language } = req.body;
   const { password, avatar } = res.locals;
 
@@ -13,7 +13,7 @@ export const createNewUser = async (req, res, next) => {
   let preferId;
   try {
     prefer = await getDBPreferByParams({ theme, language });
-    //In not the Perfer, create it
+    //In not Perfer, create it
     if (!prefer) prefer = await createDBPrefer({ theme, language });
 
     preferId = prefer?.id;
@@ -44,7 +44,7 @@ export const createNewUser = async (req, res, next) => {
       password,
       preferId,
     };
-    newUser = await createDBUser(newUser);
+    newUser = await createDBUserLocal(newUser);
     newUser = { ...newUser, theme: prefer.theme, language: prefer.language };
   } catch (err) {
     const error = new HttpError(

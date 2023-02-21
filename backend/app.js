@@ -1,4 +1,4 @@
-import { server } from "./server-init.js";
+import { server } from "./config/server-init.js";
 
 const port = process.env.PORT || 5000;
 server.listen(port, () => console.log("Server running on port 5000"));

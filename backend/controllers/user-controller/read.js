@@ -6,9 +6,10 @@ import {
   getDBUserByEmail,
 } from "../../database/mysql/user/read.js";
 import { getDBPrefer } from "../../database/mysql/prefer/read.js";
+import { getDBLocal } from "../../database/mysql/social/read.js";
 
 //Get User
-export const getUser = async (req, res, next) => {
+export const identifyUser = async (req, res, next) => {
   const { uid } = req.userData;
 
   let user;
@@ -35,7 +36,7 @@ export const getUser = async (req, res, next) => {
 };
 
 //Get User Params
-export const getUserbyParams = async (req, res, next) => {
+export const getUser = async (req, res, next) => {
   //Find User
   console.log("GET USER");
   const uid = req.params.uid;
@@ -97,7 +98,30 @@ export const getUserbyEmail = async (req, res, next) => {
   }
 
   res.locals.user = user;
-  res.locals.is_email = !!user;
+  next();
+};
+
+//Get User Local Info
+export const getUserLocal = async (req, res, next) => {
+  const user = res.locals.user;
+
+  let local;
+  try {
+    local = await getDBLocal(user?.id);
+    if (!local)
+      throw new HttpError(
+        "Local information not exist! Please Login by Google.",
+        500
+      );
+  } catch (err) {
+    const error = new HttpError(
+      "Finding user prefer failed, please try again later.",
+      500
+    );
+    return next(error);
+  }
+
+  res.locals.user = { ...user, password: local.secrect };
   next();
 };
 
@@ -117,7 +141,6 @@ export const getUserPrefer = async (req, res, next) => {
   }
 
   res.locals.user = { ...user, theme: prefer.theme, language: prefer.language };
-  res.locals.is_email = !!user;
   next();
 };
 
@@ -140,4 +163,14 @@ export const checkAdmin = async (req, res, next) => {
 
   res.locals.admin = isAdmin;
   next();
+};
+
+export default {
+  identifyUser,
+  getUser,
+  getUsers,
+  getUserbyEmail,
+  getUserLocal,
+  getUserPrefer,
+  checkAdmin
 };

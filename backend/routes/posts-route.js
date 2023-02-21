@@ -4,39 +4,22 @@ import { check } from "express-validator";
 import checkAuth from "../middleware/check-auth.js";
 import fileUploadToServer from "../middleware/file-upload.js";
 
-import { getUser, checkAdmin } from "../controllers/user-controller/index.js";
-import {
-  checkTopic,
-  createNewTopic,
-} from "../controllers/topic-controller/index.js";
-import {
-  getPost,
-  getFullPost,
-  getFullPosts,
-  getPostSearch,
-  checkPostAuthor,
-  createNewPost,
-  editPost,
-  pinPost,
-  deletePost
-} from "../controllers/post-controller/index.js";
-import {
-  validation,
-  replaceImageSrc,
-  responseHttp,
-} from "../controllers/share-controller/index.js";
+import userController from "../controllers/user-controller/index.js";
+import topicController from "../controllers/topic-controller/index.js";
+import postController from "../controllers/post-controller/index.js";
+import shareController from "../controllers/share-controller/index.js";
 
 const router = express.Router();
 
 router.get(
   "/search",
   [check("query").not().isEmpty()],
-  validation,
-  getPostSearch,
-  responseHttp
+  shareController.validation,
+  postController.getPostSearch,
+  shareController.responseHttp
 );
-router.get("/", getFullPosts, responseHttp);
-router.get("/:pid", getFullPost, responseHttp);
+router.get("/", postController.getFullPosts, shareController.responseHttp);
+router.get("/:pid", postController.getFullPost, shareController.responseHttp);
 
 // check token middleware
 router.use(checkAuth);
@@ -48,13 +31,13 @@ router.post(
     { name: "images" },
   ]),
   [check("content").not().isEmpty()],
-  validation,
-  getUser,
-  replaceImageSrc,
-  checkTopic,
-  createNewTopic,
-  createNewPost,
-  responseHttp
+  shareController.validation,
+  userController.identifyUser,
+  shareController.replaceImageSrc,
+  topicController.checkTopic,
+  topicController.createNewTopic,
+  postController.createNewPost,
+  shareController.responseHttp
 );
 
 router.put(
@@ -64,27 +47,33 @@ router.put(
     { name: "images" },
   ]),
   [check("content").not().isEmpty()],
-  validation,
-  getPost,
-  getUser,
-  checkPostAuthor,
-  replaceImageSrc,
-  checkTopic,
-  createNewTopic,
-  editPost,
-  responseHttp
+  shareController.validation,
+  postController.getPost,
+  userController.identifyUser,
+  postController.checkPostAuthor,
+  shareController.replaceImageSrc,
+  topicController.checkTopic,
+  topicController.createNewTopic,
+  postController.editPost,
+  shareController.responseHttp
 );
 
 router.patch(
   "/pin/:pid",
   [check("pin").not().isEmpty()],
-  validation,
-  getPost,
-  checkAdmin,
-  pinPost,
-  responseHttp
+  shareController.validation,
+  postController.getPost,
+  userController.checkAdmin,
+  postController.pinPost,
+  shareController.responseHttp
 );
 
-router.delete("/:pid", getPost, checkAdmin, deletePost, responseHttp);
+router.delete(
+  "/:pid",
+  postController.getPost,
+  userController.checkAdmin,
+  postController.deletePost,
+  shareController.responseHttp
+);
 
 export default router;

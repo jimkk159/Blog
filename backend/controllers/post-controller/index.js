@@ -1,9 +1,9 @@
 import HttpError from "../../models/http-error.js";
 
-export * from "./create.js";
-export * from "./read.js";
-export * from "./update.js";
-export * from "./delete.js";
+import * as create from "./create.js";
+import * as read from "./read.js";
+import * as update from "./update.js";
+import * as deleted from "./delete.js";
 
 export const checkPostAuthor = (req, res, next) => {
   //Find User
@@ -16,4 +16,12 @@ export const checkPostAuthor = (req, res, next) => {
     return next(error);
   }
   next();
+};
+
+export default {
+  ...create,
+  ...read,
+  ...update,
+  ...deleted,
+  checkPostAuthor,
 };

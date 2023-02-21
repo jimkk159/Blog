@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import normalize from "normalize-path";
 import HttpError from "../../models/http-error.js";
 import { validationResult } from "express-validator";
+import querystring from "node:querystring";
 
 export const validation = (req, res, next) => {
   //Validate the req
@@ -43,8 +44,6 @@ export const replaceImageSrc = async (req, res, next) => {
     if (req?.files?.images) {
       let count = 0;
       let imgCount = 0;
-      console.log(imgMap);
-      console.log(newEntityMap);
       for (let i = 0; i < Object.keys(newEntityMap).length; i++) {
         if (newEntityMap[i]?.type === "IMAGE") {
           if (+imgMap[count] === 1) {
@@ -57,7 +56,6 @@ export const replaceImageSrc = async (req, res, next) => {
         }
       }
     }
-    console.log(newEntityMap);
 
     postContent = JSON.stringify(newContent);
 
@@ -88,21 +86,20 @@ export const encryptPassword = async (req, res, next) => {
   next();
 };
 
-//Check Email if exist
+//Check Password
 export const checkPassword = async (req, res, next) => {
   const { password } = req.body;
-  const existingUser = res.locals.user_by_email;
-
+  const user = res.locals.user;
   //Check Password Valid
-  let isValidPassword = false;
+  let valid = false;
   try {
-    isValidPassword = await bcrypt.compare(password, existingUser.password);
+    valid = await bcrypt.compare(password, user.password);
   } catch (err) {
     const error = new HttpError("Valid credentials fail", 500);
     return next(error);
   }
 
-  if (!isValidPassword) {
+  if (!valid) {
     const error = new HttpError("Invalid credentials.", 401);
     return next(error);
   }
@@ -142,7 +139,31 @@ export const createAvatar = (req, res, next) => {
   next();
 };
 
-export const responseHttp = async (req, res, next) => {
+export const responseHttp = (req, res, next) => {
   const response = res.locals.response;
   res.status(200).json(response);
 };
+
+export const redirectOauth = (req, res, next) => {
+  console.log("Oauth Success");
+  //Remove the user info in session, we don't need it
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    const queryString = querystring.stringify(res.locals.response);
+    res.redirect(process.env.CLIENT_URL + "/oauth/success/?" + queryString);
+  });
+};
+
+export default {
+  validation,
+  replaceImageSrc,
+  encryptPassword,
+  checkPassword,
+  generateToken,
+  createAvatar,
+  responseHttp,
+  redirectOauth,
+};
+//reference: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function

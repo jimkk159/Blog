@@ -1,23 +1,20 @@
 import HttpError from "../../models/http-error.js";
-export * from "./create.js";
-export * from "./read.js";
-
+import * as create from "./create.js";
+import * as read from "./read.js";
 
 //Check Email if exist
-export const getIsEmail = async (req, res, next) => {
-  const is_email = !!res.locals.is_email;
+const checkIsUser = async (req, res, next) => {
   //Check if the User Exist
-  if (!is_email) {
+  if (!res.locals.user) {
     const error = new HttpError("Email not found!", 403);
     return next(error);
   }
   next();
 };
 
-//Check Email if exist
-export const getIsEmailEmpty = async (req, res, next) => {
-  const is_email = !!res.locals.is_email;
-  if (is_email) {
+//Check Email if not exist
+const checkIsUserEmpty = async (req, res, next) => {
+  if (!!res.locals.user) {
     const error = new HttpError(
       "Email existed already, please login instead.",
       422
@@ -28,7 +25,7 @@ export const getIsEmailEmpty = async (req, res, next) => {
 };
 
 //SignUp
-export const signup = async (req, res, next) => {
+const signup = async (req, res, next) => {
   console.log("Sign Up");
   const user = res.locals.user;
   const token = res.locals.token;
@@ -46,7 +43,7 @@ export const signup = async (req, res, next) => {
 };
 
 //Login
-export const login = async (req, res, next) => {
+const login = async (req, res, next) => {
   console.log("Login");
   const user = res.locals.user;
   const token = res.locals.token;
@@ -60,4 +57,13 @@ export const login = async (req, res, next) => {
     token: token,
   };
   next();
+};
+
+export default {
+  ...create,
+  ...read,
+  checkIsUser,
+  checkIsUserEmpty,
+  signup,
+  login,
 };

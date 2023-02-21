@@ -1,2 +1,4 @@
-export * from "./create.js";
-export * from "./read.js";
+import * as create from "./create.js";
+import * as read from "./read.js";
+
+export default { ...create, ...read };

@@ -247,7 +247,6 @@ export const getDBRelatedPosts = async (pid, number) => {
 export const getDBPostSearch = async (target, number) => {
   let filterIDs = [-1];
   let filter_posts;
-  let search_posts;
 
   const queryString =
     "SELECT `post`.`id` FROM " +
@@ -363,7 +362,6 @@ export const getDBPostSearch = async (target, number) => {
   }
 
   filterIDs.shift();
-  console.log(filterIDs);
   if (filterIDs.length === 0) return [];
   return await getDBFullPostsByIds({
     number,
