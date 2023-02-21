@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { GoogleLoginButton } from "react-social-login-buttons";
 
 //Redux Thunk
 import { loginAuto } from "../../store/auth-thunk";
@@ -41,6 +42,7 @@ function AuthForm(props) {
   const { toLogin } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [externalPopup, setExternalPopup] = useState(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -57,12 +59,6 @@ function AuthForm(props) {
     },
     false
   );
-
-  useEffect(() => {
-    if (toLogin !== undefined) {
-      setIsLoginMode(!!toLogin);
-    }
-  }, [toLogin]);
 
   //Switch Auth Form
   const switchModeHandler = () => {
@@ -101,7 +97,7 @@ function AuthForm(props) {
     if (isLoginMode) {
       try {
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "/users/login",
+          process.env.REACT_APP_BACKEND_URL + "/auth/login",
           "POST",
           JSON.stringify({
             [emailKey]: formState.inputs[emailKey].value,
@@ -117,8 +113,10 @@ function AuthForm(props) {
         else dispatch(themeActions.setLight());
 
         //Language
-        if (responseData.language === "en") dispatch(languageActions.setEnglish());
-        if (responseData.language === "ch") dispatch(languageActions.setChinese());
+        if (responseData.language === "en")
+          dispatch(languageActions.setEnglish());
+        if (responseData.language === "ch")
+          dispatch(languageActions.setChinese());
 
         //UserInfo
         dispatch(
@@ -145,11 +143,10 @@ function AuthForm(props) {
         formData.append(imageKey, formState.inputs[imageKey].value);
         formData.append(emailKey, formState.inputs[emailKey].value);
         formData.append(passwordKey, formState.inputs[passwordKey].value);
-        formData.append(passwordKey, formState.inputs[passwordKey].value);
         formData.append("theme", isDarkMode ? 1 : 0);
         formData.append("language", isEnglish ? "en" : "ch");
         const responseData = await sendRequest(
-          process.env.REACT_APP_BACKEND_URL + "/users/signup",
+          process.env.REACT_APP_BACKEND_URL + "/auth/signup",
           "POST",
           formData
         );
@@ -180,6 +177,28 @@ function AuthForm(props) {
       setIsDrag(true);
     }
   };
+
+  const googleHandler = (event) => {
+    event.preventDefault();
+    const popup = window.open(
+      `${process.env.REACT_APP_BACKEND_URL}/auth/google`,
+      "Login Google",
+      `left=${window.innerWidth / 3}, top=100, width=400, height=500`
+    );
+    const timer = setInterval(function () {
+      if (popup.closed) {
+        clearInterval(timer);
+        window.location.reload(false);
+      }
+    }, 1000);
+  };
+  console.log(1, externalPopup?.closed);
+
+  useEffect(() => {
+    if (toLogin !== undefined) {
+      setIsLoginMode(!!toLogin);
+    }
+  }, [toLogin]);
 
   return (
     <>
@@ -256,6 +275,20 @@ function AuthForm(props) {
               }${language.loginSuffix}`}
               isDarkMode={isDarkMode}
             />
+            {isLoginMode && (
+              <>
+                <div className={`center ${classes["separator"]}`}>𝘰𝘳</div>
+                <GoogleLoginButton
+                  style={
+                    !isDarkMode && {
+                      boxShadow: "1px 1px 4px #444",
+                    }
+                  }
+                  preventActiveStyles={true}
+                  onClick={googleHandler}
+                />
+              </>
+            )}
           </>
         )}
       </Card>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //Image
@@ -27,7 +27,7 @@ import useMediaQuery from "../../hooks/media-query-hook";
 //CSS
 import classes from "./Navigation.module.css";
 
-function Navigation(props) {
+function Navigation() {
   const [isDrawer, setIsDrawer] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -38,6 +38,9 @@ function Navigation(props) {
     (state) => state.language
   );
   const dispatch = useDispatch();
+
+  //React Router
+  const location = useLocation();
 
   const userAvatar = avatar
     ? avatar.startsWith("https://") ||
@@ -65,7 +68,7 @@ function Navigation(props) {
 
   //Show Auth Modal
   const showAuthHandler = () => {
-    if (!token) {
+    if (!token && location.pathname !== "/auth") {
       setShowModal(true);
     }
   };

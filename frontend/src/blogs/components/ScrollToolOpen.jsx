@@ -22,7 +22,9 @@ function ScrollToolOpen({
   };
   return (
     <Card
-      className={`${className} ${classes["container"]}`}
+      className={`${className} ${classes["container"]} ${
+        isDarkMode ? null : classes["container-light"]
+      }`}
       isDarkMode={isDarkMode}
     >
       <RxCross2

@@ -57,6 +57,10 @@ const AuthPage = loadable(
   () => import("../users/pages/AuthPage"),
   loadingFallback
 );
+const OauthPage = loadable(
+  () => import("../users/pages/OauthPage"),
+  loadingFallback
+);
 const PostPage = loadable(
   () => import("../blogs/pages/PostPage"),
   loadingFallback
@@ -96,11 +100,10 @@ export function RouteCreate() {
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (userData?.token && new Date(userData.expiration) > new Date()) {
-
       //Theme
       if (!!+userData.theme) dispatch(themeActions.setDark());
       else dispatch(themeActions.setLight());
-      
+
       //Language
       if (userData.language === "en") dispatch(languageActions.setEnglish());
       if (userData.language === "ch") dispatch(languageActions.setChinese());
@@ -155,6 +158,7 @@ export function RouteCreate() {
           <Route path=":pid" element={<PostPage />} />
           {/* <Route path="/*" element={<NotFoundPage />} /> */}
         </Route>
+        <Route path="/oauth/success" element={<OauthPage />}></Route>
         <Route path="/*" element={<Navigate replace to="/" />} loader={null} />
       </Route>
     )
