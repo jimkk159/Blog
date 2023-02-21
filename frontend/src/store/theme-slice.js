@@ -11,6 +11,10 @@ const themeSlice = createSlice({
     setLight: (state) => {
       state.value = false;
     },
+    setTheme: (state, action) => {
+      if (typeof action.payload.value == "boolean")
+        state.value = action.payload.value;
+    },
     toggle: (state) => {
       state.value = !state.value;
     },

@@ -42,7 +42,6 @@ function AuthForm(props) {
   const { toLogin } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [externalPopup, setExternalPopup] = useState(null);
 
   //Redux
   const isDarkMode = useSelector((state) => state.theme.value);
@@ -109,8 +108,7 @@ function AuthForm(props) {
         );
 
         //Theme
-        if (!!+responseData.theme) dispatch(themeActions.setDark());
-        else dispatch(themeActions.setLight());
+        dispatch(themeActions.setTheme(!!+responseData.theme));
 
         //Language
         if (responseData.language === "en")
@@ -192,7 +190,6 @@ function AuthForm(props) {
       }
     }, 1000);
   };
-  console.log(1, externalPopup?.closed);
 
   useEffect(() => {
     if (toLogin !== undefined) {

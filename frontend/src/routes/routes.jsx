@@ -101,8 +101,7 @@ export function RouteCreate() {
     const userData = JSON.parse(localStorage.getItem("userData"));
     if (userData?.token && new Date(userData.expiration) > new Date()) {
       //Theme
-      if (!!+userData.theme) dispatch(themeActions.setDark());
-      else dispatch(themeActions.setLight());
+      dispatch(themeActions.setTheme(!!+userData.theme));
 
       //Language
       if (userData.language === "en") dispatch(languageActions.setEnglish());

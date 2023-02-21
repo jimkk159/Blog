@@ -13,8 +13,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      state.uid = action.payload.uid;
-      state.isAdmin = action.payload.isAdmin;
+      state.uid = +action.payload.uid;
+      state.isAdmin = !!+action.payload.isAdmin;
       state.name = action.payload.name;
       state.avatar = action.payload.avatar;
       state.token = action.payload.token;
