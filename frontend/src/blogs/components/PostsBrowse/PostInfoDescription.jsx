@@ -16,10 +16,14 @@ function PostInfoDescription(props) {
 
   //Custom Hook
   const { matches } = useMediaQuery("min", "768");
-  const limit = matches ? 125 : 50;
+  const limit = matches ? 100 : 50;
 
   if (short?.length < limit)
-    return <div className={classes["container"]}>{short}</div>;
+    return (
+      <div className={`${classes["container"]} ${classes["short-container"]}`}>
+        {short}
+      </div>
+    );
 
   //Count the description stop word
   let count = limit;
@@ -29,7 +33,9 @@ function PostInfoDescription(props) {
   return (
     <div className={classes["container"]}>
       <p>
-        {short?.slice(0, count) + "... ( "}
+        <span className={`${classes["short-container"]}`}>
+          {short?.slice(0, count) + "... ( "}
+        </span>
         <Link
           to={`/blog/${postId}`}
           className={

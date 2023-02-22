@@ -66,6 +66,8 @@ function PostPage() {
     isLoading: isLoadingPost,
     error: errorPost,
     clearError: clearErrorPost,
+    shortState,
+    setShortState,
     titleState,
     setTitleState,
     originState,
@@ -105,7 +107,7 @@ function PostPage() {
         if (!pid || !token || authorId !== uid) return;
         const title = getTextHandler(titleState);
         const type = "Problem";
-        const short = "bra bra bra";
+        const short = getTextHandler(shortState);
         const tag = getTextHandler(tagState).trim();
         const newTags = tag ? [...tags, tag] : [...tags];
         const contentRawData = savePostContentHandler(editorState);
@@ -166,6 +168,7 @@ function PostPage() {
       isEnglish,
       setIsEdit,
       cover,
+      shortState,
       titleState,
       tagState,
       editorState,
@@ -230,6 +233,8 @@ function PostPage() {
       />
       {isEdit ? (
         <EditPost
+          shortState={shortState}
+          onChangeShort={setShortState}
           titleState={titleState}
           onChangeTitle={setTitleState}
           originState={originState}

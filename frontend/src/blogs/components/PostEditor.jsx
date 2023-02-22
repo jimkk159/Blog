@@ -43,9 +43,11 @@ import classes from "./PostEditor.module.css";
 const decorator = createLinkDecorator();
 function PostEditor({
   className,
+  shortState,
   titleState,
   editorState,
   tagState,
+  onChangeShort,
   onChangeTitle,
   onChange,
   onChangeTag,
@@ -217,6 +219,15 @@ function PostEditor({
         }
         closeItem={<ScrollToolClose />}
       />
+      <Card className={`${classes["short-container"]}`} isDarkMode={isDarkMode}>
+        <h1 className={classes["short-title"]}>{language["short-title"]}</h1>
+        <hr className={classes["short-hr"]} />
+        <Editor
+          editorState={shortState}
+          onChange={onChangeShort}
+          placeholder={language.short}
+        />
+      </Card>
       <ToolBar
         isDarkMode={isDarkMode}
         editorState={editorState}

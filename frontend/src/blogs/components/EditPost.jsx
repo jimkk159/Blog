@@ -14,6 +14,8 @@ import classes from "./EditPost.module.css";
 
 function EditPost({
   isLoading,
+  shortState,
+  onChangeShort,
   originState,
   editorState,
   onChange,
@@ -43,6 +45,8 @@ function EditPost({
   return (
     <>
       <PostEditor
+        shortState={shortState}
+        onChangeShort={onChangeShort}
         editorState={editorState}
         onChange={onChange}
         titleState={titleState}

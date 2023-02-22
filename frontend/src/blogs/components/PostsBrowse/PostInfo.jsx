@@ -138,8 +138,8 @@ function PostInfo({ post, topic, onPin, onDelete }) {
               author={author}
               date={postDate}
               isPined={!!pin}
-              onEdit={editHandler}
               onPin={onPin}
+              onEdit={editHandler}
               onShowDelete={showDeleteHandler}
             />
             <hr />

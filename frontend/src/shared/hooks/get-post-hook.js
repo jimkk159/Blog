@@ -21,6 +21,7 @@ const usePost = () => {
   const { isLoading, error, sendRequest, clearError } = useHttp();
 
   //Post Title
+  const [shortState, setShortState] = useState(() => EditorState.createEmpty());
   const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
 
   //Post Content
@@ -41,13 +42,18 @@ const usePost = () => {
           process.env.REACT_APP_BACKEND_URL + `/posts/${pid}`
         );
         const postContent = post?.content;
+        let shortText = choiceLanguage(
+          isEnglish,
+          postContent?.en?.short,
+          postContent?.ch?.short,
+          "No Description..."
+        );
         let titleText = choiceLanguage(
           isEnglish,
           postContent?.en?.title,
           postContent?.ch?.title,
           ""
         );
-        titleText = titleText ? titleText : "";
         let enContent;
         try {
           enContent = JSON.parse(postContent?.en?.content);
@@ -66,6 +72,8 @@ const usePost = () => {
           chContent,
           convertToRaw(ContentState.createFromText(""))
         );
+        setShortState(createEditorStateWithText(shortText));
+        setTitleState(createEditorStateWithText(titleText));
         const postContentState = convertFromRaw(postJSON);
         setOriginState(EditorState.createWithContent(postContentState));
         setEditorState(EditorState.createWithContent(postContentState));
@@ -103,6 +111,8 @@ const usePost = () => {
     isLoading,
     error,
     clearError,
+    shortState,
+    setShortState,
     titleState,
     setTitleState,
     originState,

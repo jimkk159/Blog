@@ -28,6 +28,8 @@
   "saveBtn": "儲存",
   "deleteBtn": "刪除",
   "cancelBtn": "取消",
+  "short-title": "簡述",
+  "short": "簡述你的文章...",
   "addTitle": "新增標題",
   "addContent": "新增內容"
 }

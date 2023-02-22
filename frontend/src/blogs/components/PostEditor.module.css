@@ -1,20 +1,39 @@
 .post-container {
-  padding: 1.5rem 3rem 3rem;
   font-family: "Noto Sans TC", "Segoe UI", "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "微軟正黑體",
     "Microsoft JhengHei", Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro",
     "LiHei Pro";
+  padding: 1.5rem 3rem 3rem;
+}
+
+.short-container {
+  font-family: "Noto Sans TC", "Segoe UI", "Helvetica Neue", Arial, sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "微軟正黑體",
+  "Microsoft JhengHei", Arial, "文泉驛正黑", "WenQuanYi Zen Hei", "儷黑 Pro",
+  "LiHei Pro";
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+.short-title {
+  font-size: 20;
+  line-height: 32px;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.short-hr {
+  margin: 0.5rem 0 1rem;
 }
 .editor-container {
   min-height: 10rem;
 }
 .tags-container {
-  position: relative;
   margin-top: 3rem;
+  position: relative;
 }
 .cover {
-  margin-top: 2rem;
   margin-bottom: 2rem;
+  margin-top: 2rem;
   max-width: 80%;
   width: 80%;
 }

@@ -28,6 +28,8 @@
   "saveBtn": "SAVE",
   "deleteBtn": "DELETE",
   "cancelBtn": "CANCEL",
+  "short-title": "Brief",
+  "short":"Tell your story in short...",
   "addTitle": "Click to add Title...",
   "addContent": "Tell a story..."
 }

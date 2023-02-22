@@ -12,6 +12,7 @@ import convertImgURL from "../../shared/util/url-to-blob";
 
 //Custom Hook
 import useHttp from "../../shared/hooks/http-hook";
+import usePost from "../../shared/hooks/get-post-hook";
 import useTopic from "../../shared/hooks/get-topic-hook";
 
 //Custom Component
@@ -27,10 +28,6 @@ import useAutoSave from "../../shared/hooks/save-post-hook";
 
 function NewPostPage() {
   const [cover, setCover] = useState(null);
-  const [titleState, setTitleState] = useState(() => EditorState.createEmpty());
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
   const [tagState, setTagState] = useState(() => EditorState.createEmpty());
 
   //Redux
@@ -54,6 +51,14 @@ function NewPostPage() {
     error: errorTopic,
     clearError: clearErrorTopic,
   } = useTopic();
+  const {
+    shortState,
+    setShortState,
+    titleState,
+    setTitleState,
+    editorState,
+    setEditorState,
+  } = usePost();
 
   //Get EditorState FirstBlock Text
   const getTextHandler = useCallback((editorState) => {
@@ -63,7 +68,7 @@ function NewPostPage() {
   }, []);
 
   //Save the Post Editor
-  const savePostContentHandler = useCallback((editorState) => {
+  const saveContentHandler = useCallback((editorState) => {
     const currentContent = editorState.getCurrentContent();
     return JSON.stringify(convertToRaw(currentContent));
   }, []);
@@ -73,11 +78,11 @@ function NewPostPage() {
     async (token) => {
       try {
         if (!token) return;
-        const title = getTextHandler(titleState);
         const type = "Problem";
-        const short = "bra bra bra";
+        const short = getTextHandler(shortState);
+        const title = getTextHandler(titleState);
         const tag = getTextHandler(tagState).trim();
-        const contentRawData = savePostContentHandler(editorState);
+        const contentRawData = saveContentHandler(editorState);
         const [convertedData, imgBlobs, imgMap] = convertImgURL(contentRawData);
         const newTags = tag ? [...tags, tag] : [...tags];
         const createSendForm = (imgMap, imgArray, draftRawData, tags) => {
@@ -131,13 +136,14 @@ function NewPostPage() {
       setIsEdit,
       isEnglish,
       cover,
+      shortState,
       titleState,
       editorState,
       tagState,
       navigate,
       sendRequest,
       getTextHandler,
-      savePostContentHandler,
+      saveContentHandler,
     ]
   );
 
@@ -174,10 +180,12 @@ function NewPostPage() {
         </>
       )}
       <PostEditor
-        editorState={editorState}
-        onChange={setEditorState}
+        shortState={shortState}
+        onChangeShort={setShortState}
         titleState={titleState}
         onChangeTitle={setTitleState}
+        editorState={editorState}
+        onChange={setEditorState}
         tagState={tagState}
         onChangeTag={setTagState}
         onCover={setCover}
