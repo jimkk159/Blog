@@ -62,10 +62,10 @@ export const getFullPost = async (req, res, next) => {
     );
     return next(error);
   }
-
   const postInfo = {
     id: post.id,
     date: post.update,
+    short: post.short,
     topic_id: post.topic_id,
     topic: post.topic,
     type: post.type,

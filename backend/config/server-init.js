@@ -41,7 +41,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //Allow CORS
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL, // allow to server to accept request from different origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    // credentials: true, // allow session cookie from browser to pass through
+  })
+);
 
 //Add Static Folder to save images
 app.use("/upload/images", express.static(path.join("upload", "images")));
