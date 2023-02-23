@@ -1,3 +1,4 @@
+import gravatar from "gravatar";
 import { getDBUser, getDBUserByEmail } from "../../database/mysql/user/read.js";
 import { createDBUserSocial } from "../../database/mysql/user/create.js";
 import { getDBSocialByParams } from "../../database/mysql/social/read.js";
@@ -9,17 +10,13 @@ const oauthGoogle = async (accessToken, refreshToken, profile, cb) => {
   let cridential;
 
   if (!profile.emails || !profile.emails.length || !profile?.displayName) {
-    return next(
-      new HttpError("Login Google Failed! Please try again later", 500)
-    );
+    cb(new HttpError("Create Account Failed! Please try again later", 500));
   }
 
   try {
     cridential = await getDBSocialByParams(profile.provider, profile.id);
   } catch (err) {
-    return next(
-      new HttpError("Login Google Failed! Please try again later", 500)
-    );
+    cb(new HttpError("Create Account Failed! Please try again later", 500));
   }
 
   if (!cridential) {
@@ -29,7 +26,7 @@ const oauthGoogle = async (accessToken, refreshToken, profile, cb) => {
         const newUser = {
           name: profile?.displayName,
           email: profile?.emails[0].value,
-          avatar: "upload/images/default/default_avatar.png",
+          avatar: gravatar.url(profile?.emails[0].value, { protocol: "https", d: "identicon" }),
           provider: profile?.provider,
           sercrect: profile?.id,
         };
@@ -38,17 +35,14 @@ const oauthGoogle = async (accessToken, refreshToken, profile, cb) => {
         await createDBSocial(user.id, profile.provider, profile.id);
       }
     } catch (err) {
-      return next(
-        new HttpError("Create Account Failed! Please try again later", 500)
-      );
+      console.log(err);
+      cb(new HttpError("Create Account Failed! Please try again later", 500));
     }
   } else {
     try {
       user = await getDBUser(cridential.user_id);
     } catch (err) {
-      return next(
-        new HttpError("Get User Failed! Please try again later", 500)
-      );
+      cb(new HttpError("Create Account Failed! Please try again later", 500));
     }
   }
   return cb(null, user);

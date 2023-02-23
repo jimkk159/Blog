@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
 import normalize from "normalize-path";
 import HttpError from "../../models/http-error.js";
@@ -128,12 +129,14 @@ export const generateToken = (req, res, next) => {
 
 //Generate Avatar URI
 export const createAvatar = (req, res, next) => {
+  const { email } = req.body;
+
   //Setting Avatar
   let avatar;
   if (req.file?.path) {
     avatar = normalize(req.file.path);
   } else {
-    avatar = "upload/images/default/default_avatar.png";
+    avatar = gravatar.url(email, { protocol: "https", d: "identicon" });
   }
   res.locals.avatar = avatar;
   next();
