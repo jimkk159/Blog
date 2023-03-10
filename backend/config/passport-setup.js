@@ -1,7 +1,7 @@
 import passport from "passport";
 import passportGoogle from "passport-google-oauth20";
 
-import oauth from "../controllers/oauth-controller/index.js";
+import oauth from "../controllers/oauth-controller.js";
 
 const GoogleStrategy = passportGoogle.Strategy;
 
