@@ -11,6 +11,7 @@ import {
   user_id_,
   provider_,
   password_,
+  role_,
 } from "../../utils/table.js";
 
 //-----------------User---------------------
@@ -20,6 +21,7 @@ export const createOneUser = async ({
   avatar,
   provider,
   password,
+  role,
 }) => {
   let insertId;
   //Transaction
@@ -27,11 +29,15 @@ export const createOneUser = async ({
   try {
     await connection.beginTransaction();
 
+    const cols = [user_name_, email_, avatar_];
+    const vals = [name, email, avatar];
+    if (role) cols.push(role_);
+    if (role) vals.push(role);
     insertId = await queryConnection.createOne(
       connection,
       user_,
-      [user_name_, email_, avatar_],
-      [name, email, avatar]
+      cols,
+      vals
     );
     await queryConnection.createOne(
       connection,

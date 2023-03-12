@@ -3,29 +3,13 @@ import passport from "passport";
 import { check } from "express-validator";
 import fileUploadToServer from "../utils/file-upload.js";
 
-import oauth from "../controllers/oauth-controller.js";
+import oauthController from "../controllers/oauth-controller.js";
 import authController from "../controllers/auth-controller.js";
-import userController from "../controllers/user-controller.js";
 import shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
 //---------------Local--------------------
-router.post(
-  "/login",
-  [
-    check("email").normalizeEmail().isEmail(),
-    check("password").isLength({ min: 6 }),
-  ],
-  shareController.validation,
-  authController.identifyEmail("exist"),
-  authController.getUserSecrect("local"),
-  shareController.checkPassword,
-  shareController.generateToken,
-  authController.login,
-  shareController.responseHttp
-);
-
 router.post(
   "/signup",
   fileUploadToServer.single("image"),
@@ -33,16 +17,25 @@ router.post(
     check("name").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
     check("password").isLength({ min: 6 }),
+    check("confirmPassword").isLength({ min: 6 }),
   ],
   shareController.validation,
-  authController.identifyEmail("empty"),
-  shareController.encryptPassword,
-  shareController.createAvatar,
-  userController.createLocalUser,
-  shareController.generateToken,
-  authController.signup,
-  shareController.responseHttp
+  authController.signup("user")
 );
+
+router.post(
+  "/login",
+  [
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
+  ],
+  shareController.validation,
+  authController.login
+);
+router.get("/logout", authController.logout);
+
+router.post("/forgotPassword", authController.forgotPassword);
+// router.patch('/resetPassword/:token', authController.resetPassword);
 
 //---------------Google-------------------
 // auth with google
@@ -57,10 +50,9 @@ router.get(
   passport.authenticate("google", {
     failureRedirect: "/auth/google/failed",
   }),
-  oauth.setSessionUser,
-  shareController.generateToken,
-  authController.login,
-  shareController.redirectOauth
+  oauthController.setSessionUser,
+  oauthController.setOauth,
+  oauthController.redirectOauth
 );
 
 // when login failed, send failed msg
@@ -69,6 +61,10 @@ router.get("/google/failed", (req, res) => {
     message: "Login by google failed!",
   });
 });
+
+router.use(authController.authToken);
+
+// router.patch('/updateMyPassword', authController.updatePassword);
 
 export default router;
 //Reference: https://alexanderleon.medium.com/implement-social-authentication-with-react-restful-api-9b44f4714fa

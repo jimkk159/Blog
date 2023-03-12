@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import hpp from "hpp";
 import cors from "cors";
 import path from "path";
@@ -23,7 +25,8 @@ import authRouters from "../routes/auth-routes.js";
 import usersRouters from "../routes/user-routes.js";
 import postsRouters from "../routes/post-routes.js";
 import topicsRouters from "../routes/topic-routes.js";
-import exampleRouters from "../routes/example-routes.js";
+
+
 
 export const app = express();
 
@@ -100,7 +103,6 @@ app.use("/auth", authRouters);
 app.use("/user", usersRouters);
 app.use("/post", postsRouters);
 app.use("/topic", topicsRouters);
-app.use("/example", exampleRouters);
 
 //Compress response bodies
 app.use(compression());

@@ -1,5 +1,3 @@
-import queryPool from "../module/mysql/pool.js";
-import { id_, topic_, topic_name_ } from "../utils/table.js";
 
 //Remove apostrophe
 export const trimApos = (element) => element.replace(/(^\`+|\`+$)/g, "");

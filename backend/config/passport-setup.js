@@ -1,7 +1,7 @@
 import passport from "passport";
 import passportGoogle from "passport-google-oauth20";
 
-import oauth from "../controllers/oauth-controller.js";
+import oauthController from "../controllers/oauth-controller.js";
 
 const GoogleStrategy = passportGoogle.Strategy;
 
@@ -13,7 +13,7 @@ passport.serializeUser(function (user, cb) {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
-      admin: user.admin,
+      role: user.role,
     });
   });
 });
@@ -32,7 +32,7 @@ passport.use(
       clientSecret: process.env["GOOGLE_CLIENT_SECRET"],
       callbackURL: "/auth/google/redirect",
     },
-    oauth.oauthGoogle
+    oauthController.oauthGoogle
   )
 );
 

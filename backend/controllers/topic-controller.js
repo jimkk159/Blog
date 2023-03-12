@@ -26,20 +26,16 @@ const identifyTopic = catchAsync(async (req, res, next) => {
 });
 
 const isValidParentChildRelation = async (parent, child) => {
-  const childTopic = await queryPool.getOne(`topic`, `name`, child);
-  const parentTopic = await queryPool.getOne(
-    `topic`,
-    "id",
-    childTopic.parent_id
-  );
+  const childTopic = await queryPool.getOne(topic_, topic_name_, child);
+  const parentTopic = await queryPool.getOne(topic_, id_, childTopic.parent_id);
   if (parent !== parentTopic.name) return false;
   return true;
 };
 
 const isValidTopic = async (req, res, next) => {
   //Check Existed Topic
-  const topic = await queryPool.getOne(`topic`, `name`, req.body.topic);
-  const parent = await queryPool.getOne(`topic`, `name`, req.body.parent);
+  const topic = await queryPool.getOne(topic_, topic_name_, req.body.topic);
+  const parent = await queryPool.getOne(topic_, topic_name_, req.body.parent);
   let children = [];
   if (Array.isArray(req.body.children)) {
     children = [

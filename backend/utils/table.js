@@ -1,7 +1,11 @@
+//--------------token-----------------
+export const access_token_ = "`token`";
+export const refresh_token_ = null;
+
 //---------------table----------------
 export const post_ = "`post`";
 export const topic_ = "`topic`";
-export const auth_ = "`auth`"
+export const auth_ = "`auth`";
 export const user_ = "`user`";
 export const postEn_ = "`postEn`";
 export const postCh_ = "`postCh`";
@@ -31,6 +35,7 @@ export const provider_ = "`provider`";
 export const password_ = "`password`";
 export const email_ = "`email`";
 export const parent_ = "`parent`";
+export const role_ = "`role`";
 
 //-----------compose field-------------
 export const postFields = [

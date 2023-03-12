@@ -1,32 +1,37 @@
 import factory from "./handle-factory.js";
-import catchAsync from "../utils/catch-async.js";
 import { createOneUser } from "../module/mysql/user-model.js";
+import { id_, user_ } from "../utils/table.js";
+import HttpError from "../utils/http-error.js";
 
-const table = "user";
 //Create Local User
-export const createLocalUser = catchAsync(async (req, res, next) => {
-  //Create User
-  const newUser = await createOneUser({
-    name: req.body.name,
-    email: req.body.email,
-    avatar: res.locals.avatar,
-    provider: "local",
-    password: res.locals.password,
-  });
-  
-  if (!newUser) {
-    return next(
-      new HttpError("Create User fail, please try again later.", 500)
-    );
-  }
-  req.user = { ...req.user, ...newUser };
-  next();
-});
+export const createLocalUser =
+  (roles) => async (name, email, avatar, password, role) => {
+    if (role && ![...roles].includes(role))
+      throw new HttpError(
+        "Create User fail, please check your input role.",
+        500
+      );
 
-const getAllUsers = factory.getAll(table, ["id", "item", "price", "update"]);
-const postUser = factory.createOne(table);
-const patchUser = factory.updateOne(table);
-const deleteUser = factory.deleteOne(table);
+    //Create User
+    const newUser = await createOneUser({
+      name,
+      email,
+      avatar,
+      provider: "local",
+      password,
+      role,
+    });
+
+    if (!newUser)
+      throw new HttpError("Create User fail, please try again later.", 500);
+
+    return { ...newUser };
+  };
+
+const getAllUsers = factory.getAll(user_, [id_, "item", "price", "update"]);
+const postUser = factory.createOne(user_);
+const patchUser = factory.updateOne(user_);
+const deleteUser = factory.deleteOne(user_);
 
 export default {
   getAllUsers,

@@ -1,13 +1,13 @@
 import express from "express";
 import { check } from "express-validator";
 
-import authToken from "../utils/check-auth.js";
 import fileUploadToServer from "../utils/file-upload.js";
 import factory from "../controllers/handle-factory.js";
 import topicController from "../controllers/topic-controller.js";
 import userController from "../controllers/auth-controller.js";
 import postController from "../controllers/post-controller.js";
 import shareController from "../controllers/share-controller.js";
+import authController from "../controllers/auth-controller.js";
 
 const table = `post`;
 const router = express.Router();
@@ -34,7 +34,7 @@ router
   );
 
 // check token middleware
-router.use(authToken);
+router.use(authController.authToken);
 
 router.post(
   "/",
@@ -62,7 +62,7 @@ router.patch(
   [check("pin").not().isEmpty()],
   shareController.validation,
   postController.identifyPost,
-  shareController.restrictTo("root", "admin"),
+  shareController.restrictTo("root", "leader", "manager"),
   postController.pinPost
 );
 
@@ -88,7 +88,7 @@ router
   )
   .delete(
     postController.identifyPost,
-    postController.judeDeletePostPermission("root", "admin"),
+    postController.judeDeletePostPermission("root", "leader"),
     factory.deleteOne(table)
   );
 

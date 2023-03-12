@@ -24,6 +24,7 @@ import {
   post_id_,
   topic_id_,
   postFields,
+  pin_,
   joinPostAndPostTag,
   joinTagAndPostTag,
   joinPostAndTopic,
@@ -364,7 +365,6 @@ export const updateLanguagePost = async (
 };
 
 export const updateTagPost = async (connection, id, tags) => {
-  console.log(tags, !tags.length);
   if (!tags.length) {
     await queryConnection.query(
       connection,
