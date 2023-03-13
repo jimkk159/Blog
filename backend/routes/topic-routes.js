@@ -16,9 +16,6 @@ router.post(
   "/",
   [check("topic").not().isEmpty(), check("parent").not().isEmpty()],
   shareController.validation,
-  topicController.identifyTopic,
-  topicController.validationTopic,
-  topicController.createOneTopic,
-  shareController.responseHttp
+  topicController.createOneTopic
 );
 export default router;

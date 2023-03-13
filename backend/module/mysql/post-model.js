@@ -421,23 +421,26 @@ export const updateOnePost = async ({
   try {
     await connection.beginTransaction();
     if (topic_id) {
-      cols.push(`${topic_id_} = ?`);
+      cols.push(`${topic_id_}`);
       vals.push(topic_id);
     }
     if (type) {
-      cols.push(`${type_} = ?`);
+      cols.push(`${type_}`);
       vals.push(type);
     }
     if (cover) {
-      cols.push(`${cover_} = ?`);
+      cols.push(`${cover_}`);
       vals.push(cover);
     }
 
     if (!!cols.length)
-      await queryConnection.updateOne(connection, "`post`", cols.join(", "), [
-        ...vals,
-        id,
-      ]);
+      await queryConnection.updateOne(
+        connection,
+        post_,
+        cols,
+        [id_],
+        [...vals, id]
+      );
 
     if (content?.en)
       await updateLanguagePost(
@@ -473,8 +476,7 @@ export const updateOnePost = async ({
 
 //---------------Patch-------------------
 export const updatePostPin = async ({ id, pin }) => {
-  const [result] = await queryPool.updateOne(post_, `${pin_} = ?`, [+pin, id]);
-  return result;
+  await queryPool.updateOne(post_, [pin_], [id_], [+pin, id]);
 };
 
 export default {
@@ -484,6 +486,7 @@ export default {
   getSearchPost,
   createOnePost,
   updateOnePost,
+  updatePostPin,
 };
 //Reference: https://dba.stackexchange.com/questions/76973/what-is-faster-one-big-query-or-many-small-queries
 //Reference: https://dba.stackexchange.com/questions/36391/is-there-an-execution-difference-between-a-join-condition-and-a-where-condition/36409#36409

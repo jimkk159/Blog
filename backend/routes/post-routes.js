@@ -2,36 +2,22 @@ import express from "express";
 import { check } from "express-validator";
 
 import fileUploadToServer from "../utils/file-upload.js";
-import factory from "../controllers/handle-factory.js";
-import topicController from "../controllers/topic-controller.js";
-import userController from "../controllers/auth-controller.js";
+
 import postController from "../controllers/post-controller.js";
 import shareController from "../controllers/share-controller.js";
 import authController from "../controllers/auth-controller.js";
 
-const table = `post`;
 const router = express.Router();
 
 router.get(
   "/search",
   [check("search").not().isEmpty()],
   shareController.validation,
-  postController.getPostSearch,
-  shareController.responseHttp
+  postController.getPostSearch
 );
-router.get("/", postController.getAllPost, shareController.responseHttp);
-router
-  .route("/many")
-  .get(postController.getPostByIds, shareController.responseHttp);
-router
-  .route("/:id")
-  .get(
-    postController.getOnePost,
-    postController.getTopicRelatedPost,
-    postController.getTagRelatedPost,
-    postController.getAuthorRelatedPost,
-    shareController.responseHttp
-  );
+router.get("/", postController.getAllPost);
+router.get("/many", postController.getPostByIds); //Todo
+router.get("/:id",postController.getOnePost);
 
 // check token middleware
 router.use(authController.authToken);
@@ -44,25 +30,15 @@ router.post(
   ]),
   [check("detail").not().isEmpty()],
   shareController.validation,
-  userController.identifyUser,
-  topicController.identifyTopic,
-  topicController.validationTopic,
-  shareController.replaceImageSrc,
-  topicController.createOneTopic,
   postController.createOnePost,
-  postController.getOnePost,
-  postController.getTopicRelatedPost,
-  postController.getTagRelatedPost,
-  postController.getAuthorRelatedPost,
-  shareController.responseHttp
+  postController.getOnePost
 );
 
 router.patch(
   "/pin/:id",
   [check("pin").not().isEmpty()],
   shareController.validation,
-  postController.identifyPost,
-  shareController.restrictTo("root", "leader", "manager"),
+  // shareController.restrictTo("root", "leader", "manager"),
   postController.pinPost
 );
 
@@ -74,22 +50,11 @@ router
       { name: "images" },
     ]),
     shareController.validation,
-    userController.identifyUser,
-    postController.identifyPost,
-    topicController.parseTopic,
-    postController.identifyAuthor,
-    shareController.replaceImageSrc,
     postController.updateOnePost,
-    postController.getOnePost,
-    postController.getTopicRelatedPost,
-    postController.getTagRelatedPost,
-    postController.getAuthorRelatedPost,
-    shareController.responseHttp
+    postController.getOnePost
   )
   .delete(
-    postController.identifyPost,
-    postController.judeDeletePostPermission("root", "leader"),
-    factory.deleteOne(table)
+    postController.deleteOnePost,
   );
 
 export default router;

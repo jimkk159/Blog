@@ -10,14 +10,14 @@ const router = express.Router();
 // check token middleware
 router.use(authController.authToken);
 
-// router.use(shareController.restrictTo(("root", "leader", "manager")));
+router.use(shareController.restrictTo(("root", "leader", "manager")));
 
-router.route("/").get(factory.getAll(user_), shareController.responseUserHttp);
+router.route("/").get(factory.getAll(user_));
 router
   .route("/:id")
-  .get(factory.getOne(user_), shareController.responseUserHttp);
+  .get(factory.getOne(user_));
 
-// router.use(shareController.restrictTo(("root", "leader")));
+router.use(shareController.restrictTo(("root", "leader")));
 
 router
   .route("/")
@@ -49,7 +49,7 @@ router.use(shareController.restrictTo("root"));
 
 router
   .route("/:id")
-  .patch(factory.updateOne(user_), shareController.responseHttp)
+  .patch(factory.updateOne(user_))
   .delete(factory.deleteOne(user_));
 
 export default router;

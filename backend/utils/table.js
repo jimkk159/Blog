@@ -33,6 +33,7 @@ export const parent_id_ = "`parent_id`";
 export const user_id_ = "`user_id`";
 export const provider_ = "`provider`";
 export const password_ = "`password`";
+export const expire_in_ = "`expire_in`";
 export const email_ = "`email`";
 export const parent_ = "`parent`";
 export const role_ = "`role`";

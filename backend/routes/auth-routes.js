@@ -35,7 +35,11 @@ router.post(
 router.get("/logout", authController.logout);
 
 router.post("/forgotPassword", authController.forgotPassword);
-// router.patch('/resetPassword/:token', authController.resetPassword);
+router.patch(
+  "/updatePassword",
+  authController.authToken,
+  authController.updatePassword
+);
 
 //---------------Google-------------------
 // auth with google
@@ -61,10 +65,6 @@ router.get("/google/failed", (req, res) => {
     message: "Login by google failed!",
   });
 });
-
-router.use(authController.authToken);
-
-// router.patch('/updateMyPassword', authController.updatePassword);
 
 export default router;
 //Reference: https://alexanderleon.medium.com/implement-social-authentication-with-react-restful-api-9b44f4714fa

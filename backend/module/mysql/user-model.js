@@ -28,17 +28,12 @@ export const createOneUser = async ({
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-
+    
     const cols = [user_name_, email_, avatar_];
     const vals = [name, email, avatar];
     if (role) cols.push(role_);
     if (role) vals.push(role);
-    insertId = await queryConnection.createOne(
-      connection,
-      user_,
-      cols,
-      vals
-    );
+    insertId = await queryConnection.createOne(connection, user_, cols, vals);
     await queryConnection.createOne(
       connection,
       auth_,

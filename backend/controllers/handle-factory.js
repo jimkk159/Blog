@@ -10,11 +10,10 @@ const getOne = (table) =>
     if (!data) {
       return next(new HttpError(`No data found with that ID.`, 404));
     }
-    res.locals.response = {
+    res.status(200).json({
       status: "success",
       data,
-    };
-    if (!res.locals.skipNext) next();
+    });
   });
 
 const getAll = (table, fields) =>
@@ -24,12 +23,11 @@ const getAll = (table, fields) =>
       req.query,
       fields?.map((element) => `${element}`)
     );
-    res.locals.response = {
+    res.status(200).json({
       status: "success",
       results: data.length,
       data,
-    };
-    if (!res.locals.skipNext) next();
+    });
   });
 
 const createOne = (table) =>
@@ -40,11 +38,10 @@ const createOne = (table) =>
     const insertId = await queryPool.createOne(table, columns, values);
     const data = await queryPool.getOne(table, id_, insertId);
 
-    res.locals.response = {
+    res.status(200).json({
       status: "success",
       data,
-    };
-    if (!res.locals.skipNext) next();
+    });
   });
 
 const updateOne = (table) =>
@@ -57,22 +54,26 @@ const updateOne = (table) =>
       .join(", `")}`;
 
     const values = Object.values(req.body);
-    await queryPool.updateOne(table, statements, [...values, req.params.id]);
+    await queryPool.updateOne(
+      table,
+      statements,
+      [id_],
+      [...values, req.params.id]
+    );
     const data = await queryPool.getOne(table, id_, req.params.id);
     if (!data) {
       return next(new HttpError("No data found with that ID", 404));
     }
 
-    res.locals.response = {
+    res.status(200).json({
       status: "success",
       data,
-    };
-    if (!res.locals.skipNext) next();
+    });
   });
 
 const deleteOne = (table) =>
   catchAsync(async (req, res, next) => {
-    await queryPool.deleteOne(table, req.params.id);
+    await queryPool.deleteOne(table, [id_], [req.params.id]);
     if (!res.locals.skipNext) res.status(204).json();
   });
 

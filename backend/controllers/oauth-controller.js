@@ -79,15 +79,10 @@ const setSessionUser = (req, res, next) => {
 const setOauth = (req, res, next) => {
   
   // 1) Generate token
-  res.locals.token = authController.generateToken(req.user.id, req.user.email);
+  const token = authController.generateToken(req.user.id, req.user.email);
 
   // 2) create token cookie
-  createTokenCookie(req, res);
-
-  const token = res.locals.token;
-  if (res.locals.token) delete res.locals.token;
-  if (req.user.password) delete req.user.password;
-  if (req.body.password) delete req.body.password;
+  createTokenCookie(req, res, token);
 
   res.locals.response = {
     id: req.user.id,

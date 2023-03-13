@@ -1,5 +1,5 @@
 import apiFeatures from "../../utils/api-features.js";
-import { id_ } from "../../utils/table.js";
+import pool from "./index.js";
 
 const query = async (connection, statement, values) => {
   const [result] = await connection.query(statement, values);
@@ -59,10 +59,13 @@ const createOne = async (
   return result.insertId;
 };
 
-const updateOne = (connection, table, statements, values) =>
-  connection.query(`UPDATE ${table} SET ${statements} WHERE ${id_}= ?;`, [
-    ...values,
+const updateOne = async (connection, table, updateCols, cols, vals) => {
+  const update = updateCols.map((col) => `${col}= ?`).join(", ");
+  const conditions = cols.map((col) => `${col}= ?`).join(" AND ");
+  connection.query(`UPDATE ${table} SET ${update} WHERE ${conditions};`, [
+    ...vals,
   ]);
+};
 
 const updateAll = async (connection, table, queryObj, col, vals) => {
   const [statements, values] = Object.entries(queryObj).reduce(
@@ -80,13 +83,16 @@ const updateAll = async (connection, table, queryObj, col, vals) => {
   );
 };
 
-export const deleteOne = (connection, table, id) =>
-  connection.query(`DELETE FROM ${table} WHERE ${id_}= ?;`, [id]);
+export const deleteOne = async (connection, table, cols, vals) => {
+  const conditions = cols.map((col) => `${col}= ?`).join(" AND ");
+  connection.query(`DELETE FROM ${table} WHERE ${conditions};`, vals);
+};
 
-const startTransaction = async (connection, func) => {
+const startTransaction = async (func) => {
   let result;
+  const connection = await pool.getConnection();
+  await connection.beginTransaction();
   try {
-    await connection.beginTransaction();
     result = await func();
     await connection.commit();
     connection.release();

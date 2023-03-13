@@ -20,11 +20,11 @@ const getAll = async (table, queryString, fields) =>
 const createOne = async (table, columns, values, isIgnore) =>
   queryConnection.createOne(pool, table, columns, values, isIgnore);
 
-const updateOne = (table, statement, values, id) =>
-  queryConnection.updateOne(pool, table, statement, values, id);
+const updateOne = async (table, updateCols, cols, vals) =>
+  queryConnection.updateOne(pool, table, updateCols, cols, vals);
 
-export const deleteOne = (table, id) =>
-  queryConnection.deleteOne(pool, table, id);
+export const deleteOne = async (table, cols, vals) =>
+  queryConnection.deleteOne(pool, table, cols, vals);
 
 export default {
   query,

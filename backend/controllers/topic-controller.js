@@ -2,7 +2,7 @@ import HttpError from "../utils/http-error.js";
 import queryPool from "../module/mysql/pool.js";
 import catchAsync from "../utils/catch-async.js";
 import apiFeatures from "../utils/api-features.js";
-import topicModule from "../module/mysql/topic-model.js";
+import topicModel from "../module/mysql/topic-model.js";
 import {
   topic_,
   parent_,
@@ -14,35 +14,34 @@ import {
 
 const child = "`child`";
 const children = "`children`";
-const identifyTopic = catchAsync(async (req, res, next) => {
-  //To Seperate the topic and parent and children
-  if (!req.body.topic || req.body.topic === "null")
-    return next(new HttpError("Input topic null!!", 400));
 
-  if (req.body.topic.toLowerCase() === "root")
-    return next(new HttpError("Not allow to set Root for Topic.", 422));
+const checkTopic = (topic) => {
+  if (topic.toLowerCase() === "root")
+    throw new HttpError("Not allow to set Root for Topic.", 422);
 
-  next();
-});
+  if (!topic) throw new HttpError("Topic is null!", 403);
+};
 
 const isValidParentChildRelation = async (parent, child) => {
   const childTopic = await queryPool.getOne(topic_, topic_name_, child);
+  if (!childTopic) return false;
   const parentTopic = await queryPool.getOne(topic_, id_, childTopic.parent_id);
+  if (!parentTopic) return false;
   if (parent !== parentTopic.name) return false;
   return true;
 };
 
-const isValidTopic = async (req, res, next) => {
-  //Check Existed Topic
-  const topic = await queryPool.getOne(topic_, topic_name_, req.body.topic);
-  const parent = await queryPool.getOne(topic_, topic_name_, req.body.parent);
+const isLegalTopic = async (queryTopic, queryParent, queryChildren) => {
+  //Check Topic Property
+  const topic = await queryPool.getOne(topic_, topic_name_, queryTopic);
+  const parent = await queryPool.getOne(topic_, topic_name_, queryParent);
   let children = [];
-  if (Array.isArray(req.body.children)) {
+  if (Array.isArray(queryChildren)) {
     children = [
-      ...new Set(req.body.children.map((element) => element.toLowerCase())),
+      ...new Set(queryChildren.map((element) => element.toLowerCase())),
     ];
-  } else if (req.body.children) {
-    children = [req.body.children.toLowerCase()];
+  } else if (queryChildren) {
+    children = [queryChildren.toLowerCase()];
   }
 
   // Parent Not Exist-----------------------
@@ -54,20 +53,16 @@ const isValidTopic = async (req, res, next) => {
     };
 
   // Parent not match Parent-----------------------
-  if (
-    topic &&
-    !(await isValidParentChildRelation(req.body.parent, req.body.topic))
-  )
+  if (topic && !(await isValidParentChildRelation(queryParent, queryTopic)))
     return {
       valid: false,
       status: 422,
       message: "Parent does not match!",
     };
-
   // Children not match -----------------------
-  const checkParent = topic ? req.body.topic : req.body.parent;
+  const checkParent = topic ? queryTopic : queryParent;
   if (
-    !children.length &&
+    children.length &&
     !(
       await Promise.all(
         children.map((child) => isValidParentChildRelation(checkParent, child))
@@ -81,57 +76,50 @@ const isValidTopic = async (req, res, next) => {
     };
 
   if (topic) {
-    return { valid: true, exist: true, ...topic };
+    return { valid: true, exist: true, ...topic, children };
   }
+
   // Get Children Ids
   if (children.length)
     children = (
-      await queryPool.getMany(topic_, topic_name_, children, id_)
+      await queryPool.getMany(topic_, topic_name_, queryChildren, id_)
     ).map((element) => element.id);
 
   return {
     valid: true,
     exist: false,
-    topic: req.body.topic,
+    topic: queryTopic,
     parent_id: parent.id,
     children,
   };
 };
 
-const validationTopic = catchAsync(async (req, res, next) => {
-  const result = await isValidTopic(req, res, next);
-  if (!result.valid) return next(new HttpError(result.message, result.status));
-  delete result.valid;
-  res.locals.topic = { ...result };
+const identifyTopic = async (topic, parent, children) => {
+  checkTopic(topic);
+  const result = await isLegalTopic(topic, parent, children);
+  if (!result.valid) throw new HttpError(result.message, result.status);
+  return { ...result };
+};
 
-  next();
-});
-
-const parseTopic = catchAsync(async (req, res, next) => {
+const parseTopic = async (topic, parent, children) => {
   if (
-    !req.body.topic ||
-    req.body.topic === "null" ||
-    req.body.topic.toLowerCase() === "root"
+    !topic ||
+    topic === "" ||
+    topic === "null" ||
+    topic.toLowerCase() === "root"
   )
-    return next();
+    throw new HttpError("Invalid Topic.", 422);
 
-  const result = await isValidTopic(req, res, next);
-  const exist = result?.exist;
-  if (!result.valid) return next(new HttpError(result.message, result.status));
-  delete result.valid;
-  delete result.exist;
+  let newTopic = await isLegalTopic(topic, parent, children);
 
-  if (exist) {
-    res.locals.topic = result;
-    res.locals.response = result;
-    return next();
+  if (!newTopic.valid) throw new HttpError(newTopic.message, newTopic.status);
+
+  if (!newTopic.exist) {
+    newTopic = await topicModel.createOneTopic({ ...result });
   }
 
-  const newTopic = await topicModule.createOneTopic({ ...result });
-  res.locals.topic = newTopic;
-  res.locals.response = newTopic;
-  next();
-});
+  return newTopic;
+};
 
 //-----------------Get---------------------
 const getOneTopic = catchAsync(async (req, res, next) => {
@@ -217,24 +205,25 @@ const getAllTopic = catchAsync(async (req, res, next) => {
 
 //-----------------Post---------------------
 const createOneTopic = catchAsync(async (req, res, next) => {
-  const exist = res.locals.topic?.exist;
-  delete res.locals.topic?.exist;
-
-  if (exist) {
-    res.locals.response = res.locals.topic;
-    return next();
+  const topicResult = await identifyTopic(
+    req.body.topic,
+    req.body.parent,
+    req.body.children
+  );
+  if (topicResult.exist) {
+    return res
+      .status(400)
+      .json({ status: "fail", message: "Topic already exist" });
   }
 
-  const newTopic = await topicModule.createOneTopic({ ...res.locals.topic });
-  res.locals.topic = newTopic;
-  res.locals.response = newTopic;
-  next();
+  const topic = await topicModel.createOneTopic({ ...topicResult });
+  res.status(400).json({ status: "success", data: topic });
 });
 
 export default {
-  isValidTopic,
+  isLegalTopic,
+  checkTopic,
   identifyTopic,
-  validationTopic,
   parseTopic,
   getOneTopic,
   getAllTopic,
