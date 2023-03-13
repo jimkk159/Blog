@@ -13,12 +13,12 @@ import authHelper from "../utils/auth-helper.js";
 
 //-----------------Get---------------------
 export const getOnePost = catchAsync(async (req, res, next) => {
-  // 1) Parse the ids
+  // 1) Parse the id
   let vals;
-  if (req.params.ids.includes(",")) {
-    vals = req.params.ids.split(",").map(Number);
+  if (("" + req.params.id).includes(",")) {
+    vals = req.params.id.split(",").map(Number);
   } else {
-    vals = [+req.params.ids];
+    vals = [+req.params.id];
   }
 
   // 2) Get the Posts by ids

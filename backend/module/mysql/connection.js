@@ -54,7 +54,7 @@ const createOne = async (
 const updateOne = async (connection, table, updateCols, cols, vals) => {
   const update = updateCols.map((col) => `${col}= ?`).join(", ");
   const conditions = cols.map((col) => `${col}= ?`).join(" AND ");
-  connection.query(`UPDATE ${table} SET ${update} WHERE ${conditions};`, [
+  await connection.query(`UPDATE ${table} SET ${update} WHERE ${conditions};`, [
     ...vals,
   ]);
 };
@@ -98,7 +98,7 @@ const startTransaction = async (func) => {
 
 export default {
   query,
-  getOne: getOne,
+  getOne,
   getMany,
   getAll,
   createOne,

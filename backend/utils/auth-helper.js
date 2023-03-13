@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import HttpError from "./http-error.js";
 import queryPool from "../module/mysql/pool.js";
 import {
   id_,

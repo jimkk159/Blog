@@ -1,4 +1,5 @@
 import helper from "./helper.js";
+import HttpError from "./http-error.js";
 import queryPool from "../module/mysql/pool.js";
 import { id_, post_ } from "../utils/table.js";
 import postModel from "../module/mysql/post-model.js";

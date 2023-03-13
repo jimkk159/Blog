@@ -54,22 +54,17 @@ const updateOne = (table) =>
     if (Object.keys(req.body).includes("id"))
       return next(new HttpError("No Allow to update ID", 404));
 
-    // 2) Parse req body
-    const statements = `\`${Object.keys(req.body)
-      .map((key) => `${key}\` = ?`)
-      .join(", `")}`;
-    const vals = Object.values(req.body);
-
-    // 3) Update to database
+    // 2) Update to database
     await queryPool.updateOne(
       table,
-      statements,
+      Object.keys(req.body),
       [id_],
-      [...vals, req.params.id]
+      [...Object.values(req.body), req.params.id]
     );
 
-    // 4) Get the update from database
+    // 3) Get the update from database
     const data = await queryPool.getOne(table, [id_], [req.params.id]);
+    console.log(data)
     if (!data) return next(new HttpError("No data found with that ID", 404));
 
     res.status(200).json({
