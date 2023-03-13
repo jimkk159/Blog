@@ -1,16 +1,15 @@
-
 //Remove apostrophe
-export const trimApos = (element) => element.replace(/(^\`+|\`+$)/g, "");
+const trimApos = (element) => element.replace(/(^\`+|\`+$)/g, "");
 
 //Juge SQL apostrophe removemoent
-export const sqlApos = (element) => {
+const sqlApos = (element) => {
   if (element.trim().startsWith("GROUP_CONCAT(")) return element;
   else if (element.at(-1) === "*") return `\`${trimApos(element)}`;
   return `\`${trimApos(element)}\``;
 };
 
 //Juge push query statement
-export const pushIn = (q, key, operator, isArray) => {
+const pushIn = (q, key, operator, isArray) => {
   let insertKey;
   let questionMarks = isArray ? "(?)" : "?";
   if (Array.isArray(key)) {
@@ -29,7 +28,7 @@ export const pushIn = (q, key, operator, isArray) => {
   return q.push(`${`${sqlApos(key)}`} ${operator} ${questionMarks}`);
 };
 
-export const removeDuplicatesById = (jsonArray) => {
+const removeDuplicatesById = (jsonArray) => {
   const uniqueIds = [];
   const resultArray = [];
 
@@ -48,7 +47,7 @@ export const removeDuplicatesById = (jsonArray) => {
 };
 
 //Extract the obj
-export const convertPrefix = (obj, prefix) => {
+const convertPrefix = (obj, prefix) => {
   let newObj = {};
 
   //Prefix target
@@ -62,11 +61,7 @@ export const convertPrefix = (obj, prefix) => {
 };
 
 //Get Obj without keys
-export const getObjWithoutKeys = (
-  originalObj,
-  excludedKeys = [],
-  prefixes = []
-) => {
+const getObjWithoutKeys = (originalObj, excludedKeys = [], prefixes = []) => {
   let newObj = {};
   for (let [key, value] of Object.entries(originalObj)) {
     if (

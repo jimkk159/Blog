@@ -24,16 +24,19 @@ export const createOneUser = async ({
   role,
 }) => {
   let insertId;
-  //Transaction
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-
+    // 1) Parse input data
     const cols = [user_name_, email_, avatar_];
     const vals = [name, email, avatar];
     if (role) cols.push(role_);
     if (role) vals.push(role);
+
+    // 2) Create user
     insertId = await queryConnection.createOne(connection, user_, cols, vals);
+
+    // 3) Create user authtization information
     await queryConnection.createOne(
       connection,
       auth_,

@@ -3,19 +3,19 @@ import queryPool from "../module/mysql/pool.js";
 import { id_, post_ } from "../utils/table.js";
 import postModel from "../module/mysql/post-model.js";
 
-export const identifyAuthor = (post, uid) => {
+const identifyAuthor = (post, uid) => {
   //Check Post Owner
   if (post?.author_id !== uid) throw new HttpError("Permissions deny.", 403);
 };
 
-export const identifyPost = async (pid) => {
+const identifyPost = async (pid) => {
   const post = await queryPool.getOne(post_, [id_], [pid]);
   //Post not find
   if (!post) throw new HttpError("Post not Find!", 404);
   return post;
 };
 
-export const removePostDuplicate = (originId, related, limit) => {
+const removePostDuplicate = (originId, related, limit) => {
   return (
     helper
       .removeDuplicatesById(related)
@@ -24,7 +24,7 @@ export const removePostDuplicate = (originId, related, limit) => {
   );
 };
 
-export const restructPost = (post) => {
+const restructPost = (post) => {
   const postObj = helper.getObjWithoutKeys(post, ["tags"], ["en_", "ch_"]);
   const tags = post.tags ? post.tags.split(",") : [];
 
@@ -41,7 +41,7 @@ export const restructPost = (post) => {
   };
 };
 
-export const getTopicRelatedPost = async (post, limit) => {
+const getTopicRelatedPost = async (post, limit) => {
   if (!post?.related || !Array.isArray(post?.related)) {
     post.related = [];
   }
@@ -71,7 +71,7 @@ export const getTopicRelatedPost = async (post, limit) => {
   return post;
 };
 
-export const getTagRelatedPost = async (post, limit) => {
+const getTagRelatedPost = async (post, limit) => {
   if (!post?.related || !Array.isArray(post?.related)) {
     post.related = [];
   }
@@ -102,7 +102,7 @@ export const getTagRelatedPost = async (post, limit) => {
   return post;
 };
 
-export const getAuthorRelatedPost = async (post, limit) => {
+const getAuthorRelatedPost = async (post, limit) => {
   if (!post?.related || !Array.isArray(post?.related)) {
     post.related = [];
   }
@@ -130,4 +130,14 @@ export const getAuthorRelatedPost = async (post, limit) => {
     };
   }
   return post;
+};
+
+export default {
+  identifyAuthor,
+  identifyPost,
+  removePostDuplicate,
+  restructPost,
+  getTopicRelatedPost,
+  getTagRelatedPost,
+  getAuthorRelatedPost,
 };

@@ -35,9 +35,8 @@ const sendErrorProd = (err, res) => {
 
     // Programming or other unknown error: don't leak error details
   } else {
-    // 1) Log error
+    // Log error
     console.log("Error!", err);
-    // 2)
     res.status(500).json({
       status: "error",
       message: "An unknown error occurred...",
@@ -48,16 +47,20 @@ const sendErrorProd = (err, res) => {
 export default (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
+  // 1) Remove file
   if (req.file) {
     fs.unlink(req.file.path, (err) => {
       console.log(`Delete file ${req.file.path}...`);
     });
   }
+  // 2) Send error in dev
   if (process.env.APP_ENV === "development") {
     sendErrorDev(err, res);
   } else if (process.env.APP_ENV === "production") {
+    // 3) Send error in production
     let error = { ...err };
     error.message = err.message;
+    
     //Predictable Error
     if (error.sql && error.sqlState === "42000")
       error = handleDBSyntaxError(error);

@@ -1,14 +1,14 @@
 import queryPool from "../module/mysql/pool.js";
 import { topic_, id_, topic_name_ } from "../utils/table.js";
 
-export const checkTopic = (topic) => {
+const checkTopic = (topic) => {
   if (topic.toLowerCase() === "root")
     throw new HttpError("Not allow to set Root for Topic.", 422);
 
   if (!topic) throw new HttpError("Topic is null!", 403);
 };
 
-export const isValidParentChildRelation = async (parent, child) => {
+const isValidParentChildRelation = async (parent, child) => {
   const childTopic = await queryPool.getOne(topic_, [topic_name_], [child]);
   if (!childTopic) return false;
   const parentTopic = await queryPool.getOne(
@@ -21,7 +21,7 @@ export const isValidParentChildRelation = async (parent, child) => {
   return true;
 };
 
-export const isLegalTopic = async (queryTopic, queryParent, queryChildren) => {
+const isLegalTopic = async (queryTopic, queryParent, queryChildren) => {
   //Check Topic Property
   const topic = await queryPool.getOne(topic_, [topic_name_], [queryTopic]);
   const parent = await queryPool.getOne(topic_, [topic_name_], [queryParent]);
@@ -84,14 +84,14 @@ export const isLegalTopic = async (queryTopic, queryParent, queryChildren) => {
   };
 };
 
-export const identifyTopic = async (topic, parent, children) => {
+const identifyTopic = async (topic, parent, children) => {
   checkTopic(topic);
   const result = await isLegalTopic(topic, parent, children);
   if (!result.valid) throw new HttpError(result.message, result.status);
   return { ...result };
 };
 
-export const parseTopic = async (topic, parent, children) => {
+const parseTopic = async (topic, parent, children) => {
   if (
     !topic ||
     topic === "" ||
@@ -109,4 +109,9 @@ export const parseTopic = async (topic, parent, children) => {
   }
 
   return newTopic;
+};
+
+export default {
+  identifyTopic,
+  parseTopic,
 };

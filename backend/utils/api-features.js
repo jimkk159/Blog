@@ -1,4 +1,4 @@
-import { sqlApos, pushIn } from "./helper.js";
+import helper from "./helper.js";
 
 class getFeatures {
   constructor(table, queryString, vals) {
@@ -22,14 +22,16 @@ class getFeatures {
 
   limitFields(defaultFields) {
     let fields = defaultFields
-      ? [...new Set(defaultFields)].map((element) => `${sqlApos(element)}`) //Remove duplicate and duplicate apostrophe
+      ? [...new Set(defaultFields)].map(
+          (element) => `${helper.sqlApos(element)}`
+        ) //Remove duplicate and duplicate apostrophe
       : "*";
     if (this.queryString?.fields) {
       const queryFields = [
         ...new Set(
           this.queryString?.fields
             .split(",")
-            .map((element) => `${sqlApos(element)}`) //Remove duplicate and duplicate apostrophe
+            .map((element) => `${helper.sqlApos(element)}`) //Remove duplicate and duplicate apostrophe
         ),
       ];
       //Drop the query not in default
@@ -82,7 +84,7 @@ class getOneFeatures extends getFeatures {
     //Filtering
     let [query, values] = Object.entries(queryObj).reduce(
       ([q, v], [key, value]) => {
-        pushIn(q, key, "=");
+        helper.pushIn(q, key, "=");
         v.push(value);
         return [q, v];
       },
@@ -129,19 +131,19 @@ class getAllFeatures extends getFeatures {
               if (val.indexOf(",") !== -1) return [q, v]; //Ignore the many case
               switch (operator) {
                 case "gte":
-                  pushIn(q, key_, ">=");
+                  helper.pushIn(q, key_, ">=");
                   v.push(val);
                   break;
                 case "gt":
-                  pushIn(q, key_, ">");
+                  helper.pushIn(q, key_, ">");
                   v.push(val);
                   break;
                 case "lte":
-                  pushIn(q, key_, "<=");
+                  helper.pushIn(q, key_, "<=");
                   v.push(val);
                   break;
                 case "lt":
-                  pushIn(q, key_, "<");
+                  helper.pushIn(q, key_, "<");
                   v.push(val);
                   break;
                 default:
@@ -153,10 +155,10 @@ class getAllFeatures extends getFeatures {
             [q, v]
           );
         } else if (("" + value).indexOf(",") !== -1) {
-          pushIn(q, key_, "IN", true);
+          helper.pushIn(q, key_, "IN", true);
           v.push(value.split(","));
         } else {
-          pushIn(q, key_, "=");
+          helper.pushIn(q, key_, "=");
           v.push(value);
         }
         return [q, v];

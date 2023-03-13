@@ -3,33 +3,27 @@ import catchAsync from "../utils/catch-async.js";
 import apiFeatures from "../utils/api-features.js";
 import topicModel from "../module/mysql/topic-model.js";
 import {
-  topic_,
-  parent_,
   id_,
+  topic_,
+  cover_,
+  child_,
+  parent_,
+  children_,
   topic_name_,
   parent_id_,
-  cover_,
 } from "../utils/table.js";
-import {
-  checkTopic,
-  isLegalTopic,
-  identifyTopic,
-  parseTopic,
-} from "../utils/topic-helper.js";
-
-const child = "`child`";
-const children = "`children`";
+import topicHelper from "../utils/topic-helper.js";
 
 //-----------------Get---------------------
 const getOneTopic = catchAsync(async (req, res, next) => {
-  //Self-join
+  // 1) Create query instance
   const features = new apiFeatures.getOneFeatures(`${topic_}`, {
     [`${topic_}.${id_}`]: req.params.id,
   })
     .join(
       "LEFT",
-      `${topic_} ${child}`,
-      `${topic_}.${id_} = ${child}.${parent_id_}`
+      `${topic_} ${child_}`,
+      `${topic_}.${id_} = ${child_}.${parent_id_}`
     )
     .join(
       "LEFT",
@@ -43,9 +37,11 @@ const getOneTopic = catchAsync(async (req, res, next) => {
       `${topic_}.${topic_name_}`,
       `${topic_}.${parent_id_}`,
       `${parent_}.${topic_name_} AS ${parent_}`,
-      `GROUP_CONCAT(${child}.${topic_name_} ORDER BY ${child}.${id_} SEPARATOR \',\') AS ${children}`,
+      `GROUP_CONCAT(${child_}.${topic_name_} ORDER BY ${child_}.${id_} SEPARATOR \',\') AS ${children_}`,
       `${topic_}.${cover_}`,
     ]);
+
+  // 2) Query topic
   const topic = (await queryPool.query(features.query, features.values)).map(
     (element) => {
       if (element.children) element.children = element.children.split(",");
@@ -62,12 +58,12 @@ const getOneTopic = catchAsync(async (req, res, next) => {
 });
 
 const getAllTopic = catchAsync(async (req, res, next) => {
-  //Self-join
+  // 1) Create query instance
   const features = new apiFeatures.getAllFeatures(`${topic_}`, req.query)
     .join(
       "LEFT",
-      `${topic_} ${child}`,
-      `${topic_}.${id_} = ${child}.${parent_id_}`
+      `${topic_} ${child_}`,
+      `${topic_}.${id_} = ${child_}.${parent_id_}`
     )
     .join(
       "LEFT",
@@ -82,10 +78,11 @@ const getAllTopic = catchAsync(async (req, res, next) => {
       `${topic_}.${topic_name_}`,
       `${topic_}.${parent_id_}`,
       `${parent_}.${topic_name_} AS ${parent_}`,
-      `GROUP_CONCAT(${child}.${topic_name_} ORDER BY ${child}.${id_} SEPARATOR \',\') AS ${children}`,
+      `GROUP_CONCAT(${child_}.${topic_name_} ORDER BY ${child_}.${id_} SEPARATOR \',\') AS ${children_}`,
       `${topic_}.${cover_}`,
     ]);
 
+  // 2) Query topic
   const topics = (await queryPool.query(features.query, features.values)).map(
     (element) => {
       if (element.children) element.children = element.children.split(",");
@@ -104,26 +101,26 @@ const getAllTopic = catchAsync(async (req, res, next) => {
 
 //-----------------Post---------------------
 const createOneTopic = catchAsync(async (req, res, next) => {
-  const topicResult = await identifyTopic(
+  // 1) Identify the topic
+  const topicResult = await topicHelper.identifyTopic(
     req.body.topic,
     req.body.parent,
     req.body.children
   );
+
+  // 2) Topic already exist
   if (topicResult.exist) {
     return res
       .status(400)
       .json({ status: "fail", message: "Topic already exist" });
   }
 
+  // 3) Create topic
   const topic = await topicModel.createOneTopic({ ...topicResult });
   res.status(400).json({ status: "success", data: topic });
 });
 
 export default {
-  isLegalTopic,
-  checkTopic,
-  identifyTopic,
-  parseTopic,
   getOneTopic,
   getAllTopic,
   createOneTopic,

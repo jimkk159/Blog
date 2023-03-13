@@ -13,30 +13,40 @@ export const postTag_ = "`postTag`";
 
 //---------------column---------------
 export const id_ = "`id`";
-export const type_ = "`type`";
-export const tag_ = "`tag`";
+
+export const role_ = "`role`";
+export const email_ = "`email`";
+export const avatar_ = "`avatar`";
+export const user_name_ = "`name`";
+
 export const title_ = "`title`";
-export const short_ = "`short`";
-export const detail_ = "`detail`";
-export const update_ = "`update`";
+export const author_id_ = "`author_id`";
 export const pin_ = "`pin`";
 export const cover_ = "`cover`";
+export const update_ = "`update`";
+export const short_ = "`short`";
+export const detail_ = "`detail`";
+export const type_ = "`type`";
+
 export const topic_name_ = "`name`";
-export const user_name_ = "`name`";
-export const tag_name_ = "`tag`";
-export const avatar_ = "`avatar`";
-export const author_id_ = "`author_id`";
-export const post_id_ = "`post_id`";
 export const topic_id_ = "`topic_id`";
-export const tag_id_ = "`tag_id`";
 export const parent_id_ = "`parent_id`";
+
+export const tag_ = "`tag`";
+export const tag_name_ = "`tag`";
+export const tag_id_ = "`tag_id`";
+
+export const post_id_ = "`post_id`";
+
 export const user_id_ = "`user_id`";
 export const provider_ = "`provider`";
 export const password_ = "`password`";
 export const expire_in_ = "`expire_in`";
-export const email_ = "`email`";
+
+//--------------synonym----------------
+export const child_ = "`child`";
 export const parent_ = "`parent`";
-export const role_ = "`role`";
+export const children_ = "`children`";
 
 //-----------compose field-------------
 export const postFields = [

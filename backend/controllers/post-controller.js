@@ -1,25 +1,19 @@
 import normalize from "normalize-path";
 import HttpError from "../utils/http-error.js";
-import catchAsync from "../utils/catch-async.js";
-import helper from "../utils/helper.js";
 import queryPool from "../module/mysql/pool.js";
-import postModel from "../module/mysql/post-model.js";
+import catchAsync from "../utils/catch-async.js";
 import authController from "./auth-controller.js";
-import topicController from "./topic-controller.js";
 import shareController from "./share-controller.js";
+import postModel from "../module/mysql/post-model.js";
 import topicModel from "../module/mysql/topic-model.js";
 import { id_, post_ } from "../utils/table.js";
-import {
-  identifyAuthor,
-  identifyPost,
-  getTopicRelatedPost,
-  getTagRelatedPost,
-  getAuthorRelatedPost,
-  restructPost,
-} from "../utils/post-helper.js";
+import topicHelper from "../utils/topic-helper.js";
+import postHelper from "../utils/post-helper.js";
+import authHelper from "../utils/auth-helper.js";
 
 //-----------------Get---------------------
 export const getOnePost = catchAsync(async (req, res, next) => {
+  // 1) Parse the ids
   let vals;
   if (req.params.ids.includes(",")) {
     vals = req.params.ids.split(",").map(Number);
@@ -27,20 +21,19 @@ export const getOnePost = catchAsync(async (req, res, next) => {
     vals = [+req.params.ids];
   }
 
+  // 2) Get the Posts by ids
   let posts = await postModel.getManyPostByKeys(id_, vals, {
     limit: vals.length,
   });
-
-  //Post not find
   if (!posts.length) return next(new HttpError("Post not Find!", 404));
 
-  //Restruct the posts obj
+  // 3) Restruct the posts obj structure
   posts = await Promise.all(
     posts.map(async (elemnt) => {
-      let post = restructPost(elemnt);
-      post = await getTopicRelatedPost(post, 5);
-      post = await getTagRelatedPost(post, 5);
-      post = await getAuthorRelatedPost(post, 5);
+      let post = postHelper.restructPost(elemnt);
+      post = await postHelper.getTopicRelatedPost(post, 5);
+      post = await postHelper.getTagRelatedPost(post, 5);
+      post = await postHelper.getAuthorRelatedPost(post, 5);
       return post;
     })
   );
@@ -55,10 +48,11 @@ export const getOnePost = catchAsync(async (req, res, next) => {
 });
 
 export const getAllPost = catchAsync(async (req, res, next) => {
+  // 1) Get the Posts
   let posts = await postModel.getAllPost(req.query);
 
-  //Restruct the posts obj
-  posts = posts.map((elemnt) => restructPost(elemnt));
+  // 2) Restruct the posts obj structure
+  posts = posts.map((elemnt) => postHelper.restructPost(elemnt));
   res.status(200).json({
     status: "success",
     results: posts.length,
@@ -71,26 +65,36 @@ export const getAllPost = catchAsync(async (req, res, next) => {
 export const getPostSearch = catchAsync(async (req, res, next) => {
   const limit = +req.body.limit || 5;
 
+  // 1) Get the Posts
   let posts = (await postModel.getSearchPost(req.query.search, limit)) ?? [];
 
-  //Restruct the posts obj
-  posts = posts.map((elemnt) => restructPost(elemnt));
-  res.status(200).json(posts);
+  // 2) Restruct the posts obj structure
+  posts = posts.map((elemnt) => postHelper.restructPost(elemnt));
+  res.status(200).json({
+    status: "success",
+    results: posts.length,
+    data: {
+      posts,
+    },
+  });
 });
 
 //-----------------Post---------------------
 export const createOnePost = catchAsync(async (req, res, next) => {
-  await authController.identifyUser(req.user.id);
-  let topic = await topicController.identifyTopic(
+  // 1) Identify the user
+  await authHelper.identifyUser(req.user.id);
+
+  // 2) Identify the topic
+  let topic = await topicHelper.identifyTopic(
     req.body.topic,
     req.body.parent,
     req.body.children
   );
 
-  if (!topic.exist) {
-    topic = await topicModel.createOneTopic({ ...topic });
-  }
+  // 3) Create the topic if not exist
+  if (!topic.exist) topic = await topicModel.createOneTopic({ ...topic });
 
+  // 4) Replace the post image by http uri
   const detail = shareController.replaceImageSrc(
     req.body.map,
     req.body.detail,
@@ -98,7 +102,7 @@ export const createOnePost = catchAsync(async (req, res, next) => {
     `${req.protocol}://${req.get("host")}`
   );
 
-  //Create New Post
+  // 5) Normalize the cover path
   let cover;
   if (
     req.files &&
@@ -109,10 +113,11 @@ export const createOnePost = catchAsync(async (req, res, next) => {
     cover = normalize(req.files?.cover[0]?.path);
   }
 
-  //Only support English and Chinese
+  // 6) Only support English and Chinese
   if (!["en", "ch"].includes(req.body.language))
     return next(new HttpError("Unsupport language", 501));
 
+  // 7) Fill up the post content
   const content = { en: null, ch: null };
   content[req.body.language] = {
     title: req.body.title,
@@ -120,7 +125,7 @@ export const createOnePost = catchAsync(async (req, res, next) => {
     detail,
   };
 
-  //New Post Id
+  // 8) Create new post
   req.params.id = await postModel.createOnePost({
     author_id: req.user.id,
     topic_id: topic.id,
@@ -135,10 +140,16 @@ export const createOnePost = catchAsync(async (req, res, next) => {
 
 //-----------------Put---------------------
 export const updateOnePost = catchAsync(async (req, res, next) => {
-  const post = await identifyPost(req.params.id);
-  await authController.identifyUser(req.user.id);
-  identifyAuthor(post, req.user.id);
+  // 1) Identify the post
+  const post = await postHelper.identifyPost(req.params.id);
 
+  // 2) Identify the user
+  await authHelper.identifyUser(req.user.id);
+
+  // 3) Identify the user if author
+  postHelper.identifyAuthor(post, req.user.id);
+
+  // 4) Replace the post image by http uri
   const detail = shareController.replaceImageSrc(
     req.body.map,
     req.body.detail,
@@ -146,16 +157,19 @@ export const updateOnePost = catchAsync(async (req, res, next) => {
     `${req.protocol}://${req.get("host")}`
   );
 
+  // 5) Parse the is topic exist
+  //    if not, check if it is leagal
+  //    if yes, create it
   let topic;
   if (req.body.topic || req.body.topic === "") {
-    topic = await topicController.parseTopic(
+    topic = await topicHelper.parseTopic(
       req.body.topic,
       req.body.parent,
       req.body.children
     );
   }
 
-  // Edit Post
+  // 5) Normalize the cover path
   let cover;
   if (
     req.files &&
@@ -166,10 +180,11 @@ export const updateOnePost = catchAsync(async (req, res, next) => {
     cover = normalize(req.files?.cover[0]?.path);
   }
 
-  //Only support English and Chinese
+  // 7) Only support English and Chinese
   if (!["en", "ch"].includes(req.body.language))
     return next(new HttpError("Unsupport language", 501));
 
+  // 8) Fill up the post content
   const content = { en: null, ch: null };
   content[req.body.language] = {
     title: req.body.title,
@@ -177,6 +192,7 @@ export const updateOnePost = catchAsync(async (req, res, next) => {
     detail,
   };
 
+  // 9) update target post
   await postModel.updateOnePost({
     id: post?.id,
     topic_id: topic?.id,
@@ -194,23 +210,33 @@ export const updateOnePost = catchAsync(async (req, res, next) => {
 
 //----------------Patch--------------------
 export const pinPost = catchAsync(async (req, res, next) => {
-  await identifyPost(req.params.id);
+  // 1) Identify the post
+  await postHelper.identifyPost(req.params.id);
+
+  // 2) Identify the query pin
   if (![0, 1].includes(+req.query.pin))
     return next(
       new HttpError("Invalid inputs, please check your input is correct", 500)
     );
-  //Pin Post
+
+  // 3) Update post pin
   await postModel.updatePostPin({ id: req.params.id, pin: +req.query.pin });
   res.status(204).json();
 });
 
 //----------------Delete--------------------
 export const deleteOnePost = catchAsync(async (req, res, next) => {
-  const post = await identifyPost(req.params.id);
-  const user = await authController.identifyUser(req.user.id);
+  // 1) Identify the post
+  const post = await postHelper.identifyPost(req.params.id);
+
+  // 2) Identify the user exist
+  const user = await authHelper.identifyUser(req.user.id);
+
+  // 3) Identify the user permission
   if (post.author_id !== req.user.id && !["root", "leader"].includes(user.role))
     return next(new HttpError("Permissions deny.", 403));
 
+  // 4) Delete the post
   await queryPool.deleteOne(post_, [id_], [req.params.id]);
   res.status(204).json();
 });

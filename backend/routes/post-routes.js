@@ -37,7 +37,7 @@ router.patch(
   "/pin/:id",
   [check("pin").not().isEmpty()],
   shareController.validation,
-  // shareController.restrictTo("root", "leader", "manager"),
+  shareController.restrictTo("root", "leader", "manager"),
   postController.pinPost
 );
 

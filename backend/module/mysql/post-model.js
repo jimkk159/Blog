@@ -34,7 +34,7 @@ import {
 } from "../../utils/table.js";
 
 export const getOnePost = async (id) => {
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(`post`, {
     [`${post_}.${id_}`]: id,
   })
@@ -57,6 +57,7 @@ export const getOnePost = async (id) => {
       `GROUP_CONCAT(${tag_}.${tag_name_}) AS \`tags\``,
     ]);
 
+  // 2) Query MySql database
   const [post] = await queryPool.query(features.query, features.values);
   return post;
 };
@@ -67,9 +68,10 @@ export const getManyPostByKeys = async (
   queryString,
   strict = false
 ) => {
+  //Check the vals
   if (!Array.isArray(vals) || vals.length === 0) return [];
 
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(`post`, queryString)
     .join(...joinPostAndPostTag)
     .join(...joinTagAndPostTag)
@@ -90,6 +92,7 @@ export const getManyPostByKeys = async (
       `GROUP_CONCAT(${tag_}.${tag_name_}) AS \`tags\``,
     ]);
 
+  // 2) Just get the given ids of posts
   if (strict) {
     features
       .changeTable(
@@ -100,19 +103,23 @@ export const getManyPostByKeys = async (
       )
       .appendValues([[...vals], [...vals], [...vals]])
       .paginate();
+
+    // 3) Query MySql database
     return (await queryPool.query(features.query, features.values)) ?? [];
   }
 
+  // 4) get the given ids of posts and other posts
   features
     .sort(`IF(FIELD(${post_}.${key}, ?) = 0, 1, 0) , FIELD(${post_}.${key}, ?)`)
     .appendValues([[...vals], [...vals]])
     .paginate();
 
+  // 5) Query MySql database
   return (await queryPool.query(features.query, features.values)) ?? [];
 };
 
 export const getAllPost = async (query) => {
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(post_, query)
     .join(...joinPostAndPostTag)
     .join(...joinTagAndPostTag)
@@ -133,6 +140,7 @@ export const getAllPost = async (query) => {
     ])
     .paginate();
 
+  // 2) Query MySql database
   return (await queryPool.query(features.query, features.values)) ?? [];
 };
 
@@ -140,7 +148,7 @@ export const getRelatedPostTitleIds = async (ids, target, limit, language) => {
   let inputIds = [-1, ...ids];
   const postLanguage = language === "ch" ? postCh_ : postEn_;
 
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(
     `(SELECT * FROM ${post_} WHERE ${post_}.${id_} NOT in (?))${post_}`,
     { limit },
@@ -155,10 +163,11 @@ export const getRelatedPostTitleIds = async (ids, target, limit, language) => {
     .limitFields([`${post_}.${id_}`])
     .paginate();
 
+  // 2) Get related post
   const newIds = (await queryPool.query(features.query, features.values)).map(
     (element) => element.id
   );
-
+  // 3) Remove the array initial prevent value -1
   inputIds.shift();
   if (!newIds.length) return inputIds;
   return [...inputIds, ...newIds];
@@ -166,7 +175,8 @@ export const getRelatedPostTitleIds = async (ids, target, limit, language) => {
 
 export const getRelatedTopicIds = async (ids, target, limit) => {
   let inputIds = [-1, ...ids];
-  //Generate MySql Syntax
+
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(
     `(SELECT * FROM ${post_} WHERE ${post_}.${id_} NOT in (?))${post_}`,
     { limit },
@@ -179,10 +189,12 @@ export const getRelatedTopicIds = async (ids, target, limit) => {
     )
     .limitFields([`${post_}.${id_}`])
     .paginate();
+
+  // 2) Get related post
   const newIds = (await queryPool.query(features.query, features.values)).map(
     (element) => element.id
   );
-
+  // 3) Remove the array initial prevent value -1
   inputIds.shift();
   if (!newIds.length) return inputIds;
   return [...inputIds, ...newIds];
@@ -191,7 +203,7 @@ export const getRelatedTopicIds = async (ids, target, limit) => {
 export const getRelatedTagIds = async (ids, target, limit) => {
   let inputIds = [-1, ...ids];
 
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntax
   const features = new apiFeatures.getAllFeatures(
     `(SELECT * FROM ${post_} WHERE ${post_}.${id_} NOT in (?))${post_}`,
     { limit },
@@ -205,10 +217,13 @@ export const getRelatedTagIds = async (ids, target, limit) => {
     )
     .limitFields([`${post_}.${id_}`])
     .paginate();
+
+  // 2) Get related post
   const newIds = (await queryPool.query(features.query, features.values)).map(
     (element) => element.id
   );
 
+  // 3) Remove the array initial prevent value -1
   inputIds.shift();
   if (!newIds.length) return inputIds;
   return [...inputIds, ...newIds];
@@ -217,7 +232,7 @@ export const getRelatedTagIds = async (ids, target, limit) => {
 export const getRelatedAuthorIds = async (ids, target, limit) => {
   let inputIds = [-1, ...ids];
 
-  //Generate MySql Syntax
+  // 1) Generate MySql Syntaxs
   const features = new apiFeatures.getAllFeatures(
     `(SELECT * FROM ${post_} WHERE ${post_}.${id_} NOT in (?))${post_}`,
     { limit },
@@ -230,10 +245,12 @@ export const getRelatedAuthorIds = async (ids, target, limit) => {
     )
     .limitFields([`${post_}.${id_}`])
     .paginate();
+  // 2) Get related post
   const newIds = (await queryPool.query(features.query, features.values)).map(
     (element) => element.id
   );
 
+  // 3) Remove the array initial prevent value -1
   inputIds.shift();
   if (!newIds.length) return inputIds;
   return [...inputIds, ...newIds];
@@ -242,23 +259,24 @@ export const getRelatedAuthorIds = async (ids, target, limit) => {
 export const getSearchPost = async (target, limit) => {
   let ids = [];
 
-  //Title En
+  // 1) Search related post for title in English
   if (limit >= ids.length)
     ids = await getRelatedPostTitleIds(ids, target, limit, "en");
 
-  //Title Ch
+  // 2) Search related post for title in Chinese
   if (limit >= ids.length)
     ids = await getRelatedPostTitleIds(ids, target, limit, "ch");
 
-  //Topic
+  // 3) Search related post topic
   if (limit >= ids.length) ids = await getRelatedTopicIds(ids, target, limit);
 
-  //Tag
+  // 4) Search related post tags
   if (limit >= ids.length) ids = await getRelatedTagIds(ids, target, limit);
 
-  //Author
+  // 5) Search related post author
   if (limit >= ids.length) ids = await getRelatedAuthorIds(ids, target, limit);
 
+  // 6) Get Post by ids
   return await getManyPostByKeys(id_, ids, {}, true);
 };
 
@@ -274,6 +292,7 @@ export const createOnePost = async ({
   const connection = await pool.getConnection();
 
   await connection.beginTransaction();
+  // 1) Create Post
   const insertId = await queryConnection.createOne(
     connection,
     post_,
@@ -281,6 +300,7 @@ export const createOnePost = async ({
     [author_id, topic_id, type, cover]
   );
 
+  // 2) Create Post English content
   if (content?.en)
     await queryConnection.createOne(
       connection,
@@ -289,6 +309,7 @@ export const createOnePost = async ({
       [insertId, content.en?.title, content.en?.short, content.en?.detail]
     );
 
+  // 3) Create Post Chinese content
   if (content?.ch)
     await queryConnection.createOne(
       connection,
@@ -297,7 +318,7 @@ export const createOnePost = async ({
       [insertId, content.ch?.title, content.ch?.short, content.ch?.detail]
     );
 
-  //Add new tags, Reference to the post
+  // 4) Add new tags which are reference to the post
   if (Array.isArray(tags) && !tags.length) {
     await queryConnection.query(
       connection,
@@ -305,6 +326,7 @@ export const createOnePost = async ({
       [tags.map((tag) => [tag])]
     );
 
+    // 5) Get the id of tags
     const tagIds = (
       await queryConnection.query(
         connection,
@@ -313,6 +335,7 @@ export const createOnePost = async ({
       )
     ).map((tag) => tag.id);
 
+    // 6) Add the relation to the table of post between tags
     await queryConnection.query(
       connection,
       `INSERT INTO ${postTag_}(${post_id_}, ${tag_id_}) ` +
@@ -336,6 +359,7 @@ export const updateLanguagePost = async (
   short,
   detail
 ) => {
+  // 1) Parse the input
   const postLanguage = language === "ch" ? postCh_ : postEn_;
   let colsA = [];
   let colsB = [];
@@ -355,7 +379,7 @@ export const updateLanguagePost = async (
     colsB.push(`${detail_} = ?`);
     vals.push(detail);
   }
-
+  // 2) Update the post content
   if (!!colsA.length)
     await queryConnection.query(
       connection,
@@ -368,18 +392,20 @@ export const updateLanguagePost = async (
 
 export const updateTagPost = async (connection, id, tags) => {
   if (!tags.length) {
+    // 1) Delete all the post tags
     await queryConnection.query(
       connection,
       `DELETE FROM ${postTag_} WHERE ${post_id_} = ?;`,
       [id]
     );
   } else {
+    // 1) Create tags to table
     await queryConnection.query(
       connection,
       `INSERT IGNORE INTO ${tag_}(${tag_}) VALUES ?;`,
       [tags.map((tag) => [tag])]
     );
-
+    // 2) Get id of tags
     let tagIds = (
       await queryConnection.getMany(
         connection,
@@ -390,6 +416,7 @@ export const updateTagPost = async (connection, id, tags) => {
       )
     ).map((element) => element.id);
 
+    // 3) Update the relation to the table of post between tags
     if (!!tagIds.length)
       await queryConnection.query(
         connection,
@@ -398,7 +425,7 @@ export const updateTagPost = async (connection, id, tags) => {
           `WHERE ${tag_}.${id_} IN (?);`,
         [id, tagIds]
       );
-
+    // 4) Delete the other post tags
     await queryConnection.query(
       connection,
       `DELETE FROM ${postTag_} ` +
@@ -422,6 +449,7 @@ export const updateOnePost = async ({
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
+    // 1) Parse the input
     if (topic_id) {
       cols.push(`${topic_id_}`);
       vals.push(topic_id);
@@ -434,7 +462,7 @@ export const updateOnePost = async ({
       cols.push(`${cover_}`);
       vals.push(cover);
     }
-
+    // 2) update Post
     if (!!cols.length)
       await queryConnection.updateOne(
         connection,
@@ -443,7 +471,7 @@ export const updateOnePost = async ({
         [id_],
         [...vals, id]
       );
-
+    // 3) update post content in English
     if (content?.en)
       await updateLanguagePost(
         connection,
@@ -453,7 +481,7 @@ export const updateOnePost = async ({
         content.en?.short,
         content.en?.detail
       );
-
+    // 4) update post content in Chinese
     if (content?.ch)
       await updateLanguagePost(
         connection,
@@ -464,7 +492,7 @@ export const updateOnePost = async ({
         content.ch?.detail
       );
 
-    //Handle with Tags
+    // 5) update post tags
     if (Array.isArray(tags)) await updateTagPost(connection, id, tags);
 
     await connection.commit();

@@ -1,7 +1,15 @@
 import jwt from "jsonwebtoken";
+
+import Email from "../utils/email.js";
+import pool from "../module/mysql/index.js";
 import HttpError from "../utils/http-error.js";
 import queryPool from "../module/mysql/pool.js";
 import catchAsync from "../utils/catch-async.js";
+import queryConnection from "../module/mysql/connection.js";
+
+import userController from "./user-controller.js";
+import shareController from "./share-controller.js";
+
 import {
   auth_,
   user_id_,
@@ -9,41 +17,24 @@ import {
   password_,
   access_token_,
 } from "../utils/table.js";
-import userController from "./user-controller.js";
-import shareController from "./share-controller.js";
-import Email from "../utils/email.js";
-import pool from "../module/mysql/index.js";
-import queryConnection from "../module/mysql/connection.js";
-import {
-  identifyUser,
-  identifyEmail,
-  identifyAuth,
-  generatePassword,
-  confirmPasswordConsistency,
-  encryptPassword,
-  checkPassword,
-  generateToken,
-  createTokenCookie,
-  getUserSecrect,
-} from "../utils/auth-helper.js";
+import authHelper from "../utils/auth-helper.js";
+
 
 //Verify Json Web Token
- const authToken = (req, res, next) => {
+const authToken = (req, res, next) => {
+  // 1) Allow preflight
+  if (req.method === "OPTIONS") return next();
 
-  if (req.method === "OPTIONS") {
-    return next();
-  }
+  // 2) Verify token
   try {
     const token = req.headers.authorization.split(" ")[1]; //Authorization: 'Bearer TOKEN
-    if (!token) {
-      throw new HttpError("Auythentication failed!", 403);
-    }
+    if (!token) throw new HttpError("Auythentication failed!", 403);
+
     const decodeToken = jwt.verify(token, process.env.JWT_KEY);
     req.user = { id: decodeToken.uid };
     next();
   } catch (err) {
-    const error = new HttpError("Authentication failed!", 403);
-    return next(error);
+    return next(new HttpError("Authentication failed!", 403));
   }
 };
 
@@ -52,17 +43,17 @@ import {
 const signup = (...roles) =>
   catchAsync(async (req, res, next) => {
     // 1) Confirm password consistency
-    confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
+    authHelper.confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
 
     // 2) Confirm email no exist
-    const emailFunc = identifyEmail("empty");
+    const emailFunc = authHelper.identifyEmail("empty");
     req.user = await emailFunc(req.body.email);
 
     // 3) Create user avatar
     res.locals.avatar = shareController.createAvatar(req.body.email, req.file);
 
     // 4) Encrypt password
-    req.user.password = await encryptPassword(req.body.password);
+    req.user.password = await authHelper.encryptPassword(req.body.password);
 
     // 5) Create Local User
     const createFunc = userController.createLocalUser(roles);
@@ -75,12 +66,10 @@ const signup = (...roles) =>
     );
 
     // 6) Generate token
-    const token = generateToken(req.user.id, req.user.email);
+    const token = authHelper.generateToken(req.user.id, req.user.email);
 
     // 7) create token cookie
-    createTokenCookie(req, res, token);
-
-    if (req.user.password) delete req.user.password;
+    authHelper.createTokenCookie(req, res, token);
 
     res.status(201).json({
       status: "success",
@@ -98,21 +87,21 @@ const signup = (...roles) =>
 //Login
 const login = catchAsync(async (req, res, next) => {
   // 1) Confirm email exist
-  const emailFunc = identifyEmail("exist");
+  const emailFunc = authHelper.identifyEmail("exist");
   req.user = await emailFunc(req.body.email);
 
   // 2) Get local user password
-  const secrectFunc = getUserSecrect("local");
+  const secrectFunc = authHelper.getUserSecrect("local");
   const auth = await secrectFunc(req.user.id);
 
   // 3) Check password
-  await checkPassword(req.body.password, auth.password);
+  await authHelper.checkPassword(req.body.password, auth.password);
 
   // 4) Generate token
-  const token = generateToken(req.user.id, req.user.email);
+  const token = authHelper.generateToken(req.user.id, req.user.email);
 
   // 5) create token cookie
-  createTokenCookie(req, res, token);
+  authHelper.createTokenCookie(req, res, token);
 
   res.status(200).json({
     status: "success",
@@ -129,6 +118,7 @@ const login = catchAsync(async (req, res, next) => {
 
 //Logout
 const logout = (req, res, next) => {
+  // Remove cookie token
   res.cookie(access_token_, "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
@@ -141,11 +131,11 @@ const singupTeam = (...roles) =>
   catchAsync(async (req, res, next) => {
     // 1) Confirm password consistency
     req.body.users.forEach((element) => {
-      confirmPasswordConsistency(element.password, element.confirmPassword);
+      authHelper.confirmPasswordConsistency(element.password, element.confirmPassword);
     });
 
     //Initial function by factory function
-    const emailFunc = identifyEmail("empty");
+    const emailFunc = authHelper.identifyEmail("empty");
     const createFunc = userController.createLocalUser(roles);
 
     let users = (
@@ -158,7 +148,7 @@ const singupTeam = (...roles) =>
           const avatar = shareController.createAvatar(element.email);
 
           // 4) Encrypt password
-          const password = await encryptPassword(element.password);
+          const password = await authHelper.encryptPassword(element.password);
 
           // 5) Create Local User
           return await createFunc(
@@ -186,12 +176,12 @@ const singupTeam = (...roles) =>
 
 const forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on email
-  const emailFunc = identifyEmail("exist");
+  const emailFunc = authHelper.identifyEmail("exist");
   req.user = await emailFunc(req.body.email);
 
   // 2) Generate the new password
-  const newPassword = generatePassword(12);
-  const newEncryptPassword = await encryptPassword(newPassword);
+  const newPassword = authHelper.generatePassword(12);
+  const newEncryptPassword = await authHelper.encryptPassword(newPassword);
   const message = `<p>Your new password is</p>` + `<h2>${newPassword}</h2>`;
 
   // 3) Change the user password
@@ -228,20 +218,20 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 
 const updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user
-  const user = await identifyUser(req.user.id);
+  const user = await authHelper.identifyUser(req.user.id);
 
   // 2) Check password
   if (!req.body.password)
     return next(new HttpError("Please provide your password", 400));
 
   // 3) Confirm password consistency
-  confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
+  authHelper.confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
 
   // 4) Check password
-  await identifyAuth(user.id, "local", req.body.originPassword);
+  await authHelper.identifyAuth(user.id, "local", req.body.originPassword);
 
   // 5) Encrypt password
-  const newEncryptPassword = await encryptPassword(req.body.password);
+  const newEncryptPassword = await authHelper.encryptPassword(req.body.password);
 
   // 6) Update password
   await queryPool.updateOne(
@@ -252,10 +242,10 @@ const updatePassword = catchAsync(async (req, res, next) => {
   );
 
   // 7) Generate token
-  const token = generateToken(user.id, user.email);
+  const token = authHelper.generateToken(user.id, user.email);
 
   // 8) create token cookie
-  createTokenCookie(req, res, token);
+  authHelper.createTokenCookie(req, res, token);
 
   res.status(201).json({
     status: "success",

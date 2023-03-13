@@ -9,12 +9,14 @@ const createOneTopic = async ({ topic, parent_id, children }) => {
   let insertId;
   try {
     await connection.beginTransaction();
+    // 1) Create topic
     insertId = await queryConnection.createOne(
       connection,
       topic_,
       [topic_name_, parent_id_],
       [topic, parent_id]
     );
+    // 2) Update child to this topic
     if (!!children.length)
       await queryConnection.updateAll(
         connection,

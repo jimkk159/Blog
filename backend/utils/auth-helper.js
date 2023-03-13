@@ -12,7 +12,7 @@ import {
 } from "./table.js";
 
 //Password Generator
-export const generatePassword = (length) => {
+const generatePassword = (length) => {
   const charset =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+|~\\=-`[]{}\"';:?/<>,.";
 
@@ -24,13 +24,13 @@ export const generatePassword = (length) => {
 };
 
 //Confirm Password
-export const confirmPasswordConsistency = (password, confirmPassword) => {
+const confirmPasswordConsistency = (password, confirmPassword) => {
   if ("" + password !== "" + confirmPassword)
     throw new HttpError("Password are not match.", 400);
 };
 
 //Hash Password
-export const encryptPassword = async (password) => {
+const encryptPassword = async (password) => {
   try {
     return await bcrypt.hash("" + password, 12);
   } catch (err) {
@@ -39,7 +39,7 @@ export const encryptPassword = async (password) => {
 };
 
 //Check Password
-export const checkPassword = async (password, comparePassword) => {
+const checkPassword = async (password, comparePassword) => {
   //Check Password Valid
   let valid = false;
   try {
@@ -52,7 +52,7 @@ export const checkPassword = async (password, comparePassword) => {
 };
 
 //Generate Json Web Token
-export const generateToken = (uid, email) => {
+const generateToken = (uid, email) => {
   //Create Token
   try {
     return jwt.sign({ uid, email }, process.env.JWT_KEY, {
@@ -64,7 +64,7 @@ export const generateToken = (uid, email) => {
 };
 
 //Create Json Web Token Cookie
-export const createTokenCookie = (req, res, token) => {
+const createTokenCookie = (req, res, token) => {
   res.cookie(access_token_.replace(/(\`+|\`+)/g, ""), token, {
     expires: new Date(Date.now() + process.env.JWT_EXPIRES_IN * 60 * 60 * 1000),
     httpOnly: true,
@@ -73,7 +73,7 @@ export const createTokenCookie = (req, res, token) => {
 };
 
 //Get User Secrect
-export const getUserSecrect = (provider) => async (uid) => {
+const getUserSecrect = (provider) => async (uid) => {
   const result = await queryPool.getOne(
     auth_,
     [provider_, user_id_],
@@ -85,7 +85,7 @@ export const getUserSecrect = (provider) => async (uid) => {
 };
 
 //Identify User
-export const identifyUser = async (uid) => {
+const identifyUser = async (uid) => {
   const user = await queryPool.getOne(user_, [id_], [uid]);
   if (!user)
     throw new HttpError("User not exists, singup an account first.", 422);
@@ -93,7 +93,7 @@ export const identifyUser = async (uid) => {
 };
 
 //Identify Email
-export const identifyEmail = (condition) => async (email) => {
+const identifyEmail = (condition) => async (email) => {
   const user = await queryPool.getOne(user_, [email_], [email]);
 
   //Check User if exist
@@ -106,7 +106,7 @@ export const identifyEmail = (condition) => async (email) => {
 };
 
 //Identify Auth
-export const identifyAuth = async (uid, provider, password) => {
+const identifyAuth = async (uid, provider, password) => {
   // Get password
   const secrectFunc = getUserSecrect(provider);
   const auth = await secrectFunc(uid);
@@ -119,4 +119,17 @@ export const identifyAuth = async (uid, provider, password) => {
   // Check Expire in
   if (new Date(auth.expire_in) > new Date())
     throw new HttpError("Token has expired.", 401);
+};
+
+export default {
+  generatePassword,
+  confirmPasswordConsistency,
+  encryptPassword,
+  checkPassword,
+  generateToken,
+  createTokenCookie,
+  getUserSecrect,
+  identifyUser,
+  identifyEmail,
+  identifyAuth,
 };

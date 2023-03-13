@@ -15,19 +15,21 @@ export const validation = (req, res, next) => {
 };
 
 export const replaceImageSrc = (map, detail, files, host) => {
-  //No need to replace Image
+  // 1) No need to replace Image
   if (!map) return detail;
 
+  // 2) Parse the image map type
   let imgMap = map;
   if (!Array.isArray(map)) imgMap = [map];
 
-  //Replace Images src
+  // 3) Get the post detail
   const newContent = JSON.parse(detail);
   const newEntityMap = newContent?.entityMap;
-  // Unprocessable ContentState
+
+  // 4) Not satisfy the draft.js entity type
   if (!newEntityMap) throw new HttpError("Create New Post Failed!", 422);
 
-  //Change Image
+  // 5) Replace image src
   if (files?.images) {
     let count = 0;
     let imgCount = 0;
@@ -44,9 +46,10 @@ export const replaceImageSrc = (map, detail, files, host) => {
     }
   }
 
+  // 6) Restore the draft.js content to string
   let resultDetail = JSON.stringify(newContent);
 
-  // Unprocessable EditorState
+  // 7) Type convert fail
   if (!resultDetail) throw new HttpError("Create New Post Failed!", 422);
 
   return resultDetail;
@@ -54,8 +57,9 @@ export const replaceImageSrc = (map, detail, files, host) => {
 
 //Generate Avatar URI
 export const createAvatar = (email, file) => {
-  //Setting Avatar
+  // 1) Normalize avatar path
   if (file?.path) return normalize(file.path);
+  // 2) Create a gravatar instead
   else
     return gravatar.url(email, {
       protocol: "https",
@@ -63,7 +67,7 @@ export const createAvatar = (email, file) => {
     });
 };
 
-//Restrict Roule
+//Restrict Role
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role))
