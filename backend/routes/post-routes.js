@@ -16,8 +16,7 @@ router.get(
   postController.getPostSearch
 );
 router.get("/", postController.getAllPost);
-router.get("/many", postController.getPostByIds); //Todo
-router.get("/:id",postController.getOnePost);
+router.get("/:ids",postController.getOnePost);
 
 // check token middleware
 router.use(authController.authToken);

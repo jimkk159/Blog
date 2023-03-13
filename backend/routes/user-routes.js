@@ -12,38 +12,34 @@ router.use(authController.authToken);
 
 router.use(shareController.restrictTo(("root", "leader", "manager")));
 
-router.route("/").get(factory.getAll(user_));
-router
-  .route("/:id")
-  .get(factory.getOne(user_));
+router.get("/", factory.getAll(user_));
+router.get("/:id", factory.getOne(user_));
 
 router.use(shareController.restrictTo(("root", "leader")));
 
-router
-  .route("/")
-  .post(
-    [
-      check("name").not().isEmpty(),
-      check("email").normalizeEmail().isEmail(),
-      check("password").isLength({ min: 6 }),
-      check("confirmPassword").isLength({ min: 6 }),
-    ],
-    shareController.validation,
-    authController.signup("leader", "manager", "user")
-  );
+router.post(
+  "/",
+  [
+    check("name").not().isEmpty(),
+    check("email").normalizeEmail().isEmail(),
+    check("password").isLength({ min: 6 }),
+    check("confirmPassword").isLength({ min: 6 }),
+  ],
+  shareController.validation,
+  authController.signup("leader", "manager", "user")
+);
 
-router
-  .route("/team")
-  .post(
-    [
-      check("users.*.name").not().isEmpty(),
-      check("users.*.email").normalizeEmail().isEmail(),
-      check("users.*.password").isLength({ min: 6 }),
-      check("users.*.confirmPassword").isLength({ min: 6 }),
-    ],
-    shareController.validation,
-    authController.singupTeam("leader", "manager", "user")
-  );
+router.post(
+  "/team",
+  [
+    check("users.*.name").not().isEmpty(),
+    check("users.*.email").normalizeEmail().isEmail(),
+    check("users.*.password").isLength({ min: 6 }),
+    check("users.*.confirmPassword").isLength({ min: 6 }),
+  ],
+  shareController.validation,
+  authController.singupTeam("leader", "manager", "user")
+);
 
 router.use(shareController.restrictTo("root"));
 

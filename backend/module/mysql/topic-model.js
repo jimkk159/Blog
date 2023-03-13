@@ -30,7 +30,7 @@ const createOneTopic = async ({ topic, parent_id, children }) => {
     connection.release();
     throw new Error(err);
   }
-  return queryPool.getOne(topic_, id_, insertId);
+  return queryPool.getOne(topic_, [id_], [insertId]);
 };
 
 export default {

@@ -28,7 +28,7 @@ export const createOneUser = async ({
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
-    
+
     const cols = [user_name_, email_, avatar_];
     const vals = [name, email, avatar];
     if (role) cols.push(role_);
@@ -48,7 +48,7 @@ export const createOneUser = async ({
     connection.release();
     throw new Error(err);
   }
-  return queryPool.getOne(user_, id_, insertId);
+  return queryPool.getOne(user_, [id_], [insertId]);
 };
 
 export default { createOneUser };

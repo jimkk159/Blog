@@ -5,7 +5,7 @@ import { id_ } from "../utils/table.js";
 
 const getOne = (table) =>
   catchAsync(async (req, res, next) => {
-    const data = await queryPool.getOne(table, id_, req.params.id);
+    const data = await queryPool.getOne(table, [id_], [req.params.id]);
 
     if (!data) {
       return next(new HttpError(`No data found with that ID.`, 404));
@@ -36,7 +36,7 @@ const createOne = (table) =>
     const values = Object.values(req.body);
 
     const insertId = await queryPool.createOne(table, columns, values);
-    const data = await queryPool.getOne(table, id_, insertId);
+    const data = await queryPool.getOne(table, [id_], [insertId]);
 
     res.status(200).json({
       status: "success",
@@ -60,7 +60,7 @@ const updateOne = (table) =>
       [id_],
       [...values, req.params.id]
     );
-    const data = await queryPool.getOne(table, id_, req.params.id);
+    const data = await queryPool.getOne(table, [id_], [req.params.id]);
     if (!data) {
       return next(new HttpError("No data found with that ID", 404));
     }

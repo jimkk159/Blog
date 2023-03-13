@@ -26,7 +26,7 @@ const oauthGoogle = catchAsync(
       );
     }
 
-    oauth = await queryPool.getOneMulti(
+    oauth = await queryPool.getOne(
       auth_,
       [provider_, password_],
       [profile.provider, profile.id]
@@ -34,19 +34,19 @@ const oauthGoogle = catchAsync(
 
     //Has Oauth Account
     if (oauth) {
-      user = await queryPool.getOne(user_, id_, cridential.user_id);
+      user = await queryPool.getOne(user_, [id_], [cridential.user_id]);
       return cb(null, user);
     }
 
     //Has Local Account
-    user = await queryPool.getOne(user_, email_, profile.email);
+    user = await queryPool.getOne(user_, [email_], [profile.email]);
     if (user) {
       const insertId = await queryPool.createOne(
         auth_,
         [user_id_, provider_, password_],
         [user.id, profile.provider, profile.id]
       );
-      user = await queryPool.getOne(user_, id_, insertId);
+      user = await queryPool.getOne(user_, [id_], [insertId]);
       return cb(null, user);
     }
 
@@ -77,7 +77,6 @@ const setSessionUser = (req, res, next) => {
 };
 
 const setOauth = (req, res, next) => {
-  
   // 1) Generate token
   const token = authController.generateToken(req.user.id, req.user.email);
 

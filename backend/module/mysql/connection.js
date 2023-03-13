@@ -6,16 +6,8 @@ const query = async (connection, statement, values) => {
   return result;
 };
 
-const getOne = async (connection, table, col, val) => {
-  const [result] = await connection.query(
-    `SELECT * FROM ${table} WHERE ${col}= ?;`,
-    [val]
-  );
-  return result[0];
-};
-
 //Get One by multi-condition
-const getOneMulti = async (connection, table, cols, vals) => {
+const getOne = async (connection, table, cols, vals) => {
   let conditions = cols.map((col) => `${col}= ?`).join(" AND ");
   let queryString = `SELECT * FROM ${table} WHERE ${conditions};`;
   const [result] = await connection.query(queryString, vals);
@@ -106,8 +98,7 @@ const startTransaction = async (func) => {
 
 export default {
   query,
-  getOne,
-  getOneMulti,
+  getOne: getOne,
   getMany,
   getAll,
   createOne,

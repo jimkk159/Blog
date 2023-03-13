@@ -4,12 +4,8 @@ import queryConnection from "./connection.js";
 const query = async (statement, values) =>
   queryConnection.query(pool, statement, values);
 
-const getOne = async (table, col, val) =>
-  queryConnection.getOne(pool, table, col, val);
-
-//Get One by multi-condition
-const getOneMulti = async (table, cols, vals) =>
-  queryConnection.getOneMulti(pool, table, cols, vals);
+const getOne = async (table, cols, vals) =>
+  queryConnection.getOne(pool, table, cols, vals);
 
 const getMany = async (table, col, vals) =>
   queryConnection.getMany(pool, table, col, vals);
@@ -29,7 +25,6 @@ export const deleteOne = async (table, cols, vals) =>
 export default {
   query,
   getOne,
-  getOneMulti,
   getMany,
   getAll,
   createOne,

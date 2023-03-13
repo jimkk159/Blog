@@ -8,149 +8,43 @@ import authController from "./auth-controller.js";
 import topicController from "./topic-controller.js";
 import shareController from "./share-controller.js";
 import topicModel from "../module/mysql/topic-model.js";
-import factory from "./handle-factory.js";
 import { id_, post_ } from "../utils/table.js";
-
-export const identifyAuthor = (post, uid) => {
-  //Check Post Owner
-  if (post?.author_id !== uid) throw new HttpError("Permissions deny.", 403);
-};
-
-export const identifyPost = async (pid) => {
-  const post = await queryPool.getOne(`post`, "id", pid);
-  //Post not find
-  if (!post) throw new HttpError("Post not Find!", 404);
-  return post;
-};
-
-export const removePostDuplicate = (originId, related, limit) => {
-  return (
-    helper
-      .removeDuplicatesById(related)
-      .filter((element) => element.id !== originId)
-      .slice(0, limit) ?? []
-  );
-};
-
-export const getTopicRelatedPost = async (post, limit) => {
-  if (!post?.related || !Array.isArray(post?.related)) {
-    post.related = [];
-  }
-
-  let related = [...post.related];
-  const relatedLimit = +limit || 5;
-
-  //Find Related Topic
-  if (limit > related.length) {
-    related = [
-      ...related,
-      ...(
-        await postModel.getAllPost({
-          topic_id: post.topic_id,
-          limit: relatedLimit + 2,
-        })
-      ) //Get Related Posts
-        .map((elemnt) => helper.restructPost(elemnt)), //Restruct Post
-    ];
-
-    related = removePostDuplicate(post.id, related, relatedLimit + 2);
-    return {
-      ...post,
-      related,
-    };
-  }
-  return post;
-};
-
-export const getTagRelatedPost = async (post, limit) => {
-  if (!post?.related || !Array.isArray(post?.related)) {
-    post.related = [];
-  }
-
-  let related = [...post.related];
-  const tag = "`tag`";
-  const relatedLimit = +limit || 5;
-
-  //Find Related Topic
-  if (limit > related.length && post?.tags.length > 0) {
-    related = [
-      ...related,
-      ...(
-        await postModel.getAllPost({
-          [`${tag}.${tag}`]: post.tags.join(","),
-          limit: relatedLimit + 2,
-        })
-      ) //Get Related Posts
-        .map((elemnt) => helper.restructPost(elemnt)), //Restruct Post
-    ];
-
-    related = removePostDuplicate(post.id, related, relatedLimit + 2);
-    return {
-      ...post,
-      related,
-    };
-  }
-  return post;
-};
-
-export const getAuthorRelatedPost = async (post, limit) => {
-  if (!post?.related || !Array.isArray(post?.related)) {
-    post.related = [];
-  }
-
-  let related = [...post?.related];
-  const relatedLimit = +limit || 5;
-
-  //Find Related Author
-  if (limit > related.length) {
-    related = [
-      ...related,
-      ...(
-        await postModel.getAllPost({
-          author_id: post?.author_id,
-          limit: relatedLimit + 2,
-        })
-      ) //Get Related Posts
-        .map((elemnt) => helper.restructPost(elemnt)), //Restruct Post
-    ];
-
-    related = removePostDuplicate(post.id, related, relatedLimit + 2);
-    return {
-      ...post,
-      related,
-    };
-  }
-  return post;
-};
+import {
+  identifyAuthor,
+  identifyPost,
+  getTopicRelatedPost,
+  getTagRelatedPost,
+  getAuthorRelatedPost,
+  restructPost,
+} from "../utils/post-helper.js";
 
 //-----------------Get---------------------
 export const getOnePost = catchAsync(async (req, res, next) => {
-  let post = await postModel.getOnePost(req.params.id);
+  let vals;
+  if (req.params.ids.includes(",")) {
+    vals = req.params.ids.split(",").map(Number);
+  } else {
+    vals = [+req.params.ids];
+  }
+
+  let posts = await postModel.getManyPostByKeys(id_, vals, {
+    limit: vals.length,
+  });
 
   //Post not find
-  if (!post) return next(new HttpError("Post not Find!", 404));
-
-  //Restruct the post
-  post = helper.restructPost(post);
-  if (!post?.related || !Array.isArray(post?.related)) post.related = [];
-
-  post = await getTopicRelatedPost(post, 5);
-  post = await getTagRelatedPost(post, 5);
-  post = await getAuthorRelatedPost(post, 5);
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      post,
-    },
-  });
-});
-
-export const getAllPost = catchAsync(async (req, res, next) => {
-  let posts = await postModel.getAllPost(req.query);
+  if (!posts.length) return next(new HttpError("Post not Find!", 404));
 
   //Restruct the posts obj
-  posts = posts.map((elemnt) => helper.restructPost(elemnt));
+  posts = await Promise.all(
+    posts.map(async (elemnt) => {
+      let post = restructPost(elemnt);
+      post = await getTopicRelatedPost(post, 5);
+      post = await getTagRelatedPost(post, 5);
+      post = await getAuthorRelatedPost(post, 5);
+      return post;
+    })
+  );
+
   res.status(200).json({
     status: "success",
     results: posts.length,
@@ -160,9 +54,11 @@ export const getAllPost = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getPostByIds = catchAsync(async (req, res, next) => {
-  const vals = req.query.ids.split(",").map(Number);
-  const posts = await postModel.getManyPostByKeys({ key: "id", vals });
+export const getAllPost = catchAsync(async (req, res, next) => {
+  let posts = await postModel.getAllPost(req.query);
+
+  //Restruct the posts obj
+  posts = posts.map((elemnt) => restructPost(elemnt));
   res.status(200).json({
     status: "success",
     results: posts.length,
@@ -178,7 +74,7 @@ export const getPostSearch = catchAsync(async (req, res, next) => {
   let posts = (await postModel.getSearchPost(req.query.search, limit)) ?? [];
 
   //Restruct the posts obj
-  posts = posts.map((elemnt) => helper.restructPost(elemnt));
+  posts = posts.map((elemnt) => restructPost(elemnt));
   res.status(200).json(posts);
 });
 
@@ -320,14 +216,8 @@ export const deleteOnePost = catchAsync(async (req, res, next) => {
 });
 
 export default {
-  identifyPost,
-  identifyAuthor,
   getOnePost,
   getAllPost,
-  getPostByIds,
-  getTopicRelatedPost,
-  getTagRelatedPost,
-  getAuthorRelatedPost,
   getPostSearch,
   createOnePost,
   updateOnePost,

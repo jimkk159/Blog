@@ -61,11 +61,16 @@ export const getOnePost = async (id) => {
   return post;
 };
 
-export const getManyPostByKeys = async ({ key, vals, strict = false }) => {
+export const getManyPostByKeys = async (
+  key,
+  vals,
+  queryString,
+  strict = false
+) => {
   if (!Array.isArray(vals) || vals.length === 0) return [];
 
   //Generate MySql Syntax
-  const features = new apiFeatures.getAllFeatures(`post`)
+  const features = new apiFeatures.getAllFeatures(`post`, queryString)
     .join(...joinPostAndPostTag)
     .join(...joinTagAndPostTag)
     .join(...joinPostAndTopic)
@@ -78,8 +83,10 @@ export const getManyPostByKeys = async ({ key, vals, strict = false }) => {
       ...postFields,
       `${postEn_}.${title_} AS \`en_title\``,
       `${postEn_}.${short_} AS \`en_short\``,
+      `${postEn_}.${detail_} AS \`en_detail\``,
       `${postCh_}.${title_} AS \`ch_title\``,
       `${postCh_}.${short_} AS \`ch_short\``,
+      `${postCh_}.${detail_} AS \`ch_detail\``,
       `GROUP_CONCAT(${tag_}.${tag_name_}) AS \`tags\``,
     ]);
 
@@ -93,7 +100,6 @@ export const getManyPostByKeys = async ({ key, vals, strict = false }) => {
       )
       .appendValues([[...vals], [...vals], [...vals]])
       .paginate();
-
     return (await queryPool.query(features.query, features.values)) ?? [];
   }
 
@@ -253,11 +259,7 @@ export const getSearchPost = async (target, limit) => {
   //Author
   if (limit >= ids.length) ids = await getRelatedAuthorIds(ids, target, limit);
 
-  return await getManyPostByKeys({
-    key: id_,
-    vals: ids,
-    strict: true,
-  });
+  return await getManyPostByKeys(id_, ids, {}, true);
 };
 
 //-----------------Post---------------------

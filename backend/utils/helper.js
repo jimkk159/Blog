@@ -79,23 +79,6 @@ export const getObjWithoutKeys = (
   return newObj;
 };
 
-export const restructPost = (post) => {
-  const postObj = getObjWithoutKeys(post, ["tags"], ["en_", "ch_"]);
-  const tags = post.tags ? post.tags.split(",") : [];
-
-  const en = convertPrefix(post, "en_") ?? {};
-  const ch = convertPrefix(post, "ch_") ?? {};
-
-  return {
-    ...postObj,
-    tags,
-    content: {
-      en,
-      ch,
-    },
-  };
-};
-
 export default {
   trimApos,
   sqlApos,
@@ -103,5 +86,4 @@ export default {
   removeDuplicatesById,
   convertPrefix,
   getObjWithoutKeys,
-  restructPost,
 };
