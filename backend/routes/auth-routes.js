@@ -3,8 +3,8 @@ import passport from "passport";
 import { check } from "express-validator";
 import fileUploadToServer from "../utils/file-upload.js";
 
-import oauthController from "../controllers/oauth-controller.js";
 import authController from "../controllers/auth-controller.js";
+import oauthController from "../controllers/oauth-controller.js";
 import shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
@@ -12,7 +12,7 @@ const router = express.Router();
 //---------------Local--------------------
 router.post(
   "/signup",
-  fileUploadToServer.single("image"),
+  fileUploadToServer.single("avatar"),
   [
     check("name").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
@@ -35,11 +35,6 @@ router.post(
 router.get("/logout", authController.logout);
 
 router.post("/forgotPassword", authController.forgotPassword);
-router.patch(
-  "/updatePassword",
-  authController.authToken,
-  authController.updatePassword
-);
 
 //---------------Google-------------------
 // auth with google
@@ -65,6 +60,9 @@ router.get("/google/failed", (req, res) => {
     message: "Login by google failed!",
   });
 });
+
+router.use(authController.authToken);
+router.patch("/updatePassword", authController.updatePassword);
 
 export default router;
 //Reference: https://alexanderleon.medium.com/implement-social-authentication-with-react-restful-api-9b44f4714fa

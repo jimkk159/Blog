@@ -16,7 +16,7 @@ router.get(
   postController.getPostSearch
 );
 router.get("/", postController.getAllPost);
-router.get("/:id",postController.getOnePost);
+router.get("/:id", postController.getOnePost);
 
 // check token middleware
 router.use(authController.authToken);
@@ -37,7 +37,7 @@ router.patch(
   "/pin/:id",
   [check("pin").not().isEmpty()],
   shareController.validation,
-  shareController.restrictTo("root", "leader", "manager"),
+  shareController.restrictTo("root", "manager"),
   postController.pinPost
 );
 
@@ -52,8 +52,6 @@ router
     postController.updateOnePost,
     postController.getOnePost
   )
-  .delete(
-    postController.deleteOnePost,
-  );
+  .delete(postController.deleteOnePost);
 
 export default router;

@@ -233,7 +233,7 @@ export const deleteOnePost = catchAsync(async (req, res, next) => {
   const user = await authHelper.identifyUser(req.user.id);
 
   // 3) Identify the user permission
-  if (post.author_id !== req.user.id && !["root", "leader"].includes(user.role))
+  if (post.author_id !== req.user.id && !["root"].includes(user.role))
     return next(new HttpError("Permissions deny.", 403));
 
   // 4) Delete the post

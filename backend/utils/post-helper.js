@@ -26,7 +26,7 @@ const removePostDuplicate = (originId, related, limit) => {
 };
 
 const restructPost = (post) => {
-  const postObj = helper.getObjWithoutKeys(post, ["tags"], ["en_", "ch_"]);
+  const postObj = helper.filterObjWithoutPrefixes(post, ["tags"], ["en_", "ch_"]);
   const tags = post.tags ? post.tags.split(",") : [];
 
   const en = helper.convertPrefix(post, "en_") ?? {};

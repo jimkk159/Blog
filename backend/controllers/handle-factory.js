@@ -17,7 +17,6 @@ const getOne = (table) =>
 
 const getAll = (table, fields) =>
   catchAsync(async (req, res, next) => {
-    console.log(table, fields);
     const data = await queryPool.getAll(
       `${table}`,
       req.query,
@@ -64,7 +63,6 @@ const updateOne = (table) =>
 
     // 3) Get the update from database
     const data = await queryPool.getOne(table, [id_], [req.params.id]);
-    console.log(data)
     if (!data) return next(new HttpError("No data found with that ID", 404));
 
     res.status(200).json({

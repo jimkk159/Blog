@@ -13,6 +13,9 @@ import {
   parent_id_,
 } from "../utils/table.js";
 import topicHelper from "../utils/topic-helper.js";
+import HttpError from "../utils/http-error.js";
+import queryConnection from "../module/mysql/connection.js";
+import pool from "../module/mysql/pool.js";
 
 //-----------------Get---------------------
 const getOneTopic = catchAsync(async (req, res, next) => {
@@ -117,12 +120,32 @@ const createOneTopic = catchAsync(async (req, res, next) => {
 
   // 3) Create topic
   const topic = await topicModel.createOneTopic({ ...topicResult });
-  res.status(400).json({ status: "success", data: topic });
+  res.status(201).json({ status: "success", data: topic });
+});
+
+//-----------------Patch---------------------
+const updateOneTopic = catchAsync(async (req, res, next) => {
+  await topicModel.updateOneTopic(
+    +req.params.id,
+    req.body.topic,
+    req.body.parent,
+    req.body.children
+  );
+  next();
+});
+
+//-----------------Delete--------------------
+const deleteOneTopic = catchAsync(async (req, res, next) => {
+  // 1) Delete the topic
+  await topicModel.deleteOneTopic(+req.params.id);
+  res.status(204).json();
 });
 
 export default {
   getOneTopic,
   getAllTopic,
   createOneTopic,
+  updateOneTopic,
+  deleteOneTopic,
 };
 //reference:https://advancedweb.hu/how-to-use-async-functions-with-array-some-and-every-in-javascript/

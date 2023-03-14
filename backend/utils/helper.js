@@ -60,8 +60,21 @@ const convertPrefix = (obj, prefix) => {
   return newObj;
 };
 
+//Filter Obj
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach((element) => {
+    if (allowedFields.includes(element)) newObj[element] = obj[element];
+  });
+  return newObj;
+};
+
 //Get Obj without keys
-const getObjWithoutKeys = (originalObj, excludedKeys = [], prefixes = []) => {
+const filterObjWithoutPrefixes = (
+  originalObj,
+  excludedKeys = [],
+  prefixes = []
+) => {
   let newObj = {};
   for (let [key, value] of Object.entries(originalObj)) {
     if (
@@ -78,7 +91,8 @@ export default {
   trimApos,
   sqlApos,
   pushIn,
-  removeDuplicatesById,
+  filterObj,
   convertPrefix,
-  getObjWithoutKeys,
+  removeDuplicatesById,
+  filterObjWithoutPrefixes,
 };

@@ -18,4 +18,12 @@ router.post(
   shareController.validation,
   topicController.createOneTopic
 );
+
+// router.use(shareController.restrictTo("root"));
+
+router
+  .route("/:id")
+  .patch(topicController.updateOneTopic, topicController.getOneTopic)
+  .delete(topicController.deleteOneTopic);
+
 export default router;
