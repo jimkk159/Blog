@@ -34,6 +34,7 @@ router.post(
 );
 router.get("/logout", authController.logout);
 
+router.get("/verifyEmail/:token", authController.verifyEmail);
 router.post("/forgotPassword", authController.forgotPassword);
 
 //---------------Google-------------------

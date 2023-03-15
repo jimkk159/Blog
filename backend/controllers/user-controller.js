@@ -11,8 +11,8 @@ export const getMe = (req, res, next) => {
 
 //----------------Post--------------------
 //Create Local User
-export const createLocalUser = (roles) =>
-  catchAsync(async (name, email, avatar, password, role) => {
+export const createLocalUser =
+  (roles) => async (name, email, avatar, password, role) => {
     // 1) Check the input user role
     if (role && ![...roles].includes(role))
       throw new HttpError(
@@ -35,7 +35,7 @@ export const createLocalUser = (roles) =>
       throw new HttpError("Create User fail, please try again later.", 500);
 
     return { ...newUser };
-  });
+  };
 
 //----------------Patch--------------------
 export const updateMe = catchAsync(async (req, res, next) => {

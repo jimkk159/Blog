@@ -15,10 +15,13 @@ import {
   user_id_,
   provider_,
   password_,
+  auth_token,
   access_token_,
+  valid,
+  user_,
+  email_,
 } from "../utils/table.js";
 import authHelper from "../utils/auth-helper.js";
-
 
 //Verify Json Web Token
 const authToken = (req, res, next) => {
@@ -43,19 +46,60 @@ const authToken = (req, res, next) => {
 const signup = (...roles) =>
   catchAsync(async (req, res, next) => {
     // 1) Confirm password consistency
-    authHelper.confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
+    authHelper.confirmPasswordConsistency(
+      req.body.password,
+      req.body.confirmPassword
+    );
 
-    // 2) Confirm email no exist
-    const emailFunc = authHelper.identifyEmail("empty");
+    // 2) Confirm email exist
+    const emailFunc = authHelper.identifyEmail();
     req.user = await emailFunc(req.body.email);
+    if (req.user) {
+      // 3) Check if user auth again
+      const secrectFunc = authHelper.getUserSecrect("local");
+      const auth = await secrectFunc(req.user.id);
+      if (auth.valid)
+        throw HttpError("Email existed already, please login instead.", 422);
+      else {
+        // 4) Remove old user data
+        const connection = await pool.getConnection();
+        await connection.beginTransaction();
+        try {
+          const user = await queryConnection.getOne(
+            connection,
+            user_,
+            [email_],
+            [req.body.email]
+          );
+          await queryConnection.deleteOne(
+            connection,
+            user_,
+            [email_],
+            [req.body.email]
+          );
+          await queryConnection.deleteOne(
+            connection,
+            auth_,
+            [user_id_],
+            [user.id]
+          );
+          await connection.commit();
+          connection.release();
+        } catch (err) {
+          await connection.rollback();
+          connection.release();
+          return err;
+        }
+      }
+    }
 
-    // 3) Create user avatar
+    // 5) Create user avatar
     res.locals.avatar = shareController.createAvatar(req.body.email, req.file);
 
-    // 4) Encrypt password
+    // 6) Encrypt password
     req.user.password = await authHelper.encryptPassword(req.body.password);
 
-    // 5) Create Local User
+    // 7) Create Local User
     const createFunc = userController.createLocalUser(roles);
     req.user = await createFunc(
       req.body.name,
@@ -65,22 +109,25 @@ const signup = (...roles) =>
       req.body.role
     );
 
-    // 6) Generate token
+    // 8) Generate token
     const token = authHelper.generateToken(req.user.id, req.user.email);
 
-    // 7) create token cookie
-    authHelper.createTokenCookie(req, res, token);
+    // 9) Save token to database
+    await queryPool.updateOne(
+      auth_,
+      [auth_token],
+      [user_id_, provider_],
+      [token, req.user.id, "local"]
+    );
+
+    // 10) Send it to user's email
+    await new Email(req.body.email, req.body.name).sendWelcome(
+      `${req.protocol}://${req.get("host")}/auth/verifyEmail/${token}`
+    );
 
     res.status(201).json({
       status: "success",
-      message: "Signup successfully",
-      data: {
-        id: req.user.id,
-        name: req.user.name,
-        role: req.user.role,
-        avatar: req.user.avatar,
-        token,
-      },
+      message: "Signup successfully! Please check your email!",
     });
   });
 
@@ -94,13 +141,16 @@ const login = catchAsync(async (req, res, next) => {
   const secrectFunc = authHelper.getUserSecrect("local");
   const auth = await secrectFunc(req.user.id);
 
-  // 3) Check password
+  // 3) Check user has email-verified
+  if (!auth.valid) throw new HttpError("Please verify your email first");
+
+  // 4) Check password
   await authHelper.checkPassword(req.body.password, auth.password);
 
-  // 4) Generate token
+  // 5) Generate token
   const token = authHelper.generateToken(req.user.id, req.user.email);
 
-  // 5) create token cookie
+  // 6) create token cookie
   authHelper.createTokenCookie(req, res, token);
 
   res.status(200).json({
@@ -131,7 +181,10 @@ const singupTeam = (...roles) =>
   catchAsync(async (req, res, next) => {
     // 1) Confirm password consistency
     req.body.users.forEach((element) => {
-      authHelper.confirmPasswordConsistency(element.password, element.confirmPassword);
+      authHelper.confirmPasswordConsistency(
+        element.password,
+        element.confirmPassword
+      );
     });
 
     //Initial function by factory function
@@ -197,7 +250,10 @@ const forgotPassword = catchAsync(async (req, res, next) => {
     );
 
     // 4) Send it to user's email
-    await new Email(req.user).send("Reset Password", message);
+    await new Email(req.user.email, req.user.name).send(
+      "Reset Password",
+      message
+    );
     res.status(200).json({
       status: "success",
       message:
@@ -206,7 +262,6 @@ const forgotPassword = catchAsync(async (req, res, next) => {
     await connection.commit();
     connection.release();
   } catch (err) {
-    console.log(err);
     await connection.rollback();
     connection.release();
     return next(
@@ -225,13 +280,18 @@ const updatePassword = catchAsync(async (req, res, next) => {
     return next(new HttpError("Please provide your password", 400));
 
   // 3) Confirm password consistency
-  authHelper.confirmPasswordConsistency(req.body.password, req.body.confirmPassword);
+  authHelper.confirmPasswordConsistency(
+    req.body.password,
+    req.body.confirmPassword
+  );
 
   // 4) Check password
   await authHelper.identifyAuth(user.id, "local", req.body.originPassword);
 
   // 5) Encrypt password
-  const newEncryptPassword = await authHelper.encryptPassword(req.body.password);
+  const newEncryptPassword = await authHelper.encryptPassword(
+    req.body.password
+  );
 
   // 6) Update password
   await queryPool.updateOne(
@@ -256,12 +316,39 @@ const updatePassword = catchAsync(async (req, res, next) => {
   });
 });
 
+const verifyEmail = catchAsync(async (req, res, next) => {
+  // 1) Verify token
+  const decodeToken = jwt.verify(req.params.token, process.env.JWT_KEY);
+
+  // 2) Get local authuthenation info
+  const auth = await queryPool.getOne(
+    auth_,
+    [user_id_, provider_],
+    [decodeToken.uid, "local"]
+  );
+
+  // 3) Check token
+  if (auth.token !== "" + req.params.token)
+    return next(new HttpError("Verify Email fail", 400));
+
+  // 4) Update user local auth valid to true
+  await queryPool.updateOne(
+    auth_,
+    [auth_token, valid],
+    [user_id_, provider_],
+    ["", true, decodeToken.uid, "local"]
+  );
+
+  res.redirect(process.env.CLIENT_URL);
+});
+
 export default {
   authToken,
   signup,
   singupTeam,
   login,
   logout,
+  verifyEmail,
   forgotPassword,
   updatePassword,
 };

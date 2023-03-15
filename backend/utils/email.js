@@ -1,11 +1,10 @@
 import nodemailer from "nodemailer";
 
 export default class Email {
-  constructor(user, url) {
-    this.to = user.email;
-    this.nae = user.name;
-    this.url = url;
-    this.from = `Jim <${1234}>`;
+  constructor(email, name) {
+    this.to = email;
+    this.name = name;
+    this.from = `Jim <${process.env.EMAIL_PROVIDER_ADDRESS}>`;
   }
 
   //Setting the email transportation info
@@ -49,7 +48,22 @@ export default class Email {
     await this.newTransport().sendMail(mailOptions);
   }
 
-  async sendWelcome(message) {
-    await this.send("Welcome", message);
+  async sendWelcome(redirectUrl) {
+    // 1) Render HTML based on a pug template
+    const html =
+      `<h1>Welcome to Blog</h1>` +
+      `<h3>Please verify your email below.</h3>` +
+      `<a href=${redirectUrl}>Confirm</a>`;
+
+    // 2) Define email options
+    const mailOptions = {
+      from: this.from,
+      to: this.to,
+      subject: `Verify Password`,
+      html,
+    };
+
+    // 3) Create a transport and send email
+    await this.newTransport().sendMail(mailOptions);
   }
 }

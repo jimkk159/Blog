@@ -42,6 +42,8 @@ export const user_id_ = "`user_id`";
 export const provider_ = "`provider`";
 export const password_ = "`password`";
 export const expire_in_ = "`expire_in`";
+export const auth_token = "`token`";
+export const valid = "`valid`";
 
 //--------------synonym----------------
 export const child_ = "`child`";
