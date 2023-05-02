@@ -9,16 +9,15 @@ export default class Email {
 
   //Setting the email transportation info
   newTransport() {
-    if (process.env.NODE_ENV === "production") {
+    if (process.env.APP_ENV === "production") {
       // Sendgrid
-      return;
-      //   return nodemailer.createTransport({
-      //     service: "SendGrid",
-      //     auth: {
-      //       user: process.env.SENDGRID_USERNAME,
-      //       pass: process.env.SENDGRID_PASSWORD,
-      //     },
-      //   });
+      return nodemailer.createTransport({
+        service: "SendGrid",
+        auth: {
+          user: process.env.SENDGRID_USERNAME,
+          pass: process.env.SENDGRID_PASSWORD,
+        },
+      });
     }
 
     return nodemailer.createTransport({
@@ -33,33 +32,26 @@ export default class Email {
 
   // Send the actual email
   async send(subject, message) {
-    // 1) Render HTML based on a pug template
-    const html = `${message}`;
-
-    // 2) Define email options
-    const mailOptions = {
+    await this.newTransport().sendMail({
       from: this.from,
       to: this.to,
       subject,
-      html,
-    };
-
-    // 3) Create a transport and send email
-    await this.newTransport().sendMail(mailOptions);
+      html: `${message}`,
+    });
   }
 
-  async sendWelcome(redirectUrl) {
+  async sendWelcome(host, token) {
     // 1) Render HTML based on a pug template
     const html =
       `<h1>Welcome to Blog</h1>` +
       `<h3>Please verify your email below.</h3>` +
-      `<a href=${redirectUrl}>Confirm</a>`;
+      `<a href=${host}/auth/verifyEmail/${token}>Confirm</a>`;
 
     // 2) Define email options
     const mailOptions = {
       from: this.from,
       to: this.to,
-      subject: `Verify Password`,
+      subject: `Verify Email`,
       html,
     };
 

@@ -5,8 +5,8 @@
   "description": "jim's personal site backend",
   "main": "app.js",
   "scripts": {
-    "start:dev": "nodemon app.js",
-    "start:prod": "SET APP_ENV=production&& nodemon app.js"
+    "start:dev": "nodemon server.js",
+    "start:prod": "SET APP_ENV=production&& nodemon server.js"
   },
   "author": "jim",
   "license": "ISC",
@@ -32,6 +32,7 @@
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
+    "sequelize": "^6.31.1",
     "uuid": "^9.0.0",
     "xss-clean": "^0.1.1"
   },

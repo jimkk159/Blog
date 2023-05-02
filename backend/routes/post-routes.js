@@ -1,57 +1,35 @@
 import express from "express";
+import Post from "../module/post.js";
 import { check } from "express-validator";
-
-import fileUploadToServer from "../utils/file-upload.js";
-
-import postController from "../controllers/post-controller.js";
-import shareController from "../controllers/share-controller.js";
-import authController from "../controllers/auth-controller.js";
+import * as factory from "../controllers/handle-factory.js";
+import * as postController from "../controllers/post-controller.js";
+import * as authController from "../controllers/auth-controller.js";
+import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
-router.get(
-  "/search",
-  [check("search").not().isEmpty()],
-  shareController.validation,
-  postController.getPostSearch
-);
-router.get("/", postController.getAllPost);
-router.get("/:id", postController.getOnePost);
-
-// check token middleware
-router.use(authController.authToken);
-
-router.post(
-  "/",
-  fileUploadToServer.fields([
-    { name: "cover", maxCount: 1 },
-    { name: "images" },
-  ]),
-  [check("detail").not().isEmpty()],
-  shareController.validation,
-  postController.createOnePost,
-  postController.getOnePost
-);
-
-router.patch(
-  "/pin/:id",
-  [check("pin").not().isEmpty()],
-  shareController.validation,
-  shareController.restrictTo("root", "manager"),
-  postController.pinPost
-);
+router
+  .route("/")
+  .get(postController.getAll)
+  .post(
+    authController.authUserByToken,
+    [
+      check("categoryId").not().isEmpty(),
+      check("title").not().isEmpty(),
+      check("content").not().isEmpty(),
+    ],
+    shareController.validation,
+    postController.createOne
+  );
 
 router
   .route("/:id")
-  .put(
-    fileUploadToServer.fields([
-      { name: "cover", maxCount: 1 },
-      { name: "images" },
-    ]),
-    shareController.validation,
-    postController.updateOnePost,
-    postController.getOnePost
-  )
-  .delete(postController.deleteOnePost);
+  .get(postController.getOne)
+  .patch(authController.authUserByToken, postController.updateOne)
+  .delete(authController.authUserByToken, postController.deleteOne);
+
+router
+  .route("/:id/category/:categoryId")
+  .patch(authController.authUserByToken, postController.updateCategory);
 
 export default router;

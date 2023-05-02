@@ -1,33 +1,38 @@
 import express from "express";
+import User from "../module/user.js";
 import { check } from "express-validator";
-import factory from "../controllers/handle-factory.js";
 import fileUploadToServer from "../utils/file-upload.js";
-import authController from "../controllers/auth-controller.js";
-import userController from "../controllers/user-controller.js";
-import shareController from "../controllers/share-controller.js";
-import { user_ } from "../utils/table.js";
+import * as factory from "../controllers/handle-factory.js";
+import * as authController from "../controllers/auth-controller.js";
+import * as userController from "../controllers/user-controller.js";
+import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
 // check token middleware
-router.use(authController.authToken);
+router.use(authController.authUserByToken);
 
 router
   .route("/me")
-  .get(userController.getMe, factory.getOne(user_))
+  .get(userController.getMe, factory.getOne(User))
   .patch(
     fileUploadToServer.single("avatar"),
     userController.updateMe,
-    factory.updateOne(user_)
+    factory.updateOne(User)
   )
-  .delete(userController.getMe, factory.deleteOne(user_));
+  .delete(userController.getMe, factory.deleteOne(User));
 
-router.use(shareController.restrictTo(("root", "manager")));
+router.use(authController.restrictTo("root"));
 
-router.get("/:id", factory.getOne(user_));
+router
+  .route("/:id")
+  .get(factory.getOne(User))
+  .patch(factory.updateOne(User))
+  .delete(factory.deleteOne(User));
+
 router
   .route("/")
-  .get(factory.getAll(user_))
+  .get(factory.getAll(User))
   .post(
     [
       check("name").not().isEmpty(),
@@ -36,26 +41,8 @@ router
       check("confirmPassword").isLength({ min: 6 }),
     ],
     shareController.validation,
-    authController.signup("manager", "user")
+    userController.setHasValidate,
+    factory.createOne(User)
   );
-
-router.use(shareController.restrictTo("root"));
-
-router
-  .route("/:id")
-  .patch(factory.updateOne(user_))
-  .delete(factory.deleteOne(user_));
-  
-router.post(
-  "/team",
-  [
-    check("users.*.name").not().isEmpty(),
-    check("users.*.email").normalizeEmail().isEmail(),
-    check("users.*.password").isLength({ min: 6 }),
-    check("users.*.confirmPassword").isLength({ min: 6 }),
-  ],
-  shareController.validation,
-  authController.singupTeam("manager", "user")
-);
 
 export default router;
