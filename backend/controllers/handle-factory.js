@@ -25,13 +25,12 @@ export const getAll = (Model) =>
       .paginate();
 
     const data = await getFeature.findAll();
-    setTimeout(() => {
-      res.status(200).json({
-        status: "success",
-        count: data.count,
-        data: data.rows,
-      });
-    }, 2000);
+
+    res.status(200).json({
+      status: "success",
+      count: data.count,
+      data: data.rows,
+    });
   });
 
 export const createOne = (Model) =>
