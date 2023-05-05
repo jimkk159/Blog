@@ -1,7 +1,7 @@
 import Category from "../module/category";
 import * as helper from "../utils/helper/helper";
 import * as categoryHelper from "../utils/helper/category-helper";
-import * as errorTable from "../utils/error/errorTable";
+import * as errorTable from "../utils/table/error";
 import * as categoryController from "./category-controller";
 
 const testParentID = "2";

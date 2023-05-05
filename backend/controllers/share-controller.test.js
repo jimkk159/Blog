@@ -1,6 +1,6 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
-import * as errorTable from "../utils/error/errorTable";
+import * as errorTable from "../utils/table/error";
 import * as shareController from "./share-controller";
 import { validationResult } from "express-validator";
 

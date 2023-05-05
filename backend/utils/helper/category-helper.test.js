@@ -1,5 +1,5 @@
 import Category from "../../module/category";
-import * as errorTable from "../error/errorTable";
+import * as errorTable from "../table/error";
 import * as categoryHelper from "../helper/category-helper";
 import { beforeAll, beforeEach } from "vitest";
 

@@ -97,7 +97,7 @@ describe("Class:Email", () => {
     expect(sendMail).toHaveBeenLastCalledWith({
       from: `Jim <${process.env.EMAIL_PROVIDER_ADDRESS}>`,
       to: testEmail,
-      subject: `Verify Email`,
+      subject: `Verify Password`,
       html:
         `<h1>Welcome to Blog</h1>` +
         `<h3>Please verify your email below.</h3>` +

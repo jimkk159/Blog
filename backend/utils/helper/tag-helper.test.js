@@ -1,5 +1,5 @@
 import * as tagHelper from "./tag-helper";
-import * as errorTable from "../error/errorTable";
+import * as errorTable from "../table/error";
 
 describe("isTagIdLegal()", () => {
   test("should retrun true if number type of number is provided", () => {

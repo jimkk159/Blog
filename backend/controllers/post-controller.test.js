@@ -1,5 +1,5 @@
 import * as helper from "../utils/helper/helper";
-import * as errorTable from "../utils/error/errorTable";
+import * as errorTable from "../utils/table/error";
 import * as postHelper from "../utils/helper/post-helper";
 import * as postController from "../controllers/post-controller";
 import Category from "../module/category";

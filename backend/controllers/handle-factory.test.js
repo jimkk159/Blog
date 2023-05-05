@@ -1,6 +1,6 @@
 import * as helper from "../utils/helper/helper";
 import * as handleFactory from "./handle-factory";
-import * as errorTable from "../utils/error/errorTable";
+import * as errorTable from "../utils/table/error";
 import { GetFeatures } from "../utils/api-features";
 import { afterAll, beforeAll } from "vitest";
 
@@ -51,8 +51,6 @@ describe("getAll()", () => {
     sort = vi.fn().mockReturnThis();
     select = vi.fn().mockReturnThis();
     paginate = vi.fn().mockReturnThis();
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
 
     GetFeatures.mockImplementation((Model, query) => ({
       findAll: vi.fn(async () => Model.findAndCountAll()),
@@ -65,6 +63,8 @@ describe("getAll()", () => {
   });
 
   beforeEach(() => {
+    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
+    next = vi.fn();
     vi.clearAllMocks();
   });
 

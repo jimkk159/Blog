@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import User from "../../module/user";
 import Auth from "../../module/auth";
 import * as authHelper from "./auth-helper";
-import * as errorTable from "../error/errorTable";
+import * as errorTable from "../table/error";
+import { afterAll, beforeAll, beforeEach, describe } from "vitest";
 
 const testID = 1;
 const localProvider = "local";
@@ -96,9 +97,6 @@ describe("isTokenLegal()", () => {
 
     expect(Auth.findOne).toHaveBeenLastCalledWith({
       where: { UserId: decodeToken.uid, provider: decodeToken.provider },
-      attributes: {
-        include: ["updatedAt"],
-      },
     });
     expect(result).toBe(false);
   });
@@ -111,9 +109,6 @@ describe("isTokenLegal()", () => {
 
     expect(Auth.findOne).toHaveBeenLastCalledWith({
       where: { UserId: decodeToken.uid, provider: decodeToken.provider },
-      attributes: {
-        include: ["updatedAt"],
-      },
     });
     expect(result).toBe(true);
   });
@@ -127,7 +122,7 @@ describe("generateRandomPassword()", () => {
       expect(password).toHaveLength(length);
     }
   );
-
+  
   test("should password be string", (length) => {
     const password = authHelper.generateRandomPassword(2);
     expectTypeOf(password).toBeString();
