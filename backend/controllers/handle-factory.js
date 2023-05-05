@@ -27,15 +27,15 @@ export const getAll = (Model) =>
     const data = await getFeature.findAll();
     res.status(200).json({
       status: "success",
-      count: data.count,
-      data: data.rows,
+      count: data.length,
+      data,
     });
   });
 
 export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
     let data = await Model.create(req.body);
-    data = helper.removeExclude(data.toJSON(), ["updatedAt", "createdAt"]);
+    data = helper.removeKeys(data.toJSON(), ["updatedAt", "createdAt"]);
 
     res.status(200).json({
       status: "success",

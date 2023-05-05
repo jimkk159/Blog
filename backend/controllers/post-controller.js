@@ -17,12 +17,12 @@ export const getOne = catchAsync(async (req, res, next) => {
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
-  const data = await postHelper.getFullPosts(req.query);
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
 
   res.status(200).json({
     status: "success",
-    count: data.count,
-    data: data.rows,
+    count: data.length,
+    data,
   });
 });
 
@@ -47,7 +47,7 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 4) get Post (Lazy Loading)
   const author = await User.findByPk(post.AuthorId);
-  const data = helper.removeExclude(post.toJSON(), ["createdAt"]);
+  const data = helper.removeKeys(post.toJSON(), ["createdAt"]);
 
   res.status(200).json({
     status: "success",
@@ -62,7 +62,8 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 2) check Tag
   let tags = [];
-  if (req.body.tagId) tags = await postHelper.checkAndFindPostTags(req.body.tagId);
+  if (req.body.tagId)
+    tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
   // 3) update Post
   await postHelper.updatePostContentAndTags({
@@ -116,4 +117,45 @@ export const deleteOne = catchAsync(async (req, res, next) => {
   // 2) delete Post
   await Post.destroy({ where: { id: req.params.id } });
   res.status(204).json();
+});
+
+export const search = catchAsync(async (req, res, next) => {
+  let initQuery = {};
+  let forceQuery = {};
+  // 1) check the serch params
+  if (
+    !postHelper.isValidSearch(req.query, ["category", "author", "title", "tag"])
+  )
+    throw errorTable.wrongSearchParamsError();
+
+  // 2) setting the search query for sequelize to get data from database
+  switch (req.query.mode) {
+    case "category":
+      [initQuery, forceQuery] = await postHelper.createCategorySearchQuery(
+        req.query.target
+      );
+      break;
+    case "author":
+      [initQuery, forceQuery] = await postHelper.createAuthorSearchQuery(
+        req.query.target
+      );
+      break;
+    case "title":
+      [initQuery, forceQuery] = await postHelper.createTitleySearchQuery(
+        req.query.target
+      );
+      break;
+    case "tag":
+      [initQuery, forceQuery] = await postHelper.createTagSearchQuery(
+        req.query.target
+      );
+      break;
+  }
+
+  req.query = {
+    ...helper.keepKeys(req.query, ["sort", "limit", "page"]),
+    ...initQuery,
+  };
+  req.customQuery = forceQuery;
+  next();
 });

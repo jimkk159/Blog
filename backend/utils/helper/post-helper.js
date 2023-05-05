@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Tag from "../../module/tag.js";
 import Post from "../../module/post.js";
 import sequelize from "../../config/db-init.js";
@@ -6,6 +7,14 @@ import { GetFeatures } from "../api-features.js";
 import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";
 import * as categoryHelper from "../helper/category-helper.js";
+import Category from "../../module/category.js";
+import User from "../../module/user.js";
+
+export const isValidSearch = (query, allowMode) =>
+  query.mode &&
+  query.target &&
+  Array.isArray(allowMode) &&
+  allowMode.includes(query.mode);
 
 export const isUserAllowUpdatePost = (user, post) =>
   user.role === "root" || user.id === post.AuthorId;
@@ -19,21 +28,22 @@ export const getFullPost = async (postId) =>
     ],
   });
 
-export const getFullPosts = async (query) => {
+export const getFullPosts = async (query, customQuery = {}) => {
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
     .select()
     .paginate();
 
-  const customQuery = {
+  const forceQuery = {
     include: [
       "Author",
       "Category",
       { model: Tag, through: { attributes: [] } },
     ],
+    ...customQuery,
   };
-  return getFeature.findAll(customQuery);
+  return getFeature.findAll(forceQuery);
 };
 
 export const checkPostCategory = (category) => {
@@ -104,4 +114,84 @@ export const updatePostContentAndTags = async ({
     );
     if (isUpdateTags) await post.setTags(tags, { transaction: t });
   });
+};
+
+export const createCategorySearchQuery = async (target) => {
+  let initQuery = {};
+  let forceQuery = {};
+
+  // Get the target category
+  const categories = await Category.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${target}%`,
+      },
+    },
+  });
+  initQuery = {
+    CategoryId: categories.map((category) => category.id),
+  };
+
+  return [initQuery, forceQuery];
+};
+
+export const createAuthorSearchQuery = async (target) => {
+  let initQuery = {};
+  let forceQuery = {};
+
+  // Get the target user
+  const authors = await User.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${target}%`,
+      },
+    },
+  });
+  initQuery = {
+    AuthorId: authors.map((author) => author.id),
+  };
+
+  return [initQuery, forceQuery];
+};
+
+export const createTitleySearchQuery = async (target) => {
+  let initQuery = {};
+  let forceQuery = {};
+
+  // Get the target title
+  forceQuery = {
+    where: {
+      title: {
+        [Op.like]: `%${target}%`,
+      },
+    },
+  };
+  return [initQuery, forceQuery];
+};
+
+export const createTagSearchQuery = async (target) => {
+  let initQuery = {};
+  let forceQuery = {};
+
+  const tags = await Tag.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${target}%`,
+      },
+    },
+  });
+
+  // Get the target tags
+  forceQuery = {
+    include: [
+      "Author",
+      "Category",
+      {
+        model: Tag,
+        where: { id: tags.map((tag) => tag.id) },
+        through: { attributes: [] },
+      },
+    ],
+  };
+  return [initQuery, forceQuery];
 };

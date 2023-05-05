@@ -71,11 +71,11 @@ describe("isIncludeID()", () => {
   );
 });
 
-describe("removeExclude()", () => {
+describe("removeKeys()", () => {
   test("should remove the key in exclude array true", () => {
     const obj = { name: "Tom", password: 123456 };
     const exlcude = ["password"];
-    expect(helper.removeExclude(obj, exlcude)).toEqual({ name: "Tom" });
+    expect(helper.removeKeys(obj, exlcude)).toEqual({ name: "Tom" });
   });
 });
 

@@ -30,7 +30,7 @@ export const createOne = catchAsync(async (req, res, next) => {
     },
   });
   if (!created) throw errorTable.categoryAlreadyExistError();
-  category = helper.removeExclude(category.toJSON(), [
+  category = helper.removeKeys(category.toJSON(), [
     "updatedAt",
     "createdAt",
   ]);

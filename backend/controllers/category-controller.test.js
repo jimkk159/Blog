@@ -11,7 +11,7 @@ describe("createOne()", () => {
   beforeAll(() => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
-    vi.spyOn(helper, "removeExclude");
+    vi.spyOn(helper, "removeKeys");
     vi.spyOn(Category, "findOrCreate").mockImplementation(async () => {});
     vi.spyOn(categoryHelper, "checkParentIsExist").mockImplementation(
       async () => {}
@@ -88,7 +88,7 @@ describe("createOne()", () => {
 
     await categoryController.createOne(req, res, next);
 
-    expect(helper.removeExclude).toHaveBeenLastCalledWith(category.toJSON(), [
+    expect(helper.removeKeys).toHaveBeenLastCalledWith(category.toJSON(), [
       "updatedAt",
       "createdAt",
     ]);

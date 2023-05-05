@@ -60,8 +60,8 @@ describe("/api/v1/users", () => {
       expect(response.type).toBe("application/json");
       expect(response.body).toEqual({
         status: "success",
-        count: testData.count,
-        data: testData.rows,
+        count: testData.length,
+        data: testData,
       });
     });
   });

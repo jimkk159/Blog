@@ -19,7 +19,6 @@ export const sanitizeFilterObj = (queryObj, allowOperators) => {
   const newOptObj = {};
   for (const key of Object.keys(queryObj)) {
     const optObj = { ...queryObj[key] };
-    if (!helper.isObject(optObj)) continue;
     if (!isOnlyOperator(optObj)) continue;
     if (!isOperatorInTable(optObj, allowOperators)) continue;
     const operator = getOperator(optObj);

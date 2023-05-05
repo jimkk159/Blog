@@ -9,7 +9,7 @@ export class GetFeatures {
   }
 
   async findAll(queryString, options) {
-    return this.Model.findAndCountAll(
+    return this.Model.findAll(
       { ...this.sqlQuery, ...queryString },
       options
     );
@@ -19,8 +19,8 @@ export class GetFeatures {
     let filterQuery = {};
     let queryObj = { ...this.query };
     const exlcude = ["sort", "limit", "page"];
-    const operators = ["gt", "gte", "lt", "lte"];
-    queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, operators);
+    const allowOperators = ["gt", "gte", "lt", "lte"];
+    queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, allowOperators);
     filterQuery = apiFeatureHelper.replaceFilterOperators(queryObj);
 
     queryObj = { ...this.query };
@@ -31,9 +31,8 @@ export class GetFeatures {
     queryObj = apiFeatureHelper.getQueryItemEqualTo(queryObj);
     filterQuery = { ...filterQuery, ...queryObj };
 
-    filterQuery = helper.removeExclude(filterQuery, exlcude);
+    filterQuery = helper.removeKeys(filterQuery, exlcude);
     this.sqlQuery = { ...this.sqlQuery, where: filterQuery };
-
     return this;
   }
 

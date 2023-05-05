@@ -78,8 +78,8 @@ describe("getAll()", () => {
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
-      count: testdata.count,
-      data: testdata.rows,
+      count: testdata.length,
+      data: testdata,
     });
   });
 
@@ -102,7 +102,7 @@ describe("createOne()", () => {
   let res;
   let next;
   beforeAll(() => {
-    vi.spyOn(helper, "removeExclude");
+    vi.spyOn(helper, "removeKeys");
   });
 
   beforeEach(() => {
@@ -157,7 +157,7 @@ describe("createOne()", () => {
     const createOneFunc = handleFactory.createOne(TestModel);
     await createOneFunc(req, res, next);
 
-    expect(helper.removeExclude).toHaveBeenLastCalledWith(dbTestData, [
+    expect(helper.removeKeys).toHaveBeenLastCalledWith(dbTestData, [
       "updatedAt",
       "createdAt",
     ]);

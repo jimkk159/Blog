@@ -23,6 +23,10 @@ router
   );
 
 router
+  .route("/search")
+  .get(postController.search, postController.getAll);
+
+router
   .route("/:id")
   .get(postController.getOne)
   .patch(authController.authUserByToken, postController.updateOne)

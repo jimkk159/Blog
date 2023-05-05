@@ -1,5 +1,8 @@
 import AppError from "../error/app-error.js";
 
+export const wrongSearchParamsError = (err) =>
+  new AppError(`Search parameter is wrong!`, 400);
+
 export const dbUniqueConstraintError = (err) =>
   new AppError(`${err.message}`, 400);
 

@@ -82,7 +82,22 @@ describe("getAll()", () => {
 
     await postController.getAll(req, res, next).catch((err) => (error = err));
 
-    expect(postHelper.getFullPosts).toHaveBeenLastCalledWith(req.query);
+    expect(postHelper.getFullPosts).toHaveBeenLastCalledWith(
+      req.query,
+      req.customQuery
+    );
+  });
+
+  test("should find post by customQuery", async () => {
+    let error;
+    req = { customQuery: "testCustomeQuery" };
+
+    await postController.getAll(req, res, next).catch((err) => (error = err));
+
+    expect(postHelper.getFullPosts).toHaveBeenLastCalledWith(
+      req.query,
+      req.customQuery
+    );
   });
 
   test("should response posts", async () => {
@@ -96,8 +111,8 @@ describe("getAll()", () => {
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
-      count: data.count,
-      data: data.rows,
+      count: data.length,
+      data,
     });
   });
 });
@@ -110,7 +125,7 @@ describe("createOne()", () => {
     next = vi.fn();
     vi.spyOn(User, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(helper, "removeExclude").mockImplementation(() => {});
+    vi.spyOn(helper, "removeKeys").mockImplementation(() => {});
     vi.spyOn(postHelper, "checkPostCategory").mockImplementation(() => {});
     vi.spyOn(postHelper, "checkAndFindPostTags").mockImplementation(
       async () => {}
@@ -226,7 +241,7 @@ describe("createOne()", () => {
       .createOne(req, res, next)
       .catch((err) => (error = err));
 
-    expect(helper.removeExclude).toHaveBeenLastCalledWith("testPost", [
+    expect(helper.removeKeys).toHaveBeenLastCalledWith("testPost", [
       "createdAt",
     ]);
   });
@@ -249,7 +264,7 @@ describe("createOne()", () => {
     postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
     postHelper.createPostWithTags.mockResolvedValueOnce(post);
     User.findByPk.mockResolvedValueOnce(author);
-    helper.removeExclude.mockReturnValueOnce(data);
+    helper.removeKeys.mockReturnValueOnce(data);
 
     await postController
       .createOne(req, res, next)
