@@ -5,7 +5,7 @@ import User from "../../module/user.js";
 import Auth from "../../module/auth.js";
 import sequelize from "../../config/db-init.js";
 import * as authHelper from "./auth-helper.js";
-import * as errorTable from "../error/errorTable.js";
+import * as errorTable from "../table/error.js";
 
 export const isHearderAuthorization = (headers) =>
   !!(headers.authorization && typeof headers.authorization === "string");
@@ -22,8 +22,8 @@ export const isUserLegal = (user, provider) => {
 export const isTokenLegal = async (decodeToken) => {
   const auth = await Auth.findOne({
     where: { UserId: decodeToken.uid, provider: "local" },
-    attributes: { include: ["updatedAt"] },
   });
+
   if (new Date(auth.updatedAt) > new Date(1000 * decodeToken.iat)) return false;
   return true;
 };

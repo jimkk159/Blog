@@ -1,5 +1,5 @@
 import catchAsync from "../utils/catch-async.js";
-import * as errorTable from "../utils/error/errorTable.js";
+import * as errorTable from "../utils/table/error.js";
 import { GetFeatures } from "../utils/api-features.js";
 import * as helper from "../utils/helper/helper.js";
 
@@ -25,7 +25,6 @@ export const getAll = (Model) =>
       .paginate();
 
     const data = await getFeature.findAll();
-
     res.status(200).json({
       status: "success",
       count: data.count,

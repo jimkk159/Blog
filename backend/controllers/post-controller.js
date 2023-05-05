@@ -3,7 +3,7 @@ import Post from "../module/post.js";
 import Category from "../module/category.js";
 import catchAsync from "../utils/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
-import * as errorTable from "../utils/error/errorTable.js";
+import * as errorTable from "../utils/table/error.js";
 import * as postHelper from "../utils/helper/post-helper.js";
 
 export const getOne = catchAsync(async (req, res, next) => {
@@ -62,7 +62,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 2) check Tag
   let tags = [];
-  if (req.body.tagId) tags = postHelper.checkAndFindPostTags(req.body.tagId);
+  if (req.body.tagId) tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
   // 3) update Post
   await postHelper.updatePostContentAndTags({

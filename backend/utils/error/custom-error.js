@@ -1,4 +1,4 @@
-import * as errorTable from "./errorTable.js";
+import * as errorTable from "../table/error.js";
 
 // ------------------SQL Error------------------
 export const isSqlError = (error) =>

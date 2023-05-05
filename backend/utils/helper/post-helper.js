@@ -1,7 +1,7 @@
 import Tag from "../../module/tag.js";
 import Post from "../../module/post.js";
 import sequelize from "../../config/db-init.js";
-import * as errorTable from "../error/errorTable.js";
+import * as errorTable from "../table/error.js";
 import { GetFeatures } from "../api-features.js";
 import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";

@@ -9,19 +9,11 @@ router
   .route("/")
   .get(factory.getAll(Tag))
   .post(authController.authUserByToken, factory.createOne(Tag));
-
+  
 router
   .route("/:id")
   .get(factory.getOne(Tag))
-  .patch(
-    authController.authUserByToken,
-    authController.restrictTo("root"),
-    factory.updateOne(Tag)
-  )
-  .delete(
-    authController.authUserByToken,
-    authController.restrictTo("root"),
-    factory.deleteOne(Tag)
-  );
+  .patch(authController.authUserByToken, factory.updateOne(Tag))
+  .delete(authController.authUserByToken, factory.deleteOne(Tag));
 
 export default router;

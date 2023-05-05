@@ -51,7 +51,7 @@ export default class Email {
     const mailOptions = {
       from: this.from,
       to: this.to,
-      subject: `Verify Email`,
+      subject: `Verify Password`,
       html,
     };
 

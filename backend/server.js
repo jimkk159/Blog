@@ -2,7 +2,6 @@ import {
   handleUncaughtException,
   handleUnhandledRejection,
 } from "./utils/error/exceotuion-error.js";
-
 handleUncaughtException();
 
 import dotenv from "dotenv";

@@ -1,4 +1,4 @@
-import AppError from "./app-error.js";
+import AppError from "../error/app-error.js";
 
 export const dbUniqueConstraintError = (err) =>
   new AppError(`${err.message}`, 400);

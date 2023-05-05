@@ -12,6 +12,7 @@ const router = express.Router();
 // check token middleware
 router.use(authController.authUserByToken);
 
+// TODO 沒測到 fileUploadToServer
 router
   .route("/me")
   .get(userController.getMe, factory.getOne(User))
