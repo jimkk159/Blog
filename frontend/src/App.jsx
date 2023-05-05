@@ -1,22 +1,14 @@
 import React from "react";
+import { Provider } from "react-redux";
 
-//Custom component
-import Card from "./shared/components/UI/Card";
-import Navigation from "./shared/components/Navigation/Navigation";
+//Redux Store
+// import store from "./store/index.js";
 
-import './APP.module.css';
+//Custom Component
+import CustomRoute from "./routes/routes";
 
 function App() {
-  return (
-    <div>
-      <Navigation />
-      <main>
-        <Card>
-          <h1>Hello world2</h1>
-        </Card>
-      </main>
-    </div>
-  );
+  return <CustomRoute />;
 }
 
 export default App;

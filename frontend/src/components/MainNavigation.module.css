@@ -1,0 +1,11 @@
+.list a {
+  text-decoration: none;
+}
+
+.list a:hover {
+  color: chartreuse;
+}
+
+.active {
+    color: crimson;
+}
