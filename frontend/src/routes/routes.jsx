@@ -48,7 +48,6 @@ const router = createBrowserRouter([
         element: SuspenseWrapper(<AboutPage />),
         loader: lazyLoader("./pages/About"),
       },
-      { path: "search/:searchItem", element: SuspenseWrapper(<SearchPage />) },
       {
         id: "posts",
         path: "posts",
@@ -82,6 +81,11 @@ const router = createBrowserRouter([
             element: SuspenseWrapper(<NewPostPage />),
             loader: authHelper.checkAuthTokenLoader,
             action: lazyAction("../components/PostForm"),
+          },
+          {
+            path: "search",
+            element: SuspenseWrapper(<SearchPage />),
+            loader: lazyLoader("./pages/Search"),
           },
         ],
       },

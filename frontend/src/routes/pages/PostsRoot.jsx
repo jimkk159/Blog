@@ -1,5 +1,4 @@
 import { defer, Outlet } from "react-router-dom";
-import * as category from "../../util/category";
 import PostNavigation from "../../components/PostsNavigation";
 
 function PostRoot() {

@@ -24,8 +24,11 @@ function PostDetail() {
       <AwaitWrapper resolve={post}>
         {(loadPost) => (
           <>
-            <h1>{loadPost.data.title}</h1>
-            <p>{loadPost.data.content}</p>
+            <h1>{loadPost.title}</h1>
+            <p>{loadPost.content}</p>
+            {loadPost.Tags.map((tag, index) => (
+              <p key={index}>{tag.name}</p>
+            ))}
           </>
         )}
       </AwaitWrapper>
@@ -41,7 +44,8 @@ async function postLoader(id) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${id}`
   );
-  return response.json();
+  const resJSON = await response.json();
+  return resJSON.data;
 }
 
 export function loader({ params }) {
