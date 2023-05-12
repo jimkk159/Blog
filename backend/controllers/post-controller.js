@@ -122,35 +122,18 @@ export const deleteOne = catchAsync(async (req, res, next) => {
 export const search = catchAsync(async (req, res, next) => {
   let initQuery = {};
   let forceQuery = {};
+  const allowType = ["id", "text"];
+  const allowMode = ["category", "author", "title", "tag"];
   // 1) check the serch params
-  if (
-    !postHelper.isValidSearch(req.query, ["category", "author", "title", "tag"])
-  )
+  if (!postHelper.isValidSearch(req.query, allowType, allowMode))
     throw errorTable.wrongSearchParamsError();
 
   // 2) setting the search query for sequelize to get data from database
-  switch (req.query.mode) {
-    case "category":
-      [initQuery, forceQuery] = await postHelper.createCategorySearchQuery(
-        req.query.target
-      );
-      break;
-    case "author":
-      [initQuery, forceQuery] = await postHelper.createAuthorSearchQuery(
-        req.query.target
-      );
-      break;
-    case "title":
-      [initQuery, forceQuery] = await postHelper.createTitleySearchQuery(
-        req.query.target
-      );
-      break;
-    case "tag":
-      [initQuery, forceQuery] = await postHelper.createTagSearchQuery(
-        req.query.target
-      );
-      break;
-  }
+  [initQuery, forceQuery] = await postHelper.getSearchQuery(
+    req.query.mode,
+    req.query.type,
+    req.query.target
+  );
 
   req.query = {
     ...helper.keepKeys(req.query, ["sort", "limit", "page"]),

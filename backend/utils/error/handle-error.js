@@ -49,11 +49,11 @@ export default (err, req, res, next) => {
   if (req.file) removeFileWhenError(req, err);
 
   // 2) Send error in dev
-  if (process.env.APP_ENV === "development") {
+  if (process.env.APP_ENV === "dev") {
     // console.log("Error Happen!!", err);
     sendDevError(err, res);
 
-  } else if (process.env.APP_ENV === "production") {
+  } else if (process.env.APP_ENV === "prod") {
     // 3) Send error in production mode
     let error = { ...err };
     error.message = err.message;

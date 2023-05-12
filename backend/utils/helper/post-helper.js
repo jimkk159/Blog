@@ -10,10 +10,13 @@ import * as categoryHelper from "../helper/category-helper.js";
 import Category from "../../module/category.js";
 import User from "../../module/user.js";
 
-export const isValidSearch = (query, allowMode) =>
+export const isValidSearch = (query, allowType, allowMode) =>
   query.mode &&
+  query.type &&
   query.target &&
+  Array.isArray(allowType) &&
   Array.isArray(allowMode) &&
+  allowType.includes(query.type) &&
   allowMode.includes(query.mode);
 
 export const isUserAllowUpdatePost = (user, post) =>
@@ -116,7 +119,7 @@ export const updatePostContentAndTags = async ({
   });
 };
 
-export const createCategorySearchQuery = async (target) => {
+export const getCategorySearchQueryByText = async (target) => {
   let initQuery = {};
   let forceQuery = {};
 
@@ -135,7 +138,7 @@ export const createCategorySearchQuery = async (target) => {
   return [initQuery, forceQuery];
 };
 
-export const createAuthorSearchQuery = async (target) => {
+export const getAuthorSearchQueryByText = async (target) => {
   let initQuery = {};
   let forceQuery = {};
 
@@ -154,7 +157,7 @@ export const createAuthorSearchQuery = async (target) => {
   return [initQuery, forceQuery];
 };
 
-export const createTitleySearchQuery = async (target) => {
+export const getTitleySearchQueryByText = async (target) => {
   let initQuery = {};
   let forceQuery = {};
 
@@ -169,7 +172,7 @@ export const createTitleySearchQuery = async (target) => {
   return [initQuery, forceQuery];
 };
 
-export const createTagSearchQuery = async (target) => {
+export const getTagSearchQueryByText = async (target) => {
   let initQuery = {};
   let forceQuery = {};
 
@@ -194,4 +197,51 @@ export const createTagSearchQuery = async (target) => {
     ],
   };
   return [initQuery, forceQuery];
+};
+
+export const getSearchQueryById = (mode, target) => {
+  switch (mode) {
+    case "category":
+      return [{ CategoryId: target }, {}];
+
+    case "author":
+      return [{ AuthorId: target }, {}];
+
+    case "tag":
+      return [
+        {},
+        {
+          include: [
+            "Author",
+            "Category",
+            {
+              model: Tag,
+              where: { id: target },
+              through: { attributes: [] },
+            },
+          ],
+        },
+      ];
+  }
+};
+
+export const getSearchQueryByText = async (mode, target) => {
+  switch (mode) {
+    case "category":
+      return getCategorySearchQueryByText(target);
+
+    case "author":
+      return getAuthorSearchQueryByText(target);
+
+    case "title":
+      return getTitleySearchQueryByText(target);
+
+    case "tag":
+      return getTagSearchQueryByText(target);
+  }
+};
+
+export const getSearchQuery = async (mode, type, target) => {
+  if (type === "id") return getSearchQueryById(mode, target);
+  return getSearchQueryByText(mode, target);
 };

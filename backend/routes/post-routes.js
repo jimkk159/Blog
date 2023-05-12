@@ -1,7 +1,5 @@
 import express from "express";
-import Post from "../module/post.js";
 import { check } from "express-validator";
-import * as factory from "../controllers/handle-factory.js";
 import * as postController from "../controllers/post-controller.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
@@ -22,9 +20,7 @@ router
     postController.createOne
   );
 
-router
-  .route("/search")
-  .get(postController.search, postController.getAll);
+router.get("/search", postController.search, postController.getAll);
 
 router
   .route("/:id")

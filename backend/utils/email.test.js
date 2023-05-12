@@ -62,7 +62,7 @@ describe("Class:Email", () => {
   });
 
   test("should be called with property if mode in prod", () => {
-    process.env.APP_ENV = "production";
+    process.env.APP_ENV = "prod";
 
     const email = new Email(testEmail, testUser);
 

@@ -9,7 +9,7 @@ export default class Email {
 
   //Setting the email transportation info
   newTransport() {
-    if (process.env.APP_ENV === "production") {
+    if (process.env.APP_ENV === "prod") {
       // Sendgrid
       return nodemailer.createTransport({
         service: "SendGrid",

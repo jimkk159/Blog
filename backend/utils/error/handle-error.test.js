@@ -240,7 +240,7 @@ describe("errorHandler()", () => {
 
   describe("APP_ENV=dev", () => {
     beforeAll(() => {
-      process.env.APP_ENV = "development";
+      process.env.APP_ENV = "dev";
     });
 
     afterAll(() => {
@@ -264,7 +264,7 @@ describe("errorHandler()", () => {
   describe("APP_ENV=prod", () => {
     beforeAll(() => {
       vi.spyOn(customError, "createCustomSqlError");
-      process.env.APP_ENV = "production";
+      process.env.APP_ENV = "prod";
     });
 
     afterEach(() => {

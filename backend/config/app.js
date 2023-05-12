@@ -49,7 +49,7 @@ app.use("/upload/images", express.static(path.join("upload", "images")));
 app.use(helmet());
 
 //Development logging
-if (process.env.APP_ENV === "development") {
+if (process.env.APP_ENV === "dev") {
   app.use(morgan("dev"));
 }
 
