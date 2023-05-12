@@ -10,10 +10,14 @@ import RootLayout from "./pages/Root";
 import * as authHelper from "../util/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
 import UpdatePassword from "./pages/UpdatePassword";
+import SearchPage, {
+  action as SearchAction,
+  loader as SearchLoader,
+} from "./pages/Search";
 
 const AboutPage = lazy(() => import("./pages/About"));
 const AuthPage = lazy(() => import("./pages/Auth"));
-const SearchPage = lazy(() => import("./pages/Search"));
+// const SearchPage = lazy(() => import("./pages/Search"));
 const PostsRootLayout = lazy(() => import("./pages/PostsRoot"));
 const PostsPage = lazy(() => import("./pages/Posts"));
 const PostDetailPage = lazy(() => import("./pages/PostDetail"));
@@ -37,7 +41,11 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: authHelper.getAuthToken,
     children: [
-      { index: true, element: <HomePage /> },
+      {
+        index: true,
+        element: <HomePage />,
+        action: lazyAction("./pages/Home"),
+      },
       {
         path: "auth",
         element: SuspenseWrapper(<AuthPage />),
@@ -84,8 +92,9 @@ const router = createBrowserRouter([
           },
           {
             path: "search",
-            element: SuspenseWrapper(<SearchPage />),
-            loader: lazyLoader("./pages/Search"),
+            element: <SearchPage />,
+            loader: SearchLoader,
+            action: SearchAction,
           },
         ],
       },
