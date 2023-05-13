@@ -6,30 +6,37 @@ import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get(postController.getAll)
-  .post(
-    authController.authUserByToken,
-    [
-      check("categoryId").not().isEmpty(),
-      check("title").not().isEmpty(),
-      check("content").not().isEmpty(),
-    ],
-    shareController.validation,
-    postController.createOne
-  );
+router.get("/", postController.getAll);
 
 router.get("/search", postController.search, postController.getAll);
 
-router
-  .route("/:id")
-  .get(postController.getOne)
-  .patch(authController.authUserByToken, postController.updateOne)
-  .delete(authController.authUserByToken, postController.deleteOne);
+router.get(
+  "/me",
+  authController.authUserByToken,
+  postController.getMe,
+  postController.search,
+  postController.getAll
+);
+
+router.get("/:id", postController.getOne);
+
+router.use(authController.authUserByToken);
+
+router.post(
+  "/",
+  [
+    check("categoryId").not().isEmpty(),
+    check("title").not().isEmpty(),
+    check("content").not().isEmpty(),
+  ],
+  shareController.validation,
+  postController.createOne
+);
 
 router
-  .route("/:id/category/:categoryId")
-  .patch(authController.authUserByToken, postController.updateCategory);
+  .route("/:id")
+  .patch(postController.updateOne)
+  .delete(postController.deleteOne);
+router.route("/:id/category/:categoryId").patch(postController.updateCategory);
 
 export default router;
