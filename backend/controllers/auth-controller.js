@@ -67,10 +67,13 @@ export const signup = catchAsync(async (req, res, next) => {
   );
 
   // 2) Check user is existed by email
-  newUser = await User.findOne({
-    where: { email: req.body.email },
-    raw: true,
-  });
+  newUser = await User.findOne(
+    {
+      where: { email: req.body.email },
+      raw: true,
+      attributes: { include: ["isEmailValidated"] }
+    },
+  );
 
   // 3) Check if user sign up again or not exist
   if (authHelper.isUserLegal(newUser, "local"))
