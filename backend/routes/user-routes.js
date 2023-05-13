@@ -9,27 +9,27 @@ import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
-// check token middleware
-router.use(authController.authUserByToken);
-
 // TODO 沒測到 fileUploadToServer
 router
   .route("/me")
-  .get(userController.getMe, factory.getOne(User))
+  .get(
+    authController.authUserByToken,
+    userController.getMe,
+    factory.getOne(User)
+  )
   .patch(
+    authController.authUserByToken,
     fileUploadToServer.single("avatar"),
     userController.updateMe,
     factory.updateOne(User)
   )
-  .delete(userController.getMe, factory.deleteOne(User));
+  .delete(
+    authController.authUserByToken,
+    userController.getMe,
+    factory.deleteOne(User)
+  );
 
-router.use(authController.restrictTo("root"));
-
-router
-  .route("/:id")
-  .get(factory.getOne(User))
-  .patch(factory.updateOne(User))
-  .delete(factory.deleteOne(User));
+// router.use(authController.restrictTo("root"));
 
 router
   .route("/")
@@ -45,5 +45,11 @@ router
     userController.setHasValidate,
     factory.createOne(User)
   );
+
+router
+  .route("/:id")
+  .get(factory.getOne(User))
+  .patch(factory.updateOne(User))
+  .delete(factory.deleteOne(User));
 
 export default router;

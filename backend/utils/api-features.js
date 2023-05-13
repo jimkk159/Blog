@@ -9,10 +9,7 @@ export class GetFeatures {
   }
 
   async findAll(queryString, options) {
-    return this.Model.findAll(
-      { ...this.sqlQuery, ...queryString },
-      options
-    );
+    return this.Model.findAll({ ...this.sqlQuery, ...queryString }, options);
   }
 
   filter() {
