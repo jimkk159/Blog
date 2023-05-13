@@ -1,17 +1,20 @@
-import { Form, redirect } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
 import * as authHelper from "../../util/auth";
 
 function UpdatePassword() {
   return (
-    <Form method="post">
-      <label htmlFor="password">old password</label>
-      <input id="password" type="text" name="password" />
-      <label htmlFor="newPassword">new password</label>
-      <input id="newPassword" type="text" name="newPassword" />
-      <label htmlFor="confirmNewPassword">confirm new password</label>
-      <input id="confirmNewPassword" type="text" name="confirmNewPassword" />
-      <button>Save</button>
-    </Form>
+    <>
+      <Form method="post">
+        <label htmlFor="password">old password</label>
+        <input id="password" type="text" name="password" />
+        <label htmlFor="newPassword">new password</label>
+        <input id="newPassword" type="text" name="newPassword" />
+        <label htmlFor="confirmNewPassword">confirm new password</label>
+        <input id="confirmNewPassword" type="text" name="confirmNewPassword" />
+        <button>Save</button>
+      </Form>
+      <Link to="/profile">Cancel</Link>
+    </>
   );
 }
 
@@ -26,7 +29,7 @@ export async function action({ request }) {
     newPassword: data.get("newPassword"),
     confirmNewPassword: data.get("confirmNewPassword"),
   };
-  
+
   await fetch(
     process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/auth/updatePassword",
     {

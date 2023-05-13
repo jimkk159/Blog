@@ -11,6 +11,14 @@ function PostList({ posts }) {
               <Link to={`/posts/${post.id}`}>
                 <h2>{`${post.title}`}</h2>
               </Link>
+              <p>
+                created by
+                <Link
+                  to={`/profile/${post.Author.id}`}
+                >
+                  {`${post.Author.name}`}
+                </Link>
+              </p>
               <p>{post.content}</p>
               <p>
                 tags

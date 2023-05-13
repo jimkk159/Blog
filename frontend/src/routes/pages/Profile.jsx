@@ -1,15 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useRouteLoaderData } from "react-router-dom";
 
 function Profile() {
-
+  const { author } = useRouteLoaderData("profile");
+  
   return (
     <>
-      <h1>Profile</h1>
       <ul>
-        <li>
-          <Link to="/profile/update_password">Update Password</Link>
-        </li>
+        <li>Name {author.name}</li>
+        <li>Avatar {author.avatar}</li>
+        <li>Description {author.description}</li>
+        <Link to="/profile/update">Edit</Link>
       </ul>
+      <Link to="/update_password">Update Password</Link>
     </>
   );
 }

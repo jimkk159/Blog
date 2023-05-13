@@ -1,8 +1,8 @@
 import { lazy } from "react";
 import {
+  Navigate,
   RouterProvider,
   createBrowserRouter,
-  Navigate,
 } from "react-router-dom";
 import HomePage from "./pages/Home";
 import ErrorPage from "./pages/Error";
@@ -10,14 +10,10 @@ import RootLayout from "./pages/Root";
 import * as authHelper from "../util/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
 import UpdatePassword from "./pages/UpdatePassword";
-import SearchPage, {
-  action as SearchAction,
-  loader as SearchLoader,
-} from "./pages/Search";
 
 const AboutPage = lazy(() => import("./pages/About"));
 const AuthPage = lazy(() => import("./pages/Auth"));
-// const SearchPage = lazy(() => import("./pages/Search"));
+const SearchPage = lazy(() => import("./pages/Search"));
 const PostsRootLayout = lazy(() => import("./pages/PostsRoot"));
 const PostsPage = lazy(() => import("./pages/Posts"));
 const PostDetailPage = lazy(() => import("./pages/PostDetail"));
@@ -25,7 +21,10 @@ const EditPostPage = lazy(() => import("./pages/EditPost"));
 const NewPostPage = lazy(() => import("./pages/NewPost"));
 const OauthPage = lazy(() => import("./pages/Oauth"));
 const ForgotPasswordPage = lazy(() => import("./pages/ForgotPassword"));
+const ProfileRootLayout = lazy(() => import("./pages/ProfileRoot"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
+const BrowserProfilePage = lazy(() => import("./pages/BrowserProfile"));
+const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));
@@ -80,7 +79,7 @@ const router = createBrowserRouter([
                 path: "edit",
                 element: SuspenseWrapper(<EditPostPage />),
                 loader: authHelper.checkAuthTokenLoader,
-                action: lazyAction("../components/PostForm"),
+                action: lazyAction("./pages/EditPost"),
               },
             ],
           },
@@ -88,13 +87,13 @@ const router = createBrowserRouter([
             path: "new",
             element: SuspenseWrapper(<NewPostPage />),
             loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("../components/PostForm"),
+            action: lazyAction("./pages/NewPost"),
           },
           {
             path: "search",
-            element: <SearchPage />,
-            loader: SearchLoader,
-            action: SearchAction,
+            element: SuspenseWrapper(<SearchPage />),
+            loader: lazyLoader("./pages/Search"),
+            action: lazyAction("./pages/Search"),
           },
         ],
       },
@@ -110,14 +109,31 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
+        id: "profile",
+        element: SuspenseWrapper(<ProfileRootLayout />),
+        loader: lazyLoader("./pages/ProfileRoot"),
         children: [
-          { index: true, element: SuspenseWrapper(<ProfilePage />) },
           {
-            path: "update_password",
-            element: SuspenseWrapper(<UpdatePassword />),
-            action: lazyAction("./pages/UpdatePassword"),
+            index: true,
+            element: SuspenseWrapper(<ProfilePage />),
+          },
+          {
+            path: "update",
+            element: SuspenseWrapper(<UpdateProfile />),
+            loader: authHelper.checkAuthTokenLoader,
+            action: lazyAction("./pages/UpdateProfile"),
+          },
+          {
+            path: ":id",
+            element: SuspenseWrapper(<BrowserProfilePage />),
           },
         ],
+      },
+      {
+        path: "update_password",
+        element: SuspenseWrapper(<UpdatePassword />),
+        loader: authHelper.checkAuthTokenLoader,
+        action: lazyAction("./pages/UpdatePassword"),
       },
       { path: "*", element: SuspenseWrapper(<Navigate replace to="/" />) },
     ],
