@@ -119,6 +119,15 @@ export const deleteOne = catchAsync(async (req, res, next) => {
   res.status(204).json();
 });
 
+export const getMe = catchAsync(async (req, res, next) => {
+  req.query = {
+    mode: "author",
+    type: "id",
+    target: "" + req.user.id,
+  };
+  next();
+});
+
 export const search = catchAsync(async (req, res, next) => {
   let initQuery = {};
   let forceQuery = {};
