@@ -18,6 +18,9 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    description: {
+      type: DataTypes.TEXT,
+    },
     avatar: DataTypes.STRING,
     role: {
       type: DataTypes.ENUM,
