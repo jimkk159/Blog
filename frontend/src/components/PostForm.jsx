@@ -1,5 +1,4 @@
-import { Form, redirect, useNavigation } from "react-router-dom";
-import * as authHelper from "../util/auth";
+import { Form, useNavigation } from "react-router-dom";
 
 function PostForm({ method, post }) {
   const navigation = useNavigation();

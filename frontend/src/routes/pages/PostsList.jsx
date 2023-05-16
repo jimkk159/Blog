@@ -13,11 +13,11 @@ function PostList({ posts }) {
               </Link>
               <p>
                 created by
-                <Link
-                  to={`/profile/${post.Author.id}`}
-                >
-                  {`${post.Author.name}`}
-                </Link>
+                {post.Author && (
+                  <Link to={`/profile/${post.Author.id}`}>
+                    {`${post.Author.name}`}
+                  </Link>
+                )}
               </p>
               <p>{post.content}</p>
               <p>
