@@ -1,7 +1,7 @@
 import express from "express";
 import User from "../module/user.js";
 import { check } from "express-validator";
-import fileUploadToServer from "../utils/file-upload.js";
+import * as upload from "../utils/file-upload.js";
 import * as factory from "../controllers/handle-factory.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as userController from "../controllers/user-controller.js";
@@ -9,7 +9,6 @@ import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
-// TODO 沒測到 fileUploadToServer
 router
   .route("/me")
   .get(
@@ -19,7 +18,6 @@ router
   )
   .patch(
     authController.authUserByToken,
-    fileUploadToServer.single("avatar"),
     userController.updateMe,
     factory.updateOne(User)
   )
@@ -28,6 +26,15 @@ router
     userController.getMe,
     factory.deleteOne(User)
   );
+
+// TODO test upload file
+router.patch(
+  "/avatar",
+  authController.authUserByToken,
+  upload.uploadToMemory.single("avatar"),
+  userController.updateAvatar,
+  factory.updateOne(User)
+);
 
 // router.use(authController.restrictTo("root"));
 

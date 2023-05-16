@@ -9,7 +9,8 @@ const MIME_TYPE_MAP = {
   "image/gif": "gif",
 };
 
-const fileUploadToServer = multer({
+// Local
+export const uploadToLocal = multer({
   limits: 500000,
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
@@ -27,4 +28,13 @@ const fileUploadToServer = multer({
   },
 });
 
-export default fileUploadToServer;
+// Memory
+export const uploadToMemory = multer({
+  limits: 500000,
+  storage: multer.memoryStorage(),
+  fileFilter: (req, file, cb) => {
+    const isValid = !!MIME_TYPE_MAP[file.mimetype];
+    let error = isValid ? null : new Error("Invalid mime type!");
+    cb(error, isValid);
+  },
+});

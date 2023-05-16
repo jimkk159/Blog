@@ -1,7 +1,7 @@
 import catchAsync from "../utils/catch-async.js";
-import * as errorTable from "../utils/error/error-table.js";
-import { GetFeatures } from "../utils/api-features.js";
 import * as helper from "../utils/helper/helper.js";
+import { GetFeatures } from "../utils/api-features.js";
+import * as errorTable from "../utils/error/error-table.js";
 
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -9,6 +9,7 @@ export const getOne = (Model) =>
       raw: true,
     });
     if (!data) throw errorTable.idNotFoundError();
+    await helper.getImgUrlFromS3([data]);
 
     res.status(200).json({
       status: "success",
@@ -24,7 +25,9 @@ export const getAll = (Model) =>
       .select()
       .paginate();
 
-    const data = await getFeature.findAll();
+    const data = await getFeature.findAll({ raw: true });
+    await helper.getImgUrlFromS3(data);
+
     res.status(200).json({
       status: "success",
       count: data.length,
@@ -60,6 +63,12 @@ export const updateOne = (Model) =>
 
 export const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    const data = await Model.findByPk(req.params.id);
+    if (!data) return res.status(204).json();
+
+    // ToDo should roll back database and S3 when fail
+    await helper.deleteImgFromS3([data]);
+
     await Model.destroy({ where: { id: req.params.id } });
     res.status(204).json();
   });

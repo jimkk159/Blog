@@ -1,20 +1,20 @@
-import fileUploadToServer from "./file-upload";
+import * as upload from "./file-upload";
 
 vi.mock("uuid", () => ({
   v4: vi.fn(() => "mock-uuid"),
 }));
 
-describe("fileUploadToServer()", () => {
+describe("uploadToLocal()", () => {
   beforeAll(() => {});
 
   test("should limit the file size", () => {
-    expect(fileUploadToServer.limits).toBe(500000);
+    expect(upload.uploadToLocal.limits).toBe(500000);
   });
   
   test("should setting the file destination", () => {
     let req, file;
     const cb = vi.fn();
-    fileUploadToServer.storage.getDestination(req, file, cb);
+    upload.uploadToLocal.storage.getDestination(req, file, cb);
     expect(cb.mock.calls[0][0]).toBeNull();
     expect(cb.mock.calls[0][1]).toBe("upload/images");
   });
@@ -23,7 +23,7 @@ describe("fileUploadToServer()", () => {
     let req;
     const cb = vi.fn();
     const file = { mimetype: "image/jpg" };
-    fileUploadToServer.storage.getFilename(req, file, cb);
+    upload.uploadToLocal.storage.getFilename(req, file, cb);
     expect(cb.mock.calls[0][0]).toBeNull();
     expect(cb.mock.calls[0][1]).toBe("mock-uuid.jpg");
   });
@@ -32,7 +32,7 @@ describe("fileUploadToServer()", () => {
     let req;
     const cb = vi.fn();
     const file = { mimetype: "image/jpg" };
-    fileUploadToServer.fileFilter(req, file, cb);
+    upload.uploadToLocal.fileFilter(req, file, cb);
     expect(cb.mock.calls[0][0]).toBeNull();
     expect(cb.mock.calls[0][1]).toBe(true);
   });
@@ -41,7 +41,7 @@ describe("fileUploadToServer()", () => {
     let req;
     const cb = vi.fn();
     const file = { mimetype: "image/test" };
-    fileUploadToServer.fileFilter(req, file, cb);
+    upload.uploadToLocal.fileFilter(req, file, cb);
     expect(cb.mock.calls[0][0].message).toBe("Invalid mime type!");
     expect(cb.mock.calls[0][1]).toBe(false);
   });

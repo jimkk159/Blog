@@ -99,7 +99,6 @@ describe("updateMe()", () => {
 
     await userController.updateMe(req, res, next);
 
-    expect(req.body.avatar).toBe("testPath");
     expect(req.params.id).toBe("testID");
     expect(next).toHaveBeenCalledTimes(1);
   });

@@ -47,6 +47,8 @@ describe("getAll()", () => {
   let res, next, filter, sort, select, paginate;
 
   beforeAll(() => {
+    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(async () => {});
+
     filter = vi.fn().mockReturnThis();
     sort = vi.fn().mockReturnThis();
     select = vi.fn().mockReturnThis();
@@ -75,6 +77,7 @@ describe("getAll()", () => {
     const getAllFunc = handleFactory.getAll(TestModel);
     await getAllFunc(req, res, next);
 
+    expect(helper.getImgUrlFromS3).toHaveBeenLastCalledWith(testdata);
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",

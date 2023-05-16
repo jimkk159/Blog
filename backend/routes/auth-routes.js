@@ -1,7 +1,6 @@
 import express from "express";
 import passport from "passport";
 import { check } from "express-validator";
-import fileUploadToServer from "../utils/file-upload.js";
 
 import * as authController from "../controllers/auth-controller.js";
 // import oauthController from "../controllers/oauth-controller.js";
@@ -12,7 +11,6 @@ const router = express.Router();
 //---------------Local--------------------
 router.post(
   "/signup",
-  fileUploadToServer.single("avatar"),
   [
     check("name").not().isEmpty(),
     check("email").normalizeEmail().isEmail(),
