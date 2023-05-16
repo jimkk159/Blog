@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import Auth from "../module/auth";
 import User from "../module/user";
 import Email from "../utils/email";
-import * as errorTable from "../utils/table/error";
+import * as errorTable from "../utils/error/error-table";
 import * as authHelper from "../utils/helper/auth-helper";
 import * as authController from "./auth-controller";
 import * as shareController from "./share-controller";

@@ -1,7 +1,7 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
 import { validationResult } from "express-validator";
-import * as errorTable from "../utils/table/error.js";
+import * as errorTable from "../utils/error/error-table.js";
 import * as shareController from "./share-controller.js";
 
 // Validate the req

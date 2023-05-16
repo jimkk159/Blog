@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../../module/user";
 import Auth from "../../module/auth";
 import * as authHelper from "./auth-helper";
-import * as errorTable from "../table/error";
+import * as errorTable from "../error/error-table";
 import { afterAll, beforeAll, beforeEach, describe } from "vitest";
 
 const testID = 1;

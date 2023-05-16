@@ -5,7 +5,7 @@ import User from "../../module/user.js";
 import Auth from "../../module/auth.js";
 import sequelize from "../../config/db-init.js";
 import * as authHelper from "./auth-helper.js";
-import * as errorTable from "../table/error.js";
+import * as errorTable from "../error/error-table.js";
 
 export const isHearderAuthorization = (headers) =>
   !!(headers.authorization && typeof headers.authorization === "string");

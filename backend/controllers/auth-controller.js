@@ -4,7 +4,7 @@ import User from "../module/user.js";
 import Auth from "../module/auth.js";
 import Email from "../utils/email.js";
 import catchAsync from "../utils/catch-async.js";
-import * as errorTable from "../utils/table/error.js";
+import * as errorTable from "../utils/error/error-table.js";
 import * as authHelper from "../utils/helper/auth-helper.js";
 import * as shareController from "./share-controller.js";
 

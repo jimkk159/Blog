@@ -1,4 +1,4 @@
-import * as errorTable from "../utils/table/error";
+import * as errorTable from "../utils/error/error-table";
 import * as userController from "./user-controller";
 
 describe("setHasValidate()", () => {

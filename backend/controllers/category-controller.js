@@ -1,7 +1,7 @@
 import Category from "../module/category.js";
 import catchAsync from "../utils/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
-import * as errorTable from "../utils/table/error.js";
+import * as errorTable from "../utils/error/error-table.js";
 import * as categoryHelper from "../utils/helper/category-helper.js";
 
 const init = async () => {

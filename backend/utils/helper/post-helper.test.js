@@ -1,9 +1,9 @@
 import Tag from "../../module/tag";
 import Post from "../../module/post";
 import * as postHelper from "./post-helper";
-import * as errorTable from "../table/error";
 import * as ApiFeature from "../api-features";
 import * as tagHelper from "../helper/tag-helper";
+import * as errorTable from "../error/error-table";
 import * as categoryHelper from "../helper/category-helper";
 import { beforeAll, describe, expect } from "vitest";
 import sequelize from "../../config/db-init";

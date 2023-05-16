@@ -1,5 +1,5 @@
 import * as helper from "./helper.js";
-import * as errorTable from "../table/error.js"
+import * as errorTable from "../error/error-table.js"
 
 export const isTagIdLegal = (tagId) =>
   helper.isNumber(tagId) || Array.isArray(tagId);

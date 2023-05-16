@@ -1,5 +1,5 @@
 import catchAsync from "../utils/catch-async.js";
-import * as errorTable from "../utils/table/error.js";
+import * as errorTable from "../utils/error/error-table.js";
 
 export const setHasValidate = catchAsync((req, res, next) => {
   req.body = { ...req.body, isEmailValidated: true };

@@ -1,6 +1,6 @@
 import Category from "../../module/category.js";
 import * as helper from "../helper/helper.js";
-import * as errorTable from "../table/error.js";
+import * as errorTable from "../error/error-table.js";
 import * as categoryHelper from "../helper/category-helper.js";
 
 export const checkParentIsExist = async (id) => {

@@ -1,6 +1,6 @@
 import * as helper from "../utils/helper/helper";
 import * as handleFactory from "./handle-factory";
-import * as errorTable from "../utils/table/error";
+import * as errorTable from "../utils/error/error-table";
 import { GetFeatures } from "../utils/api-features";
 import { afterAll, beforeAll } from "vitest";
 

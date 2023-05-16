@@ -1,4 +1,4 @@
-import AppError from "../error/app-error.js";
+import AppError from "./app-error.js";
 
 export const wrongSearchParamsError = (err) =>
   new AppError(`Search parameter is wrong!`, 400);
