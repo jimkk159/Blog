@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../module/user.js";
 import Auth from "../module/auth.js";
 import Email from "../utils/email.js";
-import catchAsync from "../utils/catch-async.js";
+import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as authHelper from "../utils/helper/auth-helper.js";
 import * as shareController from "./share-controller.js";
@@ -58,7 +58,7 @@ export const restrictTo = (...roles) =>
 
 // SignUp
 export const signup = catchAsync(async (req, res, next) => {
-  let newUser;
+  let newUser, newUserJSON, loaclAuth;
 
   // 1) Confirm password consistency
   authHelper.confirmPasswordConsistency(
@@ -67,16 +67,17 @@ export const signup = catchAsync(async (req, res, next) => {
   );
 
   // 2) Check user is existed by email
-  newUser = await User.findOne(
-    {
-      where: { email: req.body.email },
-      raw: true,
-      attributes: { include: ["isEmailValidated"] }
-    },
-  );
+  newUser = await User.findOne({
+    where: { email: req.body.email },
+    attributes: { include: ["isEmailValidated"] },
+  });
+  if (newUser) {
+    loaclAuth = await newUser.getAuths({ where: { provider: "local" } });
+    newUserJSON = newUser.toJSON();
+  }
 
   // 3) Check if user sign up again or not exist
-  if (authHelper.isUserLegal(newUser, "local"))
+  if (authHelper.isUserLegal(newUserJSON, "local"))
     throw errorTable.emailAlreadyExistError();
 
   // 4) Create user avatar
@@ -93,17 +94,19 @@ export const signup = catchAsync(async (req, res, next) => {
     role: "user",
   };
   const auth = { password, provider: "local" };
-  if (!newUser) newUser = await authHelper.createUserAndAuth(user, auth);
-  else await authHelper.updateUserAndAuth({ id: newUser.id, ...user }, auth);
+  if (!newUser) newUserJSON = await authHelper.createUserAndAuth(user, auth);
+  else if (!loaclAuth.length) await newUser.createAuth(auth);
+  else
+    await authHelper.updateUserAndAuth({ id: newUserJSON.id, ...user }, auth);
 
   // 7) Generate token and update token
-  const token = authHelper.generateRandomCrypto(newUser.id, "local");
+  const token = authHelper.generateRandomCrypto(newUserJSON.id, "local");
   const verifyToken = authHelper.createEmailValidationToken({
-    uid: newUser.id,
+    uid: newUserJSON.id,
     token,
   });
 
-  await authHelper.updateEmailCheckToken(newUser.id, verifyToken);
+  await authHelper.updateEmailCheckToken(newUserJSON.id, verifyToken);
 
   // 8) Send it to user's email
   const host = `${req.protocol}://${req.get("host")}/api/v1/blog`;

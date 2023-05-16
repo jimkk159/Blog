@@ -1,7 +1,7 @@
 import User from "../module/user.js";
 import Post from "../module/post.js";
 import Category from "../module/category.js";
-import catchAsync from "../utils/catch-async.js";
+import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";

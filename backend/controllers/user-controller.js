@@ -1,4 +1,4 @@
-import catchAsync from "../utils/catch-async.js";
+import catchAsync from "../utils/error/catch-async.js";
 import * as upload from "../utils/aws/s3.js";
 import * as errorTable from "../utils/error/error-table.js";
 

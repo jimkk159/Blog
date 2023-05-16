@@ -1,9 +1,7 @@
 import express from "express";
-import passport from "passport";
 import { check } from "express-validator";
 
 import * as authController from "../controllers/auth-controller.js";
-// import oauthController from "../controllers/oauth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();

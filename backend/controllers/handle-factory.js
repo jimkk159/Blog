@@ -1,4 +1,4 @@
-import catchAsync from "../utils/catch-async.js";
+import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
 import { GetFeatures } from "../utils/api-features.js";
 import * as errorTable from "../utils/error/error-table.js";

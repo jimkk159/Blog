@@ -139,3 +139,8 @@ export const tagNotExistError = () =>
     "Some of tags are not exist anymore, please check your input",
     400
   );
+export const loginFailError = () =>
+  new AppError(
+    "Login failed! Please try again later...",
+    500
+  );

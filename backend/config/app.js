@@ -16,7 +16,9 @@ import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 
 // Routes
+import "./passport-setup.js";
 import authRouters from "../routes/auth-routes.js";
+import oauthRouters from "../routes/oauth-routes.js";
 import usersRouters from "../routes/user-routes.js";
 import postsRouters from "../routes/post-routes.js";
 import tagsRouters from "../routes/tag-routes.js";
@@ -100,6 +102,7 @@ app.use(
 //Route
 const host = "/api/v1/blog";
 app.use(host + "/auth", authRouters);
+app.use(host + "/oauth", oauthRouters);
 app.use(host + "/users", usersRouters);
 app.use(host + "/posts", postsRouters);
 app.use(host + "/tags", tagsRouters);
