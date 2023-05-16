@@ -246,13 +246,62 @@ describe("deleteOne()", () => {
   let req = { params: { id: "test" } };
   let res;
   let next;
-  beforeEach(() => {
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
+
+  beforeAll(() => {
+    vi.spyOn(helper, "deleteImgFromS3").mockImplementation(async () => {});
   });
 
-  test("should delete data if id is provided", async () => {
+  beforeEach(() => {
+    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should find data by id", async () => {
     const TestModel = {
       destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(),
+    };
+
+    const deleteOneFunc = handleFactory.deleteOne(TestModel);
+    await deleteOneFunc(req, res, next);
+
+    expect(TestModel.findByPk).toHaveBeenLastCalledWith(req.params.id);
+  });
+
+  test("should find data by id", async () => {
+    const TestModel = {
+      destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(),
+    };
+
+    const deleteOneFunc = handleFactory.deleteOne(TestModel);
+    await deleteOneFunc(req, res, next);
+
+    expect(TestModel.findByPk).toHaveBeenLastCalledWith(req.params.id);
+  });
+
+  test("should response when delete data is not found", async () => {
+    const TestModel = {
+      destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(),
+    };
+
+    const deleteOneFunc = handleFactory.deleteOne(TestModel);
+    await deleteOneFunc(req, res, next);
+
+    expect(res.status).toHaveBeenLastCalledWith(204);
+    expect(res.json).toHaveBeenCalledTimes(1);
+  });
+
+  test("should delete data", async () => {
+    const testData = "testData";
+    const TestModel = {
+      destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(testData),
     };
 
     const deleteOneFunc = handleFactory.deleteOne(TestModel);
@@ -261,6 +310,18 @@ describe("deleteOne()", () => {
     expect(TestModel.destroy).toHaveBeenLastCalledWith({
       where: { id: req.params.id },
     });
+  });
+
+  test("should response when delete data is complete", async () => {
+    const testData = "testData";
+    const TestModel = {
+      destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(testData),
+    };
+
+    const deleteOneFunc = handleFactory.deleteOne(TestModel);
+    await deleteOneFunc(req, res, next);
+
     expect(res.status).toHaveBeenLastCalledWith(204);
     expect(res.json).toHaveBeenCalledTimes(1);
   });
