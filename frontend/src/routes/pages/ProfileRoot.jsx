@@ -68,7 +68,6 @@ async function postsLoader(uid) {
 }
 
 export async function loader({ params }) {
-  
   if (!params.id)
     return defer({
       author: await selfAuthorLoader(),

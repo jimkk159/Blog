@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { AwaitWrapper } from "../helper/Wrapper";
+import ReactMarkdown from "react-markdown";
 
 function PostList({ posts }) {
   return (
@@ -19,7 +20,7 @@ function PostList({ posts }) {
                   </Link>
                 )}
               </p>
-              <p>{post.content}</p>
+              <ReactMarkdown>{post.content}</ReactMarkdown>
               <p>
                 tags
                 {post.Tags.filter((tag) => tag.name !== post.Category.name).map(

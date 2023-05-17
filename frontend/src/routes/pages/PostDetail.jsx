@@ -1,3 +1,4 @@
+import ReactMarkdown from "react-markdown";
 import {
   defer,
   useRouteLoaderData,
@@ -7,11 +8,13 @@ import {
 } from "react-router-dom";
 import { AwaitWrapper } from "../helper/Wrapper";
 import * as authHelper from "../../util/auth";
+import { useSelector } from "react-redux";
 
 function PostDetail() {
   const submit = useSubmit();
   const token = useRouteLoaderData("root");
   const { post } = useRouteLoaderData("post-detail");
+  const auth = useSelector((state) => state.auth);
 
   const startDeleteHandler = () => {
     const proceed = window.confirm("Are you sure?");
@@ -19,21 +22,28 @@ function PostDetail() {
       submit(null, { method: "delete" });
     }
   };
+
   return (
     <>
       <AwaitWrapper resolve={post}>
         {(loadPost) => (
           <>
             <h1>{loadPost.title}</h1>
-            <p>{loadPost.content}</p>
+            <ReactMarkdown>{loadPost.content}</ReactMarkdown>
             {loadPost.Tags.map((tag, index) => (
               <p key={index}>{tag.name}</p>
             ))}
+            {token &&
+              (auth.role === "root" || loadPost.AuthorId === auth.id) && (
+                <Link to="edit">EDIT</Link>
+              )}
+            {token &&
+              (auth.role === "root" || loadPost.AuthorId === auth.id) && (
+                <button onClick={startDeleteHandler}>DELETE</button>
+              )}
           </>
         )}
       </AwaitWrapper>
-      {token && <Link to="edit">EDIT</Link>}
-      {token && <button onClick={startDeleteHandler}>DELETE</button>}
     </>
   );
 }

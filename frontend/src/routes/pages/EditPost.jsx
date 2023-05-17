@@ -1,7 +1,7 @@
-import { redirect, useRouteLoaderData } from "react-router-dom";
-import PostForm from "../../components/PostForm";
-import { AwaitWrapper } from "../helper/Wrapper";
 import * as authHelper from "../../util/auth";
+import { AwaitWrapper } from "../helper/Wrapper";
+import PostForm from "../../components/PostForm";
+import { redirect, useRouteLoaderData } from "react-router-dom";
 
 function EditPost() {
   const { post } = useRouteLoaderData("post-detail");

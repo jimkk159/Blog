@@ -1,3 +1,5 @@
+import store from "../../store";
+import { authActions } from "../../store/auth-slice";
 import { Link, Form, useSearchParams, redirect } from "react-router-dom";
 
 function Auth() {
@@ -61,11 +63,19 @@ export async function action({ request }) {
     }
   );
 
-  const resData = await response.json();
-  
-  const token = resData.token;
-  if(!token)   return redirect("/");
+  const resJSON = await response.json();
+
+  const token = resJSON.token;
+  if (!token) return redirect("/");
+
+  store.dispatch(
+    authActions.login({
+      id: resJSON.data.id,
+      role: resJSON.data.role,
+      name: resJSON.data.name,
+      avatar: resJSON.data.avatar,
+    })
+  );
   localStorage.setItem("token", token);
-  
   return redirect("/");
 }
