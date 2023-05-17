@@ -21,7 +21,7 @@ export async function action({ request, params }) {
   const token = authHelper.getAuthToken();
 
   const postData = {
-    categoryId: data.get("categoryId"),
+    CategoryId: data.get("CategoryId"),
     title: data.get("title"),
     content: data.get("content"),
     tagId: [],

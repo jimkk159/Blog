@@ -5,7 +5,8 @@ function BrowserProfile() {
   return (
     <ul>
       <li>Name {author.name}</li>
-      <li>Avatar {author.avatar}</li>
+      <li>Avatar</li>
+      <img src={author.avatar} alt="avatar" />
       <li>Description {author.description}</li>
     </ul>
   );

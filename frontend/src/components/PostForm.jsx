@@ -26,8 +26,8 @@ function PostForm({ method, post }) {
       </ReactMarkdown>
       <Form method={method}>
         <select
-          id="categoryId"
-          name="categoryId"
+          id="CategoryId"
+          name="CategoryId"
           defaultValue={post ? post.CategoryId : null}
         >
           {categories &&
