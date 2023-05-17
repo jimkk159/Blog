@@ -1,14 +1,21 @@
 import React from "react";
-// import { Provider } from "react-redux";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 //Redux Store
-// import store from "./store/index.js";
+import store, { persistor } from "./store";
 
 //Custom Component
 import CustomRoute from "./routes/routes";
 
 function App() {
-  return <CustomRoute />;
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <CustomRoute />
+      </PersistGate>
+    </Provider>
+  );
 }
 
 export default App;
