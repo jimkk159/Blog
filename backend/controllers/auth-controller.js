@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import User from "../module/user.js";
 import Auth from "../module/auth.js";
 import Email from "../utils/email.js";
+import * as helper from "../utils/helper/helper.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as authHelper from "../utils/helper/auth-helper.js";
@@ -58,7 +59,7 @@ export const restrictTo = (...roles) =>
 
 // SignUp
 export const signup = catchAsync(async (req, res, next) => {
-  let newUser, newUserJSON, loaclAuth;
+  let user, userJSON, loaclAuth;
 
   // 1) Confirm password consistency
   authHelper.confirmPasswordConsistency(
@@ -67,17 +68,17 @@ export const signup = catchAsync(async (req, res, next) => {
   );
 
   // 2) Check user is existed by email
-  newUser = await User.findOne({
+  user = await User.findOne({
     where: { email: req.body.email },
     attributes: { include: ["isEmailValidated"] },
   });
-  if (newUser) {
-    loaclAuth = await newUser.getAuths({ where: { provider: "local" } });
-    newUserJSON = newUser.toJSON();
+  if (user) {
+    loaclAuth = await user.getAuths({ where: { provider: "local" } });
+    userJSON = user.toJSON();
   }
 
   // 3) Check if user sign up again or not exist
-  if (authHelper.isUserLegal(newUserJSON, "local"))
+  if (authHelper.isUserLegal(userJSON, "local"))
     throw errorTable.emailAlreadyExistError();
 
   // 4) Create user avatar
@@ -87,26 +88,27 @@ export const signup = catchAsync(async (req, res, next) => {
   const password = await authHelper.encryptPassword(req.body.password);
 
   // 6) Create User if not exist, update user if email is not validated
-  const user = {
+  const newUser = {
     name: req.body.name,
     email: req.body.email,
     avatar,
     role: "user",
   };
-  const auth = { password, provider: "local" };
-  if (!newUser) newUserJSON = await authHelper.createUserAndAuth(user, auth);
-  else if (!loaclAuth.length) await newUser.createAuth(auth);
-  else
-    await authHelper.updateUserAndAuth({ id: newUserJSON.id, ...user }, auth);
 
-  // 7) Generate token and update token
-  const token = authHelper.generateRandomCrypto(newUserJSON.id, "local");
+  const auth = { password, provider: "local" };
+  if (!user) userJSON = await authHelper.createUserAndAuth(newUser, auth);
+  else if (!loaclAuth.length) await user.createAuth(auth);
+  else
+    await authHelper.updateUserAndAuth({ id: userJSON.id, ...newUser }, auth);
+
+    // 7) Generate token and update token
+  const token = authHelper.generateRandomCrypto(userJSON.id, "local");
   const verifyToken = authHelper.createEmailValidationToken({
-    uid: newUserJSON.id,
+    uid: userJSON.id,
     token,
   });
 
-  await authHelper.updateEmailCheckToken(newUserJSON.id, verifyToken);
+  await authHelper.updateEmailCheckToken(userJSON.id, verifyToken);
 
   // 8) Send it to user's email
   const host = `${req.protocol}://${req.get("host")}/api/v1/blog`;
@@ -129,7 +131,7 @@ export const login = catchAsync(async (req, res, next) => {
   const user = await User.findOne({
     where: { email: req.body.email },
     raw: true,
-    attributes: { include: ["isEmailValidated"] },
+    attributes: { include: ["role", "isEmailValidated"] },
   });
   if (!user) throw errorTable.emailNotFoundError();
 
@@ -152,11 +154,19 @@ export const login = catchAsync(async (req, res, next) => {
   // 6) create token cookie
   authHelper.createTokenCookie(req, res, token);
 
+  // 7) get Avatar
+  user.avatar = await helper.getAvatarUrlFromS3(user.avatar);
+
   res.status(200).json({
     status: "success",
     message: "Login successfully",
     token,
-    data: { id: user.id, name: user.name, avatar: user.avatar },
+    data: {
+      id: user.id,
+      name: user.name,
+      role: user.role,
+      avatar: user.avatar,
+    },
   });
 });
 

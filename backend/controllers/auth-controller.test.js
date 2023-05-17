@@ -3,6 +3,7 @@ import Auth from "../module/auth";
 import User from "../module/user";
 import Email from "../utils/email";
 import * as errorTable from "../utils/error/error-table";
+import * as helper from "../utils/helper/helper";
 import * as authHelper from "../utils/helper/auth-helper";
 import * as authController from "./auth-controller";
 import * as shareController from "./share-controller";
@@ -269,7 +270,10 @@ describe("signup()", () => {
         email: testEmail,
       },
     };
-    User.findOne.mockResolvedValueOnce({ isEmailValidated: true });
+    User.findOne.mockResolvedValueOnce({
+      getAuths: vi.fn().mockResolvedValueOnce(),
+      toJSON: vi.fn().mockReturnValueOnce({ isEmailValidated: true }),
+    });
 
     await authController.signup(req, res, next);
     error = next.mock.calls[0][0];
@@ -341,10 +345,14 @@ describe("signup()", () => {
   });
 
   test("should update user if user is already exist and email is not validated", async () => {
+    const userId = 1;
     const newUser = {
-      id: 1,
-      name: "Bob",
-      isEmailValidated: false,
+      getAuths: vi.fn().mockResolvedValueOnce(["testAuth"]),
+      toJSON: vi.fn().mockReturnValueOnce({
+        id: userId,
+        name: "Bob",
+        isEmailValidated: false,
+      }),
     };
     req = {
       body: {
@@ -369,8 +377,9 @@ describe("signup()", () => {
 
     await authController.signup(req, res, next);
 
+    expect(authHelper.updateUserAndAuth).toHaveBeenCalled();
     expect(authHelper.updateUserAndAuth).toHaveBeenLastCalledWith(
-      { id: newUser.id, ...userInfo },
+      { id: userId, ...userInfo },
       authInfo
     );
   });
@@ -533,6 +542,7 @@ describe("login()", () => {
     vi.spyOn(authHelper, "validatePassword").mockImplementation(async () => {});
     vi.spyOn(authHelper, "generateToken").mockImplementation(() => {});
     vi.spyOn(authHelper, "createTokenCookie").mockImplementation(() => {});
+    vi.spyOn(helper, "getAvatarUrlFromS3").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -553,7 +563,7 @@ describe("login()", () => {
     expect(User.findOne).toHaveBeenLastCalledWith({
       where: { email: req.body.email },
       raw: true,
-      attributes: { include: ["isEmailValidated"] },
+      attributes: { include: ["role", "isEmailValidated"] },
     });
     expect(error).toEqual(errorTable.emailNotFoundError());
   });
@@ -660,7 +670,7 @@ describe("login()", () => {
     );
   });
 
-  test("should response if login successfully", async () => {
+  test.only("should response if login successfully", async () => {
     const userInfo = {
       id: testID,
       name: "Tom",

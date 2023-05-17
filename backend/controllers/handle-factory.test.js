@@ -47,7 +47,7 @@ describe("getAll()", () => {
   let res, next, filter, sort, select, paginate;
 
   beforeAll(() => {
-    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(async () => {});
+    vi.spyOn(helper, "setAvatarsUrlFromS3").mockImplementation(async () => {});
 
     filter = vi.fn().mockReturnThis();
     sort = vi.fn().mockReturnThis();
@@ -77,7 +77,7 @@ describe("getAll()", () => {
     const getAllFunc = handleFactory.getAll(TestModel);
     await getAllFunc(req, res, next);
 
-    expect(helper.getImgUrlFromS3).toHaveBeenLastCalledWith(testdata);
+    expect(helper.setAvatarsUrlFromS3).toHaveBeenLastCalledWith(testdata);
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
@@ -248,7 +248,9 @@ describe("deleteOne()", () => {
   let next;
 
   beforeAll(() => {
-    vi.spyOn(helper, "deleteImgFromS3").mockImplementation(async () => {});
+    vi.spyOn(helper, "deleteAvatarUrlFromS3").mockImplementation(
+      async () => {}
+    );
   });
 
   beforeEach(() => {
@@ -298,7 +300,7 @@ describe("deleteOne()", () => {
   });
 
   test("should delete data", async () => {
-    const testData = "testData";
+    const testData = { avatar: "testAvatar", data: "testData" };
     const TestModel = {
       destroy: vi.fn().mockResolvedValueOnce(),
       findByPk: vi.fn().mockResolvedValueOnce(testData),
@@ -307,6 +309,7 @@ describe("deleteOne()", () => {
     const deleteOneFunc = handleFactory.deleteOne(TestModel);
     await deleteOneFunc(req, res, next);
 
+    expect(helper.deleteAvatarUrlFromS3).toHaveBeenCalled();
     expect(TestModel.destroy).toHaveBeenLastCalledWith({
       where: { id: req.params.id },
     });

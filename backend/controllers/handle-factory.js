@@ -9,7 +9,7 @@ export const getOne = (Model) =>
       raw: true,
     });
     if (!data) throw errorTable.idNotFoundError();
-    await helper.getImgUrlFromS3([data]);
+    if (data.avatar) data.avatar = await helper.getAvatarUrlFromS3(data.avatar);
 
     res.status(200).json({
       status: "success",
@@ -26,7 +26,7 @@ export const getAll = (Model) =>
       .paginate();
 
     const data = await getFeature.findAll({ raw: true });
-    await helper.getImgUrlFromS3(data);
+    await helper.setAvatarsUrlFromS3(data);
 
     res.status(200).json({
       status: "success",
@@ -67,7 +67,7 @@ export const deleteOne = (Model) =>
     if (!data) return res.status(204).json();
 
     // ToDo should roll back database and S3 when fail
-    await helper.deleteImgFromS3([data]);
+    if (data.avatar) await helper.deleteAvatarUrlFromS3(data.avatar);
 
     await Model.destroy({ where: { id: req.params.id } });
     res.status(204).json();

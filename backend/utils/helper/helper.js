@@ -39,20 +39,24 @@ export const isExpired = (expire_in) =>
 export const isNumber = (id) =>
   !!id && !helper.isObject(id) && !Array.isArray(id) && !isNaN(id);
 
-export const commandToS3Avatar = async (array, command) =>
+export const deepClone = (input) => JSON.parse(JSON.stringify(input));
+
+export const commandToS3Avatar = async (file, command) => {
+  if (file && !(file.startsWith("https://") || file.startsWith("http://"))) {
+    return command(file);
+  }
+  return file;
+};
+
+export const getAvatarUrlFromS3 = async (file) =>
+  commandToS3Avatar(file, upload.getFileFromS3);
+
+export const deleteAvatarUrlFromS3 = async (file) =>
+  commandToS3Avatar(file, upload.deleteFileFromS3);
+
+export const setAvatarsUrlFromS3 = async (data) =>
   Promise.all(
-    array.map(async (el) => {
-      if (
-        el.avatar &&
-        !(el.avatar.startsWith("https://") || el.avatar.startsWith("http://"))
-      ) {
-        el.avatar = await command(el.avatar);
-      }
+    data.map(async (el) => {
+      if (el.avatar) el.avatar = await helper.getAvatarUrlFromS3(el.avatar);
     })
   );
-
-export const getImgUrlFromS3 = async (array) =>
-  Promise.all([commandToS3Avatar(array, upload.getFileFromS3)]);
-
-export const deleteImgFromS3 = async (array) =>
-  Promise.all([commandToS3Avatar(array, upload.deleteFileFromS3)]);
