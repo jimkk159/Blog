@@ -102,6 +102,7 @@ export const checkUserUpdatePostPermission = (user, post) => {
 export const updatePostContentAndTags = async ({
   postId,
   title,
+  CategoryId,
   content,
   isUpdateTags,
   tags,
@@ -112,6 +113,7 @@ export const updatePostContentAndTags = async ({
       {
         title,
         content,
+        CategoryId
       },
       { where: { id: postId }, transaction: t }
     );

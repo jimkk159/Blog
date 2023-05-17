@@ -28,7 +28,7 @@ export const getAll = catchAsync(async (req, res, next) => {
 
 export const createOne = catchAsync(async (req, res, next) => {
   // 1) check Category
-  const category = await Category.findByPk(req.body.categoryId);
+  const category = await Category.findByPk(req.body.CategoryId);
   postHelper.checkPostCategory(category);
 
   // 2) check Tag
@@ -59,7 +59,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
   // 1) check user permissions
   let post = await Post.findByPk(req.params.id);
   postHelper.checkUserUpdatePostPermission(req.user, post);
-
+  console.log(req.body)
   // 2) check Tag
   let tags = [];
   if (req.body.tagId)
@@ -69,6 +69,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
     title: req.body.title,
+    CategoryId: req.body.CategoryId,
     content: req.body.content,
     isUpdateTags: !!req.body.tagId,
     tags,
@@ -89,7 +90,7 @@ export const updateCategory = catchAsync(async (req, res, next) => {
   postHelper.checkUserUpdatePostPermission(req.user, post);
 
   // 2) check Category
-  const category = await Category.findByPk(req.params.categoryId);
+  const category = await Category.findByPk(req.params.CategoryId);
   postHelper.checkPostCategory(category);
 
   // 3) update Post Category

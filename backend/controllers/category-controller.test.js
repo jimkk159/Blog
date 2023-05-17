@@ -205,7 +205,7 @@ describe("updateOne()", () => {
     expect(error).toEqual(errorTable.notAllowUpdateRootError());
   });
 
-  test("should call checkCategoryCircularReference() by founded categoryId and provided ParentId if ParentId is provided", async () => {
+  test("should call checkCategoryCircularReference() by founded CategoryId and provided ParentId if ParentId is provided", async () => {
     req = {
       params: { id: "testID" },
       body: { name: "testCategory", ParentId: testParentID },
@@ -224,7 +224,7 @@ describe("updateOne()", () => {
     ).toHaveBeenLastCalledWith(category.id, req.body.ParentId);
   });
 
-  test("should not call checkCategoryCircularReference() by founded categoryId and provided ParentId if ParentId is not provided", async () => {
+  test("should not call checkCategoryCircularReference() by founded CategoryId and provided ParentId if ParentId is not provided", async () => {
     req = {
       params: { id: "testID" },
       body: { name: "testCategory" },

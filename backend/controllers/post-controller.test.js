@@ -143,17 +143,17 @@ describe("createOne()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should find category by categoryId", async () => {
+  test("should find category by CategoryId", async () => {
     let error;
     const category = "testCategory";
-    req = { body: { categoryId: "categoryId" } };
+    req = { body: { CategoryId: "CategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
     await postController
       .createOne(req, res, next)
       .catch((err) => (error = err));
 
-    expect(Category.findByPk).toHaveBeenLastCalledWith(req.body.categoryId);
+    expect(Category.findByPk).toHaveBeenLastCalledWith(req.body.CategoryId);
     expect(postHelper.checkPostCategory).toHaveBeenLastCalledWith(category);
   });
 
@@ -183,7 +183,7 @@ describe("createOne()", () => {
 
   test("should created post with tags", async () => {
     let error;
-    const category = { id: "categoryId" };
+    const category = { id: "CategoryId" };
     const tags = "testTags";
     req = {
       body: { title: "testTitle", content: "testContent", tagId: "tagId" },
@@ -207,7 +207,7 @@ describe("createOne()", () => {
 
   test("should find user by post authorId", async () => {
     let error;
-    const category = { id: "categoryId" };
+    const category = { id: "CategoryId" };
     req = {
       body: { title: "testTitle", content: "testContent" },
       user: { id: "testUserId" },
@@ -225,7 +225,7 @@ describe("createOne()", () => {
 
   test("should remove post date information", async () => {
     let error;
-    const category = { id: "categoryId" };
+    const category = { id: "CategoryId" };
     const post = {
       AuthorId: "AuthorId",
       toJSON: vi.fn().mockReturnValueOnce("testPost"),
@@ -248,7 +248,7 @@ describe("createOne()", () => {
 
   test("should response created post", async () => {
     let error;
-    const category = { id: "categoryId" };
+    const category = { id: "CategoryId" };
     const tags = { tags: "testTags" };
     const post = {
       AuthorId: "AuthorId",
@@ -479,19 +479,19 @@ describe("updateCategory()", () => {
 
   test("should find Category by id", async () => {
     let error;
-    req = { params: { id: "testId", categoryId: "testCategoryId" } };
+    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
 
     await postController
       .updateCategory(req, res, next)
       .catch((err) => (error = err));
 
-    expect(Category.findByPk).toHaveBeenLastCalledWith(req.params.categoryId);
+    expect(Category.findByPk).toHaveBeenLastCalledWith(req.params.CategoryId);
   });
 
   test("should check post category", async () => {
     let error;
     const category = "testCategory";
-    req = { params: { id: "testId", categoryId: "testCategoryId" } };
+    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
     await postController
@@ -504,7 +504,7 @@ describe("updateCategory()", () => {
   test("should update post", async () => {
     let error;
     const category = { id: "testCategoryId" };
-    req = { params: { id: "testId", categoryId: "testCategoryId" } };
+    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
     await postController
@@ -522,7 +522,7 @@ describe("updateCategory()", () => {
   test("should get post", async () => {
     let error;
     const category = { id: "testCategoryId" };
-    req = { params: { id: "testId", categoryId: "testCategoryId" } };
+    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
     await postController
@@ -536,7 +536,7 @@ describe("updateCategory()", () => {
     let error;
     const category = { id: "testCategoryId" };
     const post = "testPost";
-    req = { params: { id: "testId", categoryId: "testCategoryId" } };
+    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
     postHelper.getFullPost.mockResolvedValueOnce(post);
 

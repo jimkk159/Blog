@@ -25,7 +25,7 @@ router.use(authController.authUserByToken);
 router.post(
   "/",
   [
-    check("categoryId").not().isEmpty(),
+    check("CategoryId").not().isEmpty(),
     check("title").not().isEmpty(),
     check("content").not().isEmpty(),
   ],
@@ -37,6 +37,6 @@ router
   .route("/:id")
   .patch(postController.updateOne)
   .delete(postController.deleteOne);
-router.route("/:id/category/:categoryId").patch(postController.updateCategory);
+router.route("/:id/category/:CategoryId").patch(postController.updateCategory);
 
 export default router;
