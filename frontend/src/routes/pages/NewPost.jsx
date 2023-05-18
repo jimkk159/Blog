@@ -1,9 +1,9 @@
 import { redirect } from "react-router-dom";
 import * as authHelper from "../../util/auth";
-import PostForm from "../../components/PostForm";
+import PostEditor from "../../components/PostEditor";
 
 function NewPost() {
-  return <PostForm method="post" />;
+  return <PostEditor method="post" />;
 }
 
 export default NewPost;

@@ -6,9 +6,9 @@ import { Form, useNavigation, useRouteLoaderData } from "react-router-dom";
 import * as editHelper from "../util/edit";
 
 //CSS
-import classes from "./PostForm.module.css";
+import classes from "./PostEditor.module.css";
 
-function PostForm({ method, post }) {
+function PostEditor({ method, post }) {
   const inputRef = useRef(null);
   const editorRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
@@ -43,15 +43,15 @@ function PostForm({ method, post }) {
     event.preventDefault();
     event.stopPropagation();
     setIsDrag(false);
-    await editHelper.onImagePasted(event.dataTransfer, setMarkdown);
+    await editHelper.onImageDrop(event.dataTransfer, setMarkdown);
   }, []);
 
-  const postContent = post.content ? post.content : "";
+  const postContent = post?.content ? post.content : "";
   useEffect(() => setMarkdown(postContent), [postContent]);
 
   return (
     <>
-      <Form method={method}>
+      <Form method={method} >
         <select
           id="CategoryId"
           name="CategoryId"
@@ -119,4 +119,4 @@ function PostForm({ method, post }) {
   );
 }
 
-export default PostForm;
+export default PostEditor;

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { AwaitWrapper } from "../helper/Wrapper";
-import ReactMarkdown from "react-markdown";
+import MDEditor from "@uiw/react-md-editor";
 
 function PostList({ posts }) {
   return (
@@ -20,7 +20,7 @@ function PostList({ posts }) {
                   </Link>
                 )}
               </p>
-              <ReactMarkdown>{post.content}</ReactMarkdown>
+              <MDEditor.Markdown source={post.content} />
               <p>
                 tags
                 {post.Tags.filter((tag) => tag.name !== post.Category.name).map(

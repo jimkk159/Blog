@@ -1,4 +1,4 @@
-import ReactMarkdown from "react-markdown";
+import MDEditor from "@uiw/react-md-editor";
 import {
   defer,
   useRouteLoaderData,
@@ -28,7 +28,7 @@ function PostDetail() {
       {(loadPost) => (
         <>
           <h1>{loadPost.title}</h1>
-          <ReactMarkdown>{loadPost.content}</ReactMarkdown>
+          <MDEditor.Markdown source={loadPost.content} />
           {loadPost.Tags.map((tag, index) => (
             <p key={index}>{tag.name}</p>
           ))}
@@ -65,7 +65,7 @@ export async function action({ params, request }) {
   const postId = params.pid;
   const token = authHelper.getAuthToken();
 
-  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/${postId}`, {
+  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${postId}`, {
     method: request.method,
     headers: {
       Authorization: "Bearer " + token,

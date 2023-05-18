@@ -1,6 +1,6 @@
 import * as authHelper from "../../util/auth";
 import { AwaitWrapper } from "../helper/Wrapper";
-import PostForm from "../../components/PostForm";
+import PostEditor from "../../components/PostEditor";
 import { redirect, useRouteLoaderData } from "react-router-dom";
 
 function EditPost() {
@@ -8,7 +8,7 @@ function EditPost() {
 
   return (
     <AwaitWrapper resolve={post}>
-      {(loadPost) => <PostForm method="patch" post={loadPost} />}
+      {(loadPost) => <PostEditor method="patch" post={loadPost} />}
     </AwaitWrapper>
   );
 }
@@ -48,5 +48,5 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(postData),
   });
-  return redirect("/");
+  return redirect(`/${params.pid}`);
 }
