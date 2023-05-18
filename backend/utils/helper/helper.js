@@ -60,3 +60,10 @@ export const setAvatarsUrlFromS3 = async (data) =>
       if (el.avatar) el.avatar = await helper.getAvatarUrlFromS3(el.avatar);
     })
   );
+
+// export const getImgUrlFromS3 = async (file) => upload.getFileFromS3(file);
+
+export const deleteImgUrlFromS3 = async (file) => upload.deleteFileFromS3(file);
+
+export const getImgUrlFromS3 = async (file) =>
+  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + file;

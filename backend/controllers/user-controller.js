@@ -1,5 +1,5 @@
 import catchAsync from "../utils/error/catch-async.js";
-import * as upload from "../utils/aws/s3.js";
+import * as s3 from "../utils/aws/s3.js";
 import * as errorTable from "../utils/error/error-table.js";
 
 export const setHasValidate = catchAsync((req, res, next) => {
@@ -42,7 +42,7 @@ export const updateAvatar = catchAsync(async (req, res, next) => {
 
   // 2) upload to S3
   if (req.file) {
-    const avatar = await upload.uploadToS3(req.file);
+    const avatar = await s3.uploadToS3(req.file);
     req.body = { avatar };
   }
 

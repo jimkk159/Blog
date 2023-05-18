@@ -1,5 +1,6 @@
 import User from "../module/user.js";
 import Post from "../module/post.js";
+import * as s3 from "../utils/aws/s3.js";
 import Category from "../module/category.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
@@ -59,13 +60,16 @@ export const updateOne = catchAsync(async (req, res, next) => {
   // 1) check user permissions
   let post = await Post.findByPk(req.params.id);
   postHelper.checkUserUpdatePostPermission(req.user, post);
-  console.log(req.body)
+
   // 2) check Tag
   let tags = [];
   if (req.body.tagId)
     tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
-  // 3) update Post
+  // 3) Modify the img url to file name
+  req.body.content = req.body.content.replaceAll("&lt;", "<");
+
+  // 4) update Post
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
     title: req.body.title,
@@ -75,7 +79,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
     tags,
   });
 
-  // 4) get Post (Eager Loading)
+  // 5) get Post (Eager Loading)
   post = await postHelper.getFullPost(req.params.id);
 
   res.status(200).json({
@@ -151,4 +155,19 @@ export const search = catchAsync(async (req, res, next) => {
   };
   req.customQuery = forceQuery;
   next();
+});
+
+export const updateImage = catchAsync(async (req, res, next) => {
+  let img;
+  if (req.file) {
+    img = await s3.uploadToS3(req.file);
+    img = await helper.getImgUrlFromS3(img);
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      img,
+    },
+  });
 });
