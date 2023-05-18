@@ -9,7 +9,7 @@ function PostList({ posts }) {
         <ul>
           {loadPosts.map((post, index) => (
             <li key={index}>
-              <Link to={`/posts/${post.id}`}>
+              <Link to={`/${post.id}`}>
                 <h2>{`${post.title}`}</h2>
               </Link>
               <p>
@@ -27,7 +27,7 @@ function PostList({ posts }) {
                   (tag, index) => (
                     <Link
                       key={index}
-                      to={`/posts/search?mode=tag&type=id&target=${tag.id}`}
+                      to={`/search?mode=tag&type=id&target=${tag.id}`}
                     >
                       {tag.name}
                     </Link>
@@ -37,7 +37,7 @@ function PostList({ posts }) {
               <p>
                 <Link
                   key="category"
-                  to={`/posts/search?mode=category&type=id&target=${post.Category.id}`}
+                  to={`/search?mode=category&type=id&target=${post.Category.id}`}
                 >{`${post.Category && post.Category.name}`}</Link>
               </p>
             </li>

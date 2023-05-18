@@ -48,5 +48,5 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(postData),
   });
-  return redirect("/posts");
+  return redirect("/");
 }

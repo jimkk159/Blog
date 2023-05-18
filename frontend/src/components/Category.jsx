@@ -15,7 +15,7 @@ function Catalogue({ catalogue }) {
           <ul>
             {catalogue.posts.map((post, index) => (
               <li key={index}>
-                <Link to={`/posts/${post.id}`}>{post.title}</Link>
+                <Link to={`/${post.id}`}>{post.title}</Link>
               </li>
             ))}
           </ul>
@@ -34,7 +34,7 @@ function Catalogue({ catalogue }) {
         <ul>
           {catalogue.posts.map((post, index) => (
             <li key={index}>
-              <Link to={`/posts/${post.id}`}>{post.title}</Link>
+              <Link to={`/${post.id}`}>{post.title}</Link>
             </li>
           ))}
         </ul>

@@ -1,29 +1,56 @@
-import { useEffect, useState } from "react";
-import HightLight from "./HightLight";
+import MDEditor from "@uiw/react-md-editor";
+import rehypeSanitize from "rehype-sanitize";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { Form, useNavigation, useRouteLoaderData } from "react-router-dom";
-import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+
+import * as editHelper from "../util/edit";
+
+//CSS
+import classes from "./PostForm.module.css";
 
 function PostForm({ method, post }) {
-  const [content, setContent] = useState();
+  const inputRef = useRef(null);
+  const editorRef = useRef(null);
+  const [isDrag, setIsDrag] = useState(false);
+
+  const [markdown, setMarkdown] = useState("");
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const { categories } = useRouteLoaderData("posts");
 
-  const postContent = post ? post.content : "";
-  useEffect(() => {
-    setContent(postContent);
-  }, [postContent]);
+  const inputImageHandler = useCallback(async (event) => {
+    if (event.target.files && event.target.files.length === 1)
+      await editHelper.onImageUpload(event.target.files[0], setMarkdown);
+  }, []);
+
+  // Drag and drop
+  const startDragHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "dragenter") setIsDrag(true);
+  };
+
+  const dragHandler = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (event.type === "dragenter" || event.type === "dragover") {
+      setIsDrag(true);
+    } else if (event.type === "dragleave") setIsDrag(false);
+  };
+
+  const dropHandler = useCallback(async (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsDrag(false);
+    await editHelper.onImagePasted(event.dataTransfer, setMarkdown);
+  }, []);
+
+  const postContent = post.content ? post.content : "";
+  useEffect(() => setMarkdown(postContent), [postContent]);
 
   return (
     <>
-      <ReactMarkdown
-        components={{
-          code: HightLight,
-        }}
-      >
-        {content}
-      </ReactMarkdown>
       <Form method={method}>
         <select
           id="CategoryId"
@@ -50,14 +77,44 @@ function PostForm({ method, post }) {
         />
         <textarea
           name="content"
-          autoFocus
-          value={content}
-          onChange={(event) => setContent(event.target.value)}
+          style={{ display: "none" }}
+          value={markdown}
+          onChange={setMarkdown}
         />
         <button disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Save"}
         </button>
       </Form>
+      <div onDragEnter={startDragHandler} className={`${classes["related"]}`}>
+        <MDEditor
+          ref={editorRef}
+          value={markdown}
+          onChange={setMarkdown}
+          commands={editHelper.editChoice(inputRef)}
+          preview="edit"
+          previewOptions={{
+            rehypePlugins: [[rehypeSanitize]],
+          }}
+        />
+        {isDrag && (
+          <div
+            className={`${classes["upload-drag"]}`}
+            onDrop={dropHandler}
+            onDragEnter={dragHandler}
+            onDragOver={dragHandler}
+            onDragLeave={dragHandler}
+          ></div>
+        )}
+      </div>
+      <MDEditor.Markdown source={markdown} style={{ whiteSpace: "pre-wrap" }} />
+      <input
+        ref={inputRef}
+        style={{ display: "none" }}
+        type="file"
+        accept=".jpg,.png,.jpeg,.jfif,.gif"
+        name="avatar"
+        onChange={inputImageHandler}
+      />
     </>
   );
 }

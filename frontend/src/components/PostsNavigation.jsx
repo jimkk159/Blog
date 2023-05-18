@@ -11,13 +11,13 @@ function PostsNavigation() {
     <>
       <ul>
         <li>
-          <NavLink to="/posts" end>
+          <NavLink to="/" end>
             All Posts
           </NavLink>
         </li>
         {token && (
           <li>
-            <NavLink to="/posts/new">New Post</NavLink>
+            <NavLink to="/new">New Post</NavLink>
           </li>
         )}
       </ul>

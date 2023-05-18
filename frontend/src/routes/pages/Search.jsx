@@ -36,5 +36,5 @@ export async function action({ request }) {
   const mode = data.get("mode").toLowerCase();
   const target = data.get("target");
 
-  return redirect(`/posts/search?mode=${mode}&type=text&target=${target}`);
+  return redirect(`/search?mode=${mode}&type=text&target=${target}`);
 }

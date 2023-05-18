@@ -32,17 +32,6 @@ function MainNavigation() {
           )}
           <li>
             <NavLink
-              to="/posts"
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
-              end
-            >
-              Posts
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
               to="/about"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
