@@ -15,7 +15,17 @@ function MainNavigation() {
                 isActive ? classes.active : undefined
               }
             >
-              Home
+              Posts
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+            >
+              About
             </NavLink>
           </li>
           {!token && (
@@ -30,16 +40,6 @@ function MainNavigation() {
               </NavLink>
             </li>
           )}
-          <li>
-            <NavLink
-              to="/about"
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
-            >
-              About
-            </NavLink>
-          </li>
           {token && (
             <li>
               <Form method="post" action="/logout">

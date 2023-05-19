@@ -1,5 +1,5 @@
 import { NavLink, useLoaderData, useRouteLoaderData } from "react-router-dom";
-import Catalogue from "./Category";
+import Catalogue from "./Catalogue";
 import * as categoryHelper from "../util/category";
 
 function PostsNavigation() {
@@ -10,11 +10,6 @@ function PostsNavigation() {
   return (
     <>
       <ul>
-        <li>
-          <NavLink to="/" end>
-            All Posts
-          </NavLink>
-        </li>
         {token && (
           <li>
             <NavLink to="/new">New Post</NavLink>

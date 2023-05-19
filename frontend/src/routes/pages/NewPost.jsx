@@ -20,20 +20,8 @@ export async function action({ request, params }) {
     tagId: [],
   };
 
-  let url;
-  switch (method) {
-    case "POST":
-      url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts";
-      break;
-    case "PATCH":
-      const postId = params.pid;
-      url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts/" + postId;
-      break;
-    default:
-      break;
-  }
-
-  await fetch(url, {
+  const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts";
+  const response = await fetch(url, {
     method: method,
     headers: {
       "Content-Type": "application/json",
@@ -41,5 +29,8 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(postData),
   });
-  return redirect("/posts");
+
+  const resJSON = await response.json();
+  const postId = resJSON.data.id;
+  return redirect("/" + postId);
 }

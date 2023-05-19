@@ -1,46 +1,23 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { RxGear } from "react-icons/rx";
+import EditCategory from "./UpdateCategory";
 
-function Catalogue({ catalogue }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const openFolderHandler = () => setIsOpen((prev) => !prev);
-
-  if (!catalogue.ParentId)
-    return (
-      <>
-        {catalogue.children.map((child, index) => (
-          <Catalogue key={index} catalogue={child} />
-        ))}
-        {
-          <ul>
-            {catalogue.posts.map((post, index) => (
-              <li key={index}>
-                <Link to={`/${post.id}`}>{post.title}</Link>
-              </li>
-            ))}
-          </ul>
-        }
-      </>
-    );
+function Category({ category, onToggle }) {
+  const [isEdit, setIsEdit] = useState(false);
 
   return (
-    <ul>
-      <li onClick={openFolderHandler}>{catalogue.name}</li>{" "}
-      {isOpen &&
-        catalogue.children.map((child, index) => (
-          <Catalogue key={index} catalogue={child} />
-        ))}
-      {isOpen && (
-        <ul>
-          {catalogue.posts.map((post, index) => (
-            <li key={index}>
-              <Link to={`/${post.id}`}>{post.title}</Link>
-            </li>
-          ))}
-        </ul>
+    <li onClick={onToggle} style={{ position: "relative" }}>
+      {category.name}
+      <RxGear
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsEdit((prev) => !prev);
+        }}
+      />
+      {isEdit && (
+        <EditCategory current={category} onClose={() => setIsEdit(false)} />
       )}
-    </ul>
+    </li>
   );
 }
-
-export default Catalogue;
+export default Category;

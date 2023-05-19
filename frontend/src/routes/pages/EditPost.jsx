@@ -27,18 +27,9 @@ export async function action({ request, params }) {
     tagId: [],
   };
 
-  let url;
-  switch (method) {
-    case "POST":
-      url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts";
-      break;
-    case "PATCH":
-      const postId = params.pid;
-      url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts/" + postId;
-      break;
-    default:
-      break;
-  }
+  const postId = params.pid;
+  const url =
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts/" + postId;
 
   await fetch(url, {
     method: method,
