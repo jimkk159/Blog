@@ -67,7 +67,8 @@ export const updateOne = catchAsync(async (req, res, next) => {
     tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
   // 3) Modify the img url to file name
-  req.body.content = req.body.content.replaceAll("&lt;", "<");
+  if (req.body.content)
+    req.body.content = req.body.content.replaceAll("&lt;", "<");
 
   // 4) update Post
   await postHelper.updatePostContentAndTags({

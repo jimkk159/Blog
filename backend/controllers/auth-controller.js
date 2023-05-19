@@ -101,7 +101,7 @@ export const signup = catchAsync(async (req, res, next) => {
   else
     await authHelper.updateUserAndAuth({ id: userJSON.id, ...newUser }, auth);
 
-    // 7) Generate token and update token
+  // 7) Generate token and update token
   const token = authHelper.generateRandomCrypto(userJSON.id, "local");
   const verifyToken = authHelper.createEmailValidationToken({
     uid: userJSON.id,

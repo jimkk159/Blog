@@ -1,4 +1,6 @@
+import Post from "../module/post.js";
 import Category from "../module/category.js";
+import sequelize from "../config/db-init.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
@@ -30,10 +32,7 @@ export const createOne = catchAsync(async (req, res, next) => {
     },
   });
   if (!created) throw errorTable.categoryAlreadyExistError();
-  category = helper.removeKeys(category.toJSON(), [
-    "updatedAt",
-    "createdAt",
-  ]);
+  category = helper.removeKeys(category.toJSON(), ["updatedAt", "createdAt"]);
 
   res.status(200).json({
     status: "success",
@@ -84,6 +83,22 @@ export const deleteOne = catchAsync(async (req, res, next) => {
   if (categoryHelper.isRoot(category))
     throw errorTable.notAllowDeleteRootError();
 
-  await Category.destroy({ where: { id: req.params.id } });
+  await sequelize.transaction(async (t) => {
+    await Category.update(
+      { ParentId: category.ParentId },
+      {
+        where: { ParentId: req.params.id },
+        transaction: t,
+      }
+    );
+    await Post.update(
+      { CategoryId: category.ParentId },
+      {
+        where: { CategoryId: req.params.id },
+        transaction: t,
+      }
+    );
+    await Category.destroy({ where: { id: req.params.id }, transaction: t });
+  });
   res.status(204).json();
 });
