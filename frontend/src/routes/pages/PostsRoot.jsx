@@ -1,5 +1,5 @@
-import { defer, Outlet } from "react-router-dom";
 import PostNavigation from "../../components/PostsNavigation";
+import { defer, Outlet } from "react-router-dom";
 
 function PostRoot() {
   return (
@@ -20,13 +20,17 @@ async function categoryLoader() {
   return resJSON.data;
 }
 
-async function postsLoader() {
+async function postsLoader({ page, limit }) {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts"
+    process.env.REACT_APP_BACKEND_URL +
+      `/api/v1/blog/posts?page=${page}&limit=${limit}`
   );
 
   const resJSON = await response.json();
-  return resJSON.data;
+  return {
+    total: resJSON.total,
+    data: resJSON.data,
+  };
 }
 
 async function tagsLoader() {
@@ -38,10 +42,14 @@ async function tagsLoader() {
   return resJSON.data;
 }
 
-export async function loader() {
+export async function loader({ request }) {
+  const searchParams = new URL(request.url).searchParams;
+  const page = searchParams.get("page") || 1;
+  const limit = searchParams.get("limit") || 15;
+
   return defer({
     categories: await categoryLoader(),
-    posts: await postsLoader(),
+    postsRes: await postsLoader({ page, limit }),
     tags: await tagsLoader(),
   });
 }

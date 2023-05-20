@@ -18,6 +18,18 @@ function MainNavigation() {
               Posts
             </NavLink>
           </li>
+          {token && (
+            <li>
+              <NavLink
+                to="/new"
+                className={({ isActive }) =>
+                  isActive ? classes.active : undefined
+                }
+              >
+                New Post
+              </NavLink>
+            </li>
+          )}
           <li>
             <NavLink
               to="/about"

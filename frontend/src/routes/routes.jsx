@@ -50,6 +50,12 @@ const router = createBrowserRouter([
             element: SuspenseWrapper(<PostsPage />),
           },
           {
+            path: "new",
+            element: SuspenseWrapper(<NewPostPage />),
+            loader: authHelper.checkAuthTokenLoader,
+            action: lazyAction("./pages/NewPost"),
+          },
+          {
             id: "post-detail",
             path: ":pid",
             loader: lazyLoader("./pages/PostDetail"),
@@ -68,12 +74,6 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: "new",
-            element: SuspenseWrapper(<NewPostPage />),
-            loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/NewPost"),
-          },
-          {
             path: "search",
             element: SuspenseWrapper(<SearchPage />),
             loader: lazyLoader("./pages/Search"),
@@ -81,6 +81,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         path: "auth",
         element: SuspenseWrapper(<AuthPage />),
