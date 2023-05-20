@@ -20,8 +20,11 @@ export const getOne = catchAsync(async (req, res, next) => {
 export const getAll = catchAsync(async (req, res, next) => {
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
 
+  const total = await Post.count({});
+
   res.status(200).json({
     status: "success",
+    total,
     count: data.length,
     data,
   });

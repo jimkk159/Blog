@@ -6,8 +6,9 @@ import * as shareController from "./share-controller.js";
 
 // Validate the req
 export const validation = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) throw errorTable.validateError();
+  const result = validationResult(req);
+  if (!result.isEmpty())
+    throw errorTable.validateError(result.errors);
   next();
 };
 

@@ -15,7 +15,7 @@ export class GetFeatures {
   filter() {
     let filterQuery = {};
     let queryObj = { ...this.query };
-    const exlcude = ["sort", "limit", "page"];
+    const exlcude = ["sort", "limit", "page", "count"];
     const allowOperators = ["gt", "gte", "lt", "lte"];
     queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, allowOperators);
     filterQuery = apiFeatureHelper.replaceFilterOperators(queryObj);

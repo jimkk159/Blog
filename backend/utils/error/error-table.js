@@ -95,8 +95,13 @@ export const notAllowUpdatePasswordError = () =>
 export const notAllowUpdateEmailError = () =>
   new AppError("Not allow to update email.", 400);
 
-export const validateError = () =>
-  new AppError("Invalid inputs, please check your input is correct.", 422);
+export const validateError = (errors) =>
+  new AppError(
+    `Invalid inputs, please check your input ${errors
+      .map((el) => el.param)
+      .join(", ")} is correct.`,
+    422
+  );
 
 export const permissionDenyError = () => new AppError("Permission deny", 403);
 
@@ -140,7 +145,4 @@ export const tagNotExistError = () =>
     400
   );
 export const loginFailError = () =>
-  new AppError(
-    "Login failed! Please try again later...",
-    500
-  );
+  new AppError("Login failed! Please try again later...", 500);
