@@ -1,4 +1,4 @@
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 import { AwaitWrapper } from "../helper/Wrapper";
 import PostEditor from "../../components/PostEditor";
 import { redirect, useRouteLoaderData } from "react-router-dom";

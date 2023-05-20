@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import ErrorPage from "./pages/Error";
 import RootLayout from "./pages/Root";
-import * as authHelper from "../util/auth";
+import * as authHelper from "../utils/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
 import UpdatePassword from "./pages/UpdatePassword";
 

@@ -3,7 +3,7 @@ import rehypeSanitize from "rehype-sanitize";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { Form, useNavigation, useRouteLoaderData } from "react-router-dom";
 
-import * as editHelper from "../util/edit";
+import * as editHelper from "../utils/edit";
 
 //CSS
 import classes from "./PostEditor.module.css";

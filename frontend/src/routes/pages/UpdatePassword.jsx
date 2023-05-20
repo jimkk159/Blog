@@ -1,5 +1,5 @@
 import { Form, Link, redirect } from "react-router-dom";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 
 function UpdatePassword() {
   return (

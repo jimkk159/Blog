@@ -1,6 +1,6 @@
 import { NavLink, useLoaderData, useRouteLoaderData } from "react-router-dom";
 import Catalogue from "./Catalogue";
-import * as categoryHelper from "../util/category";
+import * as categoryHelper from "../utils/category";
 
 function PostsNavigation() {
   const token = useRouteLoaderData("root");

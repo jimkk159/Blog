@@ -7,7 +7,7 @@ import {
   redirect,
 } from "react-router-dom";
 import { AwaitWrapper } from "../helper/Wrapper";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 import { useSelector } from "react-redux";
 
 function PostDetail() {

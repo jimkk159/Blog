@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 import SearchBar from "../../components/SearchBar"
 import MainNavigation from "../../components/MainNavigation";
 import { Outlet, useLoaderData, useSubmit } from "react-router-dom";

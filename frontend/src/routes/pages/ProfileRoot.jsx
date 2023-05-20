@@ -1,5 +1,5 @@
 import PostsList from "./PostsList";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 import { defer, Outlet, useLoaderData } from "react-router-dom";
 
 function ProfileRoot() {

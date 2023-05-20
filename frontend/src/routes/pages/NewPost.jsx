@@ -1,5 +1,5 @@
 import { redirect } from "react-router-dom";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 import PostEditor from "../../components/PostEditor";
 
 function NewPost() {

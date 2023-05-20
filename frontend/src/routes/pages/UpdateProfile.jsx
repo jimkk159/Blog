@@ -7,7 +7,7 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 import { useRef, useCallback, useState } from "react";
-import * as authHelper from "../../util/auth";
+import * as authHelper from "../../utils/auth";
 
 function UpdateProfile() {
   const inputRef = useRef(null);

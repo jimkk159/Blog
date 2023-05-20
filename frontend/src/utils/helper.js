@@ -1,4 +1,4 @@
-import * as authHelper from "../util/auth";
+import * as authHelper from "../utils/auth";
 
 export const uploadImg = async (img) => {
   const token = authHelper.getAuthToken();
