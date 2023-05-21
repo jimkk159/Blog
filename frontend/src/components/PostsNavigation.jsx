@@ -8,7 +8,11 @@ function PostsNavigation() {
   const posts = postsRes?.data;
   const catalogue = categoryHelper.createCatalogue(posts, categories);
 
-  return <Catalogue catalogue={catalogue} />;
+  return (
+    <div className="w-1/6">
+      <Catalogue catalogue={catalogue} />
+    </div>
+  );
 }
 
 export default PostsNavigation;

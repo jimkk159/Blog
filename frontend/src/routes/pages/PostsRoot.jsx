@@ -1,12 +1,34 @@
 import PostNavigation from "../../components/PostsNavigation";
-import { defer, Outlet } from "react-router-dom";
+import {
+  defer,
+  Outlet,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
+import Pagination from "../../components/UI/Pagination";
 
 function PostRoot() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = searchParams.get("page") ?? 1;
+  const limit = searchParams.get("limit") ?? 15;
+  const { postsRes } = useLoaderData();
+
+  const navPageHandler = (nextPage) =>
+    setSearchParams({ page: nextPage, limit });
+
   return (
-    <>
-      <PostNavigation />
-      <Outlet />
-    </>
+    <div className="flex flex-col">
+      <div className="flex">
+        <PostNavigation />
+        {/* <Outlet /> */}
+      </div>
+      {/* <Pagination
+        total={postsRes.total}
+        current={page}
+        limit={limit}
+        onNavPage={navPageHandler}
+      /> */}
+    </div>
   );
 }
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import EditCategory from "./UpdateCategory";
 import Category from "./Category";
+import EditCategory from "./EditCategory";
 
 function Catalogue({ catalogue }) {
   const [isOpen, setIsOpen] = useState(false);

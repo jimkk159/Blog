@@ -3,7 +3,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 function PostList({ posts }) {
   return (
-    <ul>
+    <ul className="w-5/6">
       {posts &&
         posts.map((post, index) => (
           <li key={index}>

@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import * as authHelper from "../../utils/auth";
-import SearchBar from "../../components/SearchBar"
 import MainNavigation from "../../components/MainNavigation";
 import { Outlet, useLoaderData, useSubmit } from "react-router-dom";
+
+import cubeImg from "../img/cube.png";
 
 function Root() {
   const token = useLoaderData();
@@ -20,12 +21,13 @@ function Root() {
   }, [token, submit]);
 
   return (
-    <>
-      <SearchBar />
+    <div
+      className="bg-slate-800 p-24 text-gray-200"
+      style={{ backgroundImage: `url(${cubeImg})` }}
+    >
       <MainNavigation />
-      <h1>Root layout</h1>
       <Outlet />
-    </>
+    </div>
   );
 }
 
