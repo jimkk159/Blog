@@ -7,9 +7,6 @@ import { BiFirstPage, BiLastPage } from "react-icons/bi";
 //Custom Hook
 import usePagination, { DOTS } from "../../hooks/pagination-hook";
 
-//CSS
-import classes from "./Pagination.module.css";
-
 function Pagination({
   total = 0,
   limit = 15,
@@ -18,6 +15,7 @@ function Pagination({
   onNavPage,
   offset = 0,
 }) {
+  limit = 2;
   const paginationRange =
     usePagination({
       total: +total,
@@ -26,7 +24,7 @@ function Pagination({
       current: +current,
       offset: +offset,
     }) ?? [];
-    
+
   const totalPage = paginationRange
     ? paginationRange[paginationRange.length - 1]
     : 1;
@@ -49,24 +47,30 @@ function Pagination({
   };
   if (current < 1 || paginationRange.length < 2) return null;
   return (
-    <ul className={`${classes["pagination-container"]}`}>
-      <li className={classes["pagination-icon"]} onClick={onFirst}>
-        <BiFirstPage />
+    <ul className="flex w-full list-none justify-center p-4">
+      <li
+        className="mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
+        onClick={onFirst}
+      >
+        <BiFirstPage className="h-[25px] w-[25px]" />
       </li>
       <li
-        className={`${classes["pagination-icon"]} ${
-          current === 1 && classes["disabled"]
-        }`}
+        className={
+          "mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
+          ` ${current === 1 && "pointer-events-none"}`
+        }
         onClick={onPrev}
       >
-        <MdNavigateBefore />
+        <MdNavigateBefore className="h-[25px] w-[25px]" />
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
           return (
             <li
               key={index}
-              className={`${classes["pagination-item"]} ${classes["dots"]}`}
+              className={
+                "mx-1 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-base font-semibold leading-snug tracking-wide"
+              }
             >
               &#8230;
             </li>
@@ -75,8 +79,8 @@ function Pagination({
         return (
           <li
             key={index}
-            className={`${classes["pagination-item"]} ${
-              pageNumber === current && classes["selected"]
+            className={`mx-1 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-base font-semibold leading-snug tracking-wide ${
+              pageNumber === current && "bg-slate-500"
             }`}
             onClick={() => onNavPage(pageNumber)}
           >
@@ -85,20 +89,22 @@ function Pagination({
         );
       })}
       <li
-        className={`${classes["pagination-icon"]} ${
-          current === totalPage && classes["disabled"]
-        }`}
+        className={
+          "mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
+          ` ${current === 1 && "pointer-events-none"}`
+        }
         onClick={onNext}
       >
-        <MdNavigateNext />
+        <MdNavigateNext className="h-[25px] w-[25px]" />
       </li>
-      <li className={classes["pagination-icon"]} onClick={onLast}>
-        <BiLastPage />
+      <li
+        className="mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
+        onClick={onLast}
+      >
+        <BiLastPage className="h-[25px] w-[25px]" />
       </li>
     </ul>
   );
 }
 
 export default Pagination;
-
-//reference:https://www.youtube.com/watch?v=IYCa1F-OWmk
