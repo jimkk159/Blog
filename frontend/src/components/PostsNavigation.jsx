@@ -9,8 +9,10 @@ function PostsNavigation() {
   const catalogue = categoryHelper.createCatalogue(posts, categories);
 
   return (
-    <div className="w-1/6">
+    <div className="w-96 bg-slate-900 ">
+      <div className="w-96 px-3">
       <Catalogue catalogue={catalogue} />
+      </div>
     </div>
   );
 }

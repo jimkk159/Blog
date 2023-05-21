@@ -1,15 +1,41 @@
 import { useState } from "react";
 import { RxGear } from "react-icons/rx";
 import EditCategory from "./EditCategory";
+import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 
-function Category({ category, onToggle }) {
+function Category({ category, isOpen, setIsOpen }) {
   const [isEdit, setIsEdit] = useState(false);
 
-  const closeHandler = () => setIsEdit(false);
-  
+  const closeHandler = () => setIsEdit(false)
+
   return (
-    <li onClick={onToggle} className="flex items-center px-3 py-3">
-      <p>{category.name}</p>
+    <li className="flex items-center py-1.5 ">
+      {!isOpen && (
+        <BiChevronRight
+          className="h-[25px] w-[25px]"
+          onClick={() => setIsOpen(true)}
+        />
+      )}
+      {isOpen && (
+        <BiChevronDown
+          className="h-[25px] w-[25px]"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      <p
+        className={
+          "text-gray-200 " +
+          `${
+            category.name.length > 10
+              ? category.name.length > 16
+                ? `text-base`
+                : `text-xl`
+              : `text-2xl`
+          }`
+        }
+      >
+        {category.name}
+      </p>
       <div className="relative">
         <RxGear
           className="ml-2"

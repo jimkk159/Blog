@@ -20,7 +20,7 @@ function PostRoot() {
     <div className="flex flex-col">
       <div className="flex">
         <PostNavigation />
-        {/* <Outlet /> */}
+        <Outlet />
       </div>
       {/* <Pagination
         total={postsRes.total}
