@@ -49,19 +49,19 @@ function Pagination({
   return (
     <ul className="flex w-full list-none justify-center p-4">
       <li
-        className="mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
+        className="mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
         onClick={onFirst}
       >
-        <BiFirstPage className="h-[25px] w-[25px]" />
+        <BiFirstPage className="h-[36px] w-[36px]" />
       </li>
       <li
         className={
-          "mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
+          "mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
           ` ${current === 1 && "pointer-events-none"}`
         }
         onClick={onPrev}
       >
-        <MdNavigateBefore className="h-[25px] w-[25px]" />
+        <MdNavigateBefore className="h-[36px] w-[36px]" />
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
@@ -69,7 +69,7 @@ function Pagination({
             <li
               key={index}
               className={
-                "mx-1 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-base font-semibold leading-snug tracking-wide"
+                "mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-2xl font-semibold leading-snug tracking-wide"
               }
             >
               &#8230;
@@ -79,7 +79,7 @@ function Pagination({
         return (
           <li
             key={index}
-            className={`mx-1 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-base font-semibold leading-snug tracking-wide ${
+            className={`mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-2xl font-semibold leading-snug tracking-wide ${
               pageNumber === current && "bg-slate-500"
             }`}
             onClick={() => onNavPage(pageNumber)}
@@ -90,18 +90,18 @@ function Pagination({
       })}
       <li
         className={
-          "mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
+          "mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
           ` ${current === 1 && "pointer-events-none"}`
         }
         onClick={onNext}
       >
-        <MdNavigateNext className="h-[25px] w-[25px]" />
+        <MdNavigateNext className="h-[36px] w-[36px]" />
       </li>
       <li
-        className="mx-1 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
+        className="mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
         onClick={onLast}
       >
-        <BiLastPage className="h-[25px] w-[25px]" />
+        <BiLastPage className="h-[36px] w-[36px]" />
       </li>
     </ul>
   );

@@ -51,7 +51,7 @@ function EditCategory({ current, onClose }) {
 
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
-  const { categories } = useRouteLoaderData("posts");
+  const { categories } = useRouteLoaderData("relation");
 
   const clickHandler = (event, name) => {
     event.preventDefault();
@@ -115,7 +115,7 @@ function EditCategory({ current, onClose }) {
     <form
       onSubmit={submitHandler}
       onClick={(e) => e.stopPropagation()}
-      className="absolute left-8 top-0 z-10 w-60 bg-slate-50 p-3 text-gray-800"
+      className="absolute left-8 top-0 z-10 w-60 bg-slate-100 p-3 text-gray-800 "
     >
       <select
         id="ParentId"
@@ -177,7 +177,7 @@ function EditCategory({ current, onClose }) {
         <button
           type="button"
           onClick={deleteHandler}
-          className="ml-1.5 rounded-lg border border-blue-700 p-2 text-center text-xs font-bold text-blue-700 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
+          className="ml-1.5 rounded-lg border shadow-md border-blue-700 p-2 text-center text-xs font-bold text-blue-700 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
         >
           Delete This
         </button>

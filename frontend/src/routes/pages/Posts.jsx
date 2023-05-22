@@ -1,10 +1,9 @@
-import PostsList from "./PostsList";
+import PostsList from "../../components/PostsList";
 import { useRouteLoaderData } from "react-router-dom";
 
 function Posts() {
-  const { postsRes } = useRouteLoaderData("posts");
-
-  return <PostsList posts={postsRes.data} />;
+  const { posts } = useRouteLoaderData("posts");
+  return <PostsList posts={posts} />;
 }
 
 export default Posts;

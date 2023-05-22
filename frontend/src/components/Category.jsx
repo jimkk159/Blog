@@ -26,11 +26,11 @@ function Category({ category, isOpen, setIsOpen }) {
         className={
           "text-gray-200 " +
           `${
-            category.name.length > 10
-              ? category.name.length > 16
-                ? `text-base`
-                : `text-xl`
-              : `text-2xl`
+            category.name.length > 16
+              ? category.name.length > 20
+                ? `text-xs`
+                : `text-sm`
+              : `text-base`
           }`
         }
       >

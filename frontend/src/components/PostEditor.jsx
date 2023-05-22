@@ -17,7 +17,7 @@ function PostEditor({ method, post }) {
 
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const { categories } = useRouteLoaderData("posts");
+  const { categories } = useRouteLoaderData("relation");
 
   const inputImageHandler = useCallback(async (event) => {
     if (event.target.files && event.target.files.length === 1)

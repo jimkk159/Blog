@@ -1,4 +1,4 @@
-import PostsList from "./PostsList";
+import PostsList from "../../components/PostsList";
 import Pagination from "../../components/UI/Pagination";
 import {
   defer,
@@ -6,12 +6,13 @@ import {
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
+import PostsNavigation from "../../components/PostsNavigation";
 
 const defaultPage = 1;
 const defaultLimit = 15;
 
 function Search() {
-  const { searchPostsRes } = useLoaderData();
+  const { posts } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const mode = searchParams.get("mode") ?? "category";
@@ -25,9 +26,12 @@ function Search() {
 
   return (
     <>
-      <PostsList posts={searchPostsRes.data} />
+      <div className="flex">
+        <PostsNavigation />
+        <PostsList posts={posts} />
+      </div>
       <Pagination
-        total={searchPostsRes.total}
+        total={posts.length}
         current={page}
         limit={limit}
         onNavPage={navPageHandler}
@@ -52,10 +56,7 @@ async function postsLoader({ mode, type, target, page, limit }) {
   );
 
   const resJSON = await response.json();
-  return {
-    total: resJSON.total,
-    data: resJSON.data,
-  };
+  return resJSON.data;
 }
 
 export async function loader({ request }) {
@@ -67,7 +68,7 @@ export async function loader({ request }) {
   const limit = searchParams.get("limit");
 
   return defer({
-    searchPostsRes: await postsLoader({ mode, type, target, page, limit }),
+    posts: await postsLoader({ mode, type, target, page, limit }),
   });
 }
 

@@ -13,8 +13,9 @@ import UpdatePassword from "./pages/UpdatePassword";
 const AboutPage = lazy(() => import("./pages/About"));
 const AuthPage = lazy(() => import("./pages/Auth"));
 const SearchPage = lazy(() => import("./pages/Search"));
-const PostsRootLayout = lazy(() => import("./pages/PostsRoot"));
 const PostsPage = lazy(() => import("./pages/Posts"));
+const PostsLayout = lazy(() => import("./pages/PostsRoot"));
+const PostsRelationRootLayout = lazy(() => import("./pages/PostsRelationRoot"));
 const PostDetailPage = lazy(() => import("./pages/PostDetail"));
 const EditPostPage = lazy(() => import("./pages/EditPost"));
 const NewPostPage = lazy(() => import("./pages/NewPost"));
@@ -40,36 +41,44 @@ const router = createBrowserRouter([
     loader: authHelper.getAuthToken,
     children: [
       {
-        id: "posts",
+        id: "relation",
         path: "/",
-        element: SuspenseWrapper(<PostsRootLayout />),
-        loader: lazyLoader("./pages/PostsRoot"),
+        loader: lazyLoader("./pages/PostsRelationRoot"),
+        element: SuspenseWrapper(<PostsRelationRootLayout />),
         children: [
           {
-            index: true,
-            element: SuspenseWrapper(<PostsPage />),
-          },
-          {
-            path: "new",
-            element: SuspenseWrapper(<NewPostPage />),
-            loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/NewPost"),
-          },
-          {
-            id: "post-detail",
-            path: ":pid",
-            loader: lazyLoader("./pages/PostDetail"),
+            id: "posts",
+            path: "/",
+            loader: lazyLoader("./pages/PostsRoot"),
+            element: SuspenseWrapper(<PostsLayout />),
             children: [
               {
                 index: true,
-                element: SuspenseWrapper(<PostDetailPage />),
-                action: lazyAction("./pages/PostDetail"),
+                element: SuspenseWrapper(<PostsPage />),
               },
               {
-                path: "edit",
-                element: SuspenseWrapper(<EditPostPage />),
+                id: "post-detail",
+                path: ":pid",
+                loader: lazyLoader("./pages/PostDetail"),
+                children: [
+                  {
+                    index: true,
+                    element: SuspenseWrapper(<PostDetailPage />),
+                    action: lazyAction("./pages/PostDetail"),
+                  },
+                  {
+                    path: "edit",
+                    element: SuspenseWrapper(<EditPostPage />),
+                    loader: authHelper.checkAuthTokenLoader,
+                    action: lazyAction("./pages/EditPost"),
+                  },
+                ],
+              },
+              {
+                path: "new",
+                element: SuspenseWrapper(<NewPostPage />),
                 loader: authHelper.checkAuthTokenLoader,
-                action: lazyAction("./pages/EditPost"),
+                action: lazyAction("./pages/NewPost"),
               },
             ],
           },
@@ -81,7 +90,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-
       {
         path: "auth",
         element: SuspenseWrapper(<AuthPage />),

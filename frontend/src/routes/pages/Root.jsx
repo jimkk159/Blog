@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import * as authHelper from "../../utils/auth";
 import MainNavigation from "../../components/MainNavigation";
-import { Outlet, useLoaderData, useSubmit } from "react-router-dom";
+import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
 
 import cubeImg from "../img/cube.png";
 
@@ -22,7 +22,7 @@ function Root() {
 
   return (
     <div
-      className="bg-slate-800 text-gray-200"
+      className="bg-black text-navy-100"
       style={{ backgroundImage: `url(${cubeImg})` }}
     >
       <MainNavigation />

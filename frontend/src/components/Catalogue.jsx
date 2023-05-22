@@ -18,7 +18,7 @@ function Catalogue({ catalogue }) {
           <button
             className={
               "mt-1.5 w-full rounded border bg-gray-200 text-center text-slate-800 ring-1 hover:bg-gray-300 " +
-              `${isDrop ? "text-lg p-1 " : "text-3xl p-0.5"}`
+              `${isDrop ? "text-base p-1 " : "text-2xl p-0.5"}`
             }
             onClick={() => setIsDrop((prev) => !prev)}
           >
@@ -54,7 +54,7 @@ function Catalogue({ catalogue }) {
           {catalogue.posts.map((post, index) => (
             <li
               key={index}
-              className="cursor-pointer truncate py-1.5 text-lg hover:text-gray-200 active:text-gray-200"
+              className="cursor-pointer truncate py-1.5 text-base hover:text-gray-200 active:text-gray-200"
               onClick={() => navigate(`/${post.id}`)}
             >
               <Link to={`/${post.id}`}>{post.title}</Link>

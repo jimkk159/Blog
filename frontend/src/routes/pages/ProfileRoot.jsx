@@ -1,4 +1,4 @@
-import PostsList from "./PostsList";
+import PostsList from "../../components/PostsList";
 import * as authHelper from "../../utils/auth";
 import { defer, Outlet, useLoaderData } from "react-router-dom";
 

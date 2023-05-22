@@ -41,14 +41,14 @@ function ChoiceChild({ className, children, categories, onClick }) {
   });
 }
 
-function CreateCategory({ current, onClose }) {
+function CreateCategory({ onClose }) {
   const [isDrop, setIsDrop] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [formData, dispatch] = useReducer(reducer, initialState);
 
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
-  const { categories } = useRouteLoaderData("posts");
+  const { categories } = useRouteLoaderData("relation");
 
   const inputHandler = useCallback((event) => {
     dispatch({ type: "UPDATE", field: "name", value: event.target.value });
@@ -117,7 +117,7 @@ function CreateCategory({ current, onClose }) {
         name="name"
         value={formData.name}
         placeholder="Category...."
-        className="h-8 w-full border border-gray-500 pl-2 text-lg outline-none"
+        className="h-8 w-full border border-gray-500 pl-2 text-base outline-none"
         onChange={inputHandler}
       />
       <p className="pl-1 pt-4 text-base font-bold">Parent</p>
@@ -135,7 +135,7 @@ function CreateCategory({ current, onClose }) {
           >
             <label
               htmlFor="ParentId"
-              className={`w-full cursor-pointer px-4 py-1 text-lg text-gray-500 hover:bg-gray-50`}
+              className={`w-full cursor-pointer px-4 py-1 text-sm whitespace-nowrap text-gray-500 hover:bg-gray-50`}
             >
               {isSelected ? formData.parent : "This category belongs to..."}
             </label>
