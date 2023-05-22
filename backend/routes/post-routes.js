@@ -9,6 +9,8 @@ const router = express.Router();
 
 router.get("/", postController.getAll);
 
+router.get("/relation", postController.getAllTitle);
+
 router.get("/search", postController.search, postController.getAll);
 
 router.get(
@@ -21,7 +23,8 @@ router.get(
 
 router.get("/:id", postController.getOne);
 
-router.post("/img",
+router.post(
+  "/img",
   upload.uploadToMemory.single("img"),
   postController.updateImage
 );
@@ -43,7 +46,7 @@ router
   .route("/:id")
   .patch(postController.updateOne)
   .delete(postController.deleteOne);
-  
+
 router.route("/:id/category/:CategoryId").patch(postController.updateCategory);
 
 export default router;

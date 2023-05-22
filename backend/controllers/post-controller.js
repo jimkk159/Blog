@@ -2,8 +2,9 @@ import User from "../module/user.js";
 import Post from "../module/post.js";
 import * as s3 from "../utils/aws/s3.js";
 import Category from "../module/category.js";
-import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
+import { GetFeatures } from "../utils/api-features.js";
+import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
 
@@ -17,10 +18,26 @@ export const getOne = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getAllTitle = catchAsync(async (req, res, next) => {
+  req.query = { fields: "-content,-AuthorId" };
+  const getFeature = new GetFeatures(Post, req.query).select();
+
+  const data = await getFeature.findAll({ raw: true });
+
+  const total = await Post.count({ where: req.count });
+
+  res.status(200).json({
+    status: "success",
+    total,
+    count: data.length,
+    data,
+  });
+});
+
 export const getAll = catchAsync(async (req, res, next) => {
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
 
-  const total = await Post.count({});
+  const total = await Post.count({ where: req.count });
 
   res.status(200).json({
     status: "success",
@@ -142,6 +159,7 @@ export const search = catchAsync(async (req, res, next) => {
   let forceQuery = {};
   const allowType = ["id", "text"];
   const allowMode = ["category", "author", "title", "tag"];
+
   // 1) check the serch params
   if (!postHelper.isValidSearch(req.query, allowType, allowMode))
     throw errorTable.wrongSearchParamsError();
@@ -158,6 +176,8 @@ export const search = catchAsync(async (req, res, next) => {
     ...initQuery,
   };
   req.customQuery = forceQuery;
+  req.count = initQuery;
+
   next();
 });
 
