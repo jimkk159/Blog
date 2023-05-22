@@ -15,7 +15,6 @@ function Pagination({
   onNavPage,
   offset = 0,
 }) {
-  limit = 2;
   const paginationRange =
     usePagination({
       total: +total,
@@ -45,6 +44,7 @@ function Pagination({
   const onLast = () => {
     onNavPage(totalPage);
   };
+
   if (current < 1 || paginationRange.length < 2) return null;
   return (
     <ul className="flex w-full list-none justify-center p-4">

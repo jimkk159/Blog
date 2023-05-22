@@ -1,6 +1,6 @@
 import PostsList from "../../components/PostsList";
 import * as authHelper from "../../utils/auth";
-import { defer, Outlet, useLoaderData } from "react-router-dom";
+import { defer, Outlet, redirect, useLoaderData } from "react-router-dom";
 
 function ProfileRoot() {
   const { posts } = useLoaderData();
@@ -27,7 +27,7 @@ async function selfAuthorLoader() {
       },
     }
   );
-  
+
   const resJSON = await response.json();
   return resJSON.data;
 }
@@ -68,6 +68,8 @@ async function postsLoader(uid) {
 }
 
 export async function loader({ params }) {
+  const token = authHelper.getAuthToken();
+  if (!token) return redirect("/");
   if (!params.id)
     return defer({
       author: await selfAuthorLoader(),

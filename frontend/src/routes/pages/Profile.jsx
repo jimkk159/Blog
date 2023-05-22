@@ -2,7 +2,7 @@ import { Link, useRouteLoaderData } from "react-router-dom";
 
 function Profile() {
   const { author } = useRouteLoaderData("profile");
-
+  console.log(author)
   return (
     <>
       <ul>

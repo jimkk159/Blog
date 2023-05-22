@@ -1,5 +1,4 @@
 import PostsList from "../../components/PostsList";
-import Pagination from "../../components/UI/Pagination";
 import {
   defer,
   redirect,
@@ -18,25 +17,20 @@ function Search() {
   const mode = searchParams.get("mode") ?? "category";
   const type = searchParams.get("type") ?? "text";
   const target = searchParams.get("target") ?? "";
-  const page = searchParams.get("page") ?? defaultPage;
   const limit = searchParams.get("limit") ?? defaultLimit;
 
   const navPageHandler = (nextPage) =>
     setSearchParams({ mode, type, target, page: nextPage, limit });
 
   return (
-    <>
-      <div className="flex">
-        <PostsNavigation />
-        <PostsList posts={posts} />
-      </div>
-      <Pagination
+    <div className="flex min-h-screen">
+      <PostsNavigation />
+      <PostsList
+        posts={posts}
         total={posts.length}
-        current={page}
-        limit={limit}
         onNavPage={navPageHandler}
       />
-    </>
+    </div>
   );
 }
 
