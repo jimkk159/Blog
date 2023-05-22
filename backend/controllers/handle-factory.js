@@ -30,7 +30,6 @@ export const getAll = (Model) =>
 
     res.status(200).json({
       status: "success",
-      total,
       count: data.length,
       data,
     });

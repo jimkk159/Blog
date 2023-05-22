@@ -12,10 +12,15 @@ export class GetFeatures {
     return this.Model.findAll({ ...this.sqlQuery, ...queryString }, options);
   }
 
+  count(queryString) {
+    return this.query.count({ ...this.sqlQuery, ...queryString }, options);
+  }
+
   filter() {
     let filterQuery = {};
     let queryObj = { ...this.query };
-    const exlcude = ["sort", "limit", "page", "count"];
+
+    const exlcude = ["sort", "limit", "page", "count", "fields"];
     const allowOperators = ["gt", "gte", "lt", "lte"];
     queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, allowOperators);
     filterQuery = apiFeatureHelper.replaceFilterOperators(queryObj);
@@ -29,7 +34,8 @@ export class GetFeatures {
     filterQuery = { ...filterQuery, ...queryObj };
 
     filterQuery = helper.removeKeys(filterQuery, exlcude);
-    this.sqlQuery = { ...this.sqlQuery, where: filterQuery };
+
+    if (Object.keys(filterQuery).length) this.sqlQuery = { ...this.sqlQuery, where: filterQuery };
     return this;
   }
 
@@ -44,14 +50,16 @@ export class GetFeatures {
   }
 
   select() {
-    let attributes, exclude;
+    let attributes = {},
+      include,
+      exclude;
     if (this.query.fields) {
       const fields = apiFeatureHelper.getQueryElements(this.query.fields);
-      attributes = apiFeatureHelper.createSequelizeAttributes(fields);
-      if (attributes.length === 0) {
-        exclude = apiFeatureHelper.createSequelizeExclude(fields);
-        attributes = { exclude };
-      }
+
+      include = apiFeatureHelper.createSequelizeAttributes(fields);
+      exclude = apiFeatureHelper.createSequelizeExclude(fields);
+
+      attributes = { include, exclude };
       this.sqlQuery = { ...this.sqlQuery, attributes };
     }
     return this;
