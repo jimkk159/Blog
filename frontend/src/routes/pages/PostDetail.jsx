@@ -18,9 +18,7 @@ function PostDetail() {
 
   const startDeleteHandler = () => {
     const proceed = window.confirm("Are you sure?");
-    if (proceed) {
-      submit(null, { method: "delete" });
-    }
+    if (proceed) submit(null, { method: "delete" });
   };
 
   return (
@@ -65,12 +63,15 @@ export async function action({ params, request }) {
   const postId = params.pid;
   const token = authHelper.getAuthToken();
 
-  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${postId}`, {
-    method: request.method,
-    headers: {
-      Authorization: "Bearer " + token,
-    },
-  });
+  await fetch(
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${postId}`,
+    {
+      method: request.method,
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
 
   if (request.method === "DELETE") return redirect(`/`);
   return redirect(`/${postId}`);

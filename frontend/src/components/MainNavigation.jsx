@@ -32,8 +32,8 @@ function MainNavigation() {
                 </Form>
               </li>
             )}
-            <Link to="/profile">
-              <Avatar className={"mx-4 h-[50px] w-[50px]"}/>
+            <Link to={token ? "/profile" : "/auth?mode=login"}>
+              <Avatar className={"mx-4 h-[50px] w-[50px]"} />
             </Link>
           </ul>
         </div>

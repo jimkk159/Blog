@@ -1,13 +1,26 @@
 import { useEffect } from "react";
 import * as authHelper from "../../utils/auth";
 import MainNavigation from "../../components/MainNavigation";
-import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
-
+import {
+  Outlet,
+  useSubmit,
+  useLoaderData,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import cubeImg from "../img/cube.png";
 
 function Root() {
-  const token = useLoaderData();
   const submit = useSubmit();
+  const token = useLoaderData();
+  const navigate = useNavigate();
+
+  const handleStorageChange = (event) => {
+    if (event.key === "token")
+      window.location.replace(
+        `${window.location.protocol}//${window.location.host}`
+      );
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -19,6 +32,11 @@ function Root() {
       submit(null, { action: "/logout", method: "post" });
     }, tokenDuration);
   }, [token, submit]);
+
+  useEffect(() => {
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   return (
     <div

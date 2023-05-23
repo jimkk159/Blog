@@ -139,6 +139,10 @@ const router = createBrowserRouter([
         loader: authHelper.checkAuthTokenLoader,
         action: lazyAction("./pages/UpdatePassword"),
       },
+      {
+        path: "/oauth/success",
+        element: <OauthPage />,
+      },
       { path: "*", element: SuspenseWrapper(<Navigate replace to="/" />) },
     ],
   },
