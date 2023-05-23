@@ -1,19 +1,12 @@
 import { useEffect } from "react";
+import cubeImg from "../img/cube.png";
 import * as authHelper from "../../utils/auth";
 import MainNavigation from "../../components/MainNavigation";
-import {
-  Outlet,
-  useSubmit,
-  useLoaderData,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
-import cubeImg from "../img/cube.png";
+import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
 
 function Root() {
   const submit = useSubmit();
   const token = useLoaderData();
-  const navigate = useNavigate();
 
   const handleStorageChange = (event) => {
     if (event.key === "token")

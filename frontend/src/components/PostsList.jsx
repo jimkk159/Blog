@@ -41,6 +41,7 @@ function PostList({ posts, total, onNavPage }) {
               <div className="flex items-end gap-3">
                 <Avatar
                   className={"h-[28px] w-[28px]"}
+                  avatar={post.Author.avatar}
                   onClick={() => navigate(`/profile/${post.Author.id}`)}
                 />
                 <Link

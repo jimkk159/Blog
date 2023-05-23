@@ -2,11 +2,13 @@ import { Form, Link, useRouteLoaderData } from "react-router-dom";
 import Avatar from "./UI/Avatar";
 import NavItem from "./NavItem";
 import SearchBar from "./SearchBar";
+import { useSelector } from "react-redux";
 
 import logo from "../assets/imgs/blog_logo.png";
 
 function MainNavigation() {
   const token = useRouteLoaderData("root");
+  const avatar = useSelector((state) => state.auth.avatar);
 
   return (
     <header className="items-center">
@@ -33,7 +35,7 @@ function MainNavigation() {
               </li>
             )}
             <Link to={token ? "/profile" : "/auth?mode=login"}>
-              <Avatar className={"mx-4 h-[50px] w-[50px]"} />
+              <Avatar className={"mx-4 h-[50px] w-[50px]"} avatar={avatar} />
             </Link>
           </ul>
         </div>
