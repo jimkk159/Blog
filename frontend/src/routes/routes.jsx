@@ -8,7 +8,6 @@ import ErrorPage from "./pages/Error";
 import RootLayout from "./pages/Root";
 import * as authHelper from "../utils/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
-import UpdatePassword from "./pages/UpdatePassword";
 
 const AboutPage = lazy(() => import("./pages/About"));
 const AuthPage = lazy(() => import("./pages/Auth"));
@@ -24,7 +23,6 @@ const ForgotPasswordPage = lazy(() => import("./pages/ForgotPassword"));
 const ProfileRootLayout = lazy(() => import("./pages/ProfileRoot"));
 const ProfilePage = lazy(() => import("./pages/Profile"));
 const BrowserProfilePage = lazy(() => import("./pages/BrowserProfile"));
-const UpdateProfile = lazy(() => import("./pages/UpdateProfile"));
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));

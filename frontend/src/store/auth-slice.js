@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { action } from "../routes/pages/Profile";
 
 const initialState = {
   id: null,
