@@ -20,7 +20,7 @@ export class GetFeatures {
     let filterQuery = {};
     let queryObj = { ...this.query };
 
-    const exlcude = ["sort", "limit", "page", "count", "fields"];
+    const exlcude = ["sort", "limit", "page", "count", "fields", "all"];
     const allowOperators = ["gt", "gte", "lt", "lte"];
     queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, allowOperators);
     filterQuery = apiFeatureHelper.replaceFilterOperators(queryObj);
@@ -35,7 +35,8 @@ export class GetFeatures {
 
     filterQuery = helper.removeKeys(filterQuery, exlcude);
 
-    if (Object.keys(filterQuery).length) this.sqlQuery = { ...this.sqlQuery, where: filterQuery };
+    if (Object.keys(filterQuery).length)
+      this.sqlQuery = { ...this.sqlQuery, where: filterQuery };
     return this;
   }
 
@@ -69,7 +70,10 @@ export class GetFeatures {
     const page = helper.toNaturalNumber(this.query.page) || 1;
     const limit = helper.toNaturalNumber(this.query.limit) || 15;
     const offset = (page - 1) * limit;
-    this.sqlQuery = { ...this.sqlQuery, limit, offset };
+
+    this.sqlQuery = !!+this.query.all
+      ? { ...this.sqlQuery }
+      : { ...this.sqlQuery, limit, offset };
     return this;
   }
 }

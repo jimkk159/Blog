@@ -147,6 +147,7 @@ export const deleteOne = catchAsync(async (req, res, next) => {
 
 export const getMe = catchAsync(async (req, res, next) => {
   req.query = {
+    ...req.query,
     mode: "author",
     type: "id",
     target: "" + req.user.id,
@@ -172,9 +173,10 @@ export const search = catchAsync(async (req, res, next) => {
   );
 
   req.query = {
-    ...helper.keepKeys(req.query, ["sort", "limit", "page"]),
+    ...helper.keepKeys(req.query, ["sort", "limit", "page", "fields","all"]),
     ...initQuery,
   };
+
   req.customQuery = forceQuery;
   req.count = initQuery;
 

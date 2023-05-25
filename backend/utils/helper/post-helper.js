@@ -8,6 +8,7 @@ import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";
 import * as categoryHelper from "../helper/category-helper.js";
 import Category from "../../module/category.js";
+import * as helper from "../helper/helper.js";
 import User from "../../module/user.js";
 
 export const isValidSearch = (query, allowType, allowMode) =>
@@ -40,13 +41,35 @@ export const getFullPosts = async (query, customQuery = {}) => {
 
   const forceQuery = {
     include: [
-      "Author",
+      {
+        model: User,
+        as: "Author",
+        attributes: {
+          exclude: [
+            "description",
+            "email",
+            "role",
+            "createdAt",
+            "updatedAt",
+            "updatePasswordAt",
+            "isEmailValidated",
+          ],
+        },
+      },
       "Category",
       { model: Tag, through: { attributes: [] } },
     ],
     ...customQuery,
   };
-  return getFeature.findAll(forceQuery);
+
+  let posts = await getFeature.findAll(forceQuery);
+  posts = posts
+    .map((el) => el.toJSON())
+    .map((el) => {
+      el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
+      return el;
+    });
+  return posts;
 };
 
 export const checkPostCategory = (category) => {
@@ -113,7 +136,7 @@ export const updatePostContentAndTags = async ({
       {
         title,
         content,
-        CategoryId
+        CategoryId,
       },
       { where: { id: postId }, transaction: t }
     );

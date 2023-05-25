@@ -1,6 +1,9 @@
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
 
+export const isURL = (input) =>
+  input.startsWith("https://") || input.startsWith("http://");
+
 export const toNaturalNumber = (input) => {
   let num = parseInt(input);
   if (isNaN(num) || num < 1) {
@@ -42,14 +45,12 @@ export const isNumber = (id) =>
 export const deepClone = (input) => JSON.parse(JSON.stringify(input));
 
 export const commandToS3Avatar = async (file, command) => {
-  if (file && !(file.startsWith("https://") || file.startsWith("http://"))) {
-    return command(file);
-  }
+  if (file && !isURL(file)) return command(file);
   return file;
 };
 
-export const getAvatarUrlFromS3 = async (file) =>
-  commandToS3Avatar(file, upload.getFileFromS3);
+// export const getAvatarUrlFromS3 = async (file) =>
+//   commandToS3Avatar(file, upload.getFileFromS3);
 
 export const deleteAvatarUrlFromS3 = async (file) =>
   commandToS3Avatar(file, upload.deleteFileFromS3);
@@ -57,7 +58,7 @@ export const deleteAvatarUrlFromS3 = async (file) =>
 export const setAvatarsUrlFromS3 = async (data) =>
   Promise.all(
     data.map(async (el) => {
-      if (el.avatar) el.avatar = await helper.getAvatarUrlFromS3(el.avatar);
+      if (el.avatar) el.avatar = helper.getImgUrlFromS3(el.avatar);
     })
   );
 
@@ -65,5 +66,5 @@ export const setAvatarsUrlFromS3 = async (data) =>
 
 export const deleteImgUrlFromS3 = async (file) => upload.deleteFileFromS3(file);
 
-export const getImgUrlFromS3 = async (file) =>
+export const getImgUrlFromS3 = (file) =>
   "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + file;
