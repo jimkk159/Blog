@@ -4,17 +4,22 @@ import * as authHelper from "../../utils/auth";
 //CSS
 import defaultImg from "../../assets/imgs/default.jpg";
 
-function Avatar({ className, onClick, avatar: img }) {
+function Avatar({ className, onClick, avatar: img, children }) {
   const token = authHelper.getAuthToken();
 
   const avatar = token && img ? img : defaultImg;
 
   return (
     <div
-      className={`overflow-hidden rounded-full ${className}`}
+      className={`relative ${className} overflow-hidden rounded-full after:inline-block after:h-0 after:w-full after:pt-[100%] after:align-top`}
       onClick={onClick}
     >
-      <img className="h-full w-full object-cover" src={avatar} alt="avatar" />
+      <img
+        className="absolute left-0 top-0 h-full w-full object-cover"
+        src={avatar}
+        alt="avatar"
+      />
+      {children}
     </div>
   );
 }

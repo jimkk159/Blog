@@ -1,24 +1,7 @@
-import { Form, Link, redirect } from "react-router-dom";
+import store from "../../store";
+import { redirect } from "react-router-dom";
 import * as authHelper from "../../utils/auth";
-
-function UpdatePassword() {
-  return (
-    <>
-      <Form method="post">
-        <label htmlFor="password">old password</label>
-        <input id="password" type="text" name="password" />
-        <label htmlFor="newPassword">new password</label>
-        <input id="newPassword" type="text" name="newPassword" />
-        <label htmlFor="confirmNewPassword">confirm new password</label>
-        <input id="confirmNewPassword" type="text" name="confirmNewPassword" />
-        <button>Save</button>
-      </Form>
-      <Link to="/profile">Cancel</Link>
-    </>
-  );
-}
-
-export default UpdatePassword;
+import { authActions } from "../../store/auth-slice";
 
 export async function action({ request }) {
   const data = await request.formData();
@@ -41,5 +24,8 @@ export async function action({ request }) {
       body: JSON.stringify(authData),
     }
   );
+
+  store.dispatch(authActions.logout());
+  localStorage.removeItem("token");
   return redirect("/");
 }

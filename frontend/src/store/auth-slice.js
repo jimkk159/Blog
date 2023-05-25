@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { action } from "../routes/pages/Profile";
 
 const initialState = {
   id: null,
@@ -18,11 +19,14 @@ const authSlice = createSlice({
       state.avatar = action.payload.avatar;
     },
     logout: (state) => {
-      state.id= null;
-      state.isRoot= false;
-      state.name= null;
-      state.avatar= null;
-    }
+      state.id = null;
+      state.isRoot = false;
+      state.name = null;
+      state.avatar = null;
+    },
+    updateAvatar: (state, action) => {
+      state.avatar = action.payload.avatar;
+    },
   },
 });
 

@@ -89,7 +89,7 @@ function Auth() {
             </div>
             <Link
               to="/forgot_password"
-              className="mx-2 my-2  text-left text-blue-400"
+              className="mx-2 my-2 text-left text-blue-400"
             >
               Forgot your password?
             </Link>

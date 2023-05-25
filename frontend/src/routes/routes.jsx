@@ -120,12 +120,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: SuspenseWrapper(<ProfilePage />),
-          },
-          {
-            path: "update",
-            element: SuspenseWrapper(<UpdateProfile />),
-            loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/UpdateProfile"),
+            action: lazyAction("./pages/Profile"),
           },
           {
             path: ":id",
@@ -135,7 +130,6 @@ const router = createBrowserRouter([
       },
       {
         path: "update_password",
-        element: SuspenseWrapper(<UpdatePassword />),
         loader: authHelper.checkAuthTokenLoader,
         action: lazyAction("./pages/UpdatePassword"),
       },

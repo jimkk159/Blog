@@ -8,6 +8,7 @@ import { BiFirstPage, BiLastPage } from "react-icons/bi";
 import usePagination, { DOTS } from "../../hooks/pagination-hook";
 
 function Pagination({
+  small,
   total = 0,
   limit = 15,
   sibling = 1,
@@ -47,12 +48,20 @@ function Pagination({
 
   if (current < 1 || paginationRange.length < 2) return null;
   return (
-    <ul className="flex w-full list-none justify-center p-4">
+    <ul
+      className={`flex w-full list-none justify-center ${
+        small ? "p-2" : "p-4"
+      }`}
+    >
       <li
-        className="mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
+        className={`${
+          small ? "" : "mx-2"
+        } my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide`}
         onClick={onFirst}
       >
-        <BiFirstPage className="h-[36px] w-[36px]" />
+        <BiFirstPage
+          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
+        />
       </li>
       <li
         className={
@@ -61,7 +70,9 @@ function Pagination({
         }
         onClick={onPrev}
       >
-        <MdNavigateBefore className="h-[36px] w-[36px]" />
+        <MdNavigateBefore
+          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
+        />
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
@@ -69,7 +80,7 @@ function Pagination({
             <li
               key={index}
               className={
-                "mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-2xl font-semibold leading-snug tracking-wide"
+                "font-sans mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center text-2xl font-semibold leading-snug tracking-wide"
               }
             >
               &#8230;
@@ -79,7 +90,9 @@ function Pagination({
         return (
           <li
             key={index}
-            className={`mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-sans text-2xl font-semibold leading-snug tracking-wide ${
+            className={`${
+              small ? "text-base " : "text-2xl "
+            } font-sans mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-semibold leading-snug tracking-wide ${
               pageNumber === current && "bg-slate-500"
             }`}
             onClick={() => onNavPage(pageNumber)}
@@ -91,17 +104,21 @@ function Pagination({
       <li
         className={
           "mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide" +
-          ` ${current === 1 && "pointer-events-none"}`
+          ` ${current === totalPage && "pointer-events-none"}`
         }
         onClick={onNext}
       >
-        <MdNavigateNext className="h-[36px] w-[36px]" />
+        <MdNavigateNext
+          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
+        />
       </li>
       <li
         className="mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
         onClick={onLast}
       >
-        <BiLastPage className="h-[36px] w-[36px]" />
+        <BiLastPage
+          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
+        />
       </li>
     </ul>
   );

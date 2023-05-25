@@ -93,22 +93,6 @@ function UpdateProfile() {
 
 export default UpdateProfile;
 
-export async function action({ request }) {
-  const token = authHelper.getAuthToken();
-  const data = await request.formData();
-  const userData = {
-    name: data.get("name"),
-    description: data.get("description"),
-  };
-
-  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/users/me`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token,
-    },
-    body: JSON.stringify(userData),
-  });
-
-  return redirect("/profile");
+export async function loader(){
+  return redirect("/profile")
 }
