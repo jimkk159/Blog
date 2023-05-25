@@ -155,7 +155,8 @@ export const login = catchAsync(async (req, res, next) => {
   authHelper.createTokenCookie(req, res, token);
 
   // 7) get Avatar
-  user.avatar = helper.getImgUrlFromS3(user.avatar);
+  if (user.avatar && !helper.isURL(user.avatar))
+    user.avatar = helper.getImgUrlFromS3(user.avatar);
 
   res.status(200).json({
     status: "success",

@@ -2,7 +2,7 @@ import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
 
 export const isURL = (input) =>
-  input.startsWith("https://") || input.startsWith("http://");
+  input && (input.startsWith("https://") || input.startsWith("http://"));
 
 export const toNaturalNumber = (input) => {
   let num = parseInt(input);

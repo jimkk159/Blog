@@ -55,7 +55,8 @@ export const updateOne = (Model) =>
 
     const data = await Model.findByPk(req.params.id, { raw: true });
     if (!data) throw errorTable.idNotFoundError();
-    if (data.avatar) data.avatar = helper.getImgUrlFromS3(data.avatar);
+    if (data.avatar && !helper.isURL(data.avatar))
+      data.avatar = helper.getImgUrlFromS3(data.avatar);
 
     res.status(200).json({
       status: "success",
@@ -69,7 +70,8 @@ export const deleteOne = (Model) =>
     if (!data) return res.status(204).json();
 
     // ToDo should roll back database and S3 when fail
-    if (data.avatar) await helper.deleteAvatarUrlFromS3(data.avatar);
+    if (data.avatar && !helper.isURL(data.avatar))
+      await helper.deleteAvatarUrlFromS3(data.avatar);
 
     await Model.destroy({ where: { id: req.params.id } });
     res.status(204).json();
