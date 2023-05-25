@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 
 import * as editHelper from "../utils/edit";
+import TagList from "../components/TagList";
 
 function PostEditor({ post, method }) {
   const inputRef = useRef(null);
@@ -163,6 +164,7 @@ function PostEditor({ post, method }) {
               Cancel
             </button>
           </div>
+          <TagList post={post} isClickable={false} />
         </Form>
       </div>
     </div>
