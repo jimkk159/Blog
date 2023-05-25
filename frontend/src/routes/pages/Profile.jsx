@@ -38,14 +38,14 @@ function Profile() {
           }
         );
 
-        const currentAvatar = (await resoponse.json()).data.avatar
+        const currentAvatar = (await resoponse.json()).data.avatar;
 
         dispatch(authActions.updateAvatar({ avatar: currentAvatar }));
-        
+
         window.location.reload();
       }
     },
-    [token]
+    [dispatch, token]
   );
 
   return (

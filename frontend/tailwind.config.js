@@ -20,14 +20,18 @@ module.exports = {
     plugins: [],
     fontFamily: {
       akaya: ["Akaya Telivigala", "cursive"],
+      "bree-serif": ["Bree Serif", "serif"],
       "dela-gothic-one": ["Dela Gothic One", "cursive"],
+      "dm-serif-display": ["DM Serif Display", "serif"],
+      "IBM-plex-serif": ["IBM Plex Serif", "serif"],
       "open-sans": ["Open Sans", "sans-serif"],
+      "pt-serif": ["PT Serif", "serif"],
       raleway: ["Raleway", "sans-serif"],
       roboto: ["Roboto", "sans-serif"],
       "roboto-condensed": ["Roboto Condensed", "sans-serif"],
       satify: ["Satisfy", "cursive"],
-      kanit:['Kanit', "sans-serif"],
-      "source-serif-pro":['Source Serif Pro', "serif"]
+      kanit: ["Kanit", "sans-serif"],
+      "source-serif-pro": ["Source Serif Pro", "serif"],
     },
   },
 };

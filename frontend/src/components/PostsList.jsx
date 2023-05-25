@@ -98,7 +98,7 @@ function PostList({
     );
 
   return (
-    <div className="inline-flex w-full flex-col justify-center">
+    <div className="inline-flex w-full flex-col justify-start">
       <ul className="w-full max-w-5xl">
         {posts.map((post, index) => {
           return (
@@ -146,7 +146,7 @@ function PostList({
               {isShowDescription && (
                 <MDEditor.Markdown
                   source={post.content}
-                  className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap text-justify"
+                  className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap text-justify border-2 p-2"
                 />
               )}
               {!isTagOnTopRight && <TagList post={post} />}
