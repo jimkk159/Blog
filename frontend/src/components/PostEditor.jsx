@@ -10,7 +10,7 @@ import {
 
 import * as editHelper from "../utils/edit";
 
-function PostEditor({ post }) {
+function PostEditor({ post, method }) {
   const inputRef = useRef(null);
   const titleRef = useRef(null);
   const editorRef = useRef(null);
@@ -59,16 +59,21 @@ function PostEditor({ post }) {
   const cancelHandler = (e) => {
     const alert = window.confirm("Are you sure to abandon and leave?");
     if (alert) {
-      navigate("/");
+      navigate(-1);
     }
   };
+
+  const postTitle = post?.title ? post.title : "";
   const postContent = post?.content ? post.content : "";
-  useEffect(() => setMarkdown(postContent), [postContent]);
+  useEffect(() => {
+    setTitle(postTitle);
+    setMarkdown(postContent);
+  }, [postTitle, postContent]);
 
   return (
     <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
       <div className="h-full w-full max-w-3xl rounded bg-white p-16 text-black">
-        <Form method="post">
+        <Form method={method}>
           <div className="pb-2">
             <textarea
               ref={titleRef}

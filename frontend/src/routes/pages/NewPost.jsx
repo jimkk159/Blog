@@ -8,7 +8,7 @@ function NewPost() {
 
 export default NewPost;
 
-export async function action({ request, params }) {
+export async function action({ request }) {
   const method = request.method;
   const data = await request.formData();
   const token = authHelper.getAuthToken();

@@ -1,5 +1,10 @@
 import * as authHelper from "../utils/auth";
 
+export const hasPermissionToPost = ({ auth, AuthorId }) => {
+  const token = authHelper.getAuthToken();
+  return token && (auth.role === "root" || AuthorId === auth.id);
+};
+
 export const uploadImg = async (img) => {
   const token = authHelper.getAuthToken();
 

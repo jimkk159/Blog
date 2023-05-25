@@ -1,8 +1,9 @@
 import Pagination from "./UI/Pagination";
 import MDEditor from "@uiw/react-md-editor";
-import { AiOutlineTag } from "react-icons/ai";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+import TagList from "./TagList";
+import TagListSmall from "./TagListSmall";
 import Avatar from "../components/UI/Avatar";
 
 const defaultPage = 1;
@@ -14,64 +15,6 @@ const formDate = (date) =>
     month: "short",
     day: "numeric",
   });
-
-function TagList({ post }) {
-  if (!post) return;
-  return (
-    <div className="text-md mt-2 flex items-center">
-      <AiOutlineTag className="mr-1 h-[20px] w-[20px]" />
-      <p className="m-1 flex min-w-[20px] cursor-pointer items-center rounded-2xl bg-gray-600 px-3 text-gray-50">
-        <Link
-          className="p-0.5 text-[4px]"
-          key="category"
-          to={`/search?mode=category&type=id&target=${post.Category.id}`}
-        >{`${post.Category && post.Category.name}`}</Link>
-      </p>
-      {post.Tags.filter((tag) => tag.name !== post.Category.name).map(
-        (tag, index) => (
-          <p className="m-1 flex min-w-[20px] cursor-pointer items-center rounded-2xl bg-gray-600 px-3 text-gray-50">
-            <Link
-              className="p-0.5 text-[4px]"
-              key={index}
-              to={`/search?mode=tag&type=id&target=${tag.id}`}
-            >
-              {tag.name}
-            </Link>
-          </p>
-        )
-      )}
-    </div>
-  );
-}
-
-function TagListSmall({ post }) {
-  if (!post) return;
-  return (
-    <div className="flex w-full justify-start text-xs">
-      <AiOutlineTag className="mr-1 h-4 w-4" />
-      <p className="mx-0.5 flex min-w-[10px] cursor-pointer items-center rounded-2xl bg-gray-600 px-3 text-gray-50">
-        <Link
-          className="text-[4px]"
-          key="category"
-          to={`/search?mode=category&type=id&target=${post.Category.id}`}
-        >{`${post.Category && post.Category.name}`}</Link>
-      </p>
-      {post.Tags.filter((tag) => tag.name !== post.Category.name).map(
-        (tag, index) => (
-          <p className="mx-0.5 flex min-w-[10px] cursor-pointer items-center rounded-2xl bg-gray-600 px-3 text-gray-50">
-            <Link
-              className="text-[4px]"
-              key={index}
-              to={`/search?mode=tag&type=id&target=${tag.id}`}
-            >
-              {tag.name}
-            </Link>
-          </p>
-        )
-      )}
-    </div>
-  );
-}
 
 function PostList({
   posts,
@@ -143,14 +86,13 @@ function PostList({
                 >
                   {`${post.title}`}
                 </p>
+                {isShowDescription && (
+                  <MDEditor.Markdown
+                    source={post.content}
+                    className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap border-2 p-2 text-justify"
+                  />
+                )}
               </Link>
-              <div className="w-full overflow-hidden rounded-xl bg-green-600"></div>
-              {isShowDescription && (
-                <MDEditor.Markdown
-                  source={post.content}
-                  className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap border-2 p-2 text-justify"
-                />
-              )}
               {!isTagOnTopRight && <TagList post={post} />}
             </li>
           );

@@ -3,7 +3,7 @@ import { defer, Outlet } from "react-router-dom";
 
 function PostsRoot() {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen w-full">
       <PostsNavigation />
       <Outlet />
     </div>

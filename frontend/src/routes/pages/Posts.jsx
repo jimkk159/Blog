@@ -12,11 +12,13 @@ function Posts() {
     setSearchParams({ page: nextPage, limit });
 
   return (
-    <PostsList
-      posts={posts}
-      total={relation.length}
-      onNavPage={navPageHandler}
-    />
+    <div className="w-2/3">
+      <PostsList
+        posts={posts}
+        total={relation.length}
+        onNavPage={navPageHandler}
+      />
+    </div>
   );
 }
 

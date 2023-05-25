@@ -33,7 +33,7 @@ function Root() {
 
   return (
     <div
-      className="min-h-screen bg-black text-white"
+      className="min-h-screen bg-black text-white w-full"
       style={{ backgroundImage: `url(${cubeImg})` }}
     >
       <MainNavigation />
