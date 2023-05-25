@@ -113,7 +113,7 @@ function PostList({
                   {isShowAuthor && (
                     <>
                       <Avatar
-                        className={"h-[28px] w-[28px]"}
+                        className={`h-[28px] w-[28px] cursor-pointer`}
                         avatar={post.Author.avatar}
                         onClick={() => navigate(`/profile/${post.Author.id}`)}
                       />
@@ -135,18 +135,20 @@ function PostList({
                   {isTagOnTopRight && <TagListSmall post={post} />}
                 </div>
               )}
-              <div
-                className={`truncate font-kanit font-bold ${
-                  small ? "py-0.5 text-base" : "py-1 text-xl "
-                }`}
-              >
-                <Link to={`/${post.id}`}>{`${post.title}`}</Link>
-              </div>
+              <Link to={`/${post.id}`}>
+                <p
+                  className={`truncate font-kanit font-bold ${
+                    small ? "py-0.5 text-base" : "py-1 text-xl "
+                  }`}
+                >
+                  {`${post.title}`}
+                </p>
+              </Link>
               <div className="w-full overflow-hidden rounded-xl bg-green-600"></div>
               {isShowDescription && (
                 <MDEditor.Markdown
                   source={post.content}
-                  className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap text-justify border-2 p-2"
+                  className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap border-2 p-2 text-justify"
                 />
               )}
               {!isTagOnTopRight && <TagList post={post} />}

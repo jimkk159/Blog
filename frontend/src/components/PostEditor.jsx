@@ -15,7 +15,7 @@ function PostEditor({ post }) {
   const titleRef = useRef(null);
   const editorRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
-  const [title, setTitle] = useState(null);
+  const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
 
@@ -80,12 +80,16 @@ function PostEditor({ post }) {
                 `h-[${titleHeigh}px] ` +
                 `w-full resize-none overflow-y-hidden border-b-2 border-gray-300 pl-1 font-pt-serif text-3xl outline-none `
               }
-              defaultValue={post ? post.title : null}
               placeholder="Untitle"
               value={title}
               onChange={titleChangeHandler}
             />
-            <textarea name="content" className="hidden" value={markdown} />
+            <textarea
+              name="content"
+              className="hidden"
+              value={markdown}
+              onChange={() => {}}
+            />
           </div>
           <div onDragEnter={startDragHandler} className="relative">
             <MDEditor

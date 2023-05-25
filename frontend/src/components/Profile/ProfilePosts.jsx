@@ -12,7 +12,7 @@ function ProfilePosts() {
     ? posts.data.slice((page - 1) * limit, limit + (page - 1) * limit - 1)
     : [];
   const navPageHandler = (nextPage) => setPage(nextPage);
-  
+
   return (
     <PostsList
       small={true}
