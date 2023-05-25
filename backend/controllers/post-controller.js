@@ -187,7 +187,7 @@ export const updateImage = catchAsync(async (req, res, next) => {
   let img;
   if (req.file) {
     img = await s3.uploadToS3(req.file);
-    img = await helper.getImgUrlFromS3(img);
+    img = helper.getImgUrlFromS3(img);
   }
 
   res.status(200).json({

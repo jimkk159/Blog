@@ -66,9 +66,11 @@ export const getFullPosts = async (query, customQuery = {}) => {
   posts = posts
     .map((el) => el.toJSON())
     .map((el) => {
-      el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
+      if (el.Author.avatar && !helper.isURL(el.Author.avatar))
+        el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
       return el;
     });
+
   return posts;
 };
 

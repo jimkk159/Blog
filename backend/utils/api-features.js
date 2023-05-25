@@ -46,6 +46,8 @@ export class GetFeatures {
       order = apiFeatureHelper.getQueryElements(this.query.sort);
       order = apiFeatureHelper.createSequelizeSort(order);
       this.sqlQuery = { ...this.sqlQuery, order };
+    } else {
+      this.sqlQuery = { ...this.sqlQuery, order: [["updatedAt", "DESC"]] };
     }
     return this;
   }

@@ -23,7 +23,7 @@ const Post = sequelize.define(
   {
     defaultScope: {
       attributes: {
-        exclude: ["createdAt", "updatedAt"],
+        exclude: ["createdAt"],
       },
     },
   }
