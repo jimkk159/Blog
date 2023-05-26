@@ -1,3 +1,4 @@
+import store from "../../store";
 import * as authHelper from "../../utils/auth";
 import { AwaitWrapper } from "../helper/Wrapper";
 import PostEditor from "../../components/PostEditor";
@@ -19,12 +20,13 @@ export async function action({ request, params }) {
   const method = request.method;
   const data = await request.formData();
   const token = authHelper.getAuthToken();
+  const tagId = store?.getState()?.tag?.tags.map((el) => el.id);
 
   const postData = {
     CategoryId: data.get("CategoryId"),
     title: data.get("title"),
     content: data.get("content"),
-    tagId: [],
+    tagId,
   };
 
   const postId = params.pid;
@@ -39,5 +41,6 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(postData),
   });
+
   return redirect(`/${params.pid}`);
 }

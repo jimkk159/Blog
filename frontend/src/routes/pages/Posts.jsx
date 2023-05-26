@@ -12,7 +12,7 @@ function Posts() {
     setSearchParams({ page: nextPage, limit });
 
   return (
-    <div className="w-2/3">
+    <div className="flex w-full items-center">
       <PostsList
         posts={posts}
         total={relation.length}

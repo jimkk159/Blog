@@ -12,14 +12,12 @@ function MainNavigation() {
   const avatar = useSelector((state) => state.auth.avatar);
 
   return (
-    <header className="items-center">
-      <nav className="lg mx-auto flex h-20 max-h-20 justify-between bg-navy-800 px-1 py-4">
-        <div className="">
-          <div className="min-w-20 relative ml-8 w-20">
-            <Link to="/" className="absolute -top-2">
-              <img src={logo} className="object-contain" alt="logo" />
-            </Link>
-          </div>
+    <header className="w-full items-center bg-blue-500">
+      <nav className="lg mx-auto flex h-20 max-h-20 w-full justify-between bg-navy-800 px-1 py-4">
+        <div className="min-w-20 relative ml-8 w-20">
+          <Link to="/" className="absolute -top-2">
+            <img src={logo} className="object-contain" alt="logo" />
+          </Link>
         </div>
         <div className="flex">
           <SearchBar />

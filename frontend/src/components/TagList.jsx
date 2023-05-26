@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
 import { AiOutlineTag } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
 
-function TagList({ post, title, isClickable = true }) {
+import TagsToolTip from "./TagsToolTip";
+import { tagActions } from "../store/tag-slice";
+import { useEffect } from "react";
+
+function TagList({ post, title, isEdit = false }) {
+  const dispatch = useDispatch();
+  const current = useSelector((state) => state.tag.tags);
+
   if (!post) return;
 
   let categoryTag = (
@@ -10,15 +18,19 @@ function TagList({ post, title, isClickable = true }) {
     </p>
   );
 
-  let otherTags = post.Tags.filter(
-    (tag) => tag.name !== post.Category.name
-  ).map((tag) => (
-    <p className="m-1 flex min-w-[20px] items-center rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
-      {tag.name}
-    </p>
-  ));
+  let otherTags = current
+    .filter((tag) => tag.name !== post.Category.name)
+    .map((tag, index) => (
+      <p
+        key={index}
+        onClick={() => dispatch(tagActions.remove({ id: tag.id }))}
+        className="m-1 flex min-w-[20px] items-center rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700"
+      >
+        {tag.name}
+      </p>
+    ));
 
-  if (isClickable) {
+  if (!isEdit) {
     categoryTag = (
       <Link
         title={title}
@@ -47,10 +59,11 @@ function TagList({ post, title, isClickable = true }) {
   }
 
   return (
-    <div className="text-md mt-2 flex items-center">
+    <div className="text-md mt-2 flex flex-wrap items-center">
       <AiOutlineTag className="mr-1 h-[20px] w-[20px]" />
       {categoryTag}
       {otherTags}
+      {isEdit && <TagsToolTip postTags={post.Tags} category={post.Category} />}
     </div>
   );
 }

@@ -10,8 +10,9 @@ import {
 
 import * as editHelper from "../utils/edit";
 import TagList from "../components/TagList";
+import { useSelector } from "react-redux";
 
-function PostEditor({ post, method }) {
+function PostEditor({ method, post }) {
   const inputRef = useRef(null);
   const titleRef = useRef(null);
   const editorRef = useRef(null);
@@ -133,7 +134,7 @@ function PostEditor({ post, method }) {
             <select
               id="CategoryId"
               name="CategoryId"
-              className="border text-base outline-none"
+              className="h-8 border text-base outline-none"
               defaultValue={post ? post.CategoryId : null}
             >
               {categories &&
@@ -164,8 +165,8 @@ function PostEditor({ post, method }) {
               Cancel
             </button>
           </div>
-          <TagList post={post} isClickable={false} />
         </Form>
+        <TagList post={post} isEdit={true} />
       </div>
     </div>
   );

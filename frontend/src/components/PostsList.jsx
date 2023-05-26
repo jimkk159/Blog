@@ -41,7 +41,7 @@ function PostList({
     );
 
   return (
-    <div className="inline-flex w-full flex-col justify-start">
+    <div className="inline-flex w-full flex-col items-center">
       <ul className="w-full max-w-5xl">
         {posts.map((post, index) => {
           return (
@@ -96,7 +96,10 @@ function PostList({
                 )}
               </Link>
               {!isTagOnTopRight && (
-                <TagList post={post} title="Search for this tag?" className={""} />
+                <TagList
+                  post={post}
+                  title="Search for this tag?"
+                />
               )}
             </li>
           );

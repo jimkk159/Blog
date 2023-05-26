@@ -1,0 +1,102 @@
+import { useRef, useState, useEffect } from "react";
+import { tagActions } from "../store/tag-slice";
+import { useRouteLoaderData } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
+import { useSelector, useDispatch } from "react-redux";
+
+function TagsToolTip({ postTags, category }) {
+  const inputRef = useRef(null);
+  const dispatch = useDispatch();
+  const [isEdit, setIsEdit] = useState(false);
+  const { tags } = useRouteLoaderData("relation");
+  const [searchTag, setSearchTag] = useState("");
+  const current = useSelector((state) => state.tag.tags);
+
+  const currentName = current && [
+    ...current.map((el) => el && el.name && el.name.toLowerCase()),
+    category.name,
+  ];
+
+  const choices =
+    currentName &&
+    tags
+      .filter(
+        (tag) =>
+          tag && !currentName.includes(tag.name && tag.name.toLowerCase())
+      )
+      .filter(
+        (tag) =>
+          tag &&
+          tag.name &&
+          (tag.name.startsWith(searchTag) || tag.name.endsWith(searchTag))
+      );
+
+  const inputChangeHandler = (e) => {
+    setSearchTag(e.target.value);
+  };
+
+  useEffect(() => {
+    dispatch(tagActions.update({ tags: postTags }));
+    return () => dispatch(tagActions.init());
+  }, [dispatch, postTags]);
+
+  return (
+    <div
+      className="relative"
+      onClick={(e) => {
+        e.stopPropagation();
+        setIsEdit((prev) => !prev);
+      }}
+    >
+      <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 pl-2 text-[4px] text-base text-gray-50 outline-none">
+        +
+      </p>
+      {
+        <CSSTransition
+          in={isEdit}
+          timeout={500}
+          className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-gray-200 bg-white shadow ring-1"
+          classNames={{
+            enter: "w-[200px] h-0",
+            enterActive:
+              "w-[200px] h-[150px] p-1.5 border-2 transition-all duration-500",
+            enterDone: "w-[200px] h-[150px] p-1.5 border-2",
+            exit: "w-[200px] h-[150px]",
+            exitActive: "w-0 h-0 transition-all duration-500",
+            exitDone: "w-0 h-0",
+          }}
+          mountOnEnter
+          unmountOnExit
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          <div className="relative h-full w-full px-1 py-0.5">
+            <input
+              ref={inputRef}
+              type="text"
+              className="m-0 w-full border-none pl-1 text-[14px] outline-none"
+              placeholder={"Search..."}
+              value={searchTag}
+              onChange={inputChangeHandler}
+            />
+            <hr className="mb-0 mt-0 w-full border-l-0 border-r-0" />
+            <div className={"h-full w-full"}>
+              {choices.map((el, index) => (
+                <p
+                  key={index}
+                  className="m-0.5 inline-block min-w-[20px] cursor-pointer items-center rounded-2xl bg-gray-600 px-2 text-[4px] text-gray-50 hover:bg-gray-700"
+                  onClick={() => dispatch(tagActions.add({ tag: el }))}
+                >
+                  {el.name}
+                </p>
+              ))}
+            </div>
+          </div>
+        </CSSTransition>
+      }
+    </div>
+  );
+}
+
+export default TagsToolTip;

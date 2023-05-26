@@ -13,9 +13,10 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 import { configureStore } from "@reduxjs/toolkit";
 
 // Slice
+import tag from "./tag-slice";
 import auth from "./auth-slice";
 
-const rootReducer = combineReducers({ auth }); // Combine reducer
+const rootReducer = combineReducers({ auth, tag }); // Combine reducer
 
 
 // Redux-Presist config
