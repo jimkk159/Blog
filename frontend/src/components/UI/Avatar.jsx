@@ -2,12 +2,13 @@ import React from "react";
 
 import defaultImg from "../../assets/imgs/default.jpg";
 
-function Avatar({ className, onClick, avatar: img, children }) {
+function Avatar({ title, className, onClick, avatar: img, children }) {
   const avatar = img ? img : defaultImg;
 
   return (
     <div
-      className={`relative ${className} overflow-hidden rounded-full after:inline-block after:h-0 after:w-full after:pt-[100%] after:align-top`}
+      title={title}
+      className={`relative overflow-hidden rounded-full after:inline-block after:h-0 after:w-full after:pt-[100%] after:align-top  ${className}`}
       onClick={onClick}
     >
       <img

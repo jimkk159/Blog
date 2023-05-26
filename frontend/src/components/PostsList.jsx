@@ -56,13 +56,15 @@ function PostList({
                   {isShowAuthor && (
                     <>
                       <Avatar
-                        className={`h-[28px] w-[28px] cursor-pointer`}
+                        title="To author profile"
+                        className={`h-[28px] w-[28px] cursor-pointer hover:bg-gray-950`}
                         avatar={post.Author.avatar}
                         onClick={() => navigate(`/profile/${post.Author.id}`)}
                       />
                       <Link
+                        title="To author profile"
                         to={`/profile/${post.Author.id}`}
-                        className="text-[14px] font-bold leading-none"
+                        className="text-[14px] font-bold leading-none hover:text-gray-800"
                       >
                         {`${post.Author.name}`}
                       </Link>
@@ -78,9 +80,9 @@ function PostList({
                   {isTagOnTopRight && <TagListSmall post={post} />}
                 </div>
               )}
-              <Link to={`/${post.id}`}>
+              <Link title="To post" to={`/${post.id}`}>
                 <p
-                  className={`truncate font-kanit font-bold ${
+                  className={`truncate font-kanit font-bold hover:text-gray-900 ${
                     small ? "py-0.5 text-base" : "py-1 text-xl "
                   }`}
                 >
@@ -93,7 +95,9 @@ function PostList({
                   />
                 )}
               </Link>
-              {!isTagOnTopRight && <TagList post={post} />}
+              {!isTagOnTopRight && (
+                <TagList post={post} title="Search for this tag?" className={""} />
+              )}
             </li>
           );
         })}
