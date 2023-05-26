@@ -1,13 +1,9 @@
 import React from "react";
-import * as authHelper from "../../utils/auth";
 
-//CSS
 import defaultImg from "../../assets/imgs/default.jpg";
 
 function Avatar({ className, onClick, avatar: img, children }) {
-  const token = authHelper.getAuthToken();
-
-  const avatar = token && img ? img : defaultImg;
+  const avatar = img ? img : defaultImg;
 
   return (
     <div

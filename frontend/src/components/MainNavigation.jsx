@@ -5,6 +5,7 @@ import SearchBar from "./SearchBar";
 import { useSelector } from "react-redux";
 
 import logo from "../assets/imgs/blog_logo.png";
+import defaultImg from "../assets/imgs/default.jpg";
 
 function MainNavigation() {
   const token = useRouteLoaderData("root");
@@ -35,7 +36,10 @@ function MainNavigation() {
               </li>
             )}
             <Link to={token ? "/profile" : "/auth?mode=login"}>
-              <Avatar className={"mx-4 h-[50px] w-[50px]"} avatar={avatar} />
+              <Avatar
+                className={"mx-4 h-[50px] w-[50px]"}
+                avatar={token ? avatar : defaultImg}
+              />
             </Link>
           </ul>
         </div>
