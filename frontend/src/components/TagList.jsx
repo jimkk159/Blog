@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import TagsToolTip from "./TagsToolTip";
 import { tagActions } from "../store/tag-slice";
-import { useEffect } from "react";
 
 function TagList({ post, title, isEdit = false }) {
   const dispatch = useDispatch();

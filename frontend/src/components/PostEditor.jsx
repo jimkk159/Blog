@@ -10,7 +10,6 @@ import {
 
 import * as editHelper from "../utils/edit";
 import TagList from "../components/TagList";
-import { useSelector } from "react-redux";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);

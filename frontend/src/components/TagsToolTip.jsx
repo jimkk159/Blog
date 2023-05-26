@@ -3,6 +3,7 @@ import { tagActions } from "../store/tag-slice";
 import { useRouteLoaderData } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
+import * as authHelper from "../utils/auth";
 
 function TagsToolTip({ postTags, category }) {
   const inputRef = useRef(null);
@@ -33,6 +34,30 @@ function TagsToolTip({ postTags, category }) {
 
   const inputChangeHandler = (e) => {
     setSearchTag(e.target.value);
+  };
+
+  const keyDownHandler = async (e) => {
+    if (e.key === "Enter") {
+      const token = authHelper.getAuthToken();
+      const name = e.target.value;
+      let response = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/tags",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ name }),
+        }
+      );
+      response = await response.json();
+      const tag = response.data;
+      tags.push(tag);
+      dispatch(tagActions.add({ tag }));
+      setSearchTag("");
+      setIsEdit(false);
+    }
   };
 
   useEffect(() => {
@@ -76,9 +101,10 @@ function TagsToolTip({ postTags, category }) {
               ref={inputRef}
               type="text"
               className="m-0 w-full border-none pl-1 text-[14px] outline-none"
-              placeholder={"Search..."}
+              placeholder={"Search/Create..."}
               value={searchTag}
               onChange={inputChangeHandler}
+              onKeyDown={keyDownHandler}
             />
             <hr className="mb-0 mt-0 w-full border-l-0 border-r-0" />
             <div className={"h-full w-full"}>
