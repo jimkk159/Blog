@@ -26,7 +26,21 @@ export const isUserAllowUpdatePost = (user, post) =>
 export const getFullPost = async (postId) =>
   Post.findByPk(postId, {
     include: [
-      "Author",
+      {
+        model: User,
+        as: "Author",
+        attributes: {
+          exclude: [
+            "description",
+            "email",
+            "role",
+            "createdAt",
+            "updatedAt",
+            "updatePasswordAt",
+            "isEmailValidated",
+          ],
+        },
+      },
       "Category",
       { model: Tag, through: { attributes: [] } },
     ],
@@ -200,9 +214,6 @@ export const getTitleySearchQueryByText = async (target) => {
 };
 
 export const getTagSearchQueryByText = async (target) => {
-  let initQuery = {};
-  let forceQuery = {};
-
   const tags = await Tag.findAll({
     where: {
       name: {
@@ -211,22 +222,27 @@ export const getTagSearchQueryByText = async (target) => {
     },
   });
 
-  // Get the target tags
-  forceQuery = {
+  const getFeature = new GetFeatures(Post, {})
+    .filter()
+    .sort()
+    .select()
+    .paginate();
+
+  const posts = await getFeature.findAll({
     include: [
-      "Author",
-      "Category",
       {
         model: Tag,
         where: { id: tags.map((tag) => tag.id) },
         through: { attributes: [] },
       },
     ],
-  };
-  return [initQuery, forceQuery];
+    raw: true,
+  });
+  const targetIds = posts.map((el) => el.id);
+  return [{}, { where: { id: { [Op.in]: targetIds } } }];
 };
 
-export const getSearchQueryById = (mode, target) => {
+export const getSearchQueryById = async (mode, target) => {
   switch (mode) {
     case "category":
       return [{ CategoryId: target }, {}];
@@ -235,20 +251,25 @@ export const getSearchQueryById = (mode, target) => {
       return [{ AuthorId: target }, {}];
 
     case "tag":
-      return [
-        {},
-        {
-          include: [
-            "Author",
-            "Category",
-            {
-              model: Tag,
-              where: { id: target },
-              through: { attributes: [] },
-            },
-          ],
-        },
-      ];
+      // The reason why for query two time is searching for tag will not return the complete tag inside the post
+      const getFeature = new GetFeatures(Post, {})
+        .filter()
+        .sort()
+        .select()
+        .paginate();
+
+      const posts = await getFeature.findAll({
+        include: [
+          {
+            model: Tag,
+            where: { id: target },
+            through: { attributes: [] },
+          },
+        ],
+        raw: true,
+      });
+      const targetIds = posts.map((el) => el.id);
+      return [{}, { where: { id: { [Op.in]: targetIds } } }];
   }
 };
 
@@ -269,6 +290,6 @@ export const getSearchQueryByText = async (mode, target) => {
 };
 
 export const getSearchQuery = async (mode, type, target) => {
-  if (type === "id") return getSearchQueryById(mode, target);
-  return getSearchQueryByText(mode, target);
+  if (type === "id") return await getSearchQueryById(mode, target);
+  return await getSearchQueryByText(mode, target);
 };

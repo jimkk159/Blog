@@ -173,7 +173,7 @@ export const search = catchAsync(async (req, res, next) => {
   );
 
   req.query = {
-    ...helper.keepKeys(req.query, ["sort", "limit", "page", "fields","all"]),
+    ...helper.keepKeys(req.query, ["sort", "limit", "page", "fields", "all"]),
     ...initQuery,
   };
 
