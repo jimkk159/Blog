@@ -65,12 +65,12 @@ function PostEditor({ method, post }) {
     }
   };
 
-  // const postTitle = post?.title ? post.title : "";
-  // const postContent = post?.content ? post.content : "";
-  // useEffect(() => {
-  //   setTitle(postTitle);
-  //   setMarkdown(postContent);
-  // }, [postTitle, postContent]);
+  const postTitle = post?.title ? post.title : "";
+  const postContent = post?.content ? post.content : "";
+  useEffect(() => {
+    setTitle(postTitle);
+    setMarkdown(postContent);
+  }, [postTitle, postContent]);
 
   return (
     <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
