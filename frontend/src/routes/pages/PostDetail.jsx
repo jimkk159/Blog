@@ -11,6 +11,7 @@ import * as authHelper from "../../utils/auth";
 import * as helper from "../../utils/helper";
 import { useSelector } from "react-redux";
 import TagList from "../../components/TagList";
+import Chapter from "../../components/Chapter";
 
 function PostDetail() {
   const submit = useSubmit();
@@ -26,49 +27,52 @@ function PostDetail() {
   return (
     <AwaitWrapper resolve={post}>
       {(loadPost) => (
-        <div className="flex min-h-[100%] w-2/3 justify-center px-8 py-12 ">
-          <div className="relative h-full w-full max-w-3xl rounded bg-white p-16 text-black">
-            <div className="pb-2">
-              <p
-                className={`w-full resize-none overflow-y-hidden border-b-2 border-gray-300 pl-1 font-pt-serif text-3xl outline-none `}
-              >
-                {loadPost.title}
-              </p>
-            </div>
-            <MDEditor.Markdown source={loadPost.content} />
-            <div className="my-8 flex justify-end font-pt-serif ">
-              {helper.hasPermissionToPost({
-                auth,
-                AuthorId: loadPost.AuthorId,
-              }) && (
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                  onClick={() => navigate("edit")}
+        <>
+          <div className="flex min-h-[100%] w-full justify-center px-8 py-12 ">
+            <div className="relative h-full w-full max-w-3xl rounded bg-white p-16 text-black">
+              <div className="pb-2">
+                <p
+                  className={`w-full resize-none overflow-y-hidden border-b-2 border-gray-300 pl-1 font-pt-serif text-3xl outline-none `}
                 >
-                  {isSubmitting ? "Submitting..." : "EDIT"}
-                </button>
-              )}
-              {helper.hasPermissionToPost({
-                auth,
-                AuthorId: loadPost.AuthorId,
-              }) && (
-                <button
-                  type="button"
-                  disabled={isSubmitting}
-                  onClick={startDeleteHandler}
-                  className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-                >
-                  DELETE
-                </button>
-              )}
+                  {loadPost.title}
+                </p>
+              </div>
+              <MDEditor.Markdown source={loadPost.content} />
+              <div className="my-8 flex justify-end font-pt-serif ">
+                {helper.hasPermissionToPost({
+                  auth,
+                  AuthorId: loadPost.AuthorId,
+                }) && (
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                    onClick={() => navigate("edit")}
+                  >
+                    {isSubmitting ? "Submitting..." : "EDIT"}
+                  </button>
+                )}
+                {helper.hasPermissionToPost({
+                  auth,
+                  AuthorId: loadPost.AuthorId,
+                }) && (
+                  <button
+                    type="button"
+                    disabled={isSubmitting}
+                    onClick={startDeleteHandler}
+                    className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
+                  >
+                    DELETE
+                  </button>
+                )}
+              </div>
+              <div className="absolute bottom-8 left-16">
+                <TagList post={loadPost} />
+              </div>
             </div>
-            <div className="absolute bottom-8 left-16">
-              <TagList post={loadPost} />
-            </div>
+            <Chapter post={loadPost} />
           </div>
-        </div>
+        </>
       )}
     </AwaitWrapper>
   );

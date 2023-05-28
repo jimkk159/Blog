@@ -1,5 +1,6 @@
-import PostsNavigation from "../../components/PostsNavigation";
 import { defer, Outlet } from "react-router-dom";
+
+import PostsNavigation from "../../components/PostsNavigation";
 
 function PostsRoot() {
   return (

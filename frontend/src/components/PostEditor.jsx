@@ -8,9 +8,9 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 
-import * as editHelper from "../utils/edit";
-import TagList from "./TagList";
 import Code from "./Plugins";
+import TagList from "./TagList";
+import * as editHelper from "../utils/edit";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -112,7 +112,7 @@ function PostEditor({ method, post }) {
                 // This will make the components lose efficacy
                 // rehypePlugins: [[rehypeSanitize]],
                 components: {
-                  code: Code
+                  code: Code,
                 },
               }}
               height={700}
