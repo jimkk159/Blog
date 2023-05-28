@@ -82,7 +82,7 @@ export default PostDetail;
 
 async function postLoader(id) {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${id}`
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/${id}`
   );
   const resJSON = await response.json();
   return resJSON.data;
@@ -100,7 +100,7 @@ export async function action({ params, request }) {
   const token = authHelper.getAuthToken();
 
   await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/${postId}`,
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/${postId}`,
     {
       method: request.method,
       headers: {

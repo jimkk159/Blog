@@ -12,7 +12,7 @@ export default PostsRelationRoot;
 
 async function categoryLoader() {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/categories"
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/categories"
   );
   const resJSON = await response.json();
   return resJSON.data;
@@ -20,7 +20,7 @@ async function categoryLoader() {
 
 async function postRelationLoader() {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/relation`
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/relation`
   );
 
   const resJSON = await response.json();
@@ -29,7 +29,7 @@ async function postRelationLoader() {
 
 async function tagLoader() {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/tags"
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/tags"
   );
 
   const resJSON = await response.json();

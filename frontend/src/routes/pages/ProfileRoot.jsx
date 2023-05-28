@@ -11,7 +11,7 @@ async function selfAuthorLoader() {
   const token = authHelper.getAuthToken();
 
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/users/me`,
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`,
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -28,7 +28,7 @@ async function selfpostsLoader() {
 
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/blog/posts/me?fields=updatedAt,-content,-AuthorId&all=1`,
+      `/api/v1/posts/me?fields=updatedAt,-content,-AuthorId&all=1`,
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -45,7 +45,7 @@ async function selfpostsLoader() {
 
 async function authorLoader(uid) {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/users/${uid}`
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/${uid}`
   );
 
   const resJSON = await response.json();
@@ -55,7 +55,7 @@ async function authorLoader(uid) {
 async function postsLoader(uid) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/blog/posts/search?mode=author&type=id&target=${uid}&fields=updatedAt`
+      `/api/v1/posts/search?mode=author&type=id&target=${uid}&fields=updatedAt`
   );
   const resJSON = await response.json();
   return {

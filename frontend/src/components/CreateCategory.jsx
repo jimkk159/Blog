@@ -70,7 +70,7 @@ function CreateCategory({ onClose }) {
       event.stopPropagation();
       if (name) {
         await fetch(
-          process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/categories`,
+          process.env.REACT_APP_BACKEND_URL + `/api/v1/categories`,
           {
             method: "POST",
             headers: {

@@ -20,7 +20,7 @@ export async function action({ request }) {
     tagId: [],
   };
 
-  const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts";
+  const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts";
   const response = await fetch(url, {
     method: method,
     headers: {

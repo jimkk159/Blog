@@ -12,7 +12,7 @@ export const uploadImg = async (img) => {
   imgForm.append("img", img);
 
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/posts/img`,
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/img`,
     {
       method: "POST",
       headers: { Authorization: "Bearer " + token },

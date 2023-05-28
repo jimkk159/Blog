@@ -16,7 +16,7 @@ export default PostsRoot;
 async function postsLoader({ page, limit }) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/blog/posts?page=${page}&limit=${limit}&fields=updatedAt`
+      `/api/v1/posts?page=${page}&limit=${limit}&fields=updatedAt`
   );
 
   const resJSON = await response.json();

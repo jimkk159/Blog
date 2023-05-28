@@ -41,7 +41,7 @@ function TagsToolTip({ postTags, category }) {
       const token = authHelper.getAuthToken();
       const name = e.target.value;
       let response = await fetch(
-        process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/tags",
+        process.env.REACT_APP_BACKEND_URL + "/api/v1/tags",
         {
           method: "POST",
           headers: {

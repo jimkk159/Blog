@@ -11,7 +11,7 @@ function Auth() {
   const googleHandler = useCallback((event) => {
     event.preventDefault();
     window.open(
-      `${process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/oauth/google"}`,
+      `${process.env.REACT_APP_BACKEND_URL + "/api/v1/oauth/google"}`,
       "Login Google",
       `left=${window.innerWidth / 3}, top=100, width=400, height=500`
     );
@@ -96,7 +96,7 @@ function Auth() {
           </>
         )}
         {isSignup && (
-          <div className="flex items-center justify-center py-4 text-base">
+          <div className="flex items-center justify-start py-4 px-2 text-base">
             <p>Already has an account?</p>
             <Link to={"/auth?mode=login"} className="mx-4 text-blue-400">
               Login
@@ -123,7 +123,7 @@ export async function action({ request }) {
   };
 
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/auth/` + mode,
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/auth/` + mode,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },

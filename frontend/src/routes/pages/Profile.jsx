@@ -30,7 +30,7 @@ function Profile() {
         avatarForm.append("avatar", avatar);
 
         const resoponse = await fetch(
-          process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/users/avatar",
+          process.env.REACT_APP_BACKEND_URL + "/api/v1/users/avatar",
           {
             method: "PATCH",
             headers: { Authorization: "Bearer " + token },
@@ -114,7 +114,7 @@ export async function action({ request }) {
     description: data.get("description"),
   };
 
-  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/users/me`, {
+  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

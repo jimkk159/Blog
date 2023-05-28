@@ -38,7 +38,7 @@ function UpdateProfile() {
       avatarData.append("avatar", avatar);
 
       await fetch(
-        process.env.REACT_APP_BACKEND_URL + `/api/v1/blog/users/avatar`,
+        process.env.REACT_APP_BACKEND_URL + `/api/v1/users/avatar`,
         {
           method: "PATCH",
           headers: { Authorization: "Bearer " + token },

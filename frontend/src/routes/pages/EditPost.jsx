@@ -31,7 +31,7 @@ export async function action({ request, params }) {
 
   const postId = params.pid;
   const url =
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/posts/" + postId;
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/posts/" + postId;
 
   await fetch(url, {
     method: method,

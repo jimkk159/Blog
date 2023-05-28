@@ -45,7 +45,7 @@ async function postsLoader({ mode, type, target, page, limit }) {
 
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/blog/posts/search?mode=${mode}&type=${type}&target=${target}` +
+      `/api/v1/posts/search?mode=${mode}&type=${type}&target=${target}` +
       `&page=${page ? page : defaultPage}&limit=${limit ? limit : defaultLimit}`
   );
 

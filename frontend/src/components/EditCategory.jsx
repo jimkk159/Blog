@@ -72,7 +72,7 @@ function EditCategory({ current, onClose }) {
       if (!!parentName) {
         await fetch(
           process.env.REACT_APP_BACKEND_URL +
-            `/api/v1/blog/categories/${categoryId}`,
+            `/api/v1/categories/${categoryId}`,
           {
             method: "PATCH",
             headers: {
@@ -92,7 +92,7 @@ function EditCategory({ current, onClose }) {
   const deleteHandler = useCallback(async () => {
     await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `/api/v1/blog/categories/${categoryId}`,
+        `/api/v1/categories/${categoryId}`,
       {
         method: "DELETE",
         headers: {

@@ -14,7 +14,7 @@ export async function action({ request }) {
   };
 
   await fetch(
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/blog/auth/updatePassword",
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/auth/updatePassword",
     {
       method: "PATCH",
       headers: {
