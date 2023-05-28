@@ -22,6 +22,7 @@ import oauthRouters from "../routes/oauth-routes.js";
 import usersRouters from "../routes/user-routes.js";
 import postsRouters from "../routes/post-routes.js";
 import tagsRouters from "../routes/tag-routes.js";
+import aboutRouters from "../routes/about-routes.js";
 import categoriesRouters from "../routes/category-routes.js";
 import otherRoutes from "../routes/other-routes.js";
 
@@ -107,6 +108,7 @@ app.use(host + "/users", usersRouters);
 app.use(host + "/posts", postsRouters);
 app.use(host + "/tags", tagsRouters);
 app.use(host + "/categories", categoriesRouters);
+app.use(host + "/about", aboutRouters);
 app.use(host, otherRoutes);
 
 //Compress response bodies
