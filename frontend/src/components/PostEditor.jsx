@@ -1,5 +1,5 @@
 import MDEditor from "@uiw/react-md-editor";
-import rehypeSanitize from "rehype-sanitize";
+// import rehypeSanitize from "rehype-sanitize";
 import { useRef, useEffect, useState, useCallback } from "react";
 import {
   Form,
@@ -9,7 +9,8 @@ import {
 } from "react-router-dom";
 
 import * as editHelper from "../utils/edit";
-import TagList from "../components/TagList";
+import TagList from "./TagList";
+import Code from "./Plugins";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -64,12 +65,12 @@ function PostEditor({ method, post }) {
     }
   };
 
-  const postTitle = post?.title ? post.title : "";
-  const postContent = post?.content ? post.content : "";
-  useEffect(() => {
-    setTitle(postTitle);
-    setMarkdown(postContent);
-  }, [postTitle, postContent]);
+  // const postTitle = post?.title ? post.title : "";
+  // const postContent = post?.content ? post.content : "";
+  // useEffect(() => {
+  //   setTitle(postTitle);
+  //   setMarkdown(postContent);
+  // }, [postTitle, postContent]);
 
   return (
     <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
@@ -104,9 +105,17 @@ function PostEditor({ method, post }) {
               onChange={setMarkdown}
               commands={editHelper.editChoice(inputRef)}
               preview="edit"
-              previewOptions={{
-                rehypePlugins: [[rehypeSanitize]],
+              textareaProps={{
+                placeholder: "Tell about your story...",
               }}
+              previewOptions={{
+                // This will make the components lose efficacy
+                // rehypePlugins: [[rehypeSanitize]],
+                components: {
+                  code: Code
+                },
+              }}
+              height={700}
             />
             {isDrag && (
               <div
