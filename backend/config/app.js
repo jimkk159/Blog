@@ -101,7 +101,7 @@ app.use(
 );
 
 //Route
-const host = "/api/v1/blog";
+const host = "/api/v1";
 app.use(host + "/auth", authRouters);
 app.use(host + "/oauth", oauthRouters);
 app.use(host + "/users", usersRouters);
