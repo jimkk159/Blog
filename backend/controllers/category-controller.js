@@ -6,7 +6,7 @@ import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as categoryHelper from "../utils/helper/category-helper.js";
 
-const init = async () => {
+export const init = async () => {
   try {
     await Category.findOrCreate({
       where: { name: "root" },

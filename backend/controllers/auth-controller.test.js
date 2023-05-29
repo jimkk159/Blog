@@ -11,7 +11,9 @@ import * as shareController from "./share-controller";
 const testID = "testID";
 const testHost = "testHost";
 const token = "testToken";
+const role = "testRole";
 const avatar = "testAvatar";
+const s3Avatar = "testS3Avatar";
 const localProvider = "local";
 const filePath = "testFilePath";
 const testEmail = "test@test.com";
@@ -537,12 +539,14 @@ describe("login()", () => {
   let req, res, next, error;
   beforeAll(() => {
     next = vi.fn();
+    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     vi.spyOn(User, "findOne").mockImplementation(async () => {});
     vi.spyOn(Auth, "findOne").mockImplementation(async () => {});
     vi.spyOn(authHelper, "validatePassword").mockImplementation(async () => {});
     vi.spyOn(authHelper, "generateToken").mockImplementation(() => {});
     vi.spyOn(authHelper, "createTokenCookie").mockImplementation(() => {});
-    vi.spyOn(helper, "getAvatarUrlFromS3").mockImplementation(async () => {});
+    vi.spyOn(helper, "isURL").mockImplementation(() => {});
+    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(() => {});
   });
 
   beforeEach(() => {
@@ -602,7 +606,6 @@ describe("login()", () => {
     }));
 
     await authController.login(req, res, next);
-    error = next.mock.calls[0][0];
 
     expect(authHelper.validatePassword).toHaveBeenLastCalledWith(
       req.body.password,
@@ -610,23 +613,7 @@ describe("login()", () => {
     );
   });
 
-  test("should verify password by password from request and encrypt password from database", async () => {
-    req = { body: { email: testEmail, password: testPassword } };
-    User.findOne.mockResolvedValueOnce({ id: 1, isEmailValidated: true });
-    Auth.findOne.mockImplementationOnce(async () => ({
-      password: testHashPassword,
-    }));
-
-    await authController.login(req, res, next);
-    error = next.mock.calls[0][0];
-
-    expect(authHelper.validatePassword).toHaveBeenLastCalledWith(
-      req.body.password,
-      testHashPassword
-    );
-  });
-
-  test("should generate token by user id and emai", async () => {
+  test("should generate token by user id and email", async () => {
     const userInfo = {
       id: testID,
       email: testEmail,
@@ -639,7 +626,6 @@ describe("login()", () => {
     }));
 
     await authController.login(req, res, next);
-    error = next.mock.calls[0][0];
 
     expect(authHelper.generateToken).toHaveBeenLastCalledWith(
       userInfo.id,
@@ -648,6 +634,29 @@ describe("login()", () => {
   });
 
   test("should create cookie by req, res, token", async () => {
+    const userInfo = {
+      id: 1,
+      email: testEmail,
+      avatar,
+      isEmailValidated: true,
+    };
+    req = { body: { email: testEmail, password: testPassword } };
+    User.findOne.mockResolvedValueOnce(userInfo);
+    Auth.findOne.mockImplementationOnce(async () => ({
+      password: testHashPassword,
+    }));
+    authHelper.generateToken.mockImplementationOnce(() => token);
+
+    await authController.login(req, res, next);
+
+    expect(authHelper.createTokenCookie).toHaveBeenLastCalledWith(
+      req,
+      res,
+      token
+    );
+  });
+
+  test("should return origin avatar even if the user avatar does not exist", async () => {
     const userInfo = {
       id: 1,
       email: testEmail,
@@ -661,20 +670,75 @@ describe("login()", () => {
     authHelper.generateToken.mockImplementationOnce(() => token);
 
     await authController.login(req, res, next);
-    error = next.mock.calls[0][0];
 
-    expect(authHelper.createTokenCookie).toHaveBeenLastCalledWith(
-      req,
-      res,
-      token
-    );
+    expect(res.status).toHaveBeenLastCalledWith(200);
+    expect(res.json).toHaveBeenLastCalledWith({
+      status: "success",
+      message: "Login successfully",
+      token,
+      data: { id: userInfo.id, name: userInfo.name },
+    });
   });
 
-  test.only("should response if login successfully", async () => {
+  test("should return origin avatar if the user avatar is an url", async () => {
+    const userInfo = {
+      id: 1,
+      email: testEmail,
+      isEmailValidated: true,
+      avatar,
+    };
+    req = { body: { email: testEmail, password: testPassword } };
+    User.findOne.mockResolvedValueOnce(userInfo);
+    Auth.findOne.mockImplementationOnce(async () => ({
+      password: testHashPassword,
+    }));
+    authHelper.generateToken.mockImplementationOnce(() => token);
+    helper.isURL.mockImplementationOnce(() => true);
+
+    await authController.login(req, res, next);
+
+    expect(res.status).toHaveBeenLastCalledWith(200);
+    expect(res.json).toHaveBeenLastCalledWith({
+      status: "success",
+      message: "Login successfully",
+      token,
+      data: { id: userInfo.id, name: userInfo.name, avatar: userInfo.avatar },
+    });
+  });
+
+  test("should replace the avatar file by the amazon s3 file url if the avatar is exist and not an url", async () => {
+    const userInfo = {
+      id: 1,
+      email: testEmail,
+      isEmailValidated: true,
+      avatar,
+    };
+    req = { body: { email: testEmail, password: testPassword } };
+    User.findOne.mockResolvedValueOnce(userInfo);
+    Auth.findOne.mockImplementationOnce(async () => ({
+      password: testHashPassword,
+    }));
+    authHelper.generateToken.mockImplementationOnce(() => token);
+    helper.isURL.mockImplementationOnce(() => false);
+    helper.getImgUrlFromS3.mockImplementationOnce(() => s3Avatar);
+
+    await authController.login(req, res, next);
+
+    expect(res.status).toHaveBeenLastCalledWith(200);
+    expect(res.json).toHaveBeenLastCalledWith({
+      status: "success",
+      message: "Login successfully",
+      token,
+      data: { id: userInfo.id, name: userInfo.name, avatar: s3Avatar },
+    });
+  });
+
+  test("should response if login successfully", async () => {
     const userInfo = {
       id: testID,
       name: "Tom",
       avatar,
+      role,
       isEmailValidated: true,
     };
     req = { body: { email: testEmail, password: testPassword } };
@@ -692,7 +756,12 @@ describe("login()", () => {
       status: "success",
       message: "Login successfully",
       token,
-      data: { id: userInfo.id, name: userInfo.name, avatar: userInfo.avatar },
+      data: {
+        id: userInfo.id,
+        name: userInfo.name,
+        role: userInfo.role,
+        avatar: userInfo.avatar,
+      },
     });
   });
 });

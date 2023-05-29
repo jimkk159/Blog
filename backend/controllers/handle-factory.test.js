@@ -61,7 +61,6 @@ describe("getAll()", () => {
       select,
       paginate,
     }));
-    return { GetFeatures };
   });
 
   beforeEach(() => {

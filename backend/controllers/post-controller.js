@@ -21,7 +21,6 @@ export const getOne = catchAsync(async (req, res, next) => {
 export const getAllTitle = catchAsync(async (req, res, next) => {
   req.query = { fields: "-content,-AuthorId" };
   const getFeature = new GetFeatures(Post, req.query).select();
-
   const data = await getFeature.findAll({ raw: true });
 
   const total = await Post.count({ where: req.count });

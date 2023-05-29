@@ -12,8 +12,8 @@ export class GetFeatures {
     return this.Model.findAll({ ...this.sqlQuery, ...queryString }, options);
   }
 
-  count(queryString) {
-    return this.query.count({ ...this.sqlQuery, ...queryString }, options);
+  async count(queryString, options) {
+    return this.Model.count({ ...this.sqlQuery, ...queryString }, options);
   }
 
   filter() {

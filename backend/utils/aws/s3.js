@@ -5,11 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
+  // GetObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const MIME_TYPE_MAP = {
   "image/png": "png",
@@ -19,7 +19,7 @@ const MIME_TYPE_MAP = {
   "image/gif": "gif",
 };
 
-const s3 = new S3Client({
+export const s3 = new S3Client({
   credentials: {
     accessKeyId: process.env.AWS_BUCKET_ACCESS_KEY,
     secretAccessKey: process.env.AWS_BUCKET_SECRECT_ACCESS_KEY,
@@ -45,18 +45,18 @@ export async function uploadToS3(file) {
 }
 
 // get file from S3
-export async function getFileFromS3(fileName) {
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: fileName,
-  };
+// export async function getFileFromS3(fileName) {
+//   const params = {
+//     Bucket: process.env.AWS_BUCKET_NAME,
+//     Key: fileName,
+//   };
 
-  const command = new GetObjectCommand(params);
-  // const url = await getSignedUrl(s3, command, { expiresIn: 2 * 24 * 60 * 60 });
-  const url = await getSignedUrl(s3, command, { expiresIn: 2 * 24 * 60 * 60 });
+//   const command = new GetObjectCommand(params);
+//   // const url = await getSignedUrl(s3, command, { expiresIn: 2 * 24 * 60 * 60 });
+//   const url = await getSignedUrl(s3, command, { expiresIn: 2 * 24 * 60 * 60 });
 
-  return url;
-}
+//   return url;
+// }
 
 // delete file from S3
 export async function deleteFileFromS3(fileName) {
@@ -64,7 +64,8 @@ export async function deleteFileFromS3(fileName) {
     Bucket: process.env.AWS_BUCKET_NAME,
     Key: fileName,
   };
-
+  
   const command = new DeleteObjectCommand(params);
+
   await s3.send(command);
 }

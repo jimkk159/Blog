@@ -2,7 +2,7 @@ import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
 
 export const isURL = (input) =>
-  input && (input.startsWith("https://") || input.startsWith("http://"));
+  !!(input && (input.startsWith("https://") || input.startsWith("http://")));
 
 export const toNaturalNumber = (input) => {
   let num = parseInt(input);
@@ -53,7 +53,7 @@ export const commandToS3Avatar = async (file, command) => {
 //   commandToS3Avatar(file, upload.getFileFromS3);
 
 export const deleteAvatarUrlFromS3 = async (file) =>
-  commandToS3Avatar(file, upload.deleteFileFromS3);
+  helper.commandToS3Avatar(file, upload.deleteFileFromS3);
 
 export const setAvatarsUrlFromS3 = async (data) =>
   Promise.all(

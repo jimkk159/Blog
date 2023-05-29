@@ -7,6 +7,7 @@ import * as errorTable from "../error/error-table";
 import * as categoryHelper from "../helper/category-helper";
 import { beforeAll, describe, expect } from "vitest";
 import sequelize from "../../config/db-init";
+import User from "../../module/user";
 
 describe("isUserAllowUpdatePost()", () => {
   test("should return true if user role is root", () => {
@@ -66,7 +67,21 @@ describe("getFullPost()", () => {
 
     expect(Post.findByPk).toHaveBeenLastCalledWith(postId, {
       include: [
-        "Author",
+        {
+          model: User,
+          as: "Author",
+          attributes: {
+            exclude: [
+              "description",
+              "email",
+              "role",
+              "createdAt",
+              "updatedAt",
+              "updatePasswordAt",
+              "isEmailValidated",
+            ],
+          },
+        },
         "Category",
         { model: Tag, through: { attributes: [] } },
       ],
@@ -140,7 +155,21 @@ describe("getFullPosts()", () => {
     let error;
     const customQuery = {
       include: [
-        "Author",
+        {
+          model: User,
+          as: "Author",
+          attributes: {
+            exclude: [
+              "description",
+              "email",
+              "role",
+              "createdAt",
+              "updatedAt",
+              "updatePasswordAt",
+              "isEmailValidated",
+            ],
+          },
+        },
         "Category",
         { model: Tag, through: { attributes: [] } },
       ],

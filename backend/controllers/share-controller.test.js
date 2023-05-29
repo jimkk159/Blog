@@ -23,10 +23,12 @@ describe("validation()", () => {
   });
 
   test("should throw error if there is an error during validation", () => {
+    const errors = ["testError1", "testError2"]
     validationResult.mockImplementationOnce(() => ({
       isEmpty() {
         return false;
       },
+      errors,
     }));
 
     try {
@@ -35,7 +37,7 @@ describe("validation()", () => {
       error = err;
     }
 
-    expect(error).toEqual(errorTable.validateError());
+    expect(error).toEqual(errorTable.validateError(errors));
     expect(next).toHaveBeenCalledTimes(0);
   });
 

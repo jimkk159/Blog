@@ -15,6 +15,39 @@ describe("Class:GetFeatures", () => {
     expect(getFeatures.sqlQuery).toEqual({});
   });
 
+  describe("findAll()", () => {
+    test("should Model findAll the data by query and options", async () => {
+      const Model = { findAll: vi.fn() };
+      const query = { id: { gte: "1" } };
+      const queryString = { key: "testQueryString" };
+      const options = { key: "testOptions" };
+
+      const getFeatures = new GetFeatures(Model, query);
+      await getFeatures.findAll(queryString, options);
+
+      expect(getFeatures.query).toEqual(query);
+      expect(Model.findAll).toHaveBeenLastCalledWith(
+        { ...queryString },
+        options
+      );
+    });
+  });
+
+  describe("count()", () => {
+    test("should Model count the data by query", async () => {
+      const Model = { count: vi.fn() };
+      const query = { id: { gte: "1" } };
+      const queryString = { key: "testQueryString" };
+      const options = { key: "testOptions" };
+
+      const getFeatures = new GetFeatures(Model, query);
+      getFeatures.count(queryString, options);
+
+      expect(getFeatures.query).toEqual(query);
+      expect(Model.count).toHaveBeenLastCalledWith({ ...queryString }, options);
+    });
+  });
+
   describe("filter()", () => {
     test.each([{ id: "1" }, { name: "Tom" }])(
       "should get obj key key equals target value if obj key equals target value",
@@ -79,7 +112,7 @@ describe("Class:GetFeatures", () => {
       const getFeatures = new GetFeatures(Model, query).sort();
 
       expect(getFeatures.query).toEqual(query);
-      expect(getFeatures.sqlQuery).toEqual({});
+      expect(getFeatures.sqlQuery).toEqual({ order: [["updatedAt", "DESC"]] });
     });
 
     test("should get obj with order if query.sort is provided", () => {
@@ -109,7 +142,7 @@ describe("Class:GetFeatures", () => {
       expect(getFeatures.sqlQuery).toEqual({});
     });
 
-    test("should get obj with attributes if positive fields are provided", () => {
+    test("should get obj with attributes if fields are provided", () => {
       const Model = "Model";
       const query = { fields: "A,B,-C" };
 
@@ -117,19 +150,10 @@ describe("Class:GetFeatures", () => {
 
       expect(getFeatures.query).toEqual(query);
       expect(getFeatures.sqlQuery).toEqual({
-        attributes: ["A", "B"],
-      });
-    });
-
-    test("should get obj with exclude if positive fields are not provided and negative fields are provided", () => {
-      const Model = "Model";
-      const query = { fields: "-A,-B" };
-
-      const getFeatures = new GetFeatures(Model, query).select();
-
-      expect(getFeatures.query).toEqual(query);
-      expect(getFeatures.sqlQuery).toEqual({
-        attributes: { exclude: ["A", "B"] },
+        attributes: {
+          include: ["A", "B"],
+          exclude: ["C"],
+        },
       });
     });
   });
@@ -163,6 +187,16 @@ describe("Class:GetFeatures", () => {
 
       expect(getFeatures.query).toEqual(query);
       expect(getFeatures.sqlQuery).toEqual({ offset: 0, limit: 20 });
+    });
+
+    test("should return all the data if req.all is true", () => {
+      const Model = "Model";
+      const query = { all: 1 };
+
+      const getFeatures = new GetFeatures(Model, query).paginate();
+
+      expect(getFeatures.query).toEqual(query);
+      expect(getFeatures.sqlQuery).toEqual({});
     });
 
     test("should change paginate page and limit if req.offset and req.limit are provided", () => {

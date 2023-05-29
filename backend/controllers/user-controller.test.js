@@ -1,5 +1,6 @@
-import * as errorTable from "../utils/error/error-table";
+import * as s3 from "../utils/aws/s3";
 import * as userController from "./user-controller";
+import * as errorTable from "../utils/error/error-table";
 
 describe("setHasValidate()", () => {
   let req, res, next;
@@ -89,6 +90,14 @@ describe("updateMe()", () => {
     expect(error).toEqual(errorTable.notAllowUpdateEmailError());
   });
 
+  test("should remove the update information for avatar", async () => {
+    req.body = { avatar: "Test" };
+
+    await userController.updateMe(req, res, next);
+
+    expect(req.body.avatar).toBeUndefined();
+  });
+
   test("should has property if set update information successfully!", async () => {
     req = {
       user: { id: "testID" },
@@ -101,5 +110,50 @@ describe("updateMe()", () => {
 
     expect(req.params.id).toBe("testID");
     expect(next).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("updateAvatar()", () => {
+  let req, res, next, error;
+
+  beforeAll(() => {
+    next = vi.fn();
+    vi.spyOn(s3, "uploadToS3").mockImplementation(() => {});
+  });
+
+  beforeEach(() => {
+    req = {};
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should not upload the request file to aws S3 if file doest not exist", async () => {
+    req = { params: {}, user: { id: "testId" } };
+
+    await userController.updateAvatar(req, res, next);
+
+    expect(s3.uploadToS3).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
+  });
+
+  test("should upload the request file to aws S3", async () => {
+    req = { params: {}, user: { id: "testId" }, file: vi.fn() };
+
+    await userController.updateAvatar(req, res, next);
+
+    expect(s3.uploadToS3).toHaveBeenCalledWith(req.file);
+    expect(next).toHaveBeenCalled();
+  });
+
+  test("should update the avatar information into the body after upload to the s3", async () => {
+    req = { params: {}, user: { id: "testId" }, file: vi.fn() };
+    s3.uploadToS3.mockImplementation(async () => "testAvatar");
+
+    await userController.updateAvatar(req, res, next);
+
+    expect(req.body).toEqual({ avatar: "testAvatar" });
   });
 });

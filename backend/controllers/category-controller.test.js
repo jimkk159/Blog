@@ -1,8 +1,43 @@
 import Category from "../module/category";
+import sequelize from "../config/db-init.js";
 import * as helper from "../utils/helper/helper";
 import * as categoryHelper from "../utils/helper/category-helper";
 import * as errorTable from "../utils/error/error-table";
 import * as categoryController from "./category-controller";
+import Post from "../module/post";
+
+describe("init", () => {
+  beforeAll(() => {
+    vi.spyOn(Category, "findOrCreate").mockImplementation(async () => {});
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should initial create the root category", async () => {
+    await categoryController.init();
+
+    expect(Category.findOrCreate).toHaveBeenLastCalledWith({
+      where: { name: "root" },
+    });
+  });
+
+  test("should throw error if initial create the root category fail", async () => {
+    let error;
+    Category.findOrCreate.mockImplementationOnce(() => {
+      throw new Error();
+    });
+
+    await categoryController.init().catch((err) => (error = err));
+
+    expect(error).toEqual(new Error("initial category table fail"));
+  });
+});
 
 const testParentID = "2";
 describe("createOne()", () => {
@@ -307,12 +342,16 @@ describe("updateOne()", () => {
 });
 
 describe("deleteOne()", () => {
-  let req, res, next;
+  let req, res, next, session;
 
   beforeAll(() => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
+    session = vi.fn();
+    vi.spyOn(sequelize, "transaction").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
+    vi.spyOn(Category, "update").mockImplementation(async () => {});
+    vi.spyOn(Post, "update").mockImplementation(async () => {});
     vi.spyOn(Category, "destroy").mockImplementation(async () => {});
   });
 
@@ -355,15 +394,68 @@ describe("deleteOne()", () => {
     expect(error).toEqual(errorTable.notAllowDeleteRootError());
   });
 
+  test("should update the category children to its parent", async () => {
+    req = { params: { id: "testID" } };
+    const category = { name: "testName", ParentId: "testParentId" };
+    Category.findByPk.mockResolvedValueOnce(category);
+    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
+
+    await categoryController.deleteOne(req, res, next);
+
+    expect(Category.update).toHaveBeenLastCalledWith(
+      { ParentId: category.ParentId },
+      {
+        where: { ParentId: req.params.id },
+        transaction: session,
+      }
+    );
+  });
+
+  test("should update the category children to its parent", async () => {
+    req = { params: { id: "testID" } };
+    const category = { name: "testName", ParentId: "testParentId" };
+    Category.findByPk.mockResolvedValueOnce(category);
+    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
+
+    await categoryController.deleteOne(req, res, next);
+
+    expect(Category.update).toHaveBeenLastCalledWith(
+      { ParentId: category.ParentId },
+      {
+        where: { ParentId: req.params.id },
+        transaction: session,
+      }
+    );
+  });
+
+  test("should update the post to its origin category parent", async () => {
+    req = { params: { id: "testID" } };
+    const category = { name: "testName", ParentId: "testParentId" };
+    Category.findByPk.mockResolvedValueOnce(category);
+    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
+
+    await categoryController.deleteOne(req, res, next);
+
+    expect(Post.update).toHaveBeenLastCalledWith(
+      { CategoryId: category.ParentId },
+      {
+        where: { CategoryId: req.params.id },
+        transaction: session,
+      }
+    );
+  });
+
   test("should delete category by id", async () => {
     req = { params: { id: "testID" } };
     const category = { name: "testName" };
     Category.findByPk.mockResolvedValueOnce(category);
+    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
 
     await categoryController.deleteOne(req, res, next);
 
     expect(Category.destroy).toHaveBeenLastCalledWith({
       where: { id: req.params.id },
+      transaction: session,
     });
   });
 

@@ -1,4 +1,24 @@
 import * as helper from "./helper";
+import * as upload from "../aws/s3.js";
+
+vi.mock("../aws/s3.js");
+describe("isURL()", () => {
+  test("should return false if input is null", () => {
+    expect(helper.isURL()).toBe(false);
+  });
+
+  test("should return false if input is not url", () => {
+    expect(helper.isURL("test")).toBe(false);
+  });
+
+  test("should return true if input start with htt://", () => {
+    expect(helper.isURL("http://")).toBe(true);
+  });
+
+  test("should return true if input start with htts://", () => {
+    expect(helper.isURL("https://")).toBe(true);
+  });
+});
 
 describe("toNaturalNumber()", () => {
   test.each(["1", "2"])(
@@ -71,6 +91,20 @@ describe("isIncludeID()", () => {
   );
 });
 
+describe("keepKeys()", () => {
+  test("should keep keys from the obj if keys want to remain", () => {
+    const inputObj = { a: "A", b: "B", c: "C" };
+
+    expect(helper.keepKeys(inputObj, ["a", "b", "c"])).toEqual(inputObj);
+  });
+
+  test("should remove keys from the obj if keys do not want to remain", () => {
+    const inputObj = { a: "A", b: "B", c: "C" };
+
+    expect(helper.keepKeys(inputObj, [])).toEqual({});
+  });
+});
+
 describe("removeKeys()", () => {
   test("should remove the key in exclude array true", () => {
     const obj = { name: "Tom", password: 123456 };
@@ -93,7 +127,7 @@ describe("isExpired()", () => {
   });
 });
 
-describe("isNumber", () => {
+describe("isNumber()", () => {
   test.each([1, 1.1])(
     "should return true if number type of number is provided",
     (input) => {
@@ -130,5 +164,83 @@ describe("isNumber", () => {
 
   test("should return false if obj is provided", () => {
     expect(helper.isNumber({})).toBe(false);
+  });
+});
+
+describe("deepClone()", () => {
+  test("should deep clone the obj", () => {
+    const inputObj = { lv1: { lv2: { lv3: "test" } } };
+
+    const result = helper.deepClone(inputObj);
+
+    expect(result.lv1.lv2).not.toBe(inputObj.lv1.lv2);
+  });
+});
+
+describe("commandToS3Avatar()", () => {
+  test("should return origin file if the file is null", async () => {
+    let inputFile;
+    const command = vi.fn();
+
+    const result = await helper.commandToS3Avatar(inputFile, command);
+
+    expect(command).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
+  });
+
+  test("should return origin file if the file is url", async () => {
+    const inputFile = "http://";
+    const command = vi.fn();
+
+    const result = await helper.commandToS3Avatar(inputFile, command);
+
+    expect(command).not.toHaveBeenCalled();
+    expect(result).toBe(inputFile);
+  });
+
+  test("should run the command by file if the file is not url", async () => {
+    const inputFile = "test";
+    const command = vi.fn();
+
+    const result = await helper.commandToS3Avatar(inputFile, command);
+
+    expect(command).toHaveBeenLastCalledWith(inputFile);
+  });
+});
+
+describe("deleteAvatarUrlFromS3()", () => {
+  test("should delete the avatar by file and delete function", async () => {
+    const inputFile = "test";
+    vi.spyOn(helper, "commandToS3Avatar").mockImplementationOnce(
+      async () => {}
+    );
+
+    await helper.deleteAvatarUrlFromS3(inputFile);
+
+    expect(helper.commandToS3Avatar).toHaveBeenLastCalledWith(
+      inputFile,
+      upload.deleteFileFromS3
+    );
+  });
+});
+
+describe("deleteImgUrlFromS3()", () => {
+  test("should delete the img by file", async () => {
+    const inputFile = "test";
+    vi.spyOn(upload, "deleteFileFromS3").mockImplementationOnce(async () => {});
+
+    await helper.deleteImgUrlFromS3(inputFile);
+
+    expect(upload.deleteFileFromS3).toHaveBeenLastCalledWith(inputFile);
+  });
+});
+
+describe("getImgUrlFromS3()", () => {
+  test("should get the img by file", async () => {
+    const inputFile = "test";
+
+    expect(helper.getImgUrlFromS3(inputFile)).toBe(
+      "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + inputFile
+    );
   });
 });
