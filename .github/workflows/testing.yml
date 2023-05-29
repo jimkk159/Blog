@@ -16,10 +16,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: list folder
-        run: ls -a
       - name: change folder
         run: cd backend
+      - name: list folder
+        run: ls -a
       - name: npm install
         run: npm ci
       - name: test
