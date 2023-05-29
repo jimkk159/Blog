@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
-import Auth from "../module/auth";
-import User from "../module/user";
-import Email from "../utils/email";
-import * as errorTable from "../utils/error/error-table";
-import * as helper from "../utils/helper/helper";
-import * as authHelper from "../utils/helper/auth-helper";
-import * as authController from "./auth-controller";
-import * as shareController from "./share-controller";
+import Auth from "../../module/auth";
+import User from "../../module/user";
+import Email from "../../utils/email";
+import * as errorTable from "../../utils/error/error-table";
+import * as helper from "../../utils/helper/helper";
+import * as authHelper from "../../utils/helper/auth-helper";
+import * as authController from "../../controllers/auth-controller";
+import * as shareController from "../../controllers/share-controller";
 
 const testID = "testID";
 const testHost = "testHost";

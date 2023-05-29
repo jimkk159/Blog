@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { GetFeatures } from "./api-features";
+import { GetFeatures } from "../../utils/api-features";
 
 vi.mock("sequelize");
 

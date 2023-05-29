@@ -1,4 +1,4 @@
-import AppError from "./app-error";
+import AppError from "../../utils/error/app-error";
 
 describe("AppError", () => {
   test.each(["Error1", "Error2"])(
