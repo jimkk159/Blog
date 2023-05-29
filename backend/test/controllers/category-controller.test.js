@@ -1,10 +1,10 @@
-import Category from "../module/category";
-import sequelize from "../config/db-init.js";
-import * as helper from "../utils/helper/helper";
-import * as categoryHelper from "../utils/helper/category-helper";
-import * as errorTable from "../utils/error/error-table";
-import * as categoryController from "./category-controller";
-import Post from "../module/post";
+import Post from "../../module/post";
+import Category from "../../module/category";
+import sequelize from "../../config/db-init.js";
+import * as helper from "../../utils/helper/helper";
+import * as categoryHelper from "../../utils/helper/category-helper";
+import * as errorTable from "../../utils/error/error-table";
+import * as categoryController from "../../controllers/category-controller";
 
 describe("init", () => {
   beforeAll(() => {

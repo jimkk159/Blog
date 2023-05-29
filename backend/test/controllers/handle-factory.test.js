@@ -1,10 +1,10 @@
-import * as helper from "../utils/helper/helper";
-import * as handleFactory from "./handle-factory";
-import * as errorTable from "../utils/error/error-table";
-import { GetFeatures } from "../utils/api-features";
+import * as helper from "../../utils/helper/helper";
+import * as handleFactory from "../../controllers/handle-factory";
+import * as errorTable from "../../utils/error/error-table";
+import { GetFeatures } from "../../utils/api-features";
 import { afterAll, beforeAll } from "vitest";
 
-vi.mock("../utils/api-features");
+vi.mock("../../utils/api-features");
 
 describe("getOne()", () => {
   let req = { params: { id: 1 } };

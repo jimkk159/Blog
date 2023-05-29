@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import * as apiFeatureHelper from "./api-feature-helper.js";
+import * as apiFeatureHelper from "../../utils/helper/api-feature-helper.js";
 
 vi.mock("sequelize");
 

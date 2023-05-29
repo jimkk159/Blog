@@ -1,7 +1,7 @@
-import Category from "../../module/category";
-import * as errorTable from "../error/error-table";
-import * as categoryHelper from "../helper/category-helper";
 import { beforeAll, beforeEach } from "vitest";
+import Category from "../../module/category";
+import * as errorTable from "../../utils/error/error-table";
+import * as categoryHelper from "../../utils/helper/category-helper";
 
 describe("checkParentIsExist()", () => {
   beforeAll(() => {

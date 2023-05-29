@@ -25,7 +25,7 @@ const testWrongPassword = "testWrongPassword";
 const testRandomPassword = "testRandomPassword";
 
 vi.mock("jsonwebtoken");
-vi.mock("../utils/email");
+vi.mock("../../utils/email");
 describe("authUserByToken()", () => {
   let req, res, next, error;
   beforeAll(() => {

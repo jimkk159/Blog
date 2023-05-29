@@ -1,15 +1,15 @@
-import * as helper from "../utils/helper/helper";
-import * as errorTable from "../utils/error/error-table";
-import * as postHelper from "../utils/helper/post-helper";
-import * as postController from "../controllers/post-controller";
-import Category from "../module/category";
-import User from "../module/user";
+import * as helper from "../../utils/helper/helper";
+import * as errorTable from "../../utils/error/error-table";
+import * as postHelper from "../../utils/helper/post-helper";
+import * as postController from "../../controllers/post-controller";
+import Category from "../../module/category";
+import User from "../../module/user";
 import { describe, expect } from "vitest";
-import Post from "../module/post";
-import { GetFeatures } from "../utils/api-features";
-import * as s3 from "../utils/aws/s3";
+import Post from "../../module/post";
+import { GetFeatures } from "../../utils/api-features";
+import * as s3 from "../../utils/aws/s3";
 
-vi.mock("../utils/api-features");
+vi.mock("../../utils/api-features");
 
 describe("getOne()", () => {
   let req, res, next;

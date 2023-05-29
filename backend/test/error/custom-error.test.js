@@ -1,5 +1,8 @@
 import { describe } from "vitest";
-import { isSqlError, createCustomSqlError } from "./custom-error";
+import {
+  isSqlError,
+  createCustomSqlError,
+} from "../../utils/error/custom-error";
 
 describe("isSqlError()", () => {
   test("should return true if error is SQL error", () => {

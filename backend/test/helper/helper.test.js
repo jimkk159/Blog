@@ -1,5 +1,5 @@
-import * as helper from "./helper";
-import * as upload from "../aws/s3.js";
+import * as helper from "../../utils/helper/helper";
+import * as upload from "../../utils/aws/s3.js";
 
 vi.mock("../aws/s3.js");
 describe("isURL()", () => {

@@ -1,14 +1,7 @@
 import fs from "fs";
-import {
-  sendDevError,
-  sendProductError,
-  handleUnknownError,
-  isOperationaleError,
-  removeFileWhenError,
-  handleOperationalError,
-} from "./handle-error";
-import errorHandler from "./handle-error";
-import * as customError from "./custom-error";
+import * as errors from "../../utils/error/handle-error";
+import errorHandler from "../../utils/error/handle-error";
+import * as customError from "../../utils/error/custom-error";
 import { beforeAll } from "vitest";
 
 //---------------------------------Dev------------------------------------
@@ -30,7 +23,7 @@ describe("sendDevError()", () => {
       isOperational: true,
     };
 
-    sendDevError(err, res);
+    errors.sendDevError(err, res);
 
     expect(res.status).toHaveBeenLastCalledWith(err.statusCode);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -46,12 +39,12 @@ describe("sendDevError()", () => {
 describe("isOperationaleError()", () => {
   test("should return true if error is operantional", () => {
     const err = { isOperational: true };
-    expect(isOperationaleError(err)).toBe(true);
+    expect(errors.isOperationaleError(err)).toBe(true);
   });
 
   test("should return false if error is not operantional", () => {
     const err = {};
-    expect(isOperationaleError(err)).toBeFalsy();
+    expect(errors.isOperationaleError(err)).toBeFalsy();
   });
 });
 
@@ -73,7 +66,7 @@ describe("handleOperationalError()", () => {
       isOperational: true,
     };
 
-    handleOperationalError(err, res);
+    errors.handleOperationalError(err, res);
 
     expect(res.status).toHaveBeenLastCalledWith(err.statusCode);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -95,7 +88,7 @@ describe("handleUnknownError()", () => {
   test("should response error detail", () => {
     const err = {};
 
-    handleUnknownError(err, res);
+    errors.handleUnknownError(err, res);
 
     expect(res.status).toHaveBeenLastCalledWith(500);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -124,7 +117,7 @@ describe("sendProductError()", () => {
   test("should response operational error", () => {
     err.isOperational = true;
 
-    sendProductError(err, res);
+    errors.sendProductError(err, res);
 
     expect(res.status).toHaveBeenLastCalledWith(err.statusCode);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -136,7 +129,7 @@ describe("sendProductError()", () => {
   test("should response unknown error", () => {
     err.isOperational = false;
 
-    sendProductError(err, res);
+    errors.sendProductError(err, res);
 
     expect(res.status).toHaveBeenLastCalledWith(500);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -165,7 +158,7 @@ describe("removeFileWhenError()", () => {
     let err;
     const req = { file: { path: "test" } };
 
-    removeFileWhenError(req, err);
+    errors.removeFileWhenError(req, err);
 
     expect(fs.unlink.mock.calls[0][0]).toBe("test");
   });

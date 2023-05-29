@@ -2,8 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../module/user";
 import Auth from "../../module/auth";
-import * as authHelper from "./auth-helper";
-import * as errorTable from "../error/error-table";
+import * as authHelper from "../../utils/helper/auth-helper";
+import * as errorTable from "../../utils/error/error-table";
 import { afterAll, beforeAll, beforeEach, describe } from "vitest";
 
 const testID = 1;

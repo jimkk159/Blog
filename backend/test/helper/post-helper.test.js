@@ -1,10 +1,10 @@
 import Tag from "../../module/tag";
 import Post from "../../module/post";
-import * as postHelper from "./post-helper";
-import * as ApiFeature from "../api-features";
-import * as tagHelper from "../helper/tag-helper";
-import * as errorTable from "../error/error-table";
-import * as categoryHelper from "../helper/category-helper";
+import * as postHelper from "../../utils/helper/post-helper";
+import * as ApiFeature from "../../utils/api-features";
+import * as tagHelper from "../../utils/helper/tag-helper";
+import * as errorTable from "../../utils/error/error-table";
+import * as categoryHelper from "../../utils/helper/category-helper";
 import { beforeAll, describe, expect } from "vitest";
 import sequelize from "../../config/db-init";
 import User from "../../module/user";

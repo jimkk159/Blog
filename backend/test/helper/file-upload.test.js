@@ -1,4 +1,4 @@
-import * as upload from "./file-upload";
+import * as upload from "../../utils/file-upload";
 import multer from "multer";
 
 vi.mock("uuid", () => ({

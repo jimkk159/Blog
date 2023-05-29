@@ -1,6 +1,6 @@
-import * as s3 from "../utils/aws/s3";
-import * as userController from "./user-controller";
-import * as errorTable from "../utils/error/error-table";
+import * as s3 from "../../utils/aws/s3";
+import * as userController from "../../controllers/user-controller";
+import * as errorTable from "../../utils/error/error-table";
 
 describe("setHasValidate()", () => {
   let req, res, next;

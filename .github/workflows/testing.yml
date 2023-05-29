@@ -16,11 +16,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: change folder
-        run: cd backend
-      - name: list folder
-        working-directory: ./backend
-        run: ls -a
       - name: npm install
         working-directory: ./backend
         run: npm ci

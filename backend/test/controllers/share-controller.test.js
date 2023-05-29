@@ -1,8 +1,8 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
-import * as errorTable from "../utils/error/error-table";
-import * as shareController from "./share-controller";
 import { validationResult } from "express-validator";
+import * as errorTable from "../../utils/error/error-table";
+import * as shareController from "../../controllers/share-controller";
 
 vi.mock("gravatar");
 vi.mock("normalize-path");

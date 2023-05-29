@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect } from "vitest";
-import Email, { sendWelcomeEmail } from "./email";
+import Email from "../../utils/email";
 import nodemailer from "nodemailer";
 
 vi.mock(nodemailer);
