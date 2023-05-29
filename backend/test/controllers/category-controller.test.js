@@ -1,43 +1,45 @@
 import Post from "../../module/post";
+import sequelize from "../../config/db-init";
 import Category from "../../module/category";
-import sequelize from "../../config/db-init.js";
 import * as helper from "../../utils/helper/helper";
 import * as categoryHelper from "../../utils/helper/category-helper";
 import * as errorTable from "../../utils/error/error-table";
 import * as categoryController from "../../controllers/category-controller";
 
-describe("init", () => {
-  beforeAll(() => {
-    vi.spyOn(Category, "findOrCreate").mockImplementation(async () => {});
-  });
+vi.mock("../../config/db-init");
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+// describe("init", () => {
+//   beforeAll(() => {
+//     vi.spyOn(Category, "findOrCreate").mockImplementation(async () => {});
+//   });
 
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
+//   beforeEach(() => {
+//     vi.clearAllMocks();
+//   });
 
-  test("should initial create the root category", async () => {
-    await categoryController.init();
+//   afterAll(() => {
+//     vi.restoreAllMocks();
+//   });
 
-    expect(Category.findOrCreate).toHaveBeenLastCalledWith({
-      where: { name: "root" },
-    });
-  });
+//   test("should initial create the root category", async () => {
+//     await categoryController.init();
 
-  test("should throw error if initial create the root category fail", async () => {
-    let error;
-    Category.findOrCreate.mockImplementationOnce(() => {
-      throw new Error();
-    });
+//     expect(Category.findOrCreate).toHaveBeenLastCalledWith({
+//       where: { name: "root" },
+//     });
+//   });
 
-    await categoryController.init().catch((err) => (error = err));
+//   test("should throw error if initial create the root category fail", async () => {
+//     let error;
+//     Category.findOrCreate.mockImplementationOnce(() => {
+//       throw new Error();
+//     });
 
-    expect(error).toEqual(new Error("initial category table fail"));
-  });
-});
+//     await categoryController.init().catch((err) => (error = err));
+
+//     expect(error).toEqual(new Error("initial category table fail"));
+//   });
+// });
 
 const testParentID = "2";
 describe("createOne()", () => {

@@ -6,17 +6,17 @@ import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as categoryHelper from "../utils/helper/category-helper.js";
 
-export const init = async () => {
-  try {
-    await Category.findOrCreate({
-      where: { name: "root" },
-    });
-  } catch (err) {
-    throw new Error("initial category table fail");
-  }
-};
+// export const init = async () => {
+//   try {
+//     await Category.findOrCreate({
+//       where: { name: "root" },
+//     });
+//   } catch (err) {
+//     throw new Error("initial category table fail");
+//   }
+// };
 
-await init();
+// await init();
 
 export const createOne = catchAsync(async (req, res, next) => {
   // 1) check ParentId
