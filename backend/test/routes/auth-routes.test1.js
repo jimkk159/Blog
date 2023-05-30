@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import app from "../config/app";
+import app from "../../config/app";
 import request from "supertest";
-import User from "../module/user";
-import * as authHelper from "../utils/helper/auth-helper";
+import User from "../../module/user";
+import * as authHelper from "../../utils/helper/auth-helper";
 
 vi.mock("jsonwebtoken");
 
