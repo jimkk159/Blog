@@ -9,6 +9,7 @@ import { beforeAll, describe, expect } from "vitest";
 import sequelize from "../../config/db-init";
 import User from "../../module/user";
 
+vi.mock("sequelize");
 describe("isUserAllowUpdatePost()", () => {
   test("should return true if user role is root", () => {
     const user = { id: "A", role: "root" };
@@ -291,7 +292,7 @@ describe("checkAndFindPostTags()", () => {
 });
 
 describe("createPostWithTags()", () => {
-  let addTags, transact, post;
+  let addTags, session, post;
   const postInput = {
     title: "testTitle",
     content: "testContent",
@@ -303,13 +304,13 @@ describe("createPostWithTags()", () => {
     tags: "testTags",
   };
   beforeAll(() => {
-    transact = vi.fn();
+    session = vi.fn();
     addTags = vi.fn(async () => {});
     post = { addTags };
     vi.spyOn(Post, "create").mockImplementation(() => post);
-    vi.spyOn(sequelize, "transaction").mockImplementation(async (cb) => {
-      cb(transact);
-    });
+    vi.spyOn(sequelize, "transaction").mockImplementation(async (fn) =>
+      fn(session)
+    );
   });
 
   beforeEach(() => {
@@ -334,7 +335,7 @@ describe("createPostWithTags()", () => {
     await postHelper.createPostWithTags(input).catch((err) => (error = err));
 
     expect(Post.create).toHaveBeenLastCalledWith(postInput, {
-      transaction: transact,
+      transaction: session,
     });
   });
 
@@ -344,7 +345,7 @@ describe("createPostWithTags()", () => {
     await postHelper.createPostWithTags(input).catch((err) => (error = err));
 
     expect(addTags).toHaveBeenLastCalledWith(input.tags, {
-      transaction: transact,
+      transaction: session,
     });
   });
 
@@ -399,7 +400,7 @@ describe("checkUserUpdatePostPermission()", () => {
 });
 
 describe("updatePostContentAndTags()", () => {
-  let setTags, transact, post;
+  let setTags, session, post;
   const postInput = {
     postId: "testPostId",
     title: "testTitle",
@@ -410,15 +411,16 @@ describe("updatePostContentAndTags()", () => {
     isUpdateTags: true,
     tags: "testTags",
   };
+  
   beforeAll(() => {
-    transact = vi.fn();
+    session = vi.fn();
     setTags = vi.fn(async () => {});
     post = { setTags };
     vi.spyOn(Post, "update").mockImplementation(() => {});
     vi.spyOn(Post, "findByPk").mockImplementation(() => post);
-    vi.spyOn(sequelize, "transaction").mockImplementation(async (cb) => {
-      cb(transact);
-    });
+    vi.spyOn(sequelize, "transaction").mockImplementation(async (fn) =>
+      fn(session)
+    );
   });
 
   beforeEach(() => {
@@ -461,7 +463,7 @@ describe("updatePostContentAndTags()", () => {
         title: input.title,
         content: input.content,
       },
-      { where: { id: input.postId }, transaction: transact }
+      { where: { id: input.postId }, transaction: session }
     );
   });
 
@@ -473,7 +475,7 @@ describe("updatePostContentAndTags()", () => {
       .catch((err) => (error = err));
 
     expect(setTags).toHaveBeenLastCalledWith(input.tags, {
-      transaction: transact,
+      transaction: session,
     });
   });
 

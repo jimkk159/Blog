@@ -98,6 +98,7 @@ export const deleteOne = catchAsync(async (req, res, next) => {
         transaction: t,
       }
     );
+
     await Category.destroy({ where: { id: req.params.id }, transaction: t });
   });
   res.status(204).json();

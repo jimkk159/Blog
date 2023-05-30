@@ -3,6 +3,7 @@ import Category from "../../module/category";
 import * as errorTable from "../../utils/error/error-table";
 import * as categoryHelper from "../../utils/helper/category-helper";
 
+vi.mock("sequelize");
 describe("checkParentIsExist()", () => {
   beforeAll(() => {
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});

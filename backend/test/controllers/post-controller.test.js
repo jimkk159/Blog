@@ -9,8 +9,8 @@ import Post from "../../module/post";
 import { GetFeatures } from "../../utils/api-features";
 import * as s3 from "../../utils/aws/s3";
 
+vi.mock("sequelize");
 vi.mock("../../utils/api-features");
-
 describe("getOne()", () => {
   let req, res, next;
   beforeAll(() => {

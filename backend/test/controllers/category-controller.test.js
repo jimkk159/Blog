@@ -6,7 +6,7 @@ import * as categoryHelper from "../../utils/helper/category-helper";
 import * as errorTable from "../../utils/error/error-table";
 import * as categoryController from "../../controllers/category-controller";
 
-vi.mock("../../config/db-init");
+vi.mock("sequelize");
 
 // describe("init", () => {
 //   beforeAll(() => {
@@ -350,7 +350,9 @@ describe("deleteOne()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     session = vi.fn();
-    vi.spyOn(sequelize, "transaction").mockImplementation(async () => {});
+    vi.spyOn(sequelize, "transaction").mockImplementation(async (fn) =>
+      fn(session)
+    );
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "update").mockImplementation(async () => {});
     vi.spyOn(Post, "update").mockImplementation(async () => {});
@@ -400,7 +402,6 @@ describe("deleteOne()", () => {
     req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
-    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
 
     await categoryController.deleteOne(req, res, next);
 
@@ -417,7 +418,6 @@ describe("deleteOne()", () => {
     req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
-    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
 
     await categoryController.deleteOne(req, res, next);
 
@@ -434,7 +434,6 @@ describe("deleteOne()", () => {
     req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
-    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
 
     await categoryController.deleteOne(req, res, next);
 
@@ -451,7 +450,6 @@ describe("deleteOne()", () => {
     req = { params: { id: "testID" } };
     const category = { name: "testName" };
     Category.findByPk.mockResolvedValueOnce(category);
-    sequelize.transaction.mockImplementationOnce(async (fn) => fn(session));
 
     await categoryController.deleteOne(req, res, next);
 
