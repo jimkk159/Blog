@@ -111,6 +111,14 @@ app.use(host + "/categories", categoriesRouters);
 app.use(host + "/about", aboutRouters);
 app.use(host, otherRoutes);
 
+//Testing route
+app.use("/", (req, res, next) => {
+  res.status(200).json({
+    status: "success",
+    message: "Server run up successfully!",
+  });
+});
+
 //Compress response bodies
 app.use(compression());
 
