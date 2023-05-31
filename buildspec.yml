@@ -24,11 +24,6 @@ phases:
 artifacts:
   files:
     - README.md
-    - package.json
-    - app.js
     - appspec.yml
-    - scripts/*
-    - node_modules/**/*
-    - public/**/*
     - backend/**/*
     
