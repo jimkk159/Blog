@@ -7,7 +7,7 @@ nvm install 16
 
 #create our working directory if it does not exist
 DIR="/home/ec2-user/Blog"
-if [ -d "$DIR" ]; THEN
+if [ -d "$DIR" ]; then
     echo "${DIR} exists"
 else
     echo "Creating ${DIR} directory"
