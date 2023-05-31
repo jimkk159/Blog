@@ -21,9 +21,11 @@ phases:
 
       # Install runtime dependencies
       - npm install --production
+      
 artifacts:
   files:
     - README.md
     - appspec.yml
+    - scripts/*
     - backend/**/*
     
