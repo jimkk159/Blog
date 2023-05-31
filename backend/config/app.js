@@ -115,7 +115,7 @@ app.use(host, otherRoutes);
 app.get("/", (req, res, next) => {
   res.status(200).json({
     status: "success",
-    message: "Server run up successfully!",
+    message: "Server run up successfully2!",
   });
 });
 
