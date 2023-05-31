@@ -1,13 +1,13 @@
 #!/bin/bash
 
 #give permission
-sudo chmod -R 777 /home/ec2-user/Blog
+sudo chmod -R 777 /home/ec2-user/blog
 
 #copy the .env
-cp /home/ec2-user/.env /home/ec2-user/Blog/backend/.env
+cp /home/ec2-user/.env /home/ec2-user/blog/backend/.env
 
 #change work dir
-cd /home/ec2-user/Blog/backend
+cd /home/ec2-user/blog/backend
 
 #add npm and node to path
 export NVM_DIR="$HOME/.nvm"	
