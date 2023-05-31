@@ -21,6 +21,8 @@ phases:
 
       # Install runtime dependencies
       - npm install --production
+      - pwd
+      - ls
 artifacts:
   files:
     - README.md
