@@ -31,3 +31,4 @@ artifacts:
     - node_modules/**/*
     - public/**/*
     - backend/**/*
+    
