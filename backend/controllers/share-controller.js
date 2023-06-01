@@ -1,14 +1,15 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
+import * as s3 from "../utils/aws/s3.js";
 import { validationResult } from "express-validator";
+import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as shareController from "./share-controller.js";
 
 // Validate the req
 export const validation = (req, res, next) => {
   const result = validationResult(req);
-  if (!result.isEmpty())
-    throw errorTable.validateError(result.errors);
+  if (!result.isEmpty()) throw errorTable.validateError(result.errors);
   next();
 };
 
@@ -25,5 +26,20 @@ export const createAvatar = (email, file) => {
   if (isFilePath(file)) return normalize(file.path);
   else return shareController.createGravatar(email);
 };
+
+export const updateImage = catchAsync(async (req, res, next) => {
+  let img;
+  if (req.file) {
+    img = await s3.uploadToS3(req.file);
+    img = helper.getImgUrlFromS3(img);
+  }
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      img,
+    },
+  });
+});
 
 //reference: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function

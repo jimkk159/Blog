@@ -245,12 +245,12 @@ export const updatePassword = catchAsync(async (req, res, next) => {
 
 export const verifyEmail = catchAsync(async (req, res, next) => {
   // 1) Verify token
-  const decodeToken = jwt.verify(req.params.token, process.env.JWT_KEY);
+  const decodeToken = jwt.verify(req.params.emailToken, process.env.JWT_KEY);
 
   // 2) Check Email validation token
   await authHelper.checkEmailValidationToken({
     UserId: decodeToken.uid,
-    token: req.params.token,
+    token: req.params.emailToken,
     provider: "local",
   });
 

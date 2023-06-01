@@ -48,6 +48,6 @@ router.patch(
   authController.updatePassword
 );
 
-router.get("/verifyEmail/:token", authController.verifyEmail);
+router.get("/verifyEmail/:emailToken", authController.verifyEmail);
 
 export default router;

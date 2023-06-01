@@ -1,6 +1,5 @@
 import express from "express";
 import { check } from "express-validator";
-import * as upload from "../utils/file-upload.js";
 import * as postController from "../controllers/post-controller.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
@@ -23,12 +22,6 @@ router.get(
 
 router.get("/:id", postController.getOne);
 
-router.post(
-  "/img",
-  upload.uploadToMemory.single("img"),
-  postController.updateImage
-);
-
 router.use(authController.authUserByToken);
 
 router.post(
@@ -47,6 +40,6 @@ router
   .patch(postController.updateOne)
   .delete(postController.deleteOne);
 
-router.route("/:id/category/:CategoryId").patch(postController.updateCategory);
+router.patch("/:id/category/:CategoryId", postController.updateCategory);
 
 export default router;

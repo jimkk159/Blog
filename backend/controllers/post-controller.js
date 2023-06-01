@@ -1,6 +1,5 @@
 import User from "../module/user.js";
 import Post from "../module/post.js";
-import * as s3 from "../utils/aws/s3.js";
 import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
 import { GetFeatures } from "../utils/api-features.js";
@@ -180,19 +179,4 @@ export const search = catchAsync(async (req, res, next) => {
   req.count = initQuery;
 
   next();
-});
-
-export const updateImage = catchAsync(async (req, res, next) => {
-  let img;
-  if (req.file) {
-    img = await s3.uploadToS3(req.file);
-    img = helper.getImgUrlFromS3(img);
-  }
-
-  res.status(200).json({
-    status: "success",
-    data: {
-      img,
-    },
-  });
 });
