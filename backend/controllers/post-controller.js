@@ -20,11 +20,12 @@ export const getMe = catchAsync(async (req, res, next) => {
 export const checkPermission = catchAsync(async (req, res, next) => {
   // 1) find post
   let post = await Post.findByPk(req.params.id);
+  console.log(post)
   if (!post) throw errorTable.postNotFound();
   req.post = post;
 
   // 2) check user permissions
-  if (req.user.role === "root") next();
+  if (req.user.role === "root") return next();
   postHelper.checkUserUpdatePostPermission(req.user, post);
 
   next();
@@ -98,8 +99,6 @@ export const createOne = catchAsync(async (req, res, next) => {
 });
 
 export const updateOne = catchAsync(async (req, res, next) => {
-  let post = req.post;
-
   // 1) check Tag
   let tags = [];
   if (req.body.tagId)
@@ -120,7 +119,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
   });
 
   // 4) get Post (Eager Loading)
-  post = await postHelper.getFullPost(req.params.id);
+  const post = await postHelper.getFullPost(req.params.id);
 
   res.status(200).json({
     status: "success",

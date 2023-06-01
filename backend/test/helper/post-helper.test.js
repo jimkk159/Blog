@@ -373,12 +373,6 @@ describe("checkUserUpdatePostPermission()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should throw error if post not exist", () => {
-    expect(() => postHelper.checkUserUpdatePostPermission()).toThrow(
-      errorTable.postNotFound()
-    );
-  });
-
   test("should throw error if user is not allow to update post", () => {
     let error;
     const user = {};

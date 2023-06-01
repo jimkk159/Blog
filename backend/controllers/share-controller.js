@@ -1,6 +1,7 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
 import * as s3 from "../utils/aws/s3.js";
+import * as helper from "../utils/helper/helper.js";
 import { validationResult } from "express-validator";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
@@ -29,9 +30,10 @@ export const createAvatar = (email, file) => {
 
 export const updateImage = catchAsync(async (req, res, next) => {
   let img;
+
   if (req.file) {
-    img = await s3.uploadToS3(req.file);
-    img = helper.getImgUrlFromS3(img);
+    const uploadImg = await s3.uploadToS3(req.file);
+    img = helper.getImgUrlFromS3(uploadImg);
   }
 
   res.status(200).json({

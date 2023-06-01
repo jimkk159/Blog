@@ -7,7 +7,6 @@ import User from "../../module/user";
 import { describe, expect } from "vitest";
 import Post from "../../module/post";
 import { GetFeatures } from "../../utils/api-features";
-import * as s3 from "../../utils/aws/s3";
 
 vi.mock("sequelize");
 vi.mock("../../utils/api-features");
@@ -360,8 +359,9 @@ describe("createOne()", () => {
   });
 });
 
-describe("updateOne()", () => {
+describe("checkPermission()", () => {
   let req, res, next;
+
   beforeAll(() => {
     req = {};
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
@@ -370,6 +370,65 @@ describe("updateOne()", () => {
     vi.spyOn(postHelper, "checkUserUpdatePostPermission").mockImplementation(
       () => {}
     );
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should find Post by params id", async () => {
+    req = { params: { id: "testId" } };
+
+    await postController.checkPermission(req, res, next);
+
+    expect(Post.findByPk).toHaveBeenLastCalledWith(req.params.id);
+  });
+
+  test("should throw error if post does not exist", async () => {
+    req = { params: { id: "testId" } };
+
+    await postController.checkPermission(req, res, next);
+
+    expect(next).toHaveBeenLastCalledWith(errorTable.postNotFound());
+  });
+
+  test("should allow root user to update post", async () => {
+    const post = "testPost";
+    req = { params: { id: "testId" }, user: { role: "root" } };
+    Post.findByPk.mockResolvedValueOnce(post);
+
+    await postController.checkPermission(req, res, next);
+
+    expect(postHelper.checkUserUpdatePostPermission).not.toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
+  });
+
+  test("should check if user allow to update post", async () => {
+    const post = "testPost";
+    req = { params: { id: "testId" }, user: { role: "user" } };
+    Post.findByPk.mockResolvedValueOnce(post);
+
+    await postController.checkPermission(req, res, next);
+
+    expect(postHelper.checkUserUpdatePostPermission).toHaveBeenLastCalledWith(
+      req.user,
+      post
+    );
+    expect(next).toHaveBeenCalled();
+  });
+});
+
+describe("updateOne()", () => {
+  let req, res, next;
+  beforeAll(() => {
+    req = {};
+    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
+    next = vi.fn();
+    vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
     vi.spyOn(postHelper, "checkAndFindPostTags").mockImplementation(() => {});
     vi.spyOn(postHelper, "updatePostContentAndTags").mockImplementation(
       async () => {}
@@ -385,35 +444,7 @@ describe("updateOne()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should find Post by id", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.findByPk).toHaveBeenLastCalledWith(req.params.id);
-  });
-
-  test("should check whether user has permission to update post", async () => {
-    let error;
-    const post = "testPost";
-    req = { params: { id: "testId" }, user: "testUser" };
-    Post.findByPk.mockResolvedValueOnce(post);
-
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(postHelper.checkUserUpdatePostPermission).toHaveBeenLastCalledWith(
-      req.user,
-      post
-    );
-  });
-
   test("should check and find post tags if tagId is provided", async () => {
-    let error;
     const post = "testPost";
     req = {
       params: { id: "testId" },
@@ -422,9 +453,7 @@ describe("updateOne()", () => {
     };
     Post.findByPk.mockResolvedValueOnce(post);
 
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateOne(req, res, next);
 
     expect(postHelper.checkAndFindPostTags).toHaveBeenLastCalledWith(
       req.body.tagId
@@ -432,7 +461,6 @@ describe("updateOne()", () => {
   });
 
   test("should not check and find post tags if tagId is not provided", async () => {
-    let error;
     const post = "testPost";
     req = {
       params: { id: "testId" },
@@ -441,15 +469,12 @@ describe("updateOne()", () => {
     };
     Post.findByPk.mockResolvedValueOnce(post);
 
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateOne(req, res, next);
 
     expect(postHelper.checkAndFindPostTags).not.toHaveBeenCalled();
   });
 
   test("should update post content and tags", async () => {
-    let error;
     const post = "testPost";
     const tags = "testTags";
     req = {
@@ -460,9 +485,7 @@ describe("updateOne()", () => {
     Post.findByPk.mockResolvedValueOnce(post);
     postHelper.checkAndFindPostTags.mockReturnValueOnce(tags);
 
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateOne(req, res, next);
 
     expect(postHelper.updatePostContentAndTags).toHaveBeenLastCalledWith({
       postId: req.params.id,
@@ -474,15 +497,12 @@ describe("updateOne()", () => {
   });
 
   test("should get post by id", async () => {
-    let error;
     req = {
       params: { id: "testId" },
       body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
     };
 
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateOne(req, res, next);
 
     expect(postHelper.getFullPost).toHaveBeenLastCalledWith(req.params.id);
   });
@@ -517,9 +537,6 @@ describe("updateCategory()", () => {
     vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Post, "update").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(postHelper, "checkUserUpdatePostPermission").mockImplementation(
-      () => {}
-    );
     vi.spyOn(postHelper, "checkPostCategory").mockImplementation(() => {});
     vi.spyOn(postHelper, "getFullPost").mockImplementation(async () => {});
   });
@@ -530,33 +547,6 @@ describe("updateCategory()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
-  });
-
-  test("should find Post by id", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.findByPk).toHaveBeenLastCalledWith(req.params.id);
-  });
-
-  test("should check whether user has permission to update post", async () => {
-    let error;
-    const post = "testPost";
-    req = { params: { id: "testId" }, user: "testUser" };
-    Post.findByPk.mockResolvedValueOnce(post);
-
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(postHelper.checkUserUpdatePostPermission).toHaveBeenLastCalledWith(
-      req.user,
-      post
-    );
   });
 
   test("should find Category by id", async () => {
@@ -571,27 +561,21 @@ describe("updateCategory()", () => {
   });
 
   test("should check post category", async () => {
-    let error;
     const category = "testCategory";
     req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateCategory(req, res, next);
 
     expect(postHelper.checkPostCategory).toHaveBeenLastCalledWith(category);
   });
 
   test("should update post", async () => {
-    let error;
     const category = { id: "testCategoryId" };
     req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateCategory(req, res, next);
 
     expect(Post.update).toHaveBeenLastCalledWith(
       {
@@ -602,29 +586,23 @@ describe("updateCategory()", () => {
   });
 
   test("should get post", async () => {
-    let error;
     const category = { id: "testCategoryId" };
     req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
 
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateCategory(req, res, next);
 
     expect(postHelper.getFullPost).toHaveBeenLastCalledWith(req.params.id);
   });
 
   test("should response the updated category post", async () => {
-    let error;
     const category = { id: "testCategoryId" };
     const post = "testPost";
     req = { params: { id: "testId", CategoryId: "testCategoryId" } };
     Category.findByPk.mockResolvedValueOnce(category);
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
-    await postController
-      .updateCategory(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateCategory(req, res, next);
 
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -642,9 +620,6 @@ describe("deleteOne()", () => {
     next = vi.fn();
     vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Post, "destroy").mockImplementation(async () => {});
-    vi.spyOn(postHelper, "checkUserUpdatePostPermission").mockImplementation(
-      () => {}
-    );
   });
 
   beforeEach(() => {
@@ -653,33 +628,6 @@ describe("deleteOne()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
-  });
-
-  test("should find Post by id", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.findByPk).toHaveBeenLastCalledWith(req.params.id);
-  });
-
-  test("should check whether user has permission to update post", async () => {
-    let error;
-    const post = "testPost";
-    req = { params: { id: "testId" }, user: "testUser" };
-    Post.findByPk.mockResolvedValueOnce(post);
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(postHelper.checkUserUpdatePostPermission).toHaveBeenLastCalledWith(
-      req.user,
-      post
-    );
   });
 
   test("should delete post", async () => {
@@ -846,65 +794,5 @@ describe("search()", () => {
     await postController.search(req, res, next);
 
     expect(next).toHaveBeenCalled();
-  });
-});
-
-describe("updateImage()", () => {
-  let req, res, next;
-  beforeAll(() => {
-    req = {};
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
-
-    vi.spyOn(s3, "uploadToS3").mockImplementation(async () => {});
-    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(() => {});
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should not return img if req.file does not eixst", async () => {
-    await postController.updateImage(req, res, next);
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      data: {},
-    });
-  });
-
-  test("should upload the image file to s3", async () => {
-    req.file = vi.fn();
-
-    await postController.updateImage(req, res, next);
-
-    expect(s3.uploadToS3).toHaveBeenLastCalledWith(req.file);
-  });
-
-  test("should get image url by the image file name", async () => {
-    req.file = vi.fn();
-    s3.uploadToS3.mockImplementationOnce(async () => "testImg");
-
-    await postController.updateImage(req, res, next);
-
-    expect(helper.getImgUrlFromS3).toHaveBeenLastCalledWith("testImg");
-  });
-
-  test("should response the image url", async () => {
-    req.file = vi.fn();
-    helper.getImgUrlFromS3.mockImplementationOnce(() => "testImg");
-
-    await postController.updateImage(req, res, next);
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      data: { img: "testImg" },
-    });
   });
 });
