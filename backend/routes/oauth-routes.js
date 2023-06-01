@@ -16,7 +16,7 @@ router.get(
 router.get(
   "/google/redirect",
   passport.authenticate("google", {
-    failureRedirect: "/api/v1/blog/oauth/google/failed",
+    failureRedirect: "/api/v1/oauth/google/failed",
   }),
   oauthController.redirectOauth
 );

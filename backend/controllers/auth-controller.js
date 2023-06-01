@@ -44,6 +44,7 @@ export const authUserByToken = catchAsync(async (req, res, next) => {
 
   // 6) Set user
   req.user = user;
+  console.log(user)
   next();
 });
 
@@ -111,7 +112,7 @@ export const signup = catchAsync(async (req, res, next) => {
   await authHelper.updateEmailCheckToken(userJSON.id, verifyToken);
 
   // 8) Send it to user's email
-  const host = `${req.protocol}://${req.get("host")}/api/v1/blog`;
+  const host = `${req.protocol}://${req.get("host")}/api/v1`;
 
   const email = new Email(req.body.email, req.body.name);
   await email.sendWelcome(host, verifyToken).catch(() => {

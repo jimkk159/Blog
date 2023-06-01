@@ -460,7 +460,7 @@ describe("signup()", () => {
       },
     };
     const sendWelcome = vi.fn(async () => {});
-    const host = `${req.protocol}://${req.get("host")}/api/v1/blog`;
+    const host = `${req.protocol}://${req.get("host")}/api/v1`;
     authHelper.createUserAndAuth.mockResolvedValueOnce(newUser);
     authHelper.createEmailValidationToken.mockImplementationOnce(
       () => verifyToken
