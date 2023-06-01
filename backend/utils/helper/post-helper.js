@@ -12,13 +12,15 @@ import * as helper from "../helper/helper.js";
 import User from "../../module/user.js";
 
 export const isValidSearch = (query, allowType, allowMode) =>
-  query.mode &&
-  query.type &&
-  query.target &&
-  Array.isArray(allowType) &&
-  Array.isArray(allowMode) &&
-  allowType.includes(query.type) &&
-  allowMode.includes(query.mode);
+  !!(
+    query.mode &&
+    query.type &&
+    query.target &&
+    Array.isArray(allowType) &&
+    Array.isArray(allowMode) &&
+    allowType.includes(query.type) &&
+    allowMode.includes(query.mode)
+  );
 
 export const isUserAllowUpdatePost = (user, post) =>
   user.role === "root" || user.id === post.AuthorId;
@@ -80,7 +82,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
   posts = posts
     .map((el) => el.toJSON())
     .map((el) => {
-      if (el.Author.avatar && !helper.isURL(el.Author.avatar))
+      if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
         el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
       return el;
     });
@@ -275,20 +277,20 @@ export const getSearchQueryById = async (mode, target) => {
 export const getSearchQueryByText = async (mode, target) => {
   switch (mode) {
     case "category":
-      return getCategorySearchQueryByText(target);
+      return postHelper.getCategorySearchQueryByText(target);
 
     case "author":
-      return getAuthorSearchQueryByText(target);
+      return postHelper.getAuthorSearchQueryByText(target);
 
     case "title":
-      return getTitleySearchQueryByText(target);
+      return postHelper.getTitleySearchQueryByText(target);
 
     case "tag":
-      return getTagSearchQueryByText(target);
+      return postHelper.getTagSearchQueryByText(target);
   }
 };
 
 export const getSearchQuery = async (mode, type, target) => {
-  if (type === "id") return await getSearchQueryById(mode, target);
-  return await getSearchQueryByText(mode, target);
+  if (type === "id") return postHelper.getSearchQueryById(mode, target);
+  return postHelper.getSearchQueryByText(mode, target);
 };

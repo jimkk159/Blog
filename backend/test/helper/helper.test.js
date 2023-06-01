@@ -1,5 +1,6 @@
 import * as helper from "../../utils/helper/helper";
 import * as upload from "../../utils/aws/s3.js";
+import { afterAll, beforeAll, beforeEach } from "vitest";
 
 vi.mock("../aws/s3.js");
 describe("isURL()", () => {
@@ -221,6 +222,36 @@ describe("deleteAvatarUrlFromS3()", () => {
       inputFile,
       upload.deleteFileFromS3
     );
+  });
+});
+
+describe("getAvatarsUrlFromS3()", () => {
+  beforeAll(() => {
+    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(
+      (el) => "testAvatarFromS3" + el
+    );
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should get avatars", async () => {
+    let error;
+    const avatars = [{ avatar: "avatar1" }, { avatar: "avatar2" }];
+
+    const result = await helper
+      .getAvatarsUrlFromS3(avatars)
+      .catch((err) => (error = err));
+
+    expect(avatars).toEqual([
+      { avatar: "testAvatarFromS3" + "avatar1" },
+      { avatar: "testAvatarFromS3" + "avatar2" },
+    ]);
   });
 });
 

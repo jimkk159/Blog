@@ -27,7 +27,7 @@ export const getAll = (Model) =>
       .paginate();
 
     const data = await getFeature.findAll({ raw: true });
-    await helper.setAvatarsUrlFromS3(data);
+    await helper.getAvatarsUrlFromS3(data);
 
     res.status(200).json({
       status: "success",

@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../module/user";
@@ -23,6 +24,7 @@ const testAuth = {
 
 vi.useFakeTimers();
 vi.setSystemTime(new Date(1998, 11, 19));
+vi.mock("crypto");
 vi.mock("sequelize");
 describe("isHearderAuthorization()", () => {
   test("should return true if hearder has authorization", () => {
@@ -264,6 +266,18 @@ describe("validatePassword()", () => {
   });
 });
 
+describe("generateRandomCrypto()", () => {
+  test("should throw error if an error occur", async () => {
+    crypto.randomBytes = vi.fn().mockReturnThis();
+    crypto.toString = vi.fn().mockReturnThis();
+
+    authHelper.generateRandomCrypto();
+
+    expect(crypto.randomBytes).toHaveBeenLastCalledWith(32);
+    expect(crypto.toString).toHaveBeenLastCalledWith("hex");
+  });
+});
+
 describe("createEmailValidationToken()", () => {
   beforeAll(() => {
     vi.spyOn(jwt, "sign").mockImplementation(() => {});
@@ -358,6 +372,38 @@ describe("createTokenCookie()", () => {
       ),
       httpOnly: true,
       secure: req.secure,
+    });
+  });
+
+  test("should secure false if req secure does not provide and x-forwarded-proto is http", () => {
+    req = { headers: { "x-forwarded-proto": "http" } };
+    res = { cookie: vi.fn() };
+    process.env.JWT_EXPIRES_IN = 10;
+
+    authHelper.createTokenCookie(req, res, token);
+
+    expect(res.cookie).toHaveBeenLastCalledWith("token", token, {
+      expires: new Date(
+        Date.now() + process.env.JWT_EXPIRES_IN * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: false,
+    });
+  });
+
+  test("should secure true if req secure does not provide and x-forwarded-proto is https", () => {
+    req = { headers: { "x-forwarded-proto": "https" } };
+    res = { cookie: vi.fn() };
+    process.env.JWT_EXPIRES_IN = 10;
+
+    authHelper.createTokenCookie(req, res, token);
+
+    expect(res.cookie).toHaveBeenLastCalledWith("token", token, {
+      expires: new Date(
+        Date.now() + process.env.JWT_EXPIRES_IN * 60 * 60 * 1000
+      ),
+      httpOnly: true,
+      secure: true,
     });
   });
 });
@@ -556,45 +602,45 @@ describe("isSameToken()", () => {
   });
 });
 
-// describe("checkEmailValidationToken()", () => {
-//   let error;
+describe("checkEmailValidationToken()", () => {
+  let error;
 
-//   beforeAll(() => {
-//     vi.spyOn(Auth, "findOne");
-//   });
+  beforeAll(() => {
+    vi.spyOn(Auth, "findOne");
+  });
 
-//   beforeEach(() => {
-//     error = undefined;
-//   });
+  beforeEach(() => {
+    error = undefined;
+  });
 
-//   afterEach(() => {
-//     vi.clearAllMocks();
-//   });
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-//   afterAll(() => {
-//     vi.restoreAllMocks();
-//   });
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
 
-//   test("should throw error if email validation token is not correct.", async () => {
-//     Auth.findOne.mockResolvedValueOnce({ token: "" });
+  test("should throw error if email validation token is not correct.", async () => {
+    Auth.findOne.mockResolvedValueOnce({ token: "" });
 
-//     await authHelper.checkEmailValidationToken(testAuth).catch((err) => {
-//       error = err;
-//     });
+    await authHelper.checkEmailValidationToken(testAuth).catch((err) => {
+      error = err;
+    });
 
-//     expect(error).toEqual(errorTable.emailTokenVerifyError());
-//   });
+    expect(error).toEqual(errorTable.emailTokenVerifyError());
+  });
 
-//   test("should has property if email validate successfully!", async () => {
-//     Auth.findOne.mockResolvedValueOnce({ token: testAuth.token });
+  test("should has property if email validate successfully!", async () => {
+    Auth.findOne.mockResolvedValueOnce({ token: testAuth.token });
 
-//     await authHelper.checkEmailValidationToken(testAuth).catch((err) => {
-//       error = err;
-//     });
+    await authHelper.checkEmailValidationToken(testAuth).catch((err) => {
+      error = err;
+    });
 
-//     expect(error).toBeUndefined();
-//     expect(Auth.findOne).toHaveBeenLastCalledWith({
-//       where: { UserId: testAuth.UserId, provider: testAuth.provider },
-//     });
-//   });
-// });
+    expect(error).toBeUndefined();
+    expect(Auth.findOne).toHaveBeenLastCalledWith({
+      where: { UserId: testAuth.UserId, provider: testAuth.provider },
+    });
+  });
+});

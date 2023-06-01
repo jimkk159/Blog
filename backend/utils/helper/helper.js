@@ -55,7 +55,7 @@ export const commandToS3Avatar = async (file, command) => {
 export const deleteAvatarUrlFromS3 = async (file) =>
   helper.commandToS3Avatar(file, upload.deleteFileFromS3);
 
-export const setAvatarsUrlFromS3 = async (data) =>
+export const getAvatarsUrlFromS3 = async (data) =>
   Promise.all(
     data.map(async (el) => {
       if (el.avatar) el.avatar = helper.getImgUrlFromS3(el.avatar);
