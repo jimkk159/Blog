@@ -7,6 +7,29 @@ import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
 
+export const getMe = catchAsync(async (req, res, next) => {
+  req.query = {
+    ...req.query,
+    mode: "author",
+    type: "id",
+    target: "" + req.user.id,
+  };
+  next();
+});
+
+export const checkPermission = catchAsync(async (req, res, next) => {
+  // 1) find post
+  let post = await Post.findByPk(req.params.id);
+  if (!post) throw errorTable.postNotFound();
+  req.post = post;
+
+  // 2) check user permissions
+  if (req.user.role === "root") next();
+  postHelper.checkUserUpdatePostPermission(req.user, post);
+
+  next();
+});
+
 export const getOne = catchAsync(async (req, res, next) => {
   const post = await postHelper.getFullPost(req.params.id);
   if (!post) throw errorTable.idNotFoundError();
@@ -75,20 +98,18 @@ export const createOne = catchAsync(async (req, res, next) => {
 });
 
 export const updateOne = catchAsync(async (req, res, next) => {
-  // 1) check user permissions
-  let post = await Post.findByPk(req.params.id);
-  postHelper.checkUserUpdatePostPermission(req.user, post);
+  let post = req.post;
 
-  // 2) check Tag
+  // 1) check Tag
   let tags = [];
   if (req.body.tagId)
     tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
-  // 3) Modify the img url to file name
+  // 2) Modify the img url to file name
   if (req.body.content)
     req.body.content = req.body.content.replaceAll("&lt;", "<");
 
-  // 4) update Post
+  // 3) update Post
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
     title: req.body.title,
@@ -97,32 +118,6 @@ export const updateOne = catchAsync(async (req, res, next) => {
     isUpdateTags: !!req.body.tagId,
     tags,
   });
-
-  // 5) get Post (Eager Loading)
-  post = await postHelper.getFullPost(req.params.id);
-
-  res.status(200).json({
-    status: "success",
-    data: post,
-  });
-});
-
-export const updateCategory = catchAsync(async (req, res, next) => {
-  // 1) check user permissions
-  let post = await Post.findByPk(req.params.id);
-  postHelper.checkUserUpdatePostPermission(req.user, post);
-
-  // 2) check Category
-  const category = await Category.findByPk(req.params.CategoryId);
-  postHelper.checkPostCategory(category);
-
-  // 3) update Post Category
-  post = await Post.update(
-    {
-      CategoryId: category.id,
-    },
-    { where: { id: req.params.id } }
-  );
 
   // 4) get Post (Eager Loading)
   post = await postHelper.getFullPost(req.params.id);
@@ -133,24 +128,33 @@ export const updateCategory = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteOne = catchAsync(async (req, res, next) => {
-  // 1) check user permissions
-  let post = await Post.findByPk(req.params.id);
-  postHelper.checkUserUpdatePostPermission(req.user, post);
+export const updateCategory = catchAsync(async (req, res, next) => {
+  let post = req.post;
 
-  // 2) delete Post
-  await Post.destroy({ where: { id: req.params.id } });
-  res.status(204).json();
+  // 1) check Category
+  const category = await Category.findByPk(req.params.CategoryId);
+  postHelper.checkPostCategory(category);
+
+  // 2) update Post Category
+  post = await Post.update(
+    {
+      CategoryId: category.id,
+    },
+    { where: { id: req.params.id } }
+  );
+
+  // 3) get Post (Eager Loading)
+  post = await postHelper.getFullPost(req.params.id);
+
+  res.status(200).json({
+    status: "success",
+    data: post,
+  });
 });
 
-export const getMe = catchAsync(async (req, res, next) => {
-  req.query = {
-    ...req.query,
-    mode: "author",
-    type: "id",
-    target: "" + req.user.id,
-  };
-  next();
+export const deleteOne = catchAsync(async (req, res, next) => {
+  await Post.destroy({ where: { id: req.params.id } });
+  res.status(204).json();
 });
 
 export const search = catchAsync(async (req, res, next) => {

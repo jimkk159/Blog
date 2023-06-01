@@ -44,7 +44,7 @@ export const authUserByToken = catchAsync(async (req, res, next) => {
 
   // 6) Set user
   req.user = user;
-  console.log(user)
+  console.log(user);
   next();
 });
 

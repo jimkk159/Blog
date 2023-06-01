@@ -50,7 +50,6 @@ export const createOne = (Model) =>
 export const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
     if (helper.isIncludeID(req.body)) throw errorTable.notAllowUpdateIDError();
-
     await Model.update(req.body, { where: { id: req.params.id } });
 
     const data = await Model.findByPk(req.params.id, { raw: true });

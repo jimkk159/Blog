@@ -133,7 +133,6 @@ export const createPostWithTags = async ({
 };
 
 export const checkUserUpdatePostPermission = (user, post) => {
-  if (!post) throw errorTable.postNotFound();
   if (!postHelper.isUserAllowUpdatePost(user, post))
     throw errorTable.permissionDenyError();
 };

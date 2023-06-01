@@ -28,7 +28,8 @@ export const updateMe = catchAsync(async (req, res, next) => {
     throw errorTable.notAllowUpdateEmailError();
   }
 
-  // 3) Not allow to update avatar at this route
+  // 3) Not allow to update avatar and role at this route
+  if (req.body.role) delete req.body.role;
   if (req.body.avatar) delete req.body.avatar;
 
   // 4) Setting user info

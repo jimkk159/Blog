@@ -35,6 +35,8 @@ router.post(
   postController.createOne
 );
 
+router.use(postController.checkPermission);
+
 router
   .route("/:id")
   .patch(postController.updateOne)
