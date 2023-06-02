@@ -1,30 +1,39 @@
+import validator from "validator";
 import { Form, redirect } from "react-router-dom";
 
+import Input from "../../../components/UI/Input";
+import useForm from "../../../hooks/form-hook";
+
 function ForgotPassword() {
+  const { formState, inputHandler } = useForm(
+    { email: { value: "", isValid: false } },
+    false
+  );
+
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <Form
         method="post"
         className="flex w-[448px] flex-col justify-center rounded-lg bg-white p-12 text-black"
       >
-        <p className="text-center text-3xl font-bold">
-          Forgot yuour password?
-        </p>
+        <p className="text-center text-3xl font-bold">Forgot yuour password?</p>
         <p className="mt-16 pl-[4px] font-bree-serif text-base">{`We will send the new password to your email address!`}</p>
         <label
           htmlFor="email"
-          className="text-sm mt-12"
+          className="mt-12 text-sm"
         >{`Please enter your email.`}</label>
-        <input
+        <Input
           type="email"
           name="email"
-          required
-          className="m-0 my-1.5 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
           placeholder="Email"
+          errorMessage={"Please enter a valid email."}
+          onInput={inputHandler}
+          validators={validator.isEmail}
         />
         <button
           type="submit"
-          className="m-0 my-1.5 box-border h-12 rounded border bg-blue-500 px-2 py-2.5 text-center font-roboto text-lg text-white"
+          disabled={!formState.isValid}
+          className="m-0 my-1.5 box-border h-12 rounded border bg-blue-500 px-2 py-2.5 text-center font-roboto text-lg text-white disabled:bg-blue-300"
         >
           Submit
         </button>
