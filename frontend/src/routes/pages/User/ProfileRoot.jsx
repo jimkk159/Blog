@@ -1,5 +1,5 @@
 import * as authHelper from "../../../utils/auth";
-import { json, defer, Outlet, redirect } from "react-router-dom";
+import { defer, Outlet, redirect } from "react-router-dom";
 
 function ProfileRoot() {
   return <Outlet />;

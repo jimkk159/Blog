@@ -1,3 +1,5 @@
+import validator from "validator";
+import { useCallback } from "react";
 import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
 import { GoogleLoginButton } from "react-social-login-buttons";
@@ -9,12 +11,20 @@ import {
   useActionData,
   useSearchParams,
 } from "react-router-dom";
-import { useCallback } from "react";
+import Input from "../../../components/UI/Input";
+import useForm from "../../../hooks/form-hook";
 
 function Auth() {
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
   const data = useActionData();
+  const { formState, inputHandler } = useForm(
+    {
+      email: { value: "", isValid: false },
+      password: { value: "", isValid: false },
+    },
+    false
+  );
 
   // TODO
   const googleHandler = useCallback((event) => {
@@ -36,41 +46,46 @@ function Auth() {
           {isSignup ? "Sign up" : "Login"}
         </p>
         {isSignup && (
-          <input
-            id="name"
+          <Input
             type="text"
             name="name"
-            required
-            className="m-0 my-1 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
             placeholder="Name"
+            errorMessage={"Please enter your name."}
+            onInput={inputHandler}
+            validators={(e) => !validator.isEmpty(e)}
           />
         )}
-        <input
+        <Input
           type="email"
           name="email"
-          required
-          className="m-0 my-1.5 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
           placeholder="Email"
+          errorMessage={"Please enter a valid email."}
+          onInput={inputHandler}
+          validators={validator.isEmail}
         />
-        <input
+        <Input
           type="password"
           name="password"
-          className="m-0 my-1.5 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
-          required
           placeholder="Password"
+          errorMessage={"Please enter at least 6 characters."}
+          onInput={inputHandler}
+          validators={(e) => e.length >= 6}
         />
         {isSignup && (
-          <input
+          <Input
             type="password"
             name="confirmPassword"
             className="m-0 my-1.5 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
-            required
             placeholder="Password again"
+            errorMessage={"Please enter at least 6 characters."}
+            onInput={inputHandler}
+            validators={(e) => e.length >= 6}
           />
         )}
         <button
           type="submit"
-          className="m-0 my-1.5 box-border h-12 rounded border bg-blue-500 px-2 py-2.5 text-center font-roboto text-lg text-white"
+          disabled={!formState.isValid}
+          className="m-0 my-1.5 box-border h-12 rounded border bg-blue-500 px-2 py-2.5 text-center font-roboto text-lg text-white disabled:bg-blue-300"
         >
           {isSignup ? "Sign up" : "Login"}
         </button>
