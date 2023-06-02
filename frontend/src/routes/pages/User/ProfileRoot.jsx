@@ -1,4 +1,4 @@
-import * as authHelper from "../../utils/auth";
+import * as authHelper from "../../../utils/auth";
 import { defer, Outlet, redirect } from "react-router-dom";
 
 function ProfileRoot() {

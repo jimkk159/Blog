@@ -1,10 +1,10 @@
-import Pagination from "./UI/Pagination";
+import Pagination from "../UI/Pagination";
 import MDEditor from "@uiw/react-md-editor";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import TagList from "./TagList";
-import TagListSmall from "./TagListSmall";
-import Avatar from "../components/UI/Avatar";
+import Avatar from "../UI/Avatar";
+import TagList from "../Tag/TagList";
+import TagListSmall from "../Tag/TagListSmall";
 
 const defaultPage = 1;
 const defaultLimit = 15;
@@ -96,10 +96,7 @@ function PostList({
                 )}
               </Link>
               {!isTagOnTopRight && (
-                <TagList
-                  post={post}
-                  title="Search for this tag?"
-                />
+                <TagList post={post} title="Search for this tag?" />
               )}
             </li>
           );

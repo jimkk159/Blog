@@ -1,7 +1,7 @@
 import { useReducer, useCallback, useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
-import CloneComponents from "./CloneComponent";
+import CloneComponents from "../helper/CloneComponent";
 
 const initialState = {
   id: null,

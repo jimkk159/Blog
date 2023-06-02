@@ -6,12 +6,12 @@ import {
   useNavigate,
   useRouteLoaderData,
 } from "react-router-dom";
-import { AwaitWrapper } from "../helper/Wrapper";
-import * as authHelper from "../../utils/auth";
-import * as helper from "../../utils/helper";
+import { AwaitWrapper } from "../../helper/Wrapper";
+import * as authHelper from "../../../utils/auth";
+import * as helper from "../../../utils/helper";
 import { useSelector } from "react-redux";
-import TagList from "../../components/TagList";
-import Chapter from "../../components/Chapter";
+import TagList from "../../../components/Tag/TagList";
+import Chapter from "../../../components/Post/Chapter";
 
 function PostDetail() {
   const submit = useSubmit();

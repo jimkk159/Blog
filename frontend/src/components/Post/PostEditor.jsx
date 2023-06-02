@@ -8,9 +8,9 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 
-import Code from "./Plugins";
-import TagList from "./TagList";
-import * as editHelper from "../utils/edit";
+import Code from "../Plugins";
+import TagList from "../Tag/TagList";
+import * as editHelper from "../../utils/edit";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);

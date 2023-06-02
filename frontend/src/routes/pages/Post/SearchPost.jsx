@@ -1,11 +1,11 @@
-import PostsList from "../../components/PostsList";
 import {
   defer,
   redirect,
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import PostsNavigation from "../../components/PostsNavigation";
+import PostsList from "../../../components/Post/PostsList";
+import PostsNavigation from "../../../components/Post/PostsNavigation";
 
 const defaultPage = 1;
 const defaultLimit = 15;

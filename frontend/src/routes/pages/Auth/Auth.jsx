@@ -1,5 +1,5 @@
-import store from "../../store";
-import { authActions } from "../../store/auth-slice";
+import store from "../../../store";
+import { authActions } from "../../../store/auth-slice";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import { Link, Form, useSearchParams, redirect } from "react-router-dom";
 import { useCallback } from "react";

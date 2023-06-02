@@ -9,20 +9,20 @@ import RootLayout from "./pages/Root";
 import * as authHelper from "../utils/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
 
-const AboutPage = lazy(() => import("./pages/About"));
-const AuthPage = lazy(() => import("./pages/Auth"));
-const SearchPage = lazy(() => import("./pages/Search"));
-const PostsPage = lazy(() => import("./pages/Posts"));
-const PostsLayout = lazy(() => import("./pages/PostsRoot"));
-const PostsRelationRootLayout = lazy(() => import("./pages/PostsRelationRoot"));
-const PostDetailPage = lazy(() => import("./pages/PostDetail"));
-const EditPostPage = lazy(() => import("./pages/EditPost"));
-const NewPostPage = lazy(() => import("./pages/NewPost"));
-const OauthPage = lazy(() => import("./pages/Oauth"));
-const ForgotPasswordPage = lazy(() => import("./pages/ForgotPassword"));
-const ProfileRootLayout = lazy(() => import("./pages/ProfileRoot"));
-const ProfilePage = lazy(() => import("./pages/Profile"));
-const BrowserProfilePage = lazy(() => import("./pages/BrowserProfile"));
+const AboutPage = lazy(() => import("./pages/User/About"));
+const AuthPage = lazy(() => import("./pages/Auth/Auth"));
+const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
+const PostsPage = lazy(() => import("./pages/Post/Posts"));
+const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
+const PostsRelationRootLayout = lazy(() => import("./pages/Post/PostsRelationRoot"));
+const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
+const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
+const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
+const OauthPage = lazy(() => import("./pages/Auth/Oauth"));
+const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword"));
+const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
+const ProfilePage = lazy(() => import("./pages/User/Profile"));
+const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));

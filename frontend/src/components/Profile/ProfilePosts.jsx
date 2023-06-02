@@ -1,5 +1,5 @@
 import { useRouteLoaderData } from "react-router-dom";
-import PostsList from "../PostsList";
+import PostsList from "../Post/PostsList";
 import { useState } from "react";
 
 const limit = 10;

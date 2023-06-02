@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { authActions } from "../../store/auth-slice";
+import { authActions } from "../../../store/auth-slice";
 
 function OauthPage() {
   const searchParams = useSearchParams()[0];

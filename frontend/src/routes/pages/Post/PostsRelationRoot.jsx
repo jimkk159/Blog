@@ -14,6 +14,7 @@ async function categoryLoader() {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + "/api/v1/categories"
   );
+  
   const resJSON = await response.json();
   return resJSON.data;
 }

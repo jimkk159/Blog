@@ -1,11 +1,11 @@
 import { Form, Link, useRouteLoaderData } from "react-router-dom";
-import Avatar from "./UI/Avatar";
+import Avatar from "./Avatar";
 import NavItem from "./NavItem";
 import SearchBar from "./SearchBar";
 import { useSelector } from "react-redux";
 
-import logo from "../assets/imgs/blog_logo.png";
-import defaultImg from "../assets/imgs/default.jpg";
+import logo from "../../assets/imgs/blog_logo.png";
+import defaultImg from "../../assets/imgs/default.jpg";
 
 function MainNavigation() {
   const token = useRouteLoaderData("root");

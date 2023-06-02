@@ -1,9 +1,9 @@
 import { useRef, useState, useEffect } from "react";
-import { tagActions } from "../store/tag-slice";
+import { tagActions } from "../../store/tag-slice";
 import { useRouteLoaderData } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
-import * as authHelper from "../utils/auth";
+import * as authHelper from "../../utils/auth";
 
 function TagsToolTip({ postTags, category }) {
   const inputRef = useRef(null);

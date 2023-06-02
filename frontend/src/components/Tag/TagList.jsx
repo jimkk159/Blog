@@ -3,7 +3,7 @@ import { AiOutlineTag } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 
 import TagsToolTip from "./TagsToolTip";
-import { tagActions } from "../store/tag-slice";
+import { tagActions } from "../../store/tag-slice";
 
 function TagList({ post, title, isEdit = false }) {
   const dispatch = useDispatch();

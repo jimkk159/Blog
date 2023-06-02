@@ -1,4 +1,4 @@
-import PostsList from "../../components/PostsList";
+import PostsList from "../../../components/Post/PostsList";
 import { useSearchParams, useRouteLoaderData } from "react-router-dom";
 
 function Posts() {

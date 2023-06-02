@@ -1,7 +1,7 @@
-import store from "../../store";
+import store from "../../../store";
 import { redirect } from "react-router-dom";
-import * as authHelper from "../../utils/auth";
-import { authActions } from "../../store/auth-slice";
+import * as authHelper from "../../../utils/auth";
+import { authActions } from "../../../store/auth-slice";
 
 export async function action({ request }) {
   const data = await request.formData();

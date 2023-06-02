@@ -1,15 +1,15 @@
 import { useCallback, useRef, useState } from "react";
-import * as authHelper from "../../utils/auth";
+import * as authHelper from "../../../utils/auth";
 import { AiFillCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { ImNewspaper } from "react-icons/im";
 import { redirect, useRouteLoaderData } from "react-router-dom";
 import { BsFillKeyFill, BsPersonCircle } from "react-icons/bs";
-import Avatar from "../../components/UI/Avatar";
-import Password from "../../components/Profile/Password";
-import EditProfile from "../../components/Profile/EditProfile";
-import ProfilePosts from "../../components/Profile/ProfilePosts";
-import { authActions } from "../../store/auth-slice";
+import Avatar from "../../../components/UI/Avatar";
+import Password from "../../../components/Profile/Password";
+import EditProfile from "../../../components/Profile/EditProfile";
+import ProfilePosts from "../../../components/Profile/ProfilePosts";
+import { authActions } from "../../../store/auth-slice";
 
 function Profile() {
   const token = authHelper.getAuthToken();

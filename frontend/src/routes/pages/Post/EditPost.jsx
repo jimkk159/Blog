@@ -1,7 +1,7 @@
-import store from "../../store";
-import * as authHelper from "../../utils/auth";
-import { AwaitWrapper } from "../helper/Wrapper";
-import PostEditor from "../../components/PostEditor";
+import store from "../../../store";
+import * as authHelper from "../../../utils/auth";
+import { AwaitWrapper } from "../../helper/Wrapper";
+import PostEditor from "../../../components/Post/PostEditor";
 import { redirect, useRouteLoaderData } from "react-router-dom";
 
 function EditPost() {

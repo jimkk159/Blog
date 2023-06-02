@@ -1,6 +1,6 @@
-import store from "../../store";
+import store from "../../../store";
 import { redirect } from "react-router-dom";
-import { authActions } from "../../store/auth-slice";
+import { authActions } from "../../../store/auth-slice";
 
 export function action() {
   localStorage.removeItem("token");

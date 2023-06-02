@@ -1,6 +1,6 @@
-import Avatar from "../../components/UI/Avatar";
+import Avatar from "../../../components/UI/Avatar";
 import { useRouteLoaderData } from "react-router-dom";
-import ProfilePosts from "../../components/Profile/ProfilePosts";
+import ProfilePosts from "../../../components/Profile/ProfilePosts";
 
 function BrowserProfile() {
   const { author } = useRouteLoaderData("profile");
