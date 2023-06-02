@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { defer, Await, useLoaderData } from "react-router-dom";
+import { defer, Await, useLoaderData, json } from "react-router-dom";
 
 function About() {
   const { about } = useLoaderData();
@@ -23,9 +23,25 @@ function About() {
 export default About;
 
 async function AboutLoader() {
-  const response = await fetch("http://localhost:5000/api/v1/about");
-  await response.json();
-  return "About";
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/about"
+  );
+
+  if (!response.ok)
+    throw json(
+      { message: "Could not fetch about information." },
+      { status: 404 }
+    );
+
+  const resJSON = await response.json();
+
+  if (!resJSON.data)
+    throw json(
+      { message: "Could not fetch about information." },
+      { status: 404 }
+    );
+
+  return resJSON.data;
 }
 
 export function loader() {

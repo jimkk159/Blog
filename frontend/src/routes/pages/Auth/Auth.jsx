@@ -1,13 +1,22 @@
 import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
 import { GoogleLoginButton } from "react-social-login-buttons";
-import { Link, Form, useSearchParams, redirect } from "react-router-dom";
+import {
+  Link,
+  Form,
+  redirect,
+  json,
+  useActionData,
+  useSearchParams,
+} from "react-router-dom";
 import { useCallback } from "react";
 
 function Auth() {
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
+  const data = useActionData();
 
+  // TODO
   const googleHandler = useCallback((event) => {
     event.preventDefault();
     window.open(
@@ -96,7 +105,7 @@ function Auth() {
           </>
         )}
         {isSignup && (
-          <div className="flex items-center justify-start py-4 px-2 text-base">
+          <div className="flex items-center justify-start px-2 py-4 text-base">
             <p>Already has an account?</p>
             <Link to={"/auth?mode=login"} className="mx-4 text-blue-400">
               Login
@@ -130,6 +139,15 @@ export async function action({ request }) {
       body: JSON.stringify(authData),
     }
   );
+  if (response.status !== 422)
+    throw json(
+      {
+        message:
+          mode === "login" ? "Unknow Login error" : "Unknow Signup error",
+      },
+      { status: 500 }
+    );
+  else if (response.status === 422) return response;
 
   const resJSON = await response.json();
 

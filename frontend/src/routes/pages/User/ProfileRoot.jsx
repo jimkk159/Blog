@@ -1,5 +1,5 @@
 import * as authHelper from "../../../utils/auth";
-import { defer, Outlet, redirect } from "react-router-dom";
+import { json, defer, Outlet, redirect } from "react-router-dom";
 
 function ProfileRoot() {
   return <Outlet />;
@@ -18,6 +18,17 @@ async function selfAuthorLoader() {
       },
     }
   );
+  if (!response.ok) throw new Error();
+
+  const resJSON = await response.json();
+  return resJSON.data;
+}
+
+async function authorLoader(uid) {
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/${uid}`
+  );
+  if (!response.ok) throw new Error();
 
   const resJSON = await response.json();
   return resJSON.data;
@@ -35,6 +46,11 @@ async function selfpostsLoader() {
       },
     }
   );
+  if (!response.ok)
+    return {
+      data: [],
+      total: 0,
+    };
 
   const resJSON = await response.json();
   return {
@@ -43,20 +59,17 @@ async function selfpostsLoader() {
   };
 }
 
-async function authorLoader(uid) {
-  const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/${uid}`
-  );
-
-  const resJSON = await response.json();
-  return resJSON.data;
-}
-
 async function postsLoader(uid) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
       `/api/v1/posts/search?mode=author&type=id&target=${uid}&fields=updatedAt`
   );
+  if (!response.ok)
+    return {
+      data: [],
+      total: 0,
+    };
+
   const resJSON = await response.json();
   return {
     data: resJSON.data,

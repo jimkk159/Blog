@@ -48,6 +48,7 @@ async function postsLoader({ mode, type, target, page, limit }) {
       `/api/v1/posts/search?mode=${mode}&type=${type}&target=${target}` +
       `&page=${page ? page : defaultPage}&limit=${limit ? limit : defaultLimit}`
   );
+  if (!response.ok) throw new Error();
 
   const resJSON = await response.json();
   return resJSON.data;

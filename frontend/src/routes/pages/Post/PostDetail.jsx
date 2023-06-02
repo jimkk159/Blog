@@ -1,5 +1,6 @@
 import MDEditor from "@uiw/react-md-editor";
 import {
+  json,
   defer,
   useSubmit,
   redirect,
@@ -84,6 +85,10 @@ async function postLoader(id) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/${id}`
   );
+  if (response.status === 404)
+    throw json({ message: "Could not fetch target post." }, { status: 404 });
+  if (!response.ok) throw json({ message: "Unknown Error" }, { status: 500 });
+  
   const resJSON = await response.json();
   return resJSON.data;
 }
@@ -99,15 +104,12 @@ export async function action({ params, request }) {
   const postId = params.pid;
   const token = authHelper.getAuthToken();
 
-  await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/${postId}`,
-    {
-      method: request.method,
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/${postId}`, {
+    method: request.method,
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
 
   if (request.method === "DELETE") return redirect(`/`);
   return redirect(`/${postId}`);

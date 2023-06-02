@@ -19,6 +19,8 @@ async function postsLoader({ page, limit }) {
       `/api/v1/posts?page=${page}&limit=${limit}&fields=updatedAt`
   );
 
+  if (!response.ok) throw new Error();
+
   const resJSON = await response.json();
   return resJSON.data;
 }

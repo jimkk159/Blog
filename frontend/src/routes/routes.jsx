@@ -41,13 +41,13 @@ const router = createBrowserRouter([
       {
         id: "relation",
         path: "/",
-        loader: lazyLoader("./pages/PostsRelationRoot"),
+        loader: lazyLoader("./pages/Post/PostsRelationRoot"),
         element: SuspenseWrapper(<PostsRelationRootLayout />),
         children: [
           {
             id: "posts",
             path: "/",
-            loader: lazyLoader("./pages/PostsRoot"),
+            loader: lazyLoader("./pages/Post/PostsRoot"),
             element: SuspenseWrapper(<PostsLayout />),
             children: [
               {
@@ -57,18 +57,18 @@ const router = createBrowserRouter([
               {
                 id: "post-detail",
                 path: ":pid",
-                loader: lazyLoader("./pages/PostDetail"),
+                loader: lazyLoader("./pages/Post/PostDetail"),
                 children: [
                   {
                     index: true,
                     element: SuspenseWrapper(<PostDetailPage />),
-                    action: lazyAction("./pages/PostDetail"),
+                    action: lazyAction("./pages/Post/PostDetail"),
                   },
                   {
                     path: "edit",
                     element: SuspenseWrapper(<EditPostPage />),
                     loader: authHelper.checkAuthTokenLoader,
-                    action: lazyAction("./pages/EditPost"),
+                    action: lazyAction("./pages/Post/EditPost"),
                   },
                 ],
               },
@@ -76,49 +76,49 @@ const router = createBrowserRouter([
                 path: "new",
                 element: SuspenseWrapper(<NewPostPage />),
                 loader: authHelper.checkAuthTokenLoader,
-                action: lazyAction("./pages/NewPost"),
+                action: lazyAction("./pages/Post/NewPost"),
               },
             ],
           },
           {
             path: "search",
             element: SuspenseWrapper(<SearchPage />),
-            loader: lazyLoader("./pages/Search"),
-            action: lazyAction("./pages/Search"),
+            loader: lazyLoader("./pages/Post/SearchPost"),
+            action: lazyAction("./pages/Post/SearchPost"),
           },
         ],
       },
       {
         path: "auth",
         element: SuspenseWrapper(<AuthPage />),
-        action: lazyAction("./pages/Auth"),
+        action: lazyAction("./pages/Auth/Auth"),
       },
       {
         path: "about",
         element: SuspenseWrapper(<AboutPage />),
-        loader: lazyLoader("./pages/About"),
+        loader: lazyLoader("./pages/User/About"),
       },
 
       { path: "oauth/success", element: SuspenseWrapper(<OauthPage />) },
       {
         path: "logout",
-        action: lazyAction("./pages/Logout"),
+        action: lazyAction("./pages/Auth/Logout"),
       },
       {
         path: "forgot_password",
         element: SuspenseWrapper(<ForgotPasswordPage />),
-        action: lazyAction("./pages/ForgotPassword"),
+        action: lazyAction("./pages/Auth/ForgotPassword"),
       },
       {
         path: "profile",
         id: "profile",
         element: SuspenseWrapper(<ProfileRootLayout />),
-        loader: lazyLoader("./pages/ProfileRoot"),
+        loader: lazyLoader("./pages/User/ProfileRoot"),
         children: [
           {
             index: true,
             element: SuspenseWrapper(<ProfilePage />),
-            action: lazyAction("./pages/Profile"),
+            action: lazyAction("./pages/User/Profile"),
           },
           {
             path: ":id",
@@ -129,7 +129,7 @@ const router = createBrowserRouter([
       {
         path: "update_password",
         loader: authHelper.checkAuthTokenLoader,
-        action: lazyAction("./pages/UpdatePassword"),
+        action: lazyAction("./pages/Auth/UpdatePassword"),
       },
       {
         path: "/oauth/success",
