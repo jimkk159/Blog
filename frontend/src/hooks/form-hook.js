@@ -33,9 +33,19 @@ export function useInput(initalValue, validators) {
     [validators]
   );
 
+  const setHandler = useCallback(
+    (value) =>
+      dispatch({
+        type: "CHANGE",
+        value,
+        validators,
+      }),
+    [validators]
+  );
+
   const blurHandler = useCallback(() => dispatch({ type: "TOUCH" }), []);
 
-  return { inputState, changeHandler, blurHandler };
+  return { inputState, changeHandler, blurHandler, setHandler };
 }
 
 const checkFormIsValid = (obj) => {

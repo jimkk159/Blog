@@ -10,15 +10,17 @@ import {
   json,
   useActionData,
   useSearchParams,
+  useNavigate,
 } from "react-router-dom";
 import Input from "../../../components/UI/Input";
 import useForm from "../../../hooks/form-hook";
 
 function Auth() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
   const data = useActionData();
-  const { formState, inputHandler } = useForm(
+  const { formState, inputHandler, setFormData } = useForm(
     {
       email: { value: "", isValid: false },
       password: { value: "", isValid: false },
@@ -36,6 +38,24 @@ function Auth() {
     );
   }, []);
 
+  const emailInput = formState.inputs.email;
+  const passwordInput = formState.inputs.password;
+
+  const switchHandler = useCallback(() => {
+    if (isSignup) {
+      setFormData(
+        {
+          email: { ...emailInput },
+          password: { ...passwordInput },
+        },
+        emailInput.isValid && passwordInput.isValid
+      );
+      navigate("/auth?mode=login");
+    } else {
+      navigate("/auth?mode=signup");
+    }
+  }, [isSignup, emailInput, passwordInput, setFormData, navigate]);
+
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <Form
@@ -49,6 +69,7 @@ function Auth() {
           <Input
             type="text"
             name="name"
+            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
             placeholder="Name"
             errorMessage={"Please enter your name."}
             onInput={inputHandler}
@@ -58,6 +79,7 @@ function Auth() {
         <Input
           type="email"
           name="email"
+          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
           placeholder="Email"
           errorMessage={"Please enter a valid email."}
           onInput={inputHandler}
@@ -66,6 +88,7 @@ function Auth() {
         <Input
           type="password"
           name="password"
+          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
           placeholder="Password"
           errorMessage={"Please enter at least 6 characters."}
           onInput={inputHandler}
@@ -75,7 +98,7 @@ function Auth() {
           <Input
             type="password"
             name="confirmPassword"
-            className="m-0 my-1.5 box-border h-12 overflow-ellipsis rounded border border-gray-400 px-2 py-2.5 text-base focus:outline-gray-400"
+            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
             placeholder="Password again"
             errorMessage={"Please enter at least 6 characters."}
             onInput={inputHandler}
@@ -122,9 +145,13 @@ function Auth() {
         {isSignup && (
           <div className="flex items-center justify-start px-2 py-4 text-base">
             <p>Already has an account?</p>
-            <Link to={"/auth?mode=login"} className="mx-4 text-blue-400">
+            <button
+              type="button"
+              className="mx-4 text-blue-400"
+              onClick={switchHandler}
+            >
               Login
-            </Link>
+            </button>
           </div>
         )}
       </Form>
@@ -154,7 +181,9 @@ export async function action({ request }) {
       body: JSON.stringify(authData),
     }
   );
-  if (response.status !== 422)
+
+  if (response.status === 422) return response;
+  else if (!response.ok)
     throw json(
       {
         message:
@@ -162,7 +191,6 @@ export async function action({ request }) {
       },
       { status: 500 }
     );
-  else if (response.status === 422) return response;
 
   const resJSON = await response.json();
 
