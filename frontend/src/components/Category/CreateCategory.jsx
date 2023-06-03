@@ -5,7 +5,7 @@ import Button from "../UI/Button";
 
 import useForm from "../../hooks/form-hook";
 import Input from "../../components/UI/Input";
-import MutiSelectInput from "../UI/MultiSelectInput";
+import MultiSelectInput from "../UI/MultiSelectInput";
 
 function CreateCategory({ onClose }) {
   const [isDrop, setIsDrop] = useState(false);
@@ -75,8 +75,9 @@ function CreateCategory({ onClose }) {
         validators={(e) => !validator.isEmpty(e)}
       />
       <p className="pl-1 pt-4 text-base font-bold">Parent</p>
-      <MutiSelectInput
+      <MultiSelectInput
         name="ParentId"
+        defaultName="Top"
         choices={choices}
         choiceElement={<li />}
         defaultValue="This category belongs to..."
@@ -87,10 +88,10 @@ function CreateCategory({ onClose }) {
       <div className="mt-4 flex w-full justify-end pt-0.5">
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={!formState.isValid || isLoading}
           loading={isLoading}
           spinner={{ size: 15 }}
-          className="ml-1.5 rounded-lg bg-blue-700 p-2 text-xs font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300"
+          className="ml-1.5 rounded-lg bg-blue-700 p-2 text-xs font-bold text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 disabled:bg-blue-300"
         >
           Create
         </Button>

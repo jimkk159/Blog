@@ -101,11 +101,11 @@ export default function useForm(initialInputs) {
 
   //Set Form data
   const setFormData = useCallback(
-    (inputData, formValidity) =>
+    (inputs, formIsValid) =>
       dispatch({
         type: "SET_DATA",
-        inputs: inputData,
-        formIsValid: formValidity,
+        inputs,
+        formIsValid,
       }),
     []
   );

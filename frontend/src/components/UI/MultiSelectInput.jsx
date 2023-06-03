@@ -22,7 +22,9 @@ const reducer = (state, action) => {
 
 function MultiSelectInput({
   name,
+  defaultName,
   choices,
+  current,
   isDrop,
   onDrop,
   onInput,
@@ -96,8 +98,10 @@ function MultiSelectInput({
           <ul className="rounded border text-left">
             <ChoiceChild
               className="border-b px-2 py-1 text-base hover:bg-gray-100"
+              current={current}
               choices={choices}
               children={choiceElement}
+              defaultName={defaultName}
               onClick={clickHandler}
             />
           </ul>

@@ -1,11 +1,21 @@
 import CloneComponents from "../helper/CloneComponent";
 
-function ChoiceChild({ className, children, choices, onClick }) {
+function ChoiceChild({
+  className,
+  children,
+  current,
+  choices,
+  onClick,
+  defaultName = "",
+}) {
+  let output = choices;
   if (!choices) return;
   if (!choices.length) return;
 
-  return choices.map((el, index) => {
-    const name = el.name === "root" ? "Top" : el.name;
+  if (current) output = choices.filter((el) => current.id !== el.id);
+
+  return output.map((el, index) => {
+    const name = el.name === "root" ? defaultName : el.name;
     return (
       <CloneComponents
         key={index}

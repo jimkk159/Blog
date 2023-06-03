@@ -1,82 +1,44 @@
-import { useReducer, useCallback, useEffect, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { BiChevronDown } from "react-icons/bi";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
-import CloneComponents from "../helper/CloneComponent";
+
 import Button from "../UI/Button";
-
-const initialState = {
-  id: null,
-  name: "",
-  ParentId: "1",
-  parent: "",
-};
-
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "UPDATE":
-      return { ...state, [action.field]: action.value };
-    case "RESET":
-      return initialState;
-    default:
-      return state;
-  }
-};
-
-function ChoiceChild({ className, children, categories, current, onClick }) {
-  if (!categories) return;
-  if (!categories.length) return;
-
-  return categories
-    .filter((el) => current.id !== el.id)
-    .map((el, index) => {
-      const name = el.name === "root" ? "None" : el.name;
-      return (
-        <CloneComponents
-          key={index}
-          className={className}
-          components={children}
-          value={el.id}
-          onClick={(e) => onClick(e, name)}
-        >
-          {name}
-        </CloneComponents>
-      );
-    });
-}
+import MultiSelectInput from "../UI/MultiSelectInput";
+import useForm from "../../hooks/form-hook";
 
 function EditCategory({ current, onClose }) {
   const [isDrop, setIsDrop] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isSelected, setIsSelected] = useState(false);
-  const [formData, dispatch] = useReducer(reducer, initialState);
 
+  const { formState, inputHandler, setFormData } = useForm(
+    {
+      CategoryId: { value: "", isValid: false },
+      ParentId: { value: "", isValid: false },
+    },
+    false
+  );
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
   const { categories } = useRouteLoaderData("relation");
+  const choices =
+    categories.map((el) => ({
+      ...el,
+      value: el.id,
+    })) ?? [];
 
-  const clickHandler = (event, name) => {
-    event.preventDefault();
-    event.stopPropagation();
-    dispatch({ type: "UPDATE", field: "ParentId", value: event.target.value });
-    dispatch({ type: "UPDATE", field: "parent", value: name });
-    setIsSelected(true);
-    setIsDrop(false);
-  };
+  const ParentId = formState.inputs.ParentId.value;
+  const CategoryId = formState.inputs.CategoryId.value;
 
-  const categoryId = formData.id;
-  const parentName = formData.parent;
-  const ParentId = formData.ParentId;
   const submitHandler = useCallback(
     async (event) => {
       event.preventDefault();
       event.stopPropagation();
       setIsUpdating(true);
-      if (!!parentName) {
+      if (!!ParentId) {
         await fetch(
           process.env.REACT_APP_BACKEND_URL +
-            `/api/v1/categories/${categoryId}`,
+            `/api/v1/categories/${CategoryId}`,
           {
             method: "PATCH",
             headers: {
@@ -87,17 +49,16 @@ function EditCategory({ current, onClose }) {
           }
         ).catch((err) => err);
       }
-      dispatch({ type: "RESET" });
       setIsUpdating(false);
       navigate(0);
     },
-    [navigate, token, categoryId, parentName, ParentId]
+    [navigate, token, CategoryId, ParentId]
   );
 
   const deleteHandler = useCallback(async () => {
     setIsDeleting(true);
     await fetch(
-      process.env.REACT_APP_BACKEND_URL + `/api/v1/categories/${categoryId}`,
+      process.env.REACT_APP_BACKEND_URL + `/api/v1/categories/${CategoryId}`,
       {
         method: "DELETE",
         headers: {
@@ -108,14 +69,19 @@ function EditCategory({ current, onClose }) {
     ).catch((err) => err);
     setIsDeleting(false);
     navigate(0);
-  }, [navigate, token, categoryId]);
+  }, [navigate, token, CategoryId]);
 
   useEffect(() => {
     if (current) {
-      dispatch({ type: "UPDATE", field: "id", value: current.id });
-      dispatch({ type: "UPDATE", field: "ParentId", value: current.ParentId });
+      setFormData(
+        {
+          CategoryId: { value: current.id, isValid: true },
+          ParentId: { value: current.ParentId, isValid: false },
+        },
+        false
+      );
     }
-  }, [dispatch, current]);
+  }, [current, setFormData]);
 
   return (
     <form
@@ -123,60 +89,26 @@ function EditCategory({ current, onClose }) {
       onClick={(e) => e.stopPropagation()}
       className="absolute left-8 top-0 z-10 w-60 bg-slate-100 p-3 text-gray-800 "
     >
-      <select
-        id="ParentId"
-        name="ParentId"
-        className="hidden"
-        value={formData.ParentId}
-        readOnly
-      >
-        <ChoiceChild
-          categories={categories}
-          current={current}
-          children={<option />}
-        />
-      </select>
       <RxCross1
         className="absolute right-1.5 top-1.5 h-3 w-3"
         onClick={onClose}
       />
-      <div className="relative mr-2 mt-2 flex w-full items-center justify-center gap-5">
-        <button
-          type="button"
-          className="relative flex w-full items-center justify-center rounded border bg-white text-gray-600 shadow ring-gray-200 focus:outline-none"
-          onClick={() => setIsDrop((prev) => !prev)}
-        >
-          <label
-            htmlFor="ParentId"
-            className={`w-full cursor-pointer px-4 text-gray-500 ${
-              formData.parent.length > 14 ? " text-xs" : " text-sm"
-            }`}
-          >
-            {isSelected ? formData.parent : "Blongs to..."}
-          </label>
-          <BiChevronDown className="h-[25px] w-[25px]" />
-          <div
-            className={
-              `absolute top-full mt-1 w-max min-w-full bg-white shadow` +
-              `${isDrop ? "" : " hidden"}`
-            }
-          >
-            <ul className="rounded border text-left">
-              <ChoiceChild
-                className="border-b px-4 py-1 text-sm hover:bg-gray-100"
-                categories={categories}
-                current={current}
-                children={<li />}
-                onClick={clickHandler}
-              />
-            </ul>
-          </div>
-        </button>
-      </div>
+      <MultiSelectInput
+        name="ParentId"
+        defaultName="None"
+        choices={choices}
+        choiceElement={<li />}
+        defaultValue="Blongs to..."
+        current={current}
+        isDrop={isDrop}
+        onDrop={setIsDrop}
+        onInput={inputHandler}
+      />
+
       <div className="mt-1 flex w-full justify-end pt-0.5">
         <Button
           type="submit"
-          disabled={!isSelected || isUpdating}
+          disabled={!formState.isValid || isUpdating}
           loading={isUpdating}
           spinner={{ size: 15 }}
           className={
@@ -188,7 +120,7 @@ function EditCategory({ current, onClose }) {
         </Button>
         <Button
           type="button"
-          disabled={!isSelected || isDeleting}
+          disabled={isDeleting}
           loading={isDeleting}
           spinner={{ size: 15, color: "disabled:text-blue-300" }}
           onClick={deleteHandler}
