@@ -3,6 +3,7 @@ import { RxCross1 } from "react-icons/rx";
 import { BiChevronDown } from "react-icons/bi";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import CloneComponents from "../helper/CloneComponent";
+import Button from "../UI/Button";
 
 const initialState = {
   id: null,
@@ -46,6 +47,8 @@ function ChoiceChild({ className, children, categories, current, onClick }) {
 
 function EditCategory({ current, onClose }) {
   const [isDrop, setIsDrop] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const [formData, dispatch] = useReducer(reducer, initialState);
 
@@ -69,6 +72,7 @@ function EditCategory({ current, onClose }) {
     async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      setIsUpdating(true);
       if (!!parentName) {
         await fetch(
           process.env.REACT_APP_BACKEND_URL +
@@ -84,15 +88,16 @@ function EditCategory({ current, onClose }) {
         ).catch((err) => err);
       }
       dispatch({ type: "RESET" });
+      setIsUpdating(false);
       navigate(0);
     },
     [navigate, token, categoryId, parentName, ParentId]
   );
 
   const deleteHandler = useCallback(async () => {
+    setIsDeleting(true);
     await fetch(
-      process.env.REACT_APP_BACKEND_URL +
-        `/api/v1/categories/${categoryId}`,
+      process.env.REACT_APP_BACKEND_URL + `/api/v1/categories/${categoryId}`,
       {
         method: "DELETE",
         headers: {
@@ -101,6 +106,7 @@ function EditCategory({ current, onClose }) {
         },
       }
     ).catch((err) => err);
+    setIsDeleting(false);
     navigate(0);
   }, [navigate, token, categoryId]);
 
@@ -168,19 +174,33 @@ function EditCategory({ current, onClose }) {
         </button>
       </div>
       <div className="mt-1 flex w-full justify-end pt-0.5">
-        <button
+        <Button
           type="submit"
-          className="ml-1.5 rounded-lg bg-blue-700 p-2 text-xs font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-300"
+          disabled={!isSelected || isUpdating}
+          loading={isUpdating}
+          spinner={{ size: 15 }}
+          className={
+            "ml-1.5 rounded-lg bg-blue-700 p-2 text-xs font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-300" +
+            "disabled:border-blue-300 disabled:bg-blue-300 "
+          }
         >
           Update
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          disabled={!isSelected || isDeleting}
+          loading={isDeleting}
+          spinner={{ size: 15, color: "disabled:text-blue-300" }}
           onClick={deleteHandler}
-          className="ml-1.5 rounded-lg border shadow-md border-blue-700 p-2 text-center text-xs font-bold text-blue-700 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-500 dark:hover:text-white dark:focus:ring-blue-800"
+          className={
+            "ml-1.5 rounded-lg border border-blue-700 p-2 text-center text-xs font-bold text-blue-700 shadow-md " +
+            "focus:outline-none focus:ring-4 focus:ring-blue-300 " +
+            "hover:bg-blue-600 hover:text-white " +
+            "disabled:border-blue-300 disabled:text-blue-300 disabled:hover:border-blue-300 disabled:hover:bg-blue-300 disabled:hover:text-white  "
+          }
         >
           Delete This
-        </button>
+        </Button>
       </div>
     </form>
   );
