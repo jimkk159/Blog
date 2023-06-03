@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { RxGear } from "react-icons/rx";
 import EditCategory from "./EditCategory";
+import { useSelector } from "react-redux";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 
 function Category({ category, isOpen, setIsOpen }) {
   const [isEdit, setIsEdit] = useState(false);
+  const { isRoot } = useSelector((state) => state.auth);
 
-  const closeHandler = () => setIsEdit(false)
+  const closeHandler = () => setIsEdit(false);
 
   return (
     <li className="flex items-center py-1.5 ">
@@ -37,13 +39,15 @@ function Category({ category, isOpen, setIsOpen }) {
         {category.name}
       </p>
       <div className="relative">
-        <RxGear
-          className="ml-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsEdit((prev) => !prev);
-          }}
-        />
+        {isRoot && (
+          <RxGear
+            className="ml-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEdit((prev) => !prev);
+            }}
+          />
+        )}
         {isEdit && <EditCategory current={category} onClose={closeHandler} />}
       </div>
     </li>
