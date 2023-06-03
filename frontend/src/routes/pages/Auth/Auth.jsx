@@ -11,12 +11,17 @@ import {
   useActionData,
   useSearchParams,
   useNavigate,
+  useNavigation,
 } from "react-router-dom";
 import Input from "../../../components/UI/Input";
 import useForm from "../../../hooks/form-hook";
+import Button from "../../../components/UI/Button";
 
 function Auth() {
   const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
   const data = useActionData();
@@ -40,7 +45,6 @@ function Auth() {
 
   const emailInput = formState.inputs.email;
   const passwordInput = formState.inputs.password;
-
   const switchHandler = useCallback(() => {
     if (isSignup) {
       setFormData(
@@ -105,13 +109,14 @@ function Auth() {
             validators={(e) => e.length >= 6}
           />
         )}
-        <button
+        <Button
           type="submit"
-          disabled={!formState.isValid}
+          disabled={isSubmitting || !formState.isValid}
+          loading={isSubmitting}
           className="m-0 my-1.5 box-border h-12 rounded border bg-blue-500 px-2 py-2.5 text-center font-roboto text-lg text-white disabled:bg-blue-300"
         >
           {isSignup ? "Sign up" : "Login"}
-        </button>
+        </Button>
         <div className="relative flex w-full items-center justify-center py-2">
           <span className="text-black  before:absolute before:left-0 before:top-1/2 before:h-[1px] before:w-[calc(50%-1rem)] before:bg-gray-400 after:absolute after:right-0 after:top-1/2 after:h-[1px] after:w-[calc(50%-1rem)] after:bg-gray-400">
             or
@@ -119,6 +124,7 @@ function Auth() {
         </div>
         <div className="my-2">
           <GoogleLoginButton
+            isabled={isSubmitting}
             preventActiveStyles={true}
             onClick={googleHandler}
           />
@@ -147,6 +153,7 @@ function Auth() {
             <p>Already has an account?</p>
             <button
               type="button"
+              disabled={isSubmitting}
               className="mx-4 text-blue-400"
               onClick={switchHandler}
             >

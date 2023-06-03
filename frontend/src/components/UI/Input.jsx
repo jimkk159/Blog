@@ -24,7 +24,7 @@ function Input({
   const { value, isValid } = inputState; //prevent useEffect change by isTouched
   useEffect(() => {
     onInput(name, value, isValid);
-  }, [name, onInput, value, isValid]);
+  }, [onInput, name, value, isValid]);
 
   useEffect(() => {
     if (defaultValue && isInit) setHandler(defaultValue);
