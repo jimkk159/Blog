@@ -35,12 +35,10 @@ router.post(
   postController.createOne
 );
 
-router.use(postController.checkPermission);
-
 router
   .route("/:id")
-  .patch(postController.updateOne)
-  .delete(postController.deleteOne);
+  .patch(postController.checkPermission, postController.updateOne)
+  .delete(postController.checkPermission, postController.deleteOne);
 
 router.patch("/:id/category/:CategoryId", postController.updateCategory);
 

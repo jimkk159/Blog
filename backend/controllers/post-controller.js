@@ -20,7 +20,6 @@ export const getMe = catchAsync(async (req, res, next) => {
 export const checkPermission = catchAsync(async (req, res, next) => {
   // 1) find post
   let post = await Post.findByPk(req.params.id);
-  console.log(post)
   if (!post) throw errorTable.postNotFound();
   req.post = post;
 
