@@ -5,7 +5,7 @@ import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
 import * as authHelper from "../../utils/auth";
 
-function TagsToolTip({ postTags, category }) {
+function TagsToolTip({ postTags, category, isNew = false }) {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState(false);
@@ -13,13 +13,16 @@ function TagsToolTip({ postTags, category }) {
   const { tags } = useRouteLoaderData("relation");
   const [searchTag, setSearchTag] = useState("");
   const current = useSelector((state) => state.tag.tags);
-  const [submigErrorMessage, setSubmigErrorMessage] =
-    useState("");
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
-  const currentName = current && [
-    ...current.map((el) => el && el.name && el.name.toLowerCase()),
-    category.name,
-  ];
+  const currentName =
+    current &&
+    (isNew
+      ? [...current.map((el) => el && el.name && el.name.toLowerCase())]
+      : [
+          ...current.map((el) => el && el.name && el.name.toLowerCase()),
+          category.name,
+        ]);
 
   const choices =
     currentName &&
@@ -67,9 +70,9 @@ function TagsToolTip({ postTags, category }) {
   };
 
   useEffect(() => {
-    dispatch(tagActions.update({ tags: postTags }));
+    if (!isNew) dispatch(tagActions.update({ tags: postTags }));
     return () => dispatch(tagActions.init());
-  }, [dispatch, postTags]);
+  }, [dispatch, isNew, postTags]);
 
   return (
     <div

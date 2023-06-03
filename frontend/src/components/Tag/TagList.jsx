@@ -4,21 +4,29 @@ import { useSelector, useDispatch } from "react-redux";
 
 import TagsToolTip from "./TagsToolTip";
 import { tagActions } from "../../store/tag-slice";
+import { useEffect } from "react";
 
 function TagList({ post, title, isEdit = false }) {
   const dispatch = useDispatch();
   const current = useSelector((state) => state.tag.tags);
 
-  if (!post) return;
+  useEffect(() => {
+    return () => dispatch(tagActions.reset());
+  }, [dispatch]);
 
-  let categoryTag = (
+  if (!isEdit && !post) return;
+
+  let categoryTag = post ? (
     <p className="m-1 flex min-w-[20px] items-center rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
       {`${post.Category && post.Category.name}`}
     </p>
-  );
+  ) : null;
 
   let otherTags = current
-    .filter((tag) => tag.name !== post.Category.name)
+    .filter((tag) => {
+      if (!post) return true;
+      return tag.name !== post.Category.name;
+    })
     .map((tag, index) => (
       <p
         key={index}
@@ -54,6 +62,16 @@ function TagList({ post, title, isEdit = false }) {
           </p>
         </Link>
       )
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="text-md mt-2 flex flex-wrap items-center">
+        <AiOutlineTag className="mr-1 h-[20px] w-[20px]" />
+        {otherTags}
+        {isEdit && <TagsToolTip isNew />}
+      </div>
     );
   }
 

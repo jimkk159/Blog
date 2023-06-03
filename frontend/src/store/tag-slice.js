@@ -20,6 +20,9 @@ const tagSlice = createSlice({
     remove: (state, action) => {
       state.tags = state.tags.filter((el) => el.id !== action.payload.id);
     },
+    reset: (state) => {
+      state.tags = [];
+    },
   },
 });
 

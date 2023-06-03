@@ -10,9 +10,9 @@ import {
 } from "react-router-dom";
 
 import Code from "../Plugins";
+import Button from "../UI/Button";
 import TagList from "../Tag/TagList";
 import * as editHelper from "../../utils/edit";
-import Button from "../UI/Button";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -71,10 +71,8 @@ function PostEditor({ method, post }) {
   };
 
   const changeEditorHandler = (e) => {
-    {
-      setMarkdown(e);
-      setIsTouched(true);
-    }
+    setMarkdown(e);
+    setIsTouched(true);
   };
 
   const postTitle = post?.title ? post.title : "";
@@ -192,7 +190,7 @@ function PostEditor({ method, post }) {
                 }
                 spinner={{ color: "text-blue-600" }}
               >
-                {isSubmitting ? "Submitting..." : "Save"}
+                Save
               </Button>
               <Button
                 type="button"

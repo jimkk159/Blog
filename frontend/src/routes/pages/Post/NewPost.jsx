@@ -1,3 +1,4 @@
+import store from "../../../store";
 import { redirect } from "react-router-dom";
 import * as authHelper from "../../../utils/auth";
 import PostEditor from "../../../components/Post/PostEditor";
@@ -12,12 +13,13 @@ export async function action({ request }) {
   const method = request.method;
   const data = await request.formData();
   const token = authHelper.getAuthToken();
+  const tagId = store?.getState()?.tag?.tags.map((el) => el.id);
 
   const postData = {
     CategoryId: data.get("CategoryId"),
     title: data.get("title"),
     content: data.get("content"),
-    tagId: [],
+    tagId,
   };
 
   const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts";
