@@ -41,7 +41,7 @@ function PostList({
     );
 
   return (
-    <div className="inline-flex w-full flex-col items-center">
+    <div className="inline-flex w-full h-full flex-col items-center">
       <ul className="w-full max-w-5xl">
         {posts.map((post, index) => {
           return (
@@ -57,7 +57,7 @@ function PostList({
                     <>
                       <Avatar
                         title="To author profile"
-                        className={`h-[28px] w-[28px] cursor-pointer hover:bg-gray-950`}
+                        className={`h-[28px] w-[28px] cursor-pointer`}
                         avatar={post.Author.avatar}
                         onClick={() => navigate(`/profile/${post.Author.id}`)}
                       />
