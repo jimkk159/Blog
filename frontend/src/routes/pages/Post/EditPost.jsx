@@ -2,7 +2,7 @@ import store from "../../../store";
 import * as authHelper from "../../../utils/auth";
 import { AwaitWrapper } from "../../helper/Wrapper";
 import PostEditor from "../../../components/Post/PostEditor";
-import { redirect, useRouteLoaderData } from "react-router-dom";
+import { redirect, json, useRouteLoaderData } from "react-router-dom";
 
 function EditPost() {
   const { post } = useRouteLoaderData("post-detail");
@@ -28,12 +28,10 @@ export async function action({ request, params }) {
     content: data.get("content"),
     tagId,
   };
-
   const postId = params.pid;
-  const url =
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/posts/" + postId;
+  const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts/" + postId;
 
-  await fetch(url, {
+  const response = await fetch(url, {
     method: method,
     headers: {
       "Content-Type": "application/json",
@@ -41,6 +39,12 @@ export async function action({ request, params }) {
     },
     body: JSON.stringify(postData),
   });
+  
+  if (!response.ok)
+    return json(
+      { message: "Something wrong happen when updating post..." },
+      { status: 500 }
+    );
 
   return redirect(`/${params.pid}`);
 }

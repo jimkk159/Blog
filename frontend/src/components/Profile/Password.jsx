@@ -1,9 +1,12 @@
-import { Form } from "react-router-dom";
+import { Form, useNavigation } from "react-router-dom";
 
 import Input from "../UI/Input";
 import useForm from "../../hooks/form-hook";
+import Button from "../UI/Button";
 
 function Password({ onCancel }) {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
   const { formState, inputHandler } = useForm(
     {
       password: { value: "", isValid: false },
@@ -12,7 +15,7 @@ function Password({ onCancel }) {
     },
     false
   );
-  
+
   return (
     <Form
       method="post"
@@ -47,26 +50,28 @@ function Password({ onCancel }) {
           type="confirmNewPassword"
           name="confirmNewPassword"
           className="h-8 w-48 rounded px-2 text-black outline-none"
-          errorMessage={"Please enter at least 6 characters."}
+          errorMessage={"Please enter the same password."}
           onInput={inputHandler}
-          validators={(e) => e.length >= 6}
+          validators={(e) => e === formState.inputs.newPassword}
         />
       </div>
       <div className="flex justify-end space-x-4 py-4 pr-4">
-        <button
-          disabled={!formState.isValid}
+        <Button
+          disabled={!formState.isValid || isSubmitting}
+          loading={isSubmitting}
           type="submit"
           className="box-border rounded border-[1px] bg-transparent px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700 disabled:bg-blue-300 disabled:hover:bg-blue-300 "
         >
           Confrim
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
+          loading={isSubmitting}
           className="box-border rounded bg-blue-600 px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700"
           onClick={onCancel}
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </Form>
   );

@@ -9,9 +9,12 @@ function TagsToolTip({ postTags, category }) {
   const inputRef = useRef(null);
   const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
   const { tags } = useRouteLoaderData("relation");
   const [searchTag, setSearchTag] = useState("");
   const current = useSelector((state) => state.tag.tags);
+  const [submigErrorMessage, setSubmigErrorMessage] =
+    useState("");
 
   const currentName = current && [
     ...current.map((el) => el && el.name && el.name.toLowerCase()),
@@ -33,6 +36,7 @@ function TagsToolTip({ postTags, category }) {
       );
 
   const inputChangeHandler = (e) => {
+    setIsTouched(true);
     setSearchTag(e.target.value);
   };
 
@@ -50,7 +54,9 @@ function TagsToolTip({ postTags, category }) {
           },
           body: JSON.stringify({ name }),
         }
-      );
+      ).catch((err) => {
+        setSubmigErrorMessage("create tag fail");
+      });
       response = await response.json();
       const tag = response.data;
       tags.push(tag);
@@ -107,6 +113,11 @@ function TagsToolTip({ postTags, category }) {
               onKeyDown={keyDownHandler}
             />
             <hr className="mb-0 mt-0 w-full border-l-0 border-r-0" />
+            {!isTouched && submigErrorMessage && (
+              <p className="mx-0.5 mb-0 mt-0.5 text-left text-sm text-[#FF0000]">
+                {submigErrorMessage}
+              </p>
+            )}
             <div className={"h-full w-full"}>
               {choices.map((el, index) => (
                 <p

@@ -4,6 +4,7 @@ import { useRef, useEffect, useState, useCallback } from "react";
 import {
   Form,
   useNavigate,
+  useActionData,
   useNavigation,
   useRouteLoaderData,
 } from "react-router-dom";
@@ -11,6 +12,7 @@ import {
 import Code from "../Plugins";
 import TagList from "../Tag/TagList";
 import * as editHelper from "../../utils/edit";
+import Button from "../UI/Button";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -20,11 +22,14 @@ function PostEditor({ method, post }) {
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
+  const data = useActionData();
 
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
   const { categories } = useRouteLoaderData("relation");
+  const [isTouched, setIsTouched] = useState(false);
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   const inputImageHandler = useCallback(async (event) => {
     if (event.target.files && event.target.files.length === 1)
@@ -58,10 +63,17 @@ function PostEditor({ method, post }) {
     setTitleHeigh(36 * (parseInt((+e.target.scrollHeight - 38) / 36) + 1));
   };
 
-  const cancelHandler = (e) => {
+  const cancelHandler = () => {
     const alert = window.confirm("Are you sure to abandon and leave?");
     if (alert) {
       navigate(-1);
+    }
+  };
+
+  const changeEditorHandler = (e) => {
+    {
+      setMarkdown(e);
+      setIsTouched(true);
     }
   };
 
@@ -72,11 +84,18 @@ function PostEditor({ method, post }) {
     setMarkdown(postContent);
   }, [postTitle, postContent]);
 
+  useEffect(() => {
+    if (data && data.message) {
+      setIsTouched(false);
+      setSubmigErrorMessage(data.message);
+    }
+  }, [data]);
+
   return (
     <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
       <div className="h-full w-full max-w-3xl rounded bg-white p-16 text-black">
         <Form method={method}>
-          <div className="pb-2">
+          <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
             <textarea
               ref={titleRef}
               id="title"
@@ -102,7 +121,7 @@ function PostEditor({ method, post }) {
             <MDEditor
               ref={editorRef}
               value={markdown}
-              onChange={setMarkdown}
+              onChange={changeEditorHandler}
               commands={editHelper.editChoice(inputRef)}
               preview="edit"
               textareaProps={{
@@ -156,22 +175,35 @@ function PostEditor({ method, post }) {
                   ))}
             </select>
           </div>
-          <div className="my-8 flex justify-end font-pt-serif ">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-            >
-              {isSubmitting ? "Submitting..." : "Save"}
-            </button>
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={cancelHandler}
-              className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-            >
-              Cancel
-            </button>
+          <div className="my-8 flex flex-col ">
+            {!isTouched && submigErrorMessage && (
+              <p className="px-1 pb-2 text-left font-pt-serif text-sm text-[#FF0000]">
+                {submigErrorMessage}
+              </p>
+            )}
+            <div className="flex justify-end font-pt-serif ">
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                className={
+                  "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
+                  "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                }
+                spinner={{ color: "text-blue-600" }}
+              >
+                {isSubmitting ? "Submitting..." : "Save"}
+              </Button>
+              <Button
+                type="button"
+                disabled={isSubmitting}
+                loading={isSubmitting}
+                onClick={cancelHandler}
+                className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
+              >
+                Cancel
+              </Button>
+            </div>
           </div>
         </Form>
         <TagList post={post} isEdit={true} />

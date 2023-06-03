@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import validator from "validator";
-import { Form } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 
 import Input from "../UI/Input";
 import useForm from "../../hooks/form-hook";
+import Button from "../UI/Button";
 
 function EditProfile({ author }) {
   const [isEdit, setIsEdit] = useState(false);
@@ -11,6 +12,18 @@ function EditProfile({ author }) {
     { name: { value: "", isValid: false } },
     false
   );
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+  const data = useActionData();
+  const [isTouched, setIsTouched] = useState(false);
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (data && data.message) {
+      setIsTouched(false);
+      setSubmigErrorMessage(data.message);
+    }
+  }, [data]);
 
   return (
     <Form
@@ -28,6 +41,7 @@ function EditProfile({ author }) {
             errorMessage={"Please enter your name."}
             defaultValue={author.name}
             onInput={inputHandler}
+            onFocus={() => setIsTouched(true)}
             validators={(e) => !validator.isEmpty(e)}
           />
         </div>
@@ -42,6 +56,7 @@ function EditProfile({ author }) {
             name="description"
             defaultValue={author.description}
             className="mt-2 h-full resize-none rounded-lg text-black outline-none"
+            onFocus={() => setIsTouched(true)}
           />
         </div>
       )}
@@ -55,34 +70,42 @@ function EditProfile({ author }) {
           <p className="mt-2 text-justify text-base">{author.description}</p>
         </>
       )}
-      <div className="flex justify-end space-x-4 py-4 pr-4">
-        {!isEdit && (
-          <button
-            type="button"
-            className="box-border rounded bg-blue-600 px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700"
-            onClick={() => setIsEdit(true)}
-          >
-            Edit
-          </button>
+      <div className="flex flex-col py-4 pr-4">
+        {isEdit && !isTouched && submigErrorMessage && (
+          <p className="mb-4 text-left font-kanit text-[#FF0000] ">
+            {submigErrorMessage}
+          </p>
         )}
-        {isEdit && (
-          <>
-            <button
-              type="submit"
-              disabled={!formState.isValid}
-              className="box-border rounded border-[1px] bg-transparent px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700 disabled:bg-blue-300 disabled:hover:bg-blue-300"
-            >
-              Save
-            </button>
+        <div className="flex justify-end space-x-4">
+          {!isEdit && (
             <button
               type="button"
               className="box-border rounded bg-blue-600 px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700"
-              onClick={() => setIsEdit(false)}
+              onClick={() => setIsEdit(true)}
             >
-              Cancel
+              Edit
             </button>
-          </>
-        )}
+          )}
+          {isEdit && (
+            <>
+              <Button
+                type="submit"
+                disabled={!formState.isValid || isSubmitting}
+                loading={isSubmitting}
+                className="box-border rounded border-[1px] bg-transparent px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700 disabled:bg-blue-300 disabled:hover:bg-blue-300"
+              >
+                Save
+              </Button>
+              <button
+                type="button"
+                className="box-border rounded bg-blue-600 px-4 py-1 text-center font-roboto text-lg text-white hover:bg-blue-700"
+                onClick={() => setIsEdit(false)}
+              >
+                Cancel
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </Form>
   );

@@ -3,7 +3,7 @@ import * as authHelper from "../../../utils/auth";
 import { AiFillCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { ImNewspaper } from "react-icons/im";
-import { redirect, useRouteLoaderData } from "react-router-dom";
+import { json, redirect, useRouteLoaderData } from "react-router-dom";
 import { BsFillKeyFill, BsPersonCircle } from "react-icons/bs";
 import Avatar from "../../../components/UI/Avatar";
 import Password from "../../../components/Profile/Password";
@@ -36,7 +36,7 @@ function Profile() {
             headers: { Authorization: "Bearer " + token },
             body: avatarForm,
           }
-        );
+        ).catch((err) => err);
 
         const currentAvatar = (await resoponse.json()).data.avatar;
 
@@ -114,14 +114,23 @@ export async function action({ request }) {
     description: data.get("description"),
   };
 
-  await fetch(process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + token,
-    },
-    body: JSON.stringify(userData),
-  });
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`,
+    {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      body: JSON.stringify(userData),
+    }
+  );
+
+  if (!response.ok)
+    return json(
+      { message: `Something wrong happen when updating profile...` },
+      { status: 500 }
+    );
 
   return redirect("/");
 }

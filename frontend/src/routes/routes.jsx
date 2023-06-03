@@ -9,20 +9,22 @@ import RootLayout from "./pages/Root";
 import * as authHelper from "../utils/auth";
 import { SuspenseWrapper } from "./helper/Wrapper";
 
-const AboutPage = lazy(() => import("./pages/User/About"));
 const AuthPage = lazy(() => import("./pages/Auth/Auth"));
-const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
-const PostsPage = lazy(() => import("./pages/Post/Posts"));
-const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
-const PostsRelationRootLayout = lazy(() => import("./pages/Post/PostsRelationRoot"));
-const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
-const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
-const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
 const OauthPage = lazy(() => import("./pages/Auth/Oauth"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword"));
-const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
+
+const AboutPage = lazy(() => import("./pages/User/About"));
 const ProfilePage = lazy(() => import("./pages/User/Profile"));
+const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
 const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
+
+const PostsPage = lazy(() => import("./pages/Post/Posts"));
+const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
+const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
+const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
+const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
+const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
+const PostsRelationRootLayout = lazy(() => import("./pages/Post/PostsRelationRoot"));
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));
@@ -98,7 +100,6 @@ const router = createBrowserRouter([
         element: SuspenseWrapper(<AboutPage />),
         loader: lazyLoader("./pages/User/About"),
       },
-
       { path: "oauth/success", element: SuspenseWrapper(<OauthPage />) },
       {
         path: "logout",

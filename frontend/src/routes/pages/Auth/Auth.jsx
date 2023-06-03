@@ -1,5 +1,5 @@
 import validator from "validator";
-import { useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
 import { GoogleLoginButton } from "react-social-login-buttons";
@@ -8,10 +8,10 @@ import {
   Form,
   redirect,
   json,
-  useActionData,
-  useSearchParams,
   useNavigate,
   useNavigation,
+  useActionData,
+  useSearchParams,
 } from "react-router-dom";
 import Input from "../../../components/UI/Input";
 import useForm from "../../../hooks/form-hook";
@@ -22,10 +22,17 @@ function Auth() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
+  const [isTouched, setIsTouched] = useState(false);
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
   const data = useActionData();
-  const { formState, inputHandler, setFormData } = useForm(
+
+  const {
+    formState,
+    inputHandler: formInputHandler,
+    setFormData,
+  } = useForm(
     {
       email: { value: "", isValid: false },
       password: { value: "", isValid: false },
@@ -33,7 +40,14 @@ function Auth() {
     false
   );
 
-  // TODO
+  const inputHandler = useCallback(
+    (name, value, isValid) => {
+      formInputHandler(name, value, isValid);
+      setIsTouched(true);
+    },
+    [formInputHandler]
+  );
+
   const googleHandler = useCallback((event) => {
     event.preventDefault();
     window.open(
@@ -60,6 +74,13 @@ function Auth() {
     }
   }, [isSignup, emailInput, passwordInput, setFormData, navigate]);
 
+  useEffect(() => {
+    if (data && data.message) {
+      setIsTouched(false);
+      setSubmigErrorMessage(data.message);
+    }
+  }, [data]);
+
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <Form
@@ -69,6 +90,9 @@ function Auth() {
         <p className="mb-4 text-center text-3xl ">
           {isSignup ? "Sign up" : "Login"}
         </p>
+        {!isTouched && submigErrorMessage && (
+          <p className="text-center text-[#FF0000] ">{submigErrorMessage}</p>
+        )}
         {isSignup && (
           <Input
             type="text"
@@ -104,9 +128,9 @@ function Auth() {
             name="confirmPassword"
             className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
             placeholder="Password again"
-            errorMessage={"Please enter at least 6 characters."}
+            errorMessage={"Please enter the same password."}
             onInput={inputHandler}
-            validators={(e) => e.length >= 6}
+            validators={(e) => e === formState.inputs.confirmPassword}
           />
         )}
         <Button
@@ -189,18 +213,37 @@ export async function action({ request }) {
     }
   );
 
-  if (response.status === 422) return response;
-  else if (!response.ok)
-    throw json(
-      {
-        message:
-          mode === "login" ? "Unknow Login error" : "Unknow Signup error",
-      },
-      { status: 500 }
-    );
+  switch (response.status) {
+    case 400:
+      return json(
+        { message: "Input format is wrong. Please check your input." },
+        { status: 400 }
+      );
+    case 401:
+      return json(
+        { message: "Email or Password is wrong." },
+        { status: response.status }
+      );
+    case 403:
+      return json(
+        { message: "Email or Password is wrong." },
+        { status: response.status }
+      );
+    case 422:
+      return json({ message: "Email already exists." }, { status: 422 });
+
+    default:
+      if (!response.ok)
+        throw json(
+          {
+            message:
+              mode === "login" ? "Unknow Login error" : "Unknow Signup error",
+          },
+          { status: 500 }
+        );
+  }
 
   const resJSON = await response.json();
-
   const token = resJSON.token;
   if (!token) return redirect("/");
 

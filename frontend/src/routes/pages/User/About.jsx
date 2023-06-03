@@ -27,23 +27,27 @@ async function AboutLoader() {
     process.env.REACT_APP_BACKEND_URL + "/api/v1/about"
   );
 
-  if (!response.ok)
-    throw json(
-      { message: "Could not fetch about information." },
-      { status: 404 }
-    );
+  switch (response.status) {
+    case 404:
+      throw json(
+        { message: "Could not fetch about information." },
+        { status: 404 }
+      );
+    default:
+      if (!response.ok)
+        throw json(
+          {
+            message: "Unknow error",
+          },
+          { status: 500 }
+        );
+  }
 
   const resJSON = await response.json();
 
-  if (!resJSON.data)
-    throw json(
-      { message: "Could not fetch about information." },
-      { status: 404 }
-    );
-
-  return resJSON.data;
+  return "";
 }
 
-export function loader() {
-  return defer({ about: AboutLoader() });
+export async function loader() {
+  return defer({ about: await AboutLoader() });
 }
