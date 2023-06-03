@@ -37,6 +37,7 @@ function PostDetail() {
       setSubmigErrorMessage(data.message);
     }
   }, [data]);
+
   return (
     <AwaitWrapper resolve={post}>
       {(loadPost) => (

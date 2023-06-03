@@ -17,7 +17,8 @@ const authSlice = createSlice({
       state.name = action.payload.name;
       state.avatar = action.payload.avatar;
       state.role = action.payload.role;
-      state.isRoot = action.payload.role === "root" || "admin";
+      state.isRoot =
+        action.payload.role === "root" || action.payload.role === "admin";
     },
     logout: (state) => {
       state.id = null;
