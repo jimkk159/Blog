@@ -91,12 +91,13 @@ function TagsToolTip({ postTags, category, isNew = false }) {
           timeout={500}
           className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-gray-200 bg-white shadow ring-1"
           classNames={{
-            enter: "w-[200px] h-0",
+            enter: "w-0 h-0",
             enterActive:
               "w-[200px] h-[150px] p-1.5 border-2 transition-all duration-500",
             enterDone: "w-[200px] h-[150px] p-1.5 border-2",
             exit: "w-[200px] h-[150px]",
-            exitActive: "w-0 h-0 transition-all duration-500",
+            exitActive:
+              "w-[0px] h-[0px] transition-all duration-500",
             exitDone: "w-0 h-0",
           }}
           mountOnEnter
