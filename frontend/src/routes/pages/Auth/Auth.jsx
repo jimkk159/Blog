@@ -1,4 +1,6 @@
 import validator from "validator";
+import { RxCrossCircled } from "react-icons/rx";
+import { AiFillCheckCircle } from "react-icons/ai";
 import { useState, useCallback, useEffect } from "react";
 import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
@@ -23,6 +25,7 @@ function Auth() {
   const isSubmitting = navigation.state === "submitting";
 
   const [isTouched, setIsTouched] = useState(false);
+  const [isAuthSuccess, setIsAuthSuccess] = useState();
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
@@ -75,11 +78,22 @@ function Auth() {
   }, [isSignup, emailInput, passwordInput, setFormData, navigate]);
 
   useEffect(() => {
+    let timeout;
     if (data && data.message) {
       setIsTouched(false);
-      setSubmigErrorMessage(data.message);
+      if (data.status === 200) {
+        setIsAuthSuccess(true);
+        setSubmigErrorMessage();
+        timeout = setTimeout(() => navigate("/"), 2000);
+      } else {
+        setIsAuthSuccess(false);
+        setSubmigErrorMessage(data.message);
+      }
     }
-  }, [data]);
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [data, navigate]);
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
@@ -87,9 +101,20 @@ function Auth() {
         method="post"
         className="flex w-[448px] flex-col justify-center rounded-lg bg-white p-6 text-black"
       >
+        {isAuthSuccess && (
+          <div className="flex justify-center">
+            <AiFillCheckCircle className="h-12 w-12 text-green-500" />
+          </div>
+        )}
+        {isAuthSuccess === false && (
+          <div className="flex justify-center">
+            <RxCrossCircled className="h-12 w-12 text-red-500" />
+          </div>
+        )}
         <p className="mb-4 text-center text-3xl ">
           {isSignup ? "Sign up" : "Login"}
         </p>
+
         {!isTouched && submigErrorMessage && (
           <p className="text-center text-[#FF0000] ">{submigErrorMessage}</p>
         )}
@@ -130,7 +155,7 @@ function Auth() {
             placeholder="Password again"
             errorMessage={"Please enter the same password."}
             onInput={inputHandler}
-            validators={(e) => e === formState.inputs.confirmPassword}
+            validators={(e) => e === formState.inputs.password.value}
           />
         )}
         <Button
@@ -230,6 +255,12 @@ export async function action({ request }) {
         { status: response.status }
       );
     case 422:
+      const resData = await response.json();
+      if (resData.message === "Please verify your email first!")
+        return json(
+          { message: "Please verify your email first!" },
+          { status: 422 }
+        );
       return json({ message: "Email already exists." }, { status: 422 });
 
     default:
@@ -256,5 +287,8 @@ export async function action({ request }) {
     })
   );
   localStorage.setItem("token", token);
-  return redirect("/");
+  return json(
+    { status: 200, message: "Sign up successfully!" },
+    { status: 200 }
+  );
 }
