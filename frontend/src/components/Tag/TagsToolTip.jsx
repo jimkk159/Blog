@@ -89,15 +89,14 @@ function TagsToolTip({ postTags, category, isNew = false }) {
         <CSSTransition
           in={isEdit}
           timeout={500}
-          className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-gray-200 bg-white shadow ring-1"
+          className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-gray-200 bg-white p-1.5 shadow ring-1"
           classNames={{
-            enter: "w-0 h-0",
+            enter: "w-0 h-0 p-0",
             enterActive:
-              "w-[200px] h-[150px] p-1.5 border-2 transition-all duration-500",
-            enterDone: "w-[200px] h-[150px] p-1.5 border-2",
-            exit: "w-[200px] h-[150px]",
-            exitActive:
-              "w-[0px] h-[0px] transition-all duration-500",
+              "w-[200px] h-[150px] border-2 transition-all duration-500",
+            enterDone: "w-[200px] h-[150px] border-2",
+            exit: "w-[200px] h-[150px] border-2",
+            exitActive: "transition-all duration-500",
             exitDone: "w-0 h-0",
           }}
           mountOnEnter

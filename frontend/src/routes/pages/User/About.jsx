@@ -10,13 +10,12 @@ function About() {
   const auth = useSelector((state) => state.auth);
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] min-h-[100%] w-full justify-center px-8 py-12">
+    <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-8 py-12">
       <div className="relative flex h-full w-full max-w-3xl flex-col justify-between rounded bg-white p-16 text-black">
         <AwaitWrapper resolve={about}>
           {(about) => {
             let input = null;
-            if (about[0] && about[0].content)
-              input = about[0].content;
+            if (about[0] && about[0].content) input = about[0].content;
             return (
               <>
                 <MDEditor.Markdown source={input} />

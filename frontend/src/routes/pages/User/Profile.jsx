@@ -56,7 +56,7 @@ function Profile() {
             <div className="relative">
               <Avatar avatar={author.avatar}>
                 <AiFillCamera
-                  className="absolute bottom-6 right-10 z-10 h-10 w-10 bg-transparent"
+                  className="absolute bottom-6 right-10 z-10 h-10 w-10 cursor-pointer bg-transparent text-gray-300 text-opacity-80"
                   onClick={inputAvatarHandler}
                 />
               </Avatar>
