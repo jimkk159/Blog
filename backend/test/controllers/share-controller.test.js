@@ -7,6 +7,7 @@ import * as errorTable from "../../utils/error/error-table";
 import * as shareController from "../../controllers/share-controller";
 
 vi.mock("gravatar");
+vi.mock("sequelize");
 vi.mock("normalize-path");
 vi.mock("express-validator");
 describe("validation()", () => {
