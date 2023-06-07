@@ -14,6 +14,7 @@ const OauthPage = lazy(() => import("./pages/Auth/Oauth"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword"));
 
 const AboutPage = lazy(() => import("./pages/User/About"));
+const EditAboutPage = lazy(() => import("./pages/User/EditAbout"));
 const ProfilePage = lazy(() => import("./pages/User/Profile"));
 const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
 const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
@@ -24,7 +25,9 @@ const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
 const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
 const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
 const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
-const PostsRelationRootLayout = lazy(() => import("./pages/Post/PostsRelationRoot"));
+const PostsRelationRootLayout = lazy(() =>
+  import("./pages/Post/PostsRelationRoot")
+);
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));
@@ -96,9 +99,21 @@ const router = createBrowserRouter([
         action: lazyAction("./pages/Auth/Auth"),
       },
       {
+        id: "about",
         path: "about",
-        element: SuspenseWrapper(<AboutPage />),
         loader: lazyLoader("./pages/User/About"),
+        children: [
+          {
+            index: true,
+            element: SuspenseWrapper(<AboutPage />),
+          },
+          {
+            path: "edit",
+            element: SuspenseWrapper(<EditAboutPage />),
+            loader: authHelper.checkAuthTokenLoader,
+            action: lazyAction("./pages/User/EditAbout"),
+          },
+        ],
       },
       { path: "oauth/success", element: SuspenseWrapper(<OauthPage />) },
       {

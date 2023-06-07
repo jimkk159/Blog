@@ -5,6 +5,12 @@ export const hasPermissionToPost = ({ auth, AuthorId }) => {
   return token && (auth.isRoot || AuthorId === auth.id);
 };
 
+export const hasPermissionToAbout = (auth) =>
+  authHelper.getAuthToken() && auth.isRoot;
+
+export const convertContentSyntax = async (content) =>
+  content.replaceAll("", "<");
+
 export const uploadImg = async (img) => {
   const token = authHelper.getAuthToken();
 
@@ -12,7 +18,7 @@ export const uploadImg = async (img) => {
   imgForm.append("img", img);
 
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/img`,
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/img`,
     {
       method: "POST",
       headers: { Authorization: "Bearer " + token },

@@ -76,6 +76,7 @@ export const imgBtn = (inputRef) => ({
   render: (command, disabled, executeCommand) => {
     return (
       <button
+        type="button"
         aria-label="Insert title3"
         disabled={disabled}
         onClick={() => {
@@ -121,15 +122,30 @@ function VideoChildren({ close, execute, getState, textApi, dispatch }) {
   };
 
   return (
-    <div style={{ width: 120, padding: 10 }}>
-      <div>Embeded YT Link</div>
-      <input type="text" onChange={(e) => setValue(e.target.value)} />
-      <button type="button" onClick={insert}>
-        Embeded Vieo
-      </button>
-      <button ref={closeRef} type="button" onClick={() => close()}>
-        Close
-      </button>
+    <div className="w-40 p-3">
+      <div className="font-kanit">Embeded YT Link</div>
+      <input
+        type="text"
+        className="mx-0 my-1.5 box-border h-6 w-full overflow-ellipsis rounded-sm border border-gray-400 bg-[#f8f8f8] px-1.5 text-base outline-none focus:bg-[#ebebeb]"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <div className="flex justify-start">
+        <button
+          type="button"
+          className="mr-1 my-1.5 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
+          onClick={insert}
+        >
+          Embeded
+        </button>
+        <button
+          ref={closeRef}
+          type="button"
+          className="mr-1 my-1.5 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
+          onClick={() => close()}
+        >
+          Close
+        </button>
+      </div>
     </div>
   );
 }

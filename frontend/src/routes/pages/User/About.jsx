@@ -1,22 +1,45 @@
-import { Suspense } from "react";
+import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
-import { defer, Await, useLoaderData, json } from "react-router-dom";
+import * as helper from "../../../utils/helper";
+import { AwaitWrapper } from "../../helper/Wrapper";
+import { json, defer, useNavigate, useRouteLoaderData } from "react-router-dom";
 
 function About() {
-  const { about } = useLoaderData();
+  const navigate = useNavigate();
+  const { about } = useRouteLoaderData("about");
+  const auth = useSelector((state) => state.auth);
 
   return (
-    <Suspense fallback="Loading...">
-      <Await resolve={about}>
-        {(about) => (
-          <div className="flex h-[calc(100vh-4rem)] min-h-[100%] w-full justify-center px-8 py-12 ">
-            <div className="relative h-full w-full max-w-3xl rounded bg-white p-16 text-black">
-              <MDEditor.Markdown source={about} />
-            </div>
-          </div>
-        )}
-      </Await>
-    </Suspense>
+    <div className="flex h-[calc(100vh-4rem)] min-h-[100%] w-full justify-center px-8 py-12">
+      <div className="relative flex h-full w-full max-w-3xl flex-col justify-between rounded bg-white p-16 text-black">
+        <AwaitWrapper resolve={about}>
+          {(about) => {
+            let input = null;
+            if (about[0] && about[0].content)
+              input = about[0].content;
+            return (
+              <>
+                <MDEditor.Markdown source={input} />
+                <div className="h-full w-full"></div>
+                <div className="my-8 flex flex-col">
+                  <div className="flex justify-end font-pt-serif ">
+                    {helper.hasPermissionToAbout(auth) && (
+                      <button
+                        type="submit"
+                        className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                        onClick={() => navigate("edit")}
+                      >
+                        EDIT
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            );
+          }}
+        </AwaitWrapper>
+      </div>
+    </div>
   );
 }
 
@@ -24,7 +47,7 @@ export default About;
 
 async function AboutLoader() {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL + "/api/v1/about"
+    process.env.REACT_APP_BACKEND_URL + "/api/v1/about?limit=1"
   );
 
   switch (response.status) {
@@ -42,12 +65,11 @@ async function AboutLoader() {
           { status: 500 }
         );
   }
-
-  const resJSON = await response.json();
-
-  return "";
+  const resData = await response.json();
+  if (Array.isArray(resData.data)) return resData.data;
+  return [];
 }
 
 export async function loader() {
-  return defer({ about: await AboutLoader() });
+  return defer({ about: AboutLoader() });
 }

@@ -84,7 +84,7 @@ function Auth() {
       if (data.status === 200) {
         setIsAuthSuccess(true);
         setSubmigErrorMessage();
-        timeout = setTimeout(() => navigate("/"), 2000);
+        timeout = setTimeout(() => navigate("/"), 1000);
       } else {
         setIsAuthSuccess(false);
         setSubmigErrorMessage(data.message);
