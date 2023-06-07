@@ -1,5 +1,6 @@
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
+import he from "he";
 
 export const isURL = (input) =>
   !!(input && (input.startsWith("https://") || input.startsWith("http://")));
@@ -69,4 +70,4 @@ export const deleteImgUrlFromS3 = async (file) => upload.deleteFileFromS3(file);
 export const getImgUrlFromS3 = (file) =>
   "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + file;
 
-export const modifySyntax = (input) => input.replaceAll("&lt;", "<");
+export const modifySyntax = (input) => he.decode(input);
