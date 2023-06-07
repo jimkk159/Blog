@@ -1,4 +1,5 @@
 import gravatar from "gravatar";
+import About from "../module/about.js";
 import normalize from "normalize-path";
 import * as s3 from "../utils/aws/s3.js";
 import * as helper from "../utils/helper/helper.js";
@@ -42,6 +43,13 @@ export const updateImage = catchAsync(async (req, res, next) => {
       img,
     },
   });
+});
+
+export const createAbout = catchAsync(async (req, res) => {
+  // create About
+  await About.create({ content: helper.modifySyntax(req.body.content) });
+
+  res.status(200).json({ status: "success" });
 });
 
 //reference: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function
