@@ -28,7 +28,7 @@ export async function action({ request, params }) {
     content: data.get("content"),
     tagId,
   };
-  console.log(postData)
+
   const postId = params.pid;
   const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts/" + postId;
 

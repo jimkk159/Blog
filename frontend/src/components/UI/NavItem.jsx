@@ -6,7 +6,7 @@ function NavItem({ text, to }) {
       <NavLink
         to={to}
         className={({ isActive }) =>
-          "mx-2 flex items-end py-2 px-4 whitespace-nowrap" +
+          "mx-2 flex items-end whitespace-nowrap md:mx-1 md:px-2 md:py-1 md:text-sm lg:px-4 lg:py-2 lg:text-base" +
           `${isActive ? " border " : ""}`
         }
       >

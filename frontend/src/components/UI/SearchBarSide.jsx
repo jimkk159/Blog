@@ -2,11 +2,12 @@ import { useRef } from "react";
 import { Form, useSubmit } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
-function SearchBar({ className }) {
+function SearchBar({ onSearch }) {
   const formRef = useRef();
   const submit = useSubmit("/search");
 
   const searchHandler = () => {
+    if(onSearch) onSearch();
     submit(
       {
         mode: formRef.current.mode.value,
@@ -16,12 +17,18 @@ function SearchBar({ className }) {
     );
   };
 
+  const keyDownHandler = async (e) => {
+    if (e.key === "Enter") {
+      if(onSearch) onSearch();
+    }
+  };
+
   return (
     <Form
       ref={formRef}
       method="post"
       action="/search"
-      className="flex flex-row self-center md:mr-4 lg:mr-8"
+      className="mr-4 flex flex-row self-center"
     >
       <div className="relative">
         <AiOutlineSearch
@@ -32,14 +39,15 @@ function SearchBar({ className }) {
           id="target"
           name="target"
           type="text"
-          className="rounded-l-3xl text-gray-800 outline-none md:w-32 md:py-1 md:pl-4 md:text-sm lg:w-40 lg:py-0.5 lg:pl-3 lg:text-base"
+          className="w-32 rounded-l-3xl py-1 pl-4 text-sm text-gray-800 outline-none"
           placeholder="Search..."
+          onKeyDown={keyDownHandler}
         />
       </div>
       <select
         id="mode"
         name="mode"
-        className="appearance-none rounded-r-3xl border-l border-gray-300 text-gray-800 outline-none md:py-0 md:pl-1.5 md:pr-0.5 md:text-sm lg:px-1 lg:py-0.5 lg:text-base"
+        className="appearance-none rounded-r-3xl border-l border-gray-300 py-0 pl-1.5 pr-0.5 text-sm text-gray-800 outline-none"
       >
         <option value="category">Topic</option>
         <option value="title">Title</option>
