@@ -44,7 +44,6 @@ export const authUserByToken = catchAsync(async (req, res, next) => {
 
   // 6) Set user
   req.user = user;
-  console.log(user);
   next();
 });
 
@@ -115,7 +114,7 @@ export const signup = catchAsync(async (req, res, next) => {
   const host = `${req.protocol}://${req.get("host")}/api/v1`;
 
   const email = new Email(req.body.email, req.body.name);
-  await email.sendWelcome(host, verifyToken).catch(() => {
+  await email.sendWelcome(host, verifyToken).catch((err) => {
     throw errorTable.sendEmailError();
   });
 
