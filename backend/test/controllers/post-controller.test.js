@@ -204,9 +204,10 @@ describe("createOne()", () => {
     req = {};
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
+    vi.spyOn(helper, "removeKeys").mockImplementation(() => {});
+    vi.spyOn(helper, "modifySyntax").mockImplementation((input) => input);
     vi.spyOn(User, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(helper, "removeKeys").mockImplementation(() => {});
     vi.spyOn(postHelper, "checkPostCategory").mockImplementation(() => {});
     vi.spyOn(postHelper, "checkAndFindPostTags").mockImplementation(
       async () => {}
@@ -265,7 +266,7 @@ describe("createOne()", () => {
   test("should created post with tags", async () => {
     let error;
     const category = { id: "CategoryId" };
-    const tags = "testTags";
+    const tags = ["testTags"];
     req = {
       body: { title: "testTitle", content: "testContent", tagId: "tagId" },
       user: { id: "testUserId" },
@@ -429,7 +430,10 @@ describe("updateOne()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(postHelper, "checkAndFindPostTags").mockImplementation(() => {});
+    vi.spyOn(helper, "modifySyntax").mockImplementation((input) => input);
+    vi.spyOn(postHelper, "checkAndFindPostTags").mockImplementation(
+      async () => {}
+    );
     vi.spyOn(postHelper, "updatePostContentAndTags").mockImplementation(
       async () => {}
     );
@@ -476,7 +480,7 @@ describe("updateOne()", () => {
 
   test("should update post content and tags", async () => {
     const post = "testPost";
-    const tags = "testTags";
+    const tags = ["testTags"];
     req = {
       params: { id: "testId" },
       body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
@@ -501,6 +505,9 @@ describe("updateOne()", () => {
       params: { id: "testId" },
       body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
     };
+    postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
+      "testTag",
+    ]);
 
     await postController.updateOne(req, res, next);
 
@@ -514,6 +521,9 @@ describe("updateOne()", () => {
       params: { id: "testId" },
       body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
     };
+    postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
+      "testTag",
+    ]);
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
     await postController

@@ -26,7 +26,7 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 2) find or create category
   let [category, created] = await Category.findOrCreate({
-    where: { name: req.body.name },
+    where: { name: helper.modifySyntax(req.body.name) },
     defaults: {
       ParentId: req.body.ParentId,
     },
@@ -61,7 +61,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 4) update category ParentId
   await Category.update(
-    { name: req.body.name, ParentId: req.body.ParentId },
+    { name: helper.modifySyntax(req.body.name), ParentId: req.body.ParentId },
     { where: { id: req.params.id } }
   );
 

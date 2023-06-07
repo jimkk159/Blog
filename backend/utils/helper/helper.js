@@ -68,3 +68,5 @@ export const deleteImgUrlFromS3 = async (file) => upload.deleteFileFromS3(file);
 
 export const getImgUrlFromS3 = (file) =>
   "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + file;
+
+export const modifySyntax = (input) => input.replaceAll("&lt;", "<");

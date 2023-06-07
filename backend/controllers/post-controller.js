@@ -57,7 +57,6 @@ export const getAllTitle = catchAsync(async (req, res, next) => {
 
 export const getAll = catchAsync(async (req, res, next) => {
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
-
   const total = await Post.count({ where: req.count });
 
   res.status(200).json({
@@ -73,21 +72,24 @@ export const createOne = catchAsync(async (req, res, next) => {
   const category = await Category.findByPk(req.body.CategoryId);
   postHelper.checkPostCategory(category);
 
-  // 2) check Tag
+  // 2) check Tags
   let tags = [];
   if (req.body.tagId)
     tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
-  // 3) create Post
+  // 3) Modify the tags syntax
+  if (tags.length) tags = tags.map((el) => helper.modifySyntax(el));
+
+  // 4) create Post
   const post = await postHelper.createPostWithTags({
-    title: req.body.title,
-    content: req.body.content,
+    title: helper.modifySyntax(req.body.title),
+    content: helper.modifySyntax(req.body.content),
     CategoryId: category.id,
     AuthorId: req.user.id,
     tags,
   });
 
-  // 4) get Post (Lazy Loading)
+  // 5) get Post (Lazy Loading)
   const author = await User.findByPk(post.AuthorId);
   const data = helper.removeKeys(post.toJSON(), ["createdAt"]);
 
@@ -103,16 +105,15 @@ export const updateOne = catchAsync(async (req, res, next) => {
   if (req.body.tagId)
     tags = await postHelper.checkAndFindPostTags(req.body.tagId);
 
-  // 2) Modify the img url to file name
-  if (req.body.content)
-    req.body.content = req.body.content.replaceAll("&lt;", "<");
+  // 2) Modify the tags syntax
+  if (tags.length) tags = tags.map((el) => helper.modifySyntax(el));
 
   // 3) update Post
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
-    title: req.body.title,
+    title: helper.modifySyntax(req.body.title),
     CategoryId: req.body.CategoryId,
-    content: req.body.content,
+    content: helper.modifySyntax(req.body.content),
     isUpdateTags: !!req.body.tagId,
     tags,
   });
@@ -169,7 +170,7 @@ export const search = catchAsync(async (req, res, next) => {
   [initQuery, forceQuery] = await postHelper.getSearchQuery(
     req.query.mode,
     req.query.type,
-    req.query.target
+    helper.modifySyntax(req.query.target)
   );
 
   req.query = {
