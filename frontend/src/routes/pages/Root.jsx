@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import cubeImg from "../img/cube.png";
+import Footer from "../../components/UI/Footer";
 import * as authHelper from "../../utils/auth";
 import MainNavigation from "../../components/UI/MainNavigation";
 import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
@@ -38,6 +39,7 @@ function Root() {
     >
       <MainNavigation />
       <Outlet />
+      <Footer />
     </div>
   );
 }

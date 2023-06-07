@@ -2,9 +2,9 @@ import { defer, Outlet, json } from "react-router-dom";
 
 function PostsRelationRoot() {
   return (
-    <div className="flex w-full flex-col">
+    <main className="flex w-full flex-col">
       <Outlet />
-    </div>
+    </main>
   );
 }
 
