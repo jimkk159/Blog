@@ -97,26 +97,33 @@ export const imgBtn = (inputRef) => ({
 function VideoChildren({ close, execute, getState, textApi, dispatch }) {
   const closeRef = useRef(null);
   const [value, setValue] = useState("");
-  const css = `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
+  // const css = `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
 
   const isYt = (url) =>
     url && url.startsWith("https://www.youtube.com/watch?v=");
 
-  const transToVideoLink = (url) => {
+  // const transToVideoLink = (url) => {
+  //   const ytId = extractYouTubeId(url);
+  //   const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
+  //   return `**[![](${cover})](${url})** ` + css;
+  // };
+
+  const transToVideoIframe = (url) => {
     const ytId = extractYouTubeId(url);
-    const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
-    return `**[![](${cover})](${url})** ` + css;
+    return `<div class="flex justify-center mx-auto my-1" style="width: 75%; max-width: 500px;"><div class="relative flex justify-cneter w-full h-0" style="min-height: 100px; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation allow-forms allow-same-origin allow-storage-access-by-user-activation" allowfullscreen="" 
+  class="absolute left-0 top-0 w-full h-full rounded-sm pointer-events-auto bg-[rgb(25, 25, 25)]"
+  ></iframe></div></div>`;
   };
 
   const insertVideo = () => {
-    const modifyText = transToVideoLink(value);
+    const modifyText = transToVideoIframe(value);
     textApi.replaceSelection(modifyText);
     closeRef.current.click();
   };
 
   const insert = () => {
     const state = getState();
-    if (isYt(value)) insertVideo();
+    if (isYt(value)) insertVideo(value);
     else if (isYt(state.selectedText)) insertVideo(state.selectedText);
     setValue("");
   };
@@ -132,7 +139,7 @@ function VideoChildren({ close, execute, getState, textApi, dispatch }) {
       <div className="flex justify-start">
         <button
           type="button"
-          className="mr-1 my-1.5 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
+          className="my-1.5 mr-1 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
           onClick={insert}
         >
           Embeded
@@ -140,7 +147,7 @@ function VideoChildren({ close, execute, getState, textApi, dispatch }) {
         <button
           ref={closeRef}
           type="button"
-          className="mr-1 my-1.5 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
+          className="my-1.5 mr-1 box-border h-6 rounded border border-gray-500 px-1 py-0.5 text-center font-kanit text-sm hover:bg-gray-100"
           onClick={() => close()}
         >
           Close
@@ -169,30 +176,37 @@ export const videoBtn = () =>
       </svg>
     ),
     children: (props) => <VideoChildren {...props} />,
-    execute: async (state, api) => {
-      let modifyText;
-      const css = `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
-      const inputElement = document.getElementById("video-input");
-      const inputValue = inputElement ? inputElement.value : null;
+    // execute: async (state, api) => {
+    //   let modifyText;
+    //   // const css = `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
+    //   const inputElement = document.getElementById("video-input");
+    //   const inputValue = inputElement ? inputElement.value : null;
 
-      const isYt = (url) =>
-        url && url.startsWith("https://www.youtube.com/watch?v=");
-      const transToVideoLink = (url) => {
-        const ytId = extractYouTubeId(url);
-        const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
-        return `**[![](${cover})](${url})**` + css;
-      };
+    //   const isYt = (url) =>
+    //     url && url.startsWith("https://www.youtube.com/watch?v=");
 
-      if (isYt(inputValue)) {
-        modifyText = transToVideoLink(inputValue);
-        api.replaceSelection(modifyText);
-        document.getElementById("video-close").click();
-      } else if (isYt(state.selectedText)) {
-        modifyText = transToVideoLink(state.selectedText);
-        api.replaceSelection(modifyText);
-        document.getElementById("video-close").click();
-      }
-    },
+    //   // const transToVideoLink = (url) => {
+    //   //   const ytId = extractYouTubeId(url);
+    //   //   const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
+    //   //   return `**[![](${cover})](${url})**` + css;
+    //   // };
+
+    //   const transToVideoIframe = (url) => {
+    //     const ytId = extractYouTubeId(url);
+    //     return `<div class="relative flex justify-cneter w-full h-0" style="min-height: 100px; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation allow-forms allow-same-origin allow-storage-access-by-user-activation" allowfullscreen="" 
+    //   class="absolute left-0 top-0 w-full h-full rounded-sm pointer-events-auto bg-[rgb(25, 25, 25)]"
+    //   ></iframe></div>`;
+    //   };
+    //   if (isYt(inputValue)) {
+    //     modifyText = transToVideoIframe(inputValue);
+    //     api.replaceSelection(modifyText);
+    //     document.getElementById("video-close").click();
+    //   } else if (isYt(state.selectedText)) {
+    //     modifyText = transToVideoIframe(state.selectedText);
+    //     api.replaceSelection(modifyText);
+    //     document.getElementById("video-close").click();
+    //   }
+    // },
   });
 
 export const editChoice = (inputRef) => [
