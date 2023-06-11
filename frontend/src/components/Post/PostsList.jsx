@@ -23,7 +23,7 @@ function PostList({
   isShowDescription = true,
   isShowAuthor = true,
   isTagOnTopRight = false,
-  small = false,
+  size = "normal",
   page: inputPage,
   limit: inputLimit,
 }) {
@@ -33,6 +33,22 @@ function PostList({
   const page = inputPage ?? searchParams.get("page") ?? defaultPage;
   const limit = inputLimit ?? searchParams.get("limit") ?? defaultLimit;
 
+  let liCSS = "";
+  let titleCSS = "";
+  switch (size) {
+    case "xs":
+      liCSS = "m-1 px-1 pt-1.5 py-0.5";
+      titleCSS = "py-0.25 text-sm";
+      break;
+    case "small":
+      liCSS = "m-1 px-3 py-2";
+      titleCSS = "py-0.5 text-base";
+      break;
+    default:
+      liCSS = "m-4 p-4";
+      titleCSS = "py-1 text-xl";
+  }
+
   if (!posts)
     return (
       <div className="flex flex-col">
@@ -41,26 +57,26 @@ function PostList({
     );
 
   return (
-    <div className="inline-flex w-full h-full flex-col items-center">
+    <div className="inline-flex h-full w-full flex-col items-center">
       <ul className="w-full max-w-5xl">
         {posts.map((post, index) => {
           return (
             <li
               key={index}
-              className={`flex flex-col rounded bg-gray-100 text-black ${
-                small ? "m-1 px-3 py-2" : "m-4 p-4"
-              }`}
+              className={`flex flex-col rounded bg-white text-black hover:bg-gray-50 ${liCSS}`}
             >
               {post.Author && (
-                <div className="flex items-end gap-3">
+                <div className="flex items-end gap-3 px-0.5">
                   {isShowAuthor && (
                     <>
-                      <Avatar
-                        title="To author profile"
-                        className={`h-[28px] w-[28px] cursor-pointer`}
-                        avatar={post.Author.avatar}
-                        onClick={() => navigate(`/profile/${post.Author.id}`)}
-                      />
+                      <div>
+                        <Avatar
+                          title="To author profile"
+                          className={`h-[30px] w-[30px] cursor-pointer border border-gray-500`}
+                          avatar={post.Author.avatar}
+                          onClick={() => navigate(`/profile/${post.Author.id}`)}
+                        />
+                      </div>
                       <Link
                         title="To author profile"
                         to={`/profile/${post.Author.id}`}
@@ -82,16 +98,14 @@ function PostList({
               )}
               <Link title="To post" to={`/${post.id}`}>
                 <p
-                  className={`truncate font-kanit font-bold hover:text-gray-900 ${
-                    small ? "py-0.5 text-base" : "py-1 text-xl "
-                  }`}
+                  className={`truncate px-1 font-kanit font-bold hover:text-gray-900 ${titleCSS}`}
                 >
                   {`${post.title}`}
                 </p>
                 {isShowDescription && (
                   <MDEditor.Markdown
                     source={post.content}
-                    className="h-24 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap border-2 p-2 text-justify"
+                    className="h-40 resize-none overflow-hidden overflow-ellipsis whitespace-pre-wrap border-2 p-2 text-justify md:h-24"
                   />
                 )}
               </Link>
@@ -104,7 +118,7 @@ function PostList({
       </ul>
       <div className="w-full max-w-5xl">
         <Pagination
-          small={small}
+          size={size}
           total={total}
           current={page}
           limit={limit}

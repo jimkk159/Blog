@@ -12,21 +12,23 @@ function Category({ category, isOpen, setIsOpen }) {
 
   return (
     <li className="flex items-center py-1.5 ">
-      {!isOpen && (
-        <BiChevronRight
-          className="h-[25px] w-[25px]"
-          onClick={() => setIsOpen(true)}
-        />
-      )}
-      {isOpen && (
-        <BiChevronDown
-          className="h-[25px] w-[25px]"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      <div className="text-base">
+        {!isOpen && (
+          <BiChevronRight
+            className="-ml-[6px] h-[25px] w-[25px]"
+            onClick={() => setIsOpen(true)}
+          />
+        )}
+        {isOpen && (
+          <BiChevronDown
+            className="-ml-[6px] h-[25px] w-[25px]"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+      </div>
       <p
         className={
-          "text-gray-200 " +
+          "truncate text-gray-200 " +
           `${
             category.name.length > 16
               ? category.name.length > 20

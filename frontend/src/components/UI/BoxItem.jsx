@@ -13,7 +13,7 @@ function BoxItem({ icon, to, action, empty, children, onClick }) {
   if (to)
     return (
       <div
-        className="flex h-[120px] w-[120px] flex-col items-center justify-center space-y-1 rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm"
+        className="flex h-[120px] w-[120px] flex-col items-center justify-center space-y-1 rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm hover:bg-gray-50"
         onClick={clickHandler}
       >
         {icon}
@@ -25,7 +25,7 @@ function BoxItem({ icon, to, action, empty, children, onClick }) {
     <Form method="post" action={action} onSubmit={(e) => onClick(e)}>
       <button
         type="submit"
-        className="flex h-[120px] w-[120px] flex-col items-center justify-center space-y-1 rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm"
+        className="flex h-[120px] w-[120px] flex-col items-center justify-center space-y-1 rounded-md border-2 border-gray-200 bg-white p-6 shadow-sm hover:bg-gray-50"
       >
         {icon}
         <p className="font-bree-serif text-base">{children}</p>

@@ -1,8 +1,10 @@
 import PostsList from "../../../components/Post/PostsList";
 import { useSearchParams, useRouteLoaderData } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 function Posts() {
   const { posts } = useRouteLoaderData("posts");
+  const matches = useMediaQuery({ query: '(max-width: 768px)' });
   const { relation } = useRouteLoaderData("relation");
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -17,6 +19,7 @@ function Posts() {
         posts={posts}
         total={relation.length}
         onNavPage={navPageHandler}
+        isTagOnTopRight={matches}
       />
     </div>
   );

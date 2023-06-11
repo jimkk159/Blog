@@ -17,7 +17,7 @@ function TagList({ post, title, isEdit = false }) {
   if (!isEdit && !post) return;
 
   let categoryTag = post ? (
-    <p className="m-1 flex min-w-[20px] items-center rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
+    <p className=" m-1 max-h-5 min-w-[20px] max-w-[100px] items-center truncate rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
       {`${post.Category && post.Category.name}`}
     </p>
   ) : null;
@@ -31,7 +31,7 @@ function TagList({ post, title, isEdit = false }) {
       <p
         key={index}
         onClick={() => dispatch(tagActions.remove({ id: tag.id }))}
-        className="m-1 flex min-w-[20px] items-center rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700"
+        className="m-1 max-h-5 min-w-[20px] max-w-[100px] items-center truncate rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700"
       >
         {tag.name}
       </p>

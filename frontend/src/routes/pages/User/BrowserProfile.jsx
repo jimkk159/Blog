@@ -4,7 +4,7 @@ import ProfilePosts from "../../../components/Profile/ProfilePosts";
 
 function BrowserProfile() {
   const { author } = useRouteLoaderData("profile");
-  
+
   return (
     <div className="flex h-full w-full items-center justify-center">
       <div className="m-8 flex h-[800px] w-full max-w-4xl flex-row rounded-xl bg-green-600">
@@ -18,9 +18,7 @@ function BrowserProfile() {
           <div className="flex justify-start">
             <div className="w-[200px] bg-pink-500">
               <div className="rounded-2xl bg-red-900 p-4">
-                <div className="relative">
-                  <Avatar avatar={author.avatar} />
-                </div>
+                <Avatar avatar={author.avatar} className="h-40 w-40" />
               </div>
               <p className="bg-violet-600 p-4 font-source-serif-pro text-2xl italic">
                 {author.name}

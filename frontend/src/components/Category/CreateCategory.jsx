@@ -53,15 +53,15 @@ function CreateCategory({ onClose }) {
     },
     [navigate, token, name, ParentId]
   );
-
+    
   return (
     <form
+      className="bg-slate-50 p-3 text-gray-800"
       onSubmit={submitHandler}
       onClick={(e) => {
         e.stopPropagation();
         if (isDrop) setIsDrop(false);
       }}
-      className="bg-slate-50 p-3 text-gray-800"
       onBlur={() => setIsDrop(false)}
     >
       <p className="pb-2 pl-1 pt-2 text-base font-bold">Name</p>

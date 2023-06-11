@@ -10,8 +10,8 @@ function About() {
   const auth = useSelector((state) => state.auth);
 
   return (
-    <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-8 py-12">
-      <div className="relative flex h-full w-full max-w-3xl flex-col justify-between rounded bg-white p-16 text-black">
+    <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-4 py-12 md:px-8">
+      <div className="relative flex h-full w-full max-w-3xl flex-col justify-between rounded bg-white p-6 text-black md:p-16">
         <AwaitWrapper resolve={about}>
           {(about) => {
             let input = null;

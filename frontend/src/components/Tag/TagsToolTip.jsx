@@ -82,7 +82,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
         setIsEdit((prev) => !prev);
       }}
     >
-      <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 pl-2 text-[4px] text-base text-gray-50 outline-none">
+      <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 text-[4px] text-base text-gray-50 outline-none">
         +
       </p>
       {
@@ -91,13 +91,13 @@ function TagsToolTip({ postTags, category, isNew = false }) {
           timeout={500}
           className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-gray-200 bg-white p-1.5 shadow ring-1"
           classNames={{
-            enter: "w-0 h-0 p-0",
+            enter: "w-[0px] h-[0px] p-[0px]",
             enterActive:
               "w-[200px] h-[150px] border-2 transition-all duration-500",
             enterDone: "w-[200px] h-[150px] border-2",
             exit: "w-[200px] h-[150px] border-2",
-            exitActive: "transition-all duration-500",
-            exitDone: "w-0 h-0",
+            exitActive: "w-[0px] h-[0px] p-[0px] transition-all duration-500",
+            exitDone: "w-[0px] h-[0px]",
           }}
           mountOnEnter
           unmountOnExit

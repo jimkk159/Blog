@@ -2,14 +2,15 @@ import Avatar from "./Avatar";
 import SideDrawer from "./SideDrawer";
 import { useSelector } from "react-redux";
 import defaultImg from "../../assets/imgs/default.jpg";
-import { useRouteLoaderData } from "react-router-dom";
+import { Link, useRouteLoaderData } from "react-router-dom";
 import SearchBarSide from "./SearchBarSide";
 
 import {
-  BsFillFileEarmarkPostFill,
   BsPencilFill,
   BsPersonCircle,
+  BsFillFileEarmarkPostFill,
 } from "react-icons/bs";
+import { SiNodemon } from "react-icons/si";
 import BoxItem from "./BoxItem";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 
@@ -24,10 +25,15 @@ function NavSideDrawer({ show, className, onCancel }) {
         <div
           className={`py-auto flex h-20 items-center justify-between bg-red-500 px-2`}
         >
-          <Avatar
-            className={"mx-4 h-[50px] w-[50px] border-2 border-white"}
-            avatar={token ? avatar : defaultImg}
-          />
+          <Link
+            to={token ? "/profile" : "/auth?mode=login"}
+            onClick={() => onCancel()}
+          >
+            <Avatar
+              className={"mx-4 h-[50px] w-[50px] border-2 border-white"}
+              avatar={token ? avatar : defaultImg}
+            />
+          </Link>
           <SearchBarSide onSearch={() => onCancel()} />
         </div>
         <div className="flex justify-center p-8">
@@ -40,7 +46,7 @@ function NavSideDrawer({ show, className, onCancel }) {
                 }
                 onClick={() => onCancel()}
               >
-                Post
+                Posts
               </BoxItem>
               {!token && (
                 <BoxItem
@@ -61,8 +67,8 @@ function NavSideDrawer({ show, className, onCancel }) {
                 </BoxItem>
               )}
             </div>
-            <div className="flex space-x-4">
-              {token && (
+            {token && (
+              <div className="flex space-x-4">
                 <BoxItem
                   to="/new"
                   icon={
@@ -72,12 +78,21 @@ function NavSideDrawer({ show, className, onCancel }) {
                 >
                   New
                 </BoxItem>
-              )}
+                <BoxItem
+                  to={token ? "/profile" : "/auth?mode=login"}
+                  icon={
+                    <BsPersonCircle className="h-full w-full text-orange-400" />
+                  }
+                  onClick={() => onCancel()}
+                >
+                  Profile
+                </BoxItem>
+              </div>
+            )}
+            <div className="flex space-x-4">
               <BoxItem
                 to="/about"
-                icon={
-                  <BsPersonCircle className="h-full w-full text-orange-400" />
-                }
+                icon={<SiNodemon className="h-full w-full text-orange-400" />}
                 onClick={() => onCancel()}
               >
                 About

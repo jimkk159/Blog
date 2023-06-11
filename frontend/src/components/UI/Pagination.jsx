@@ -8,7 +8,7 @@ import { BiFirstPage, BiLastPage } from "react-icons/bi";
 import usePagination, { DOTS } from "../../hooks/pagination-hook";
 
 function Pagination({
-  small,
+  size,
   total = 0,
   limit = 15,
   sibling = 1,
@@ -29,6 +29,28 @@ function Pagination({
     ? paginationRange[paginationRange.length - 1]
     : 1;
 
+  let ulCSS = "";
+  let liCSS = "";
+  let liCSS_2 = "";
+  let symbolCSS = "";
+  switch (size) {
+    case "xs":
+      ulCSS = "p-1";
+      liCSS_2 = "text-sm";
+      symbolCSS = "h-[22px] w-[22px]";
+      break;
+    case "small":
+      ulCSS = "p-2";
+      liCSS_2 = "text-base";
+      symbolCSS = "h-[25px] w-[25px]";
+      break;
+    default:
+      ulCSS = "p-4";
+      liCSS = "mx-2";
+      liCSS_2 = "text-2xl";
+      symbolCSS = "h-[36px] w-[36px]";
+  }
+
   const onFirst = () => {
     onNavPage(1);
   };
@@ -48,20 +70,12 @@ function Pagination({
 
   if (current < 1 || paginationRange.length < 2) return null;
   return (
-    <ul
-      className={`flex w-full list-none justify-center ${
-        small ? "p-2" : "p-4"
-      }`}
-    >
+    <ul className={`flex w-full list-none justify-center ${ulCSS}`}>
       <li
-        className={`${
-          small ? "" : "mx-2"
-        } my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide`}
+        className={`${liCSS} my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide`}
         onClick={onFirst}
       >
-        <BiFirstPage
-          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
-        />
+        <BiFirstPage className={symbolCSS} />
       </li>
       <li
         className={
@@ -70,9 +84,7 @@ function Pagination({
         }
         onClick={onPrev}
       >
-        <MdNavigateBefore
-          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
-        />
+        <MdNavigateBefore className={symbolCSS} />
       </li>
       {paginationRange.map((pageNumber, index) => {
         if (pageNumber === DOTS) {
@@ -90,9 +102,7 @@ function Pagination({
         return (
           <li
             key={index}
-            className={`${
-              small ? "text-base " : "text-2xl "
-            } font-sans mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-semibold leading-snug tracking-wide ${
+            className={`${liCSS_2} font-sans mx-2 my-auto flex h-8 cursor-default items-center rounded-2xl bg-transparent px-3 py-0 text-center font-semibold leading-snug tracking-wide ${
               pageNumber === current && "bg-slate-500"
             }`}
             onClick={() => onNavPage(pageNumber)}
@@ -108,17 +118,13 @@ function Pagination({
         }
         onClick={onNext}
       >
-        <MdNavigateNext
-          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
-        />
+        <MdNavigateNext className={symbolCSS} />
       </li>
       <li
         className="mx-2 my-auto flex h-8 items-center rounded-2xl px-1 py-0 text-center leading-snug tracking-wide"
         onClick={onLast}
       >
-        <BiLastPage
-          className={`${small ? "h-[25px] w-[25px]" : "h-[36px] w-[36px]"}`}
-        />
+        <BiLastPage className={symbolCSS} />
       </li>
     </ul>
   );

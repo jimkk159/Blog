@@ -32,6 +32,7 @@ module.exports = {
       satify: ["Satisfy", "cursive"],
       kanit: ["Kanit", "sans-serif"],
       "source-serif-pro": ["Source Serif Pro", "serif"],
+      teko: ["Teko", "sans-serif"],
     },
   },
 };

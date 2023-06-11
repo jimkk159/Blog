@@ -23,6 +23,7 @@ function PostEditor({ method, post }) {
   const [markdown, setMarkdown] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
   const data = useActionData();
+  const [isDrop, setIsDrop] = useState(false);
 
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -90,9 +91,16 @@ function PostEditor({ method, post }) {
   }, [data]);
 
   return (
-    <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
-      <div className="h-full w-full max-w-3xl rounded bg-white p-16 text-black">
-        <Form method={method}>
+    <div className="flex min-h-[960px] w-full justify-center p-6 md:px-8 md:py-12">
+      <div className="h-full w-full max-w-3xl rounded bg-white px-4 py-8 text-black md:px-8 md:pt-12">
+        <Form
+          method={method}
+          onClick={(e) => {
+            e.stopPropagation();
+            if (isDrop) setIsDrop(false);
+          }}
+          onBlur={() => setIsDrop(false)}
+        >
           <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
             <textarea
               ref={titleRef}
@@ -152,59 +160,63 @@ function PostEditor({ method, post }) {
             name="avatar"
             onChange={inputImageHandler}
           />
-          <div className="mt-12 flex font-pt-serif">
-            <p className="mr-4 pl-1 pr-2 text-lg italic underline">
+          <div className="mt-12 flex flex-wrap items-center justify-start space-y-2 font-pt-serif">
+            <p className="mr-4 whitespace-nowrap pl-1 pr-2 text-lg italic underline">
               Which topic does this post belog to?
             </p>
-            <select
-              id="CategoryId"
-              name="CategoryId"
-              className="h-8 border text-base outline-none"
-              defaultValue={post ? post.CategoryId : null}
-            >
-              {categories &&
-                categories.length &&
-                categories
-                  .filter((el) => el.name !== "root")
-                  .map((el, index) => (
-                    <option key={index} value={el.id}>
-                      {el.name}
-                    </option>
-                  ))}
-            </select>
+            <div className="w-2/5">
+              <select
+                id="CategoryId"
+                name="CategoryId"
+                className="h-8 w-full truncate rounded-sm border border-black p-1 text-base outline-none"
+                defaultValue={post ? post.CategoryId : null}
+              >
+                {categories &&
+                  categories.length &&
+                  categories
+                    .filter((el) => el.name !== "root")
+                    .map((el, index) => (
+                      <option key={index} value={el.id}>
+                        {el.name}
+                      </option>
+                    ))}
+              </select>
+            </div>
           </div>
-          <div className="my-8 flex flex-col ">
+          <div className="mt-8 flex flex-col ">
             {!isTouched && submigErrorMessage && (
               <p className="px-1 pb-2 text-left font-pt-serif text-sm text-[#FF0000]">
                 {submigErrorMessage}
               </p>
             )}
-            <div className="flex justify-end font-pt-serif ">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                loading={isSubmitting}
-                className={
-                  "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
-                  "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                }
-                spinner={{ color: "text-blue-600" }}
-              >
-                Save
-              </Button>
-              <Button
-                type="button"
-                disabled={isSubmitting}
-                loading={isSubmitting}
-                onClick={cancelHandler}
-                className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-              >
-                Cancel
-              </Button>
+            <div className="my-2 flex flex-col space-y-2">
+              <TagList post={post} isEdit={true} />
+              <div className="flex justify-end font-pt-serif ">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                  className={
+                    "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
+                    "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                  }
+                  spinner={{ color: "text-blue-600" }}
+                >
+                  Save
+                </Button>
+                <Button
+                  type="button"
+                  disabled={isSubmitting}
+                  loading={isSubmitting}
+                  onClick={cancelHandler}
+                  className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
+                >
+                  Cancel
+                </Button>
+              </div>
             </div>
           </div>
         </Form>
-        <TagList post={post} isEdit={true} />
       </div>
     </div>
   );

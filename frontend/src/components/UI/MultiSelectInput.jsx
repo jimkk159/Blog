@@ -33,10 +33,10 @@ function MultiSelectInput({
 }) {
   const [isSelected, setIsSelected] = useState(false);
   const [formData, dispatch] = useReducer(reducer, initialState);
-
   const clickHandler = useCallback(
     (event, choiceName) => {
       event.preventDefault();
+      event.stopPropagation();
       const choice = choices.filter((el) => el.id === event.target.value)[0];
       dispatch({ type: "CHANGE", field: "value", value: event.target.value });
       dispatch({ type: "CHANGE", field: "name", value: choiceName });
@@ -62,7 +62,7 @@ function MultiSelectInput({
 
   const formValue = formData.value;
   useEffect(() => {
-    onInput(name, formValue, true);
+    if (onInput) onInput(name, formValue, true);
   }, [onInput, name, formValue]);
 
   return (
@@ -75,7 +75,7 @@ function MultiSelectInput({
         className="flex w-full flex-col items-center justify-center rounded border bg-white  text-gray-600 shadow ring-gray-200 focus:outline-none"
       >
         <div
-          className={"flex w-full items-center "}
+          className={"flex w-full items-center"}
           onClick={(e) => {
             e.preventDefault();
             onDrop((prev) => !prev);
@@ -83,7 +83,7 @@ function MultiSelectInput({
         >
           <label
             htmlFor="ParentId"
-            className={`w-full cursor-pointer whitespace-nowrap px-4 py-1 text-sm text-gray-500 hover:bg-gray-50`}
+            className={`w-full cursor-pointer truncate whitespace-nowrap px-4 py-1 text-sm text-gray-500 hover:bg-gray-50`}
           >
             {isSelected ? formData.displayName : defaultValue}
           </label>
@@ -91,13 +91,13 @@ function MultiSelectInput({
         </div>
         <div
           className={
-            `top-full mt-1 w-max min-w-full bg-white shadow` +
+            `relative top-full mt-1 w-full min-w-full bg-white shadow` +
             `${isDrop ? "" : " hidden"}`
           }
         >
-          <ul className="rounded border text-left">
+          <ul className="absolute left-0 top-0 h-32 w-full overflow-y-scroll rounded border text-left">
             <ChoiceChild
-              className="border-b px-2 py-1 text-base hover:bg-gray-100"
+              className="w-full truncate border-b bg-white px-2 py-1 text-base hover:bg-gray-100"
               current={current}
               choices={choices}
               children={choiceElement}

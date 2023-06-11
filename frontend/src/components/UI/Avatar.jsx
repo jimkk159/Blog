@@ -4,11 +4,10 @@ import defaultImg from "../../assets/imgs/default.jpg";
 
 function Avatar({ title, className, onClick, avatar: img, children }) {
   const avatar = img ? img : defaultImg;
-
   return (
     <div
       title={title}
-      className={`relative overflow-hidden rounded-full after:inline-block after:h-0 after:w-full after:pt-[100%] after:align-top  ${className}`}
+      className={`after:pt-full relative overflow-hidden rounded-full after:inline-block after:h-0 after:w-full after:align-top ${className}`}
       onClick={onClick}
     >
       <img

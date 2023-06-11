@@ -9,12 +9,12 @@ import { useSelector } from "react-redux";
 import NavSideDrawer from "./NavSideDrawer";
 import logo from "../../assets/imgs/blog_logo.png";
 import defaultImg from "../../assets/imgs/default.jpg";
-import useMediaQuery from "../../hooks/media-query-hook";
+import { useMediaQuery } from "react-responsive";
 
 function MainNavigation() {
   const token = useRouteLoaderData("root");
   const [isDrawer, setIsDrawer] = useState(false);
-  const { matches } = useMediaQuery("min", "768");
+  const matches = useMediaQuery({ query: "(min-width: 768px)" });
   const avatar = useSelector((state) => state.auth.avatar);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ function MainNavigation() {
             <Link to={token ? "/profile" : "/auth?mode=login"}>
               <Avatar
                 className={
-                  "md:mx-2 md:h-[40px] md:w-[40px] lg:mx-4 lg:h-[50px] lg:w-[50px]"
+                  "border-2 border-white md:mx-2 md:h-[42px] md:w-[42px] lg:mx-4 lg:h-[52px] lg:w-[52px]"
                 }
                 avatar={token ? avatar : defaultImg}
               />
