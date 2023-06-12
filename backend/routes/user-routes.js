@@ -9,31 +9,35 @@ import * as shareController from "../controllers/share-controller.js";
 
 const router = express.Router();
 
-router.use(authController.authUserByToken);
-
 router
   .route("/me")
   .get(
+    authController.authUserByToken,
     userController.getMe,
     factory.getOne(User)
   )
   .patch(
+    authController.authUserByToken,
     userController.updateMe,
     factory.updateOne(User)
   )
   .delete(
+    authController.authUserByToken,
     userController.getMe,
     factory.deleteOne(User)
   );
 
 router.patch(
   "/avatar",
+  authController.authUserByToken,
   upload.uploadToMemory.single("avatar"),
   userController.updateAvatar,
   factory.updateOne(User)
 );
 
-router.use(authController.restrictTo("root"));
+router.get("/:id", factory.getOne(User));
+
+router.use(authController.authUserByToken, authController.restrictTo("root"));
 
 router
   .route("/")
@@ -52,7 +56,6 @@ router
 
 router
   .route("/:id")
-  .get(factory.getOne(User))
   .patch(factory.updateOne(User))
   .delete(factory.deleteOne(User));
 

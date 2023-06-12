@@ -11,14 +11,14 @@ const router = express.Router();
 router.get("/", factory.getAll(Category));
 router.get("/:id", factory.getOne(Category));
 
-router.use(authController.authUserByToken, authController.restrictTo("root"));
-
 router.post(
   "/",
   [check("name").not().isEmpty(), check("ParentId").not().isEmpty()],
   shareController.validation,
   categoryController.createOne
 );
+
+router.use(authController.authUserByToken, authController.restrictTo("root"));
 
 router
   .route("/:id")

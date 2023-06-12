@@ -11,6 +11,14 @@ const Post = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
+    previewImg: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    previewSummary: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     title: {
       type: DataTypes.STRING,
       allowNull: false,
