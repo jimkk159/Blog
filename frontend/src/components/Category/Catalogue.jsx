@@ -18,7 +18,7 @@ function Catalogue({ catalogue, isFirst }) {
           <button
             className={
               "mt-1.5 w-full rounded border bg-gray-200 text-center text-slate-800 ring-1 hover:bg-gray-300 " +
-              `${isDrop ? "p-1 text-base " : "p-0.5 text-2xl"}`
+              `${isDrop ? "p-1 text-sm lg:text-base" : "p-0.5 text-2xl"}`
             }
             onClick={() => setIsDrop((prev) => !prev)}
           >

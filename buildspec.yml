@@ -1,0 +1,21 @@
+version: 0.2
+phase:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - echo "Installing dependencies..."
+      - cd frontend
+      - npm install
+  build:
+    commands:
+      - echo "Start building..."
+      # Build react project
+      - npm run build
+    finally:
+      - echo "Finish building..."
+  post_build:
+    commands:
+      - echo "Updating files in the S3 bucet..."
+      - aws s3 sync build s3://jim-blog-frontend --delete
+      

@@ -95,7 +95,7 @@ function MultiSelectInput({
             `${isDrop ? "" : " hidden"}`
           }
         >
-          <ul className="absolute left-0 top-0 h-32 w-full overflow-y-scroll rounded border text-left">
+          <ul className="absolute left-0 top-0 h-32 w-full overflow-y-scroll rounded border text-left bg-white ">
             <ChoiceChild
               className="w-full truncate border-b bg-white px-2 py-1 text-base hover:bg-gray-100"
               current={current}
