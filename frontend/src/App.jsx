@@ -12,7 +12,8 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <CustomRoute />
+        {/* <CustomRoute /> */}
+        <h1>Hello world!</h1>
       </PersistGate>
     </Provider>
   );
