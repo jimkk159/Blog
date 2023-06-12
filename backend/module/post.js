@@ -44,3 +44,4 @@ Post.belongsTo(User, { foreignKey: "AuthorId", as: "Author" });
 
 await Post.sync();
 export default Post;
+
