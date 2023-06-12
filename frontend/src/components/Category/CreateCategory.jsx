@@ -106,5 +106,4 @@ function CreateCategory({ onClose }) {
     </form>
   );
 }
-
 export default CreateCategory;
