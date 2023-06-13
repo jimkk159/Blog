@@ -2,8 +2,6 @@ import validator from "validator";
 import { RxCrossCircled } from "react-icons/rx";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { useState, useCallback, useEffect } from "react";
-import store from "../../../store";
-import { authActions } from "../../../store/auth-slice";
 import { GoogleLoginButton } from "react-social-login-buttons";
 import {
   Link,
@@ -15,22 +13,33 @@ import {
   useActionData,
   useSearchParams,
 } from "react-router-dom";
+
+// redux
+import store from "../../../store";
+import { authActions } from "../../../store/auth-slice";
+
+// components
 import Input from "../../../components/UI/Input";
-import useForm from "../../../hooks/form-hook";
 import Button from "../../../components/UI/Button";
 
+// hooks
+import useForm from "../../../hooks/form-hook";
+
 function Auth() {
+  const [isTouched, setIsTouched] = useState(false);
+  const [isAuthSuccess, setIsAuthSuccess] = useState();
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
+
+  // react-router
+  const data = useActionData();
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const [isTouched, setIsTouched] = useState(false);
-  const [isAuthSuccess, setIsAuthSuccess] = useState();
-  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
   const [searchParams] = useSearchParams();
   const isSignup = searchParams.get("mode") === "signup";
-  const data = useActionData();
-
+  
+  // custom hooks
   const {
     formState,
     inputHandler: formInputHandler,
@@ -43,6 +52,7 @@ function Auth() {
     false
   );
 
+  // custom functions
   const inputHandler = useCallback(
     (name, value, isValid) => {
       formInputHandler(name, value, isValid);
@@ -77,6 +87,7 @@ function Auth() {
     }
   }, [isSignup, emailInput, passwordInput, setFormData, navigate]);
 
+  // useEffect
   useEffect(() => {
     let timeout;
     if (data && data.message) {

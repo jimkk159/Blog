@@ -1,17 +1,17 @@
+import { useState } from "react";
 import Toggle from "react-toggle";
-import React, { useState } from "react";
 import { useMediaQuery } from "react-responsive";
 
 import "react-toggle/style.css";
 
 function DarkModeToggle() {
   const [isDark, setIsDark] = useState(true);
-
-  const systemPrefersDark = useMediaQuery(
-    { query: "(prefers-color-scheme: dark)" },
-    undefined,
-    (isSystemDark) => setIsDark(isSystemDark)
-  );
+  // custom hooks
+  // const systemPrefersDark = useMediaQuery(
+  //   { query: "(prefers-color-scheme: dark)" },
+  //   undefined,
+  //   (isSystemDark) => setIsDark(isSystemDark)
+  // );
 
   return (
     <Toggle

@@ -2,11 +2,12 @@ import { useRef } from "react";
 import { Form, useSubmit } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
-function SearchBar({ className }) {
+function SearchBar() {
   const formRef = useRef();
-  const submit = useSubmit("/posts/search");
 
-  const searchHandler = () => {
+  // react-router
+  const submit = useSubmit("/posts/search");
+  const searchHandler = () =>
     submit(
       {
         mode: formRef.current.mode.value,
@@ -14,7 +15,6 @@ function SearchBar({ className }) {
       },
       { method: "post", action: "/posts/search" }
     );
-  };
 
   return (
     <Form

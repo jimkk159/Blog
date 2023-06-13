@@ -4,7 +4,7 @@ import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 //Icon
 import { BiFirstPage, BiLastPage } from "react-icons/bi";
 
-//Custom Hook
+// hooks
 import usePagination, { DOTS } from "../../hooks/pagination-hook";
 
 function Pagination({
@@ -16,19 +16,6 @@ function Pagination({
   onNavPage,
   offset = 0,
 }) {
-  const paginationRange =
-    usePagination({
-      total: +total,
-      limit: +limit,
-      sibling: +sibling,
-      current: +current,
-      offset: +offset,
-    }) ?? [];
-
-  const totalPage = paginationRange
-    ? paginationRange[paginationRange.length - 1]
-    : 1;
-
   let ulCSS = "";
   let liCSS = "";
   let liCSS_2 = "";
@@ -51,9 +38,24 @@ function Pagination({
       symbolCSS = "h-[36px] w-[36px]";
   }
 
-  const onFirst = () => {
-    onNavPage(1);
-  };
+  // custom hooks
+  const paginationRange =
+    usePagination({
+      total: +total,
+      limit: +limit,
+      sibling: +sibling,
+      current: +current,
+      offset: +offset,
+    }) ?? [];
+
+  const totalPage = paginationRange
+    ? paginationRange[paginationRange.length - 1]
+    : 1;
+
+  // custom functions
+  const onFirst = () => onNavPage(1);
+  const onLast = () => onNavPage(totalPage);
+
   const onNext = () => {
     if (totalPage > current) {
       onNavPage(current + 1);
@@ -63,9 +65,6 @@ function Pagination({
     if (current > 1) {
       onNavPage(current - 1);
     }
-  };
-  const onLast = () => {
-    onNavPage(totalPage);
   };
 
   if (current < 1 || paginationRange.length < 2) return null;

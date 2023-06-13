@@ -1,5 +1,4 @@
 import React from "react";
-
 import defaultImg from "../../assets/imgs/default.jpg";
 
 function Avatar({ title, className, onClick, avatar: img, children }) {

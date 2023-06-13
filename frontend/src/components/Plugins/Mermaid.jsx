@@ -1,6 +1,6 @@
 import mermaid from "mermaid";
 import { v4 as uuid } from "uuid";
-import React, { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback } from "react";
 
 const getCode = (arr = []) =>
   arr
@@ -47,7 +47,7 @@ function Mermaid({ inline, children = [], className, ...props }) {
       </code>
     );
   }
-  return null
+  return null;
 }
 
 export default Mermaid;

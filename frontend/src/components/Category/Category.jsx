@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { RxGear } from "react-icons/rx";
-import EditCategory from "./EditCategory";
 import { useSelector } from "react-redux";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 
+import EditCategory from "./EditCategory";
+
 function Category({ category, isOpen, setIsOpen }) {
   const [isEdit, setIsEdit] = useState(false);
+
+  // redux
   const { isRoot } = useSelector((state) => state.auth);
 
+  // custom functions
   const closeHandler = () => setIsEdit(false);
 
   return (

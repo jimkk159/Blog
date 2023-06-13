@@ -1,24 +1,20 @@
 import validator from "validator";
 import { useCallback, useState } from "react";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
-import Button from "../UI/Button";
 
-import useForm from "../../hooks/form-hook";
-import Input from "../../components/UI/Input";
+// components
+import Input from "../UI/Input";
+import Button from "../UI/Button";
 import MultiSelectInput from "../UI/MultiSelectInput";
+
+// hooks
+import useForm from "../../hooks/form-hook";
 
 function CreateCategory({ onClose }) {
   const [isDrop, setIsDrop] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { formState, inputHandler } = useForm(
-    {
-      name: { value: "", isValid: false },
-      ParentId: { value: "", isValid: false },
-    },
-    false
-  );
-
+  // react-router
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
   const { categories } = useRouteLoaderData("relation");
@@ -28,6 +24,16 @@ function CreateCategory({ onClose }) {
       value: el.id,
     })) ?? [];
 
+  // custom hooks
+  const { formState, inputHandler } = useForm(
+    {
+      name: { value: "", isValid: false },
+      ParentId: { value: "", isValid: false },
+    },
+    false
+  );
+
+  // custom functions
   const name = formState.inputs.name.value;
   const ParentId = +formState.inputs.ParentId.value;
   const submitHandler = useCallback(
@@ -53,7 +59,7 @@ function CreateCategory({ onClose }) {
     },
     [navigate, token, name, ParentId]
   );
-    
+
   return (
     <form
       className="bg-slate-50 p-3 text-gray-800"

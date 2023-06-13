@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 import Category from "./Category";
 import CreateCategory from "./CreateCategory";
 
 function Catalogue({ catalogue, isFirst }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
+
+  // react-router
   const navigate = useNavigate();
 
   if (!catalogue.ParentId)

@@ -9,6 +9,7 @@ function ChoiceChild({
   defaultName = "",
 }) {
   let output = choices;
+  
   if (!choices) return;
   if (!choices.length) return;
 

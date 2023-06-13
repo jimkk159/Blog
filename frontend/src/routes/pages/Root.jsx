@@ -1,14 +1,22 @@
 import { useEffect } from "react";
-import cubeImg from "../img/cube.png";
-import Footer from "../../components/UI/Footer";
-import * as authHelper from "../../utils/auth";
-import MainNavigation from "../../components/UI/MainNavigation";
 import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
 
+// image
+import cubeImg from "../img/cube.png";
+
+// helper
+import * as authHelper from "../../utils/auth";
+
+// components
+import Footer from "../../components/UI/Footer";
+import MainNavigation from "../../components/UI/MainNavigation";
+
 function Root() {
+  // react-router
   const submit = useSubmit();
   const token = useLoaderData();
 
+  // custom functions
   const handleStorageChange = (event) => {
     if (event.key === "token")
       window.location.replace(
@@ -16,6 +24,7 @@ function Root() {
       );
   };
 
+  // useEffect
   useEffect(() => {
     if (!token) return;
     if (authHelper.isTokenExpired(token))
@@ -34,7 +43,7 @@ function Root() {
 
   return (
     <div
-      className="min-h-screen bg-black text-white w-full"
+      className="min-h-screen w-full bg-black text-white"
       style={{ backgroundImage: `url(${cubeImg})` }}
     >
       <MainNavigation />

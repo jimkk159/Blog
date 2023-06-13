@@ -1,22 +1,32 @@
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Form, Link, useRouteLoaderData } from "react-router-dom";
+
+// imgs
+import logo from "../../assets/imgs/blog_logo.png";
+import defaultImg from "../../assets/imgs/default.jpg";
+
+// components
 import Avatar from "./Avatar";
 import NavItem from "./NavItem";
 import Hamburger from "./Hamburger";
 import SearchBar from "./SearchBar";
-import { useSelector } from "react-redux";
-
 import NavSideDrawer from "./NavSideDrawer";
-import logo from "../../assets/imgs/blog_logo.png";
-import defaultImg from "../../assets/imgs/default.jpg";
-import { useMediaQuery } from "react-responsive";
 
 function MainNavigation() {
-  const token = useRouteLoaderData("root");
   const [isDrawer, setIsDrawer] = useState(false);
-  const matches = useMediaQuery({ query: "(min-width: 768px)" });
+  
+  // redux
   const avatar = useSelector((state) => state.auth.avatar);
+  
+  // react-router
+  const token = useRouteLoaderData("root");
+  
+  // import hooks
+  const matches = useMediaQuery({ query: "(min-width: 768px)" });
 
+  // useEffect
   useEffect(() => {
     if (matches) setIsDrawer(false);
   }, [matches]);
@@ -37,7 +47,7 @@ function MainNavigation() {
         <div className="hidden md:flex">
           <SearchBar />
           <ul className="flex items-center">
-            <NavItem text="Posts" to={"/posts"} end/>
+            <NavItem text="Posts" to={"/posts"} end />
             {token && <NavItem text="New Post" to={"/posts/new"} />}
             <NavItem text="About" to={"/about"} />
             {!token && <NavItem text="Login" to={"/auth?mode=login"} />}

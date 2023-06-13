@@ -1,29 +1,34 @@
-import { useCallback, useRef, useState } from "react";
-import * as authHelper from "../../../utils/auth";
-import { AiFillCamera } from "react-icons/ai";
 import { useDispatch } from "react-redux";
 import { ImNewspaper } from "react-icons/im";
+import { AiFillCamera } from "react-icons/ai";
+import { useMediaQuery } from "react-responsive";
+import { useCallback, useRef, useState } from "react";
 import { json, useRouteLoaderData } from "react-router-dom";
 import { BsFillKeyFill, BsPersonCircle } from "react-icons/bs";
+
+import * as authHelper from "../../../utils/auth";
 import Avatar from "../../../components/UI/Avatar";
+import { authActions } from "../../../store/auth-slice";
+import Selection from "../../../components/UI/Selection";
 import Password from "../../../components/Profile/Password";
 import EditProfile from "../../../components/Profile/EditProfile";
 import ProfilePosts from "../../../components/Profile/ProfilePosts";
-import { authActions } from "../../../store/auth-slice";
-import Selection from "../../../components/UI/Selection";
-import { useMediaQuery } from "react-responsive";
 
 function Profile() {
   const token = authHelper.getAuthToken();
 
   const inputRef = useRef(null);
   const [status, setStatus] = useState();
+
+  // redux
   const dispatch = useDispatch();
   const { author } = useRouteLoaderData("profile");
 
+  // import hooks
   const matches480 = useMediaQuery({ query: "(min-width: 480px)" });
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
 
+  // custom functions
   const inputAvatarHandler = useCallback(() => inputRef.current.click(), []);
 
   const updateAvatarHander = useCallback(

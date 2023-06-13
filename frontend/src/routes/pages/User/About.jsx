@@ -1,13 +1,18 @@
 import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
-import * as helper from "../../../utils/helper";
-import { AwaitWrapper } from "../../helper/Wrapper";
 import { json, defer, useNavigate, useRouteLoaderData } from "react-router-dom";
 
+import * as helper from "../../../utils/helper";
+import { AwaitWrapper } from "../../helper/Wrapper";
+
 function About() {
+  // redux
+  const auth = useSelector((state) => state.auth);
+
+  // react-router
   const navigate = useNavigate();
   const { about } = useRouteLoaderData("about");
-  const auth = useSelector((state) => state.auth);
+
 
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-4 py-12 md:px-8">

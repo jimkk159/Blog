@@ -1,20 +1,21 @@
 import { useRef, useState, useEffect } from "react";
-import { tagActions } from "../../store/tag-slice";
 import { useRouteLoaderData } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
 import { useSelector, useDispatch } from "react-redux";
+import { CSSTransition } from "react-transition-group";
+
 import * as authHelper from "../../utils/auth";
+import { tagActions } from "../../store/tag-slice";
 
 function TagsToolTip({ postTags, category, isNew = false }) {
   const inputRef = useRef(null);
-  const dispatch = useDispatch();
   const [isEdit, setIsEdit] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
-  const { tags } = useRouteLoaderData("relation");
   const [searchTag, setSearchTag] = useState("");
-  const current = useSelector((state) => state.tag.tags);
+  const [isTouched, setIsTouched] = useState(false);
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
+  // redux
+  const dispatch = useDispatch();
+  const current = useSelector((state) => state.tag.tags);
   const currentName =
     current &&
     (isNew
@@ -24,6 +25,8 @@ function TagsToolTip({ postTags, category, isNew = false }) {
           category.name,
         ]);
 
+  // react-router
+  const { tags } = useRouteLoaderData("relation");
   const choices =
     currentName &&
     tags
@@ -38,6 +41,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
           (tag.name.startsWith(searchTag) || tag.name.endsWith(searchTag))
       );
 
+  // custom functions
   const inputChangeHandler = (e) => {
     setIsTouched(true);
     setSearchTag(e.target.value);
@@ -69,6 +73,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
     }
   };
 
+  // useEffect
   useEffect(() => {
     if (!isNew) dispatch(tagActions.update({ tags: postTags }));
     return () => dispatch(tagActions.init());

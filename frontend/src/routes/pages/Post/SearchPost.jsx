@@ -4,13 +4,14 @@ import {
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
+
 import PostsList from "../../../components/Post/PostsList";
 import PostsNavigation from "../../../components/Post/PostsNavigation";
 
 const defaultPage = 1;
 const defaultLimit = 15;
-
 function Search() {
+  // react-router
   const { posts } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -19,6 +20,7 @@ function Search() {
   const target = searchParams.get("target") ?? "";
   const limit = searchParams.get("limit") ?? defaultLimit;
 
+  // custom functions
   const navPageHandler = (nextPage) =>
     setSearchParams({ mode, type, target, page: nextPage, limit });
 

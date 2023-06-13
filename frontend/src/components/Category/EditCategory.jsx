@@ -2,8 +2,11 @@ import { RxCross1 } from "react-icons/rx";
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useRouteLoaderData } from "react-router-dom";
 
+// components
 import Button from "../UI/Button";
 import MultiSelectInput from "../UI/MultiSelectInput";
+
+// hooks
 import useForm from "../../hooks/form-hook";
 
 function EditCategory({ current, onClose }) {
@@ -11,13 +14,7 @@ function EditCategory({ current, onClose }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { formState, inputHandler, setFormData } = useForm(
-    {
-      CategoryId: { value: "", isValid: false },
-      ParentId: { value: "", isValid: false },
-    },
-    false
-  );
+  // react-router
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
   const { categories } = useRouteLoaderData("relation");
@@ -27,9 +24,18 @@ function EditCategory({ current, onClose }) {
       value: el.id,
     })) ?? [];
 
+  // custom hooks
+  const { formState, inputHandler, setFormData } = useForm(
+    {
+      CategoryId: { value: "", isValid: false },
+      ParentId: { value: "", isValid: false },
+    },
+    false
+  );
+
+  // custom functions
   const ParentId = formState.inputs.ParentId.value;
   const CategoryId = formState.inputs.CategoryId.value;
-
   const submitHandler = useCallback(
     async (event) => {
       event.preventDefault();
@@ -71,6 +77,7 @@ function EditCategory({ current, onClose }) {
     navigate(0);
   }, [navigate, token, CategoryId]);
 
+  // useEffects
   useEffect(() => {
     if (current) {
       setFormData(

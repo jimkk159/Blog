@@ -1,8 +1,10 @@
 import { Form, useNavigate } from "react-router-dom";
 
-function BoxItem({ icon, to, action, empty, children, onClick }) {
+function BoxItem({ icon, to, action, children, onClick }) {
+  // react-router
   const navigate = useNavigate();
 
+  // custom functions
   const clickHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();

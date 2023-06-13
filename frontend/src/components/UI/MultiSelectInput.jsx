@@ -33,6 +33,8 @@ function MultiSelectInput({
 }) {
   const [isSelected, setIsSelected] = useState(false);
   const [formData, dispatch] = useReducer(reducer, initialState);
+
+  // custom functions
   const clickHandler = useCallback(
     (event, choiceName) => {
       event.preventDefault();
@@ -60,6 +62,7 @@ function MultiSelectInput({
     [onDrop, choices]
   );
 
+  // useEffect
   const formValue = formData.value;
   useEffect(() => {
     if (onInput) onInput(name, formValue, true);

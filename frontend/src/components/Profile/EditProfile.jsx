@@ -1,25 +1,35 @@
-import { useEffect, useState } from "react";
 import validator from "validator";
+import { useEffect, useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 
+// components
 import Input from "../UI/Input";
-import useForm from "../../hooks/form-hook";
 import Button from "../UI/Button";
-import { useMediaQuery } from "react-responsive";
+
+// hooks
+import useForm from "../../hooks/form-hook";
 
 function EditProfile({ author }) {
   const [isEdit, setIsEdit] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
+
+  // react-router
+  const data = useActionData();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  // import hooks
+  const matches = useMediaQuery({ query: "(min-width: 480px)" });
+
+  // custom hooks
   const { formState, inputHandler } = useForm(
     { name: { value: "", isValid: false } },
     false
   );
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
-  const data = useActionData();
-  const [isTouched, setIsTouched] = useState(false);
-  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
-  const matches = useMediaQuery({ query: "(min-width: 480px)" });
 
+  // useEffect
   useEffect(() => {
     if (data && data.status === 200) {
       setIsEdit(false);

@@ -1,12 +1,14 @@
-import { HashLink } from "react-router-hash-link";
 import { useMediaQuery } from "react-responsive";
+import { HashLink } from "react-router-hash-link";
 
-const padding = ["", "pl-2", "pl-2", "pl-4", "pl-4", "pl-6"];
 const fontSize = ["14", "12", "10", "8", "6", "4"];
+const padding = ["", "pl-2", "pl-2", "pl-4", "pl-4", "pl-6"];
 const headingElements = ["# ", "## ", "### ", "#### ", "##### ", "###### "];
 
 function Chapters({ post }) {
   const chapters = [];
+  
+  // import hooks
   const matches = useMediaQuery({ query: "(min-width: 1280px)" });
 
   if (post) {

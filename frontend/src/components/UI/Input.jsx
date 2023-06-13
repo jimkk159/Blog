@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-//Custom Hook
+// hooks
 import { useInput } from "../../hooks/form-hook";
 
 function Input({
@@ -17,6 +17,8 @@ function Input({
   defaultValue,
 }) {
   const [isInit, setIsInit] = useState(true);
+
+  // custom hooks
   const {
     inputState,
     setHandler,
@@ -25,11 +27,13 @@ function Input({
   } = useInput(initalValue, validators);
   const isAlarm = !inputState.isValid && inputState.isTouched;
 
+  // custom functions
   const blurHandler = useCallback(() => {
     if (onBlur) onBlur();
     inputBlurHandler();
   }, [onBlur, inputBlurHandler]);
 
+  // useEffect
   const { value, isValid } = inputState; //prevent useEffect change by isTouched
   useEffect(() => {
     onInput(name, value, isValid);

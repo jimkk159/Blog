@@ -9,6 +9,7 @@ import TagListSmall from "../Tag/TagListSmall";
 const defaultPage = 1;
 const defaultLimit = 15;
 
+// reducer
 const formDate = (date) =>
   new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
@@ -20,19 +21,21 @@ function PostList({
   posts,
   total,
   onNavPage,
-  isShowDescription = true,
-  isShowAuthor = true,
-  isTagOnTopRight = false,
   size = "normal",
   page: inputPage,
   limit: inputLimit,
+  isShowAuthor = true,
+  isTagOnTopRight = false,
+  isShowDescription = true,
 }) {
+  // react-router
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const page = inputPage ?? searchParams.get("page") ?? defaultPage;
   const limit = inputLimit ?? searchParams.get("limit") ?? defaultLimit;
 
+  // modify css when query size change
   let liCSS = "";
   let titleCSS = "";
   switch (size) {

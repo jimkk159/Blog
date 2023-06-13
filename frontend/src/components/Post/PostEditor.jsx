@@ -18,20 +18,23 @@ function PostEditor({ method, post }) {
   const inputRef = useRef(null);
   const titleRef = useRef(null);
   const editorRef = useRef(null);
-  const [isDrag, setIsDrag] = useState(false);
   const [title, setTitle] = useState("");
+  const [isDrag, setIsDrag] = useState(false);
+  const [isDrop, setIsDrop] = useState(false);
   const [markdown, setMarkdown] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
-  const data = useActionData();
-  const [isDrop, setIsDrop] = useState(false);
-
-  const navigate = useNavigate();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
-  const { categories } = useRouteLoaderData("relation");
   const [isTouched, setIsTouched] = useState(false);
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
+  // react-router
+  const data = useActionData();
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const { categories } = useRouteLoaderData("relation");
+
+  const isSubmitting = navigation.state === "submitting";
+
+  // custom functions
   const inputImageHandler = useCallback(async (event) => {
     if (event.target.files && event.target.files.length === 1)
       await editHelper.onImageUpload(event.target.files[0], setMarkdown);
@@ -76,6 +79,7 @@ function PostEditor({ method, post }) {
     setIsTouched(true);
   };
 
+  // useEffect
   const postTitle = post?.title ? post.title : "";
   const postContent = post?.content ? post.content : "";
   useEffect(() => {

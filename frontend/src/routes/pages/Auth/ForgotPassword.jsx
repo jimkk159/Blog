@@ -1,4 +1,5 @@
 import validator from "validator";
+import { useState, useEffect } from "react";
 import {
   json,
   Form,
@@ -7,28 +8,30 @@ import {
   useNavigation,
 } from "react-router-dom";
 
-import Input from "../../../components/UI/Input";
 import useForm from "../../../hooks/form-hook";
+import Input from "../../../components/UI/Input";
 import Button from "../../../components/UI/Button";
-import { useState, useEffect } from "react";
 
 function ForgotPassword() {
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
+
+  // react-router
+  const data = useActionData();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
 
-  const data = useActionData();
+  // custom hooks
+  const { formState, inputHandler } = useForm(
+    { email: { value: "", isValid: false } },
+    false
+  );
 
+  //useEffect
   useEffect(() => {
     if (data && data.message) {
       setSubmigErrorMessage(data.message);
     }
   }, [data]);
-
-  const { formState, inputHandler } = useForm(
-    { email: { value: "", isValid: false } },
-    false
-  );
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">

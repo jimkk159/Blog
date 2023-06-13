@@ -4,9 +4,11 @@ import { useSearchParams } from "react-router-dom";
 import { authActions } from "../../../store/auth-slice";
 
 function OauthPage() {
-  const searchParams = useSearchParams()[0];
+  // redux
   const dispatch = useDispatch();
+  const searchParams = useSearchParams()[0];
 
+  // useEffect
   useEffect(() => {
     dispatch(
       authActions.login({

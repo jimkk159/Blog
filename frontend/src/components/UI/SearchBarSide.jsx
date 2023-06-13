@@ -4,10 +4,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 function SearchBar({ onSearch }) {
   const formRef = useRef();
+
+  // react-router
   const submit = useSubmit("/posts/search");
 
+  // custom functions
   const searchHandler = () => {
-    if(onSearch) onSearch();
+    if (onSearch) onSearch();
     submit(
       {
         mode: formRef.current.mode.value,
@@ -19,7 +22,7 @@ function SearchBar({ onSearch }) {
 
   const keyDownHandler = async (e) => {
     if (e.key === "Enter") {
-      if(onSearch) onSearch();
+      if (onSearch) onSearch();
     }
   };
 

@@ -16,14 +16,16 @@ function AboutEditor({ method, about }) {
   const editorRef = useRef(null);
   const [isDrag, setIsDrag] = useState(false);
   const [markdown, setMarkdown] = useState("");
-  const data = useActionData();
-
-  const navigate = useNavigate();
-  const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
   const [isTouched, setIsTouched] = useState(false);
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
+  // react-router
+  const data = useActionData();
+  const navigate = useNavigate();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+
+  // custom functions
   const inputImageHandler = useCallback(async (event) => {
     if (event.target.files && event.target.files.length === 1)
       await editHelper.onImageUpload(event.target.files[0], setMarkdown);
@@ -63,6 +65,7 @@ function AboutEditor({ method, about }) {
     setIsTouched(true);
   };
 
+  // useEffect
   const aboutContent = about?.content ? about.content : "";
   useEffect(() => {
     setMarkdown(aboutContent);

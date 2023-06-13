@@ -15,7 +15,10 @@ import BoxItem from "./BoxItem";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 
 function NavSideDrawer({ show, className, onCancel }) {
+  // react-router
   const token = useRouteLoaderData("root");
+
+  // redux
   const avatar = useSelector((state) => state.auth.avatar);
 
   return (

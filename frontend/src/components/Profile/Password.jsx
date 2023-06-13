@@ -1,13 +1,22 @@
+import { useMediaQuery } from "react-responsive";
 import { Form, useNavigation } from "react-router-dom";
 
+// components
 import Input from "../UI/Input";
-import useForm from "../../hooks/form-hook";
 import Button from "../UI/Button";
-import { useMediaQuery } from "react-responsive";
+
+// hooks
+import useForm from "../../hooks/form-hook";
 
 function Password({ onCancel }) {
+  // react-router
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+
+  // import hooks
+  const matches = useMediaQuery({ query: "(min-width: 480px)" });
+
+  // custom hooks
   const { formState, inputHandler } = useForm(
     {
       password: { value: "", isValid: false },
@@ -17,7 +26,6 @@ function Password({ onCancel }) {
     false
   );
 
-  const matches = useMediaQuery({ query: "(min-width: 480px)" });
   if (!matches)
     return (
       <Form

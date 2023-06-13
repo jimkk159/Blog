@@ -1,8 +1,9 @@
+import { redirect, json, useRouteLoaderData } from "react-router-dom";
+
 import store from "../../../store";
 import * as authHelper from "../../../utils/auth";
 import { AwaitWrapper } from "../../helper/Wrapper";
 import PostEditor from "../../../components/Post/PostEditor";
-import { redirect, json, useRouteLoaderData } from "react-router-dom";
 
 function EditPost() {
   const { post } = useRouteLoaderData("post-detail");

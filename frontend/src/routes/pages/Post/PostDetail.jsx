@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
+import { useEffect, useState } from "react";
 import {
   json,
   defer,
@@ -9,29 +11,37 @@ import {
   useNavigation,
   useRouteLoaderData,
 } from "react-router-dom";
-import { AwaitWrapper } from "../../helper/Wrapper";
-import * as authHelper from "../../../utils/auth";
+
+// helper
 import * as helper from "../../../utils/helper";
-import { useSelector } from "react-redux";
+import * as authHelper from "../../../utils/auth";
+
+// components
+import { AwaitWrapper } from "../../helper/Wrapper";
+import Button from "../../../components/UI/Button";
 import TagList from "../../../components/Tag/TagList";
 import Chapter from "../../../components/Post/Chapter";
-import Button from "../../../components/UI/Button";
-import { useEffect, useState } from "react";
 
 function PostDetail() {
-  const submit = useSubmit();
-  const navigate = useNavigate();
-  const { post } = useRouteLoaderData("post-detail");
+  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
+
+  // redux
   const auth = useSelector((state) => state.auth);
-  const data = useActionData;
   const startDeleteHandler = () => {
     const proceed = window.confirm("Are you sure?");
     if (proceed) submit(null, { method: "delete" });
   };
+
+  // react-router
+  const data = useActionData;
+  const submit = useSubmit();
+  const navigate = useNavigate();
+  const { post } = useRouteLoaderData("post-detail");
+
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
-  const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
+  // useEffect
   useEffect(() => {
     if (data && data.message) {
       setSubmigErrorMessage(data.message);

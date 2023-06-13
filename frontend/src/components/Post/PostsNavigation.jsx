@@ -1,8 +1,10 @@
 import { useRouteLoaderData } from "react-router-dom";
+
 import Catalogue from "../Category/Catalogue";
 import * as categoryHelper from "../../utils/category";
 
 function PostsNavigation() {
+  // react-router
   const { relation, categories } = useRouteLoaderData("relation");
 
   const catalogue = categoryHelper.createCatalogue(relation, categories);
