@@ -56,9 +56,9 @@ function Catalogue({ catalogue, isFirst }) {
                 `${index === 0 ? "border-t-2 border-t-gray-500" : ""}` +
                 ` cursor-pointer truncate py-1.5 text-base hover:text-gray-200 active:text-gray-200`
               }
-              onClick={() => navigate(`/${post.id}`)}
+              onClick={() => navigate(`/posts/${post.id}`)}
             >
-              <Link to={`/${post.id}`}>{post.title}</Link>
+              post.title
             </li>
           ))}
         </ul>

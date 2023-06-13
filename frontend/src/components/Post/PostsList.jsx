@@ -45,7 +45,7 @@ function PostList({
       titleCSS = "py-0.5 text-base";
       break;
     default:
-      liCSS = "m-4 p-4";
+      liCSS = "m-4 p-4 hover:p-[17px] hover:m-[15px]";
       titleCSS = "py-1 text-xl";
   }
 
@@ -63,7 +63,7 @@ function PostList({
           return (
             <li
               key={index}
-              className={`flex flex-col rounded bg-white text-black hover:bg-gray-50 ${liCSS}`}
+              className={`flex flex-col rounded bg-white text-black ${liCSS}`}
             >
               {post.Author && (
                 <div className="flex items-end gap-3 px-0.5">
