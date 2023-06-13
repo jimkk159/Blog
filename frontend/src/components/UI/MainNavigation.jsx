@@ -37,8 +37,8 @@ function MainNavigation() {
         <div className="hidden md:flex">
           <SearchBar />
           <ul className="flex items-center">
-            <NavItem text="Posts" to={"/"} />
-            {token && <NavItem text="New Post" to={"/new"} />}
+            <NavItem text="Posts" to={"/posts"} end/>
+            {token && <NavItem text="New Post" to={"/posts/new"} />}
             <NavItem text="About" to={"/about"} />
             {!token && <NavItem text="Login" to={"/auth?mode=login"} />}
             {token && (

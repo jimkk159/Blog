@@ -34,5 +34,5 @@ export async function action({ request }) {
 
   const resJSON = await response.json();
   const postId = resJSON.data.id;
-  return redirect("/" + postId);
+  return redirect("/posts/" + postId);
 }

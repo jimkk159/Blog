@@ -40,7 +40,7 @@ function NavSideDrawer({ show, className, onCancel }) {
           <div className="flex flex-wrap justify-start space-y-4">
             <div className="flex space-x-4">
               <BoxItem
-                to="/"
+                to="/posts"
                 icon={
                   <BsFillFileEarmarkPostFill className="h-full w-full text-orange-400" />
                 }
@@ -70,7 +70,7 @@ function NavSideDrawer({ show, className, onCancel }) {
             {token && (
               <div className="flex space-x-4">
                 <BoxItem
-                  to="/new"
+                  to="/posts/new"
                   icon={
                     <BsPencilFill className="h-full w-full text-orange-400" />
                   }

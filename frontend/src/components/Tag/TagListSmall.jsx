@@ -10,7 +10,7 @@ function TagListSmall({ post }) {
         <Link
           className="truncate text-[4px]"
           key="category"
-          to={`/search?mode=category&type=id&target=${post.Category.id}`}
+          to={`/posts/search?mode=category&type=id&target=${post.Category.id}`}
         >{`${post.Category && post.Category.name}`}</Link>
       </p>
       {post.Tags.filter((tag) => tag.name !== post.Category.name).map(
@@ -19,7 +19,7 @@ function TagListSmall({ post }) {
             <Link
               className="truncate text-[4px]"
               key={index}
-              to={`/search?mode=tag&type=id&target=${tag.id}`}
+              to={`/posts/search?mode=tag&type=id&target=${tag.id}`}
             >
               {tag.name}
             </Link>

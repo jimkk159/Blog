@@ -75,7 +75,7 @@ export async function action({ request }) {
   const limit = data.get("limit");
 
   return redirect(
-    `/search?mode=${mode}&type=text&target=${target}` +
+    `/posts/search?mode=${mode}&type=text&target=${target}` +
       `${page ? `&page=${page}` : ""}` +
       `${limit ? `&limit=${limit}` : ""}`
   );

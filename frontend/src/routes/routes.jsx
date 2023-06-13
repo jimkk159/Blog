@@ -4,6 +4,7 @@ import {
   RouterProvider,
   createBrowserRouter,
 } from "react-router-dom";
+import HomePage from "./pages/Home";
 import ErrorPage from "./pages/Error";
 import RootLayout from "./pages/Root";
 import * as authHelper from "../utils/auth";
@@ -43,15 +44,16 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     loader: authHelper.getAuthToken,
     children: [
+      { index: true, element: <HomePage /> },
       {
         id: "relation",
-        path: "/",
+        path: "posts",
         loader: lazyLoader("./pages/Post/PostsRelationRoot"),
         element: SuspenseWrapper(<PostsRelationRootLayout />),
         children: [
           {
             id: "posts",
-            path: "/",
+            path: "",
             loader: lazyLoader("./pages/Post/PostsRoot"),
             element: SuspenseWrapper(<PostsLayout />),
             children: [

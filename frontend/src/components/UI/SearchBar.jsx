@@ -4,7 +4,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 
 function SearchBar({ className }) {
   const formRef = useRef();
-  const submit = useSubmit("/search");
+  const submit = useSubmit("/posts/search");
 
   const searchHandler = () => {
     submit(
@@ -12,7 +12,7 @@ function SearchBar({ className }) {
         mode: formRef.current.mode.value,
         target: formRef.current.target.value,
       },
-      { method: "post", action: "/search" }
+      { method: "post", action: "/posts/search" }
     );
   };
 
@@ -20,7 +20,7 @@ function SearchBar({ className }) {
     <Form
       ref={formRef}
       method="post"
-      action="/search"
+      action="/posts/search"
       className="flex flex-row self-center md:mr-4 lg:mr-8"
     >
       <div className="relative">

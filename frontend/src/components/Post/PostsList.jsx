@@ -96,7 +96,7 @@ function PostList({
                   {isTagOnTopRight && <TagListSmall post={post} />}
                 </div>
               )}
-              <Link title="To post" to={`/${post.id}`}>
+              <Link title="To post" to={`/posts/${post.id}`}>
                 <p
                   className={`truncate px-1 font-kanit font-bold hover:text-gray-900 ${titleCSS}`}
                 >
