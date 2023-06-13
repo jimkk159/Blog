@@ -18,14 +18,11 @@ phases:
     commands:
       # Remove existing node_modules to clear dev dependencies
       - rm -r node_modules
-
       # Install runtime dependencies
-      - npm install --production
-      
+      - npm install --production   
 artifacts:
   files:
     - README.md
     - appspec.yml
     - scripts/*
     - backend/**/*
-    
