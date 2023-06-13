@@ -26,3 +26,4 @@ artifacts:
     - appspec.yml
     - scripts/*
     - backend/**/*
+    
