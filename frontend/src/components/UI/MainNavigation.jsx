@@ -40,7 +40,7 @@ function MainNavigation() {
   return (
     <>
       <header
-        className={`fixed w-full transition-opacity z-10 duration-500 hover:opacity-100 md:relative ${
+        className={`fixed z-10 w-full transition-opacity duration-500 hover:opacity-100 md:relative ${
           matches ? "bg-self-dark" : "bg-white"
         } ${isScrollingDown && scrollPosition > 250 ? "opacity-0" : ""}`}
         onClick={(e) => e.stopPropagation()}
@@ -83,7 +83,7 @@ function MainNavigation() {
                     </Form>
                   </li>
                 )}
-                <div className="pr-0.25 flex flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
+                <div className="pr-0.25 flex cursor-pointer flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs hover:bg-self-pink lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
                   <p>Profile</p>
                   <Link to={token ? "/profile" : "/auth?mode=login"}>
                     <Avatar

@@ -13,7 +13,7 @@ module.exports = {
           100: "#DDE6ED",
         },
         "self-red": "#FF0000",
-        "self-pink": "#ec6090",
+        "self-pink": { 500: "#ec6090", 600: "#d55686" },
         "self-gray": "#666",
         "self-dark": "#1f2122",
         "self-dark-gray": "#27292a",

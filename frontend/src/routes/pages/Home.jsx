@@ -1,4 +1,5 @@
 import Slider from "react-slick";
+import { useMediaQuery } from "react-responsive";
 
 // icon
 import { FiThumbsUp } from "react-icons/fi";
@@ -10,6 +11,8 @@ import Service2 from "../../assets/imgs/service-02.jpg";
 import Service3 from "../../assets/imgs/service-03.jpg";
 
 // components
+import PinkButton from "../../components/UI/PinkButton";
+import SectionTitle from "../../components/UI/SectionTitle";
 import CarouselItem from "../../components/UI/CarouselItem";
 
 // css
@@ -17,14 +20,34 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 function Home() {
-  const setting = {
+  // import hooks
+  const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
+  const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
+
+  // carousel setting
+  let carouselSetting = {
     autoplay: true,
     autoplaySpeed: 10000,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
     slidesToScroll: 1,
+    slidesToShow: 1,
   };
+  carouselSetting = matches1024
+    ? {
+        ...carouselSetting,
+        slidesToShow: 3,
+      }
+    : matches768
+    ? {
+        ...carouselSetting,
+        slidesToShow: 2,
+      }
+    : {
+        ...carouselSetting,
+        slidesToShow: 1,
+        autoplaySpeed: 5000,
+      };
   const posts = [
     {
       previewImg:
@@ -50,22 +73,18 @@ function Home() {
           <div className="py-6">
             <div className="h-full w-full rounded-3xl bg-self-dark-gray p-8">
               <div className="mb-16 flex h-full flex-col rounded-3xl bg-self-dark p-8">
-                <div className="flex items-center justify-between px-6">
-                  <h2 className="text-xl font-bold text-self-pink md:text-2xl">
-                    <span className="text-white underline">Featured</span> Posts
-                  </h2>
+                <div className="flex items-center justify-start px-6">
+                  <SectionTitle first={"Featured"} second={"Posts"} />
                 </div>
-                <Slider {...setting}>
+                <Slider {...carouselSetting}>
                   {posts.map((post, index) => (
                     <CarouselItem key={index} post={post} />
                   ))}
                 </Slider>
               </div>
               <div className="flex h-full flex-col rounded-3xl bg-self-dark p-8">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-self-pink">
-                    <span className="text-white underline">Top</span> Posts
-                  </h2>
+                <div className="flex items-center justify-start">
+                  <SectionTitle first={"Top"} second={"Posts"} />
                 </div>
                 <ul className="border-b border-self-gray">
                   <li className="border-b border-self-gray">
@@ -130,16 +149,16 @@ function Home() {
                   </li>
                 </ul>
                 <div className="mt-8 flex items-center justify-center">
-                  <h1 className="font-bold text-self-pink">View All Posts</h1>
+                  <h1 className="font-bold text-self-pink-500">
+                    View All Posts
+                  </h1>
                 </div>
               </div>
-              <div className="flex w-full items-center justify-between whitespace-nowrap py-16">
-                <h1 className="text-xl font-bold text-self-pink">
-                  <span className="text-white underline">
-                    How To Start Your
-                  </span>
-                  Live Stream
-                </h1>
+              <div className="flex w-full items-center justify-between whitespace-nowrap pb-10 pt-24">
+                <SectionTitle
+                  first={"How To Start Your"}
+                  second={"Live Stream"}
+                />
               </div>
               <ul className="space-y-8">
                 <li className="rounded-3xl border border-self-gray p-8">
@@ -192,17 +211,12 @@ function Home() {
                   </div>
                 </li>
               </ul>
-              <div className="flex items-center justify-center p-16">
-                <button className="rounded-3xl bg-self-pink px-8 py-3 text-sm text-white">
-                  Go To Profile
-                </button>
+              <div className="p-16">
+                <PinkButton text={"Go To Profile"} />
               </div>
               <div className="mb-16 flex h-full flex-col rounded-3xl bg-self-dark p-8">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-self-pink">
-                    <span className="text-white underline">Most Popular</span>
-                    Live Stream
-                  </h2>
+                  <SectionTitle first={"Most Popular"} second={"Live Stream"} />
                 </div>
                 <div className="my-8 flex w-full flex-col space-y-4 rounded-3xl border-2 border-zinc-600 bg-zinc-800 p-4 text-white">
                   <div className="flex w-full items-center justify-center">
@@ -221,7 +235,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="flex flex-col items-start space-y-2">
-                      <p className="flex items-center space-x-1 text-sm text-self-pink ">
+                      <p className="flex items-center space-x-1 text-sm text-self-pink-500 ">
                         <AiFillCheckCircle className="h-4 w-4" />
                         <p>KenganC</p>
                       </p>
@@ -248,7 +262,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="flex flex-col items-start space-y-2">
-                      <p className="flex items-center space-x-1 text-sm text-self-pink ">
+                      <p className="flex items-center space-x-1 text-sm text-self-pink-500 ">
                         <AiFillCheckCircle className="h-4 w-4" />
                         <p>KenganC</p>
                       </p>
@@ -275,7 +289,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="flex flex-col items-start space-y-2">
-                      <p className="flex items-center space-x-1 text-sm text-self-pink ">
+                      <p className="flex items-center space-x-1 text-sm text-self-pink-500 ">
                         <AiFillCheckCircle className="h-4 w-4" />
                         <p>KenganC</p>
                       </p>
@@ -302,7 +316,7 @@ function Home() {
                       </div>
                     </div>
                     <div className="flex flex-col items-start space-y-2">
-                      <p className="flex items-center space-x-1 text-sm text-self-pink ">
+                      <p className="flex items-center space-x-1 text-sm text-self-pink-500 ">
                         <AiFillCheckCircle className="h-4 w-4" />
                         <p>KenganC</p>
                       </p>
@@ -312,10 +326,8 @@ function Home() {
                     </div>
                   </div>
                 </div>
-                <div className="pt-22 flex items-center justify-center">
-                  <button className="whitespace-nowrap rounded-3xl bg-self-pink px-6 py-3 text-sm text-white">
-                    Discover All Streams
-                  </button>
+                <div className="pt-22">
+                  <PinkButton text={"Discover All Streams"} />
                 </div>
               </div>
             </div>
