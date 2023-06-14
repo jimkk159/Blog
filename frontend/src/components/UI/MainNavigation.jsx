@@ -4,27 +4,33 @@ import { useMediaQuery } from "react-responsive";
 import { Form, Link, useRouteLoaderData } from "react-router-dom";
 
 // imgs
-import logo from "../../assets/imgs/blog_logo.png";
+import logo from "../../assets/imgs/logo.png";
 import defaultImg from "../../assets/imgs/default.jpg";
 
 // components
 import Avatar from "./Avatar";
 import NavItem from "./NavItem";
+import SearchBar2 from "./SearchBar2";
 import Hamburger from "./Hamburger";
-import SearchBar from "./SearchBar";
 import NavSideDrawer from "./NavSideDrawer";
+
+// hooks
+import useScroll from "../../hooks/scorll-hook";
 
 function MainNavigation() {
   const [isDrawer, setIsDrawer] = useState(false);
-  
+
   // redux
   const avatar = useSelector((state) => state.auth.avatar);
-  
+
   // react-router
   const token = useRouteLoaderData("root");
-  
+
   // import hooks
   const matches = useMediaQuery({ query: "(min-width: 768px)" });
+
+  // custom hooks
+  const { isScrollingDown, scrollPosition } = useScroll();
 
   // useEffect
   useEffect(() => {
@@ -32,44 +38,67 @@ function MainNavigation() {
   }, [matches]);
 
   return (
-    <header className="w-full items-center bg-blue-500">
-      <nav className="lg mx-auto flex h-20 max-h-20 w-full justify-between bg-navy-800 px-6 py-4">
-        <NavSideDrawer show={isDrawer} onCancel={() => setIsDrawer(false)} />
-        <Hamburger
-          className="block md:hidden"
-          onClick={() => setIsDrawer(true)}
-        />
-        <div className="min-w-20 relative w-20">
-          <Link to="/" className="absolute -top-2">
-            <img src={logo} className="object-contain" alt="logo" />
-          </Link>
-        </div>
-        <div className="hidden md:flex">
-          <SearchBar />
-          <ul className="flex items-center">
-            <NavItem text="Posts" to={"/posts"} end />
-            {token && <NavItem text="New Post" to={"/posts/new"} />}
-            <NavItem text="About" to={"/about"} />
-            {!token && <NavItem text="Login" to={"/auth?mode=login"} />}
-            {token && (
-              <li className="flex-1 py-2 md:w-16 md:px-1 md:text-sm lg:w-28 lg:px-4 lg:text-base">
-                <Form method="post" action="/logout">
-                  <button className="w-full">Logout</button>
-                </Form>
-              </li>
-            )}
-            <Link to={token ? "/profile" : "/auth?mode=login"}>
-              <Avatar
-                className={
-                  "border-2 border-white md:mx-2 md:h-[42px] md:w-[42px] lg:mx-4 lg:h-[52px] lg:w-[52px]"
-                }
-                avatar={token ? avatar : defaultImg}
-              />
-            </Link>
-          </ul>
-        </div>
-      </nav>
-    </header>
+    <>
+      <header
+        className={`fixed w-full transition-opacity duration-500 hover:opacity-100 md:relative ${
+          matches ? "bg-[#1f2122]" : "bg-white"
+        } ${isScrollingDown && scrollPosition > 250 ? "opacity-0" : ""}`}
+      >
+        <nav className="flex h-24 max-h-24 w-full  justify-center px-16 py-4">
+          <div className="flex h-full w-full max-w-5xl items-center justify-between">
+            <NavSideDrawer
+              show={isDrawer}
+              onCancel={() => setIsDrawer(false)}
+            />
+            <div className="relative flex w-32 min-w-[80px] items-center justify-center">
+              <Link to="/" className="-ml-10">
+                <img
+                  src={logo}
+                  className="h-20 w-20 object-contain"
+                  alt="logo"
+                />
+              </Link>
+            </div>
+            <Hamburger
+              className="block justify-center md:hidden"
+              onClick={() => setIsDrawer(true)}
+            />
+            <div className="hidden h-full w-full justify-between md:flex">
+              <SearchBar2 />
+              <ul
+                className={`flex w-full items-center justify-end ${
+                  token ? "" : "md:space-x-2"
+                } lg:space-x-4`}
+              >
+                <NavItem text="Home" to={"/"} end />
+                <NavItem text="Browse" to={"/posts"} end />
+                {token && <NavItem text="Write" to={"/posts/new"} />}
+                <NavItem text="About" to={"/about"} />
+                {!token && <NavItem text="Login" to={"/auth?mode=login"} />}
+                {token && (
+                  <li className="mx-2 flex items-end whitespace-nowrap text-xs md:py-1 lg:p-2 lg:text-sm">
+                    <Form method="post" action="/logout">
+                      <button className="w-full">Logout</button>
+                    </Form>
+                  </li>
+                )}
+                <div className="pr-0.25 ml-2 flex flex-row items-center justify-between space-x-1.5 rounded-full bg-[#27292a] py-1.5 pl-3.5 pr-2 text-xs lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
+                  <p>Profile</p>
+                  <Link to={token ? "/profile" : "/auth?mode=login"}>
+                    <Avatar
+                      className={
+                        "border-2 border-white md:h-[24px] md:w-[24px] lg:h-[32px] lg:w-[32px]"
+                      }
+                      avatar={token ? avatar : defaultImg}
+                    />
+                  </Link>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+    </>
   );
 }
 

@@ -2,13 +2,11 @@ import { useRef } from "react";
 import { Form, useSubmit } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 
-function SearchBar() {
+function SearchBar2() {
   const formRef = useRef();
 
   // react-router
   const submit = useSubmit("/posts/search");
-
-  // custom functions
   const searchHandler = () =>
     submit(
       {
@@ -23,25 +21,25 @@ function SearchBar() {
       ref={formRef}
       method="post"
       action="/posts/search"
-      className="flex flex-row self-center md:mr-4 lg:mr-8"
+      className="flex flex-row self-center md:mr-4 lg:ml-8 "
     >
       <div className="relative">
         <AiOutlineSearch
-          className="absolute right-1 top-2 text-black"
+          className="absolute left-4 top-2.5"
           onClick={searchHandler}
         />
         <input
           id="target"
           name="target"
           type="text"
-          className="rounded-l-3xl text-gray-800 outline-none md:w-32 md:py-1 md:pl-4 md:text-sm lg:w-40 lg:py-0.5 lg:pl-3 lg:text-base"
+          className="rounded-l-3xl bg-zinc-800 outline-none placeholder:text-[#666] md:w-40 md:py-2 md:pl-10 md:text-sm lg:w-48"
           placeholder="Search..."
         />
       </div>
       <select
         id="mode"
         name="mode"
-        className="appearance-none rounded-r-3xl border-l border-gray-300 text-gray-800 outline-none md:py-0 md:pl-1.5 md:pr-0.5 md:text-sm lg:px-1 lg:py-0.5 lg:text-base"
+        className="appearance-none rounded-r-3xl border-l border-gray-600 bg-zinc-800 outline-none md:py-0 md:pl-1.5 md:pr-0.5 md:text-sm"
       >
         <option value="category">Topic</option>
         <option value="title">Title</option>
@@ -52,4 +50,4 @@ function SearchBar() {
   );
 }
 
-export default SearchBar;
+export default SearchBar2;

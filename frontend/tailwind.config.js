@@ -33,6 +33,7 @@ module.exports = {
       kanit: ["Kanit", "sans-serif"],
       "source-serif-pro": ["Source Serif Pro", "serif"],
       teko: ["Teko", "sans-serif"],
+      poppins: ["Poppins", "sans-serif"],
     },
   },
 };

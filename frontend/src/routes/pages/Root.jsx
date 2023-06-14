@@ -43,12 +43,13 @@ function Root() {
 
   return (
     <div
-      className="min-h-screen w-full bg-black text-white"
+      className="min-h-screen w-full bg-black font-poppins text-[#666]"
       style={{ backgroundImage: `url(${cubeImg})` }}
     >
       <MainNavigation />
       <Outlet />
-      <Footer />
+
+      {/* <Footer /> */}
     </div>
   );
 }
