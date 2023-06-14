@@ -12,6 +12,12 @@ module.exports = {
           200: "#9DB2BF",
           100: "#DDE6ED",
         },
+        "self-red": "#FF0000",
+        "self-pink": "#ec6090",
+        "self-gray": "#666",
+        "self-dark": "#1f2122",
+        "self-dark-gray": "#27292a",
+        "self-purple": "#510077",
       },
     },
     variants: {

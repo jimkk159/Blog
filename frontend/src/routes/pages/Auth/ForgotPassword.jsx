@@ -46,7 +46,7 @@ function ForgotPassword() {
           }`}
         >{`We will send the new password to your email address!`}</p>
         {submigErrorMessage && (
-          <p className="mb-5 text-center text-[#FF0000] ">
+          <p className="mb-5 text-center text-self-red ">
             {submigErrorMessage}
           </p>
         )}
@@ -58,7 +58,7 @@ function ForgotPassword() {
           type="email"
           name="email"
           placeholder="Email"
-          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
+          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-self-purple focus:bg-[#ebebeb]"
           errorMessage={"Please enter a valid email."}
           onInput={inputHandler}
           validators={validator.isEmail}

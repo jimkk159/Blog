@@ -7,8 +7,8 @@ function NavItem({ text, to, end }) {
         to={to}
         end={end}
         className={({ isActive }) =>
-          "mx-2 flex items-end whitespace-nowrap text-xs md:py-1 lg:p-2 lg:text-sm " +
-          `${isActive ? "text-pink-500" : ""}`
+          "mx-2 flex items-end whitespace-nowrap text-sm md:py-1 lg:p-2 lg:text-sm " +
+          `${isActive ? "text-self-pink" : ""}`
         }
       >
         {text}

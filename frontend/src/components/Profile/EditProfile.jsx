@@ -100,7 +100,7 @@ function EditProfile({ author }) {
               </div>
             </div>
             {isEdit && !isTouched && submigErrorMessage && (
-              <p className="mb-4 text-left font-kanit text-[#FF0000] ">
+              <p className="mb-4 text-left font-kanit text-self-red ">
                 {submigErrorMessage}
               </p>
             )}
@@ -171,7 +171,7 @@ function EditProfile({ author }) {
             </div>
             <div className="flex w-full flex-col items-end justify-end py-4 pr-4">
               {!isTouched && submigErrorMessage && (
-                <p className="mb-4 text-left font-kanit text-[#FF0000] ">
+                <p className="mb-4 text-left font-kanit text-self-red ">
                   {submigErrorMessage}
                 </p>
               )}

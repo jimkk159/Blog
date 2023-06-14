@@ -50,14 +50,14 @@ function Input({
         id={name}
         type={type}
         name={name}
-        className={`${className} ${isAlarm && "border-[#FF0000]"}`}
+        className={`${className} ${isAlarm && "border-self-red"}`}
         placeholder={placeholder}
         value={inputState.value}
         onChange={changeHandler}
         onBlur={blurHandler}
         onFocus={onFocus}
       />
-      {isAlarm && <p className="text-[#FF0000]">{errorMessage}</p>}
+      {isAlarm && <p className="text-self-red">{errorMessage}</p>}
     </>
   );
 }

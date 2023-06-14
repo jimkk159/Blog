@@ -40,11 +40,12 @@ function MainNavigation() {
   return (
     <>
       <header
-        className={`fixed w-full transition-opacity duration-500 hover:opacity-100 md:relative ${
-          matches ? "bg-[#1f2122]" : "bg-white"
+        className={`fixed w-full transition-opacity z-10 duration-500 hover:opacity-100 md:relative ${
+          matches ? "bg-self-dark" : "bg-white"
         } ${isScrollingDown && scrollPosition > 250 ? "opacity-0" : ""}`}
+        onClick={(e) => e.stopPropagation()}
       >
-        <nav className="flex h-24 max-h-24 w-full  justify-center px-16 py-4">
+        <nav className="flex h-24 max-h-24 w-full justify-center px-6 py-4">
           <div className="flex h-full w-full max-w-5xl items-center justify-between">
             <NavSideDrawer
               show={isDrawer}
@@ -76,13 +77,13 @@ function MainNavigation() {
                 <NavItem text="About" to={"/about"} />
                 {!token && <NavItem text="Login" to={"/auth?mode=login"} />}
                 {token && (
-                  <li className="mx-2 flex items-end whitespace-nowrap text-xs md:py-1 lg:p-2 lg:text-sm">
+                  <li className="mx-2 flex items-end whitespace-nowrap text-sm md:py-1 lg:p-2 lg:text-sm">
                     <Form method="post" action="/logout">
                       <button className="w-full">Logout</button>
                     </Form>
                   </li>
                 )}
-                <div className="pr-0.25 ml-2 flex flex-row items-center justify-between space-x-1.5 rounded-full bg-[#27292a] py-1.5 pl-3.5 pr-2 text-xs lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
+                <div className="pr-0.25 flex flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
                   <p>Profile</p>
                   <Link to={token ? "/profile" : "/auth?mode=login"}>
                     <Avatar

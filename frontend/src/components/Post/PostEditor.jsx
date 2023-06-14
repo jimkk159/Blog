@@ -189,7 +189,7 @@ function PostEditor({ method, post }) {
           </div>
           <div className="mt-8 flex flex-col ">
             {!isTouched && submigErrorMessage && (
-              <p className="px-1 pb-2 text-left font-pt-serif text-sm text-[#FF0000]">
+              <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
                 {submigErrorMessage}
               </p>
             )}

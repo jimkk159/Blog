@@ -122,7 +122,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
             />
             <hr className="mb-0 mt-0 w-full border-l-0 border-r-0" />
             {!isTouched && submigErrorMessage && (
-              <p className="mx-0.5 mb-0 mt-0.5 text-left text-sm text-[#FF0000]">
+              <p className="mx-0.5 mb-0 mt-0.5 text-left text-sm text-self-red">
                 {submigErrorMessage}
               </p>
             )}

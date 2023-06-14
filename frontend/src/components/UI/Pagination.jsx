@@ -1,8 +1,8 @@
 import React from "react";
-import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 //Icon
 import { BiFirstPage, BiLastPage } from "react-icons/bi";
+import { MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 
 // hooks
 import usePagination, { DOTS } from "../../hooks/pagination-hook";

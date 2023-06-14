@@ -127,13 +127,13 @@ function Auth() {
         </p>
 
         {!isTouched && submigErrorMessage && (
-          <p className="text-center text-[#FF0000] ">{submigErrorMessage}</p>
+          <p className="text-center text-self-red ">{submigErrorMessage}</p>
         )}
         {isSignup && (
           <Input
             type="text"
             name="name"
-            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
+            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-self-purple focus:bg-[#ebebeb]"
             placeholder="Name"
             errorMessage={"Please enter your name."}
             onInput={inputHandler}
@@ -143,7 +143,7 @@ function Auth() {
         <Input
           type="email"
           name="email"
-          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
+          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-self-purple focus:bg-[#ebebeb]"
           placeholder="Email"
           errorMessage={"Please enter a valid email."}
           onInput={inputHandler}
@@ -152,7 +152,7 @@ function Auth() {
         <Input
           type="password"
           name="password"
-          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
+          className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-self-purple focus:bg-[#ebebeb]"
           placeholder="Password"
           errorMessage={"Please enter at least 6 characters."}
           onInput={inputHandler}
@@ -162,7 +162,7 @@ function Auth() {
           <Input
             type="password"
             name="confirmPassword"
-            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-[#510077] focus:bg-[#ebebeb]"
+            className="m-0 my-1.5 box-border h-12 w-full overflow-ellipsis rounded border border-gray-400 bg-[#f8f8f8] px-2 py-2.5 text-base outline-none focus:border-self-purple focus:bg-[#ebebeb]"
             placeholder="Password again"
             errorMessage={"Please enter the same password."}
             onInput={inputHandler}
