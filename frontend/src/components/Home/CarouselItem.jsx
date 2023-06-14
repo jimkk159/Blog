@@ -4,7 +4,7 @@ import { FaRegCommentDots } from "react-icons/fa";
 function CarouselItem({ post }) {
   return (
     <div className="flex items-center justify-center">
-      <div className="my-8 flex w-full max-w-[300px] flex-col space-y-6 rounded-3xl border-2 border-zinc-600 p-2 py-4 text-white md:p-6">
+      <div className="my-8 flex w-full max-w-[270px] flex-col space-y-6 rounded-3xl border-2 border-zinc-600 p-2 py-4 text-white md:p-4">
         <div className="h-[421px] w-full">
           <img
             alt="preview image"

@@ -1,9 +1,6 @@
-import Slider from "react-slick";
 import { useMediaQuery } from "react-responsive";
 
 // icon
-import { FiThumbsUp } from "react-icons/fi";
-import { FaRegCommentDots } from "react-icons/fa";
 import { AiFillCheckCircle } from "react-icons/ai";
 
 import Service1 from "../../assets/imgs/service-01.jpg";
@@ -11,43 +8,21 @@ import Service2 from "../../assets/imgs/service-02.jpg";
 import Service3 from "../../assets/imgs/service-03.jpg";
 
 // components
-import PinkButton from "../../components/UI/PinkButton";
-import SectionTitle from "../../components/UI/SectionTitle";
-import CarouselItem from "../../components/UI/CarouselItem";
+import Carousel from "../../components/Home/Carousel";
+import PinkButton from "../../components/Home/PinkButton";
+import SectionTitle from "../../components/Home/SectionTitle";
 
 // css
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import TopPostItem from "../../components/Home/TopPostItem";
+import RankingList from "../../components/Home/RankingList";
 
 function Home() {
   // import hooks
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
-  // carousel setting
-  let carouselSetting = {
-    autoplay: true,
-    autoplaySpeed: 10000,
-    infinite: true,
-    speed: 500,
-    slidesToScroll: 1,
-    slidesToShow: 1,
-  };
-  carouselSetting = matches1024
-    ? {
-        ...carouselSetting,
-        slidesToShow: 3,
-      }
-    : matches768
-    ? {
-        ...carouselSetting,
-        slidesToShow: 2,
-      }
-    : {
-        ...carouselSetting,
-        slidesToShow: 1,
-        autoplaySpeed: 5000,
-      };
   const posts = [
     {
       previewImg:
@@ -66,93 +41,62 @@ function Home() {
         "https://images.unsplash.com/photo-1590506357340-4f2d8f5da5cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80",
     },
   ];
+
+  const posts2 = [
+    {
+      title: "Lofi Girl1",
+      category: "Science",
+      thumbs: 8,
+      comments: 2,
+      previewImg:
+        "https://i.ytimg.com/vi/9MhHJaFsnuc/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDkgLih_MA8=&rs=AOn4CLB1Q8rOm8mqkhIa1jwR8FBCxckvXw",
+    },
+    {
+      title: "Lofi Girl2",
+      category: "Science",
+      thumbs: 6,
+      comments: 4,
+      previewImg: "https://i.ytimg.com/vi/8r4bqa9mHWg/maxresdefault.jpg",
+    },
+    {
+      title: "Lofi Girl3",
+      category: "Science",
+      thumbs: 8,
+      comments: 2,
+      previewImg: "https://i.ytimg.com/vi/2TvhRJweMuo/maxresdefault.jpg",
+    },
+    {
+      title: "Lofi Girl4",
+      category: "Science",
+      thumbs: 6,
+      comments: 4,
+      previewImg: "https://i.ytimg.com/vi/-cswlH1laHc/maxresdefault.jpg",
+    },
+    {
+      title: "Lofi Girl5",
+      category: "Science",
+      thumbs: 8,
+      comments: 2,
+      previewImg:
+        "https://i.ytimg.com/vi/8BAl6z0lXdw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGBIgYyhyMA8=&rs=AOn4CLBD1P_dhEIHLAVyschlBQstn9uk4Q",
+    },
+    {
+      title: "Lofi Girl6",
+      category: "Science",
+      thumbs: 6,
+      comments: 4,
+      previewImg: "https://i.ytimg.com/vi/F6Dew1zwff0/maxresdefault.jpg",
+    },
+  ];
   return (
     <>
       <div className="rounded">
         <div className="h-full bg-self-dark px-3 pt-24">
           <div className="py-6">
             <div className="h-full w-full rounded-3xl bg-self-dark-gray p-8">
-              <div className="mb-16 flex h-full flex-col rounded-3xl bg-self-dark p-8">
-                <div className="flex items-center justify-start px-6">
-                  <SectionTitle first={"Featured"} second={"Posts"} />
-                </div>
-                <Slider {...carouselSetting}>
-                  {posts.map((post, index) => (
-                    <CarouselItem key={index} post={post} />
-                  ))}
-                </Slider>
-              </div>
-              <div className="flex h-full flex-col rounded-3xl bg-self-dark p-8">
-                <div className="flex items-center justify-start">
-                  <SectionTitle first={"Top"} second={"Posts"} />
-                </div>
-                <ul className="border-b border-self-gray">
-                  <li className="border-b border-self-gray">
-                    <div className="my-8 flex h-full w-full flex-col space-y-6 text-white">
-                      <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-2">
-                        <div className="flex w-32 items-center justify-center">
-                          <img
-                            className="h-full w-full overflow-hidden rounded-3xl object-cover"
-                            src="https://i.ytimg.com/vi/9MhHJaFsnuc/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDkgLih_MA8=&rs=AOn4CLB1Q8rOm8mqkhIa1jwR8FBCxckvXw"
-                          />
-                        </div>
-                        <div className="flex h-full w-full flex-col justify-between">
-                          <div>
-                            <div className="flex items-end justify-between space-x-1">
-                              <h1 className="text-xl font-bold">Lofi Girl</h1>
-                            </div>
-                            <p className="text-sm text-self-gray">Sandbox</p>
-                          </div>
-                          <div className="flex justify-end space-x-2">
-                            <div className="flex items-center justify-end space-x-1">
-                              <FiThumbsUp className="mb-0.5 w-4" />
-                              <p className="text-right text-sm">4.8</p>
-                            </div>
-                            <div className="flex items-center justify-end space-x-1">
-                              <FaRegCommentDots className="mb-1 w-4 text-white" />
-                              <p className="text-right text-sm">2.3M</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="my-8 flex h-full w-full flex-col space-y-6 text-white">
-                      <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-2">
-                        <div className="flex w-32 items-center justify-center">
-                          <img
-                            className="h-full w-full overflow-hidden rounded-3xl object-cover"
-                            src="https://i.ytimg.com/vi/8r4bqa9mHWg/maxresdefault.jpg"
-                          />
-                        </div>
-                        <div className="flex h-full w-full flex-col justify-between">
-                          <div>
-                            <div className="flex items-end justify-between space-x-1">
-                              <h1 className="text-xl font-bold">Lofi Girl</h1>
-                            </div>
-                            <p className="text-sm text-self-gray">Sandbox</p>
-                          </div>
-                          <div className="flex justify-end space-x-2">
-                            <div className="flex items-center justify-end space-x-1">
-                              <FiThumbsUp className="mb-0.5 w-4" />
-                              <p className="text-right text-sm">4.8</p>
-                            </div>
-                            <div className="flex items-center justify-end space-x-1">
-                              <FaRegCommentDots className="mb-1 w-4 text-white" />
-                              <p className="text-right text-sm">2.3M</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-                <div className="mt-8 flex items-center justify-center">
-                  <h1 className="font-bold text-self-pink-500">
-                    View All Posts
-                  </h1>
-                </div>
+              <div className="flex justify-center space-x-4 flex-col items-center lg:flex-row lg:items-start">
+                <Carousel posts={posts} />
+                <RankingList posts={posts2} />
               </div>
               <div className="flex w-full items-center justify-between whitespace-nowrap pb-10 pt-24">
                 <SectionTitle

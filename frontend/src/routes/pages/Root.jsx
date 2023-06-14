@@ -48,7 +48,6 @@ function Root() {
     >
       <MainNavigation />
       <Outlet />
-
       <Footer />
     </div>
   );
