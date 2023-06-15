@@ -1,4 +1,4 @@
-import TopPostItem from "./TopPostItem";
+import TopPostItem from "../Items/TopPostItem";
 import SectionTitle from "./SectionTitle";
 
 function RankingListSection({ posts }) {

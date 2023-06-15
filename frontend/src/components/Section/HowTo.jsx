@@ -4,9 +4,9 @@ import { HiCursorClick } from "react-icons/hi";
 import { BsPencilSquare } from "react-icons/bs";
 
 // components
-import HowToItem from "./HotToItem";
 import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
+import HowToItem from "../UI/Items/HotToItem";
 
 function HowToSection() {
   const items = [

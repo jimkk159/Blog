@@ -20,7 +20,7 @@ const ProfilePage = lazy(() => import("./pages/User/Profile"));
 const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
 const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
 
-const PostsPage = lazy(() => import("./pages/Browse"));
+const BrowsePage = lazy(() => import("./pages/Post/Browse"));
 const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
 const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
 const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: SuspenseWrapper(<PostsPage />),
+                element: SuspenseWrapper(<BrowsePage />),
               },
               {
                 id: "post-detail",

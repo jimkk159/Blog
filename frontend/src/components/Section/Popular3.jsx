@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 // components
 import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
-import PopularItem3 from "./PopularItem3";
+import PopularItem3 from "../UI/Items/PopularItem3";
 
 function PopularPost({ posts }) {
   let popular = null;

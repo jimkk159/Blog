@@ -2,10 +2,10 @@ import Slider from "react-slick";
 import { useMediaQuery } from "react-responsive";
 
 // components
-import PopularItem from "./PopularItem";
-import PopularItem2 from "./PopularItem2";
 import SectionTitle from "./SectionTitle";
 import PinkButton from "../UI/PinkButton";
+import PopularItem from "../Items/PopularItem";
+import PopularItem2 from "../Items/PopularItem2";
 
 function PopularPost({ posts, slide, button }) {
   let popular = null;

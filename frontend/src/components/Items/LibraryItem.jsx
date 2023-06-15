@@ -1,7 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 
 // components
-import Button from "../UI/Button";
+import Button from "../Button";
 
 function LiItem1({ title, content }) {
   return (

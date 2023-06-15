@@ -11,7 +11,7 @@ import {
   BsFillFileEarmarkPostFill,
 } from "react-icons/bs";
 import { SiNodemon } from "react-icons/si";
-import BoxItem from "./BoxItem";
+import BoxItem from "./Items/BoxItem";
 import { BiLogIn, BiLogOut } from "react-icons/bi";
 
 function NavSideDrawer({ show, className, onCancel }) {
