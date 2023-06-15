@@ -4,10 +4,10 @@ import PostsNavigation from "../../../components/Post/PostsNavigation";
 
 function PostsRoot() {
   return (
-    <div className="flex min-h-screen w-full">
-      <PostsNavigation />
+    // <div className="flex min-h-screen w-full">
+    //   <PostsNavigation />
       <Outlet />
-    </div>
+    // </div> 
   );
 }
 

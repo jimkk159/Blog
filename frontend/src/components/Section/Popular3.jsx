@@ -2,8 +2,8 @@ import { useMediaQuery } from "react-responsive";
 
 // components
 import PinkButton from "../UI/PinkButton";
-import PopularPostItem from "./PopularPostItem";
-import SectionTitle from "../Browse/SectionTitle";
+import SectionTitle from "./SectionTitle";
+import PopularItem3 from "./PopularItem3";
 
 function PopularPost({ posts }) {
   let popular = null;
@@ -18,19 +18,19 @@ function PopularPost({ posts }) {
             if (index % 4 === 0) {
               const Item2 =
                 posts.length > index + 1 ? (
-                  <PopularPostItem key={index + 1} post={posts[index + 1]} />
+                  <PopularItem3 key={index + 1} post={posts[index + 1]} />
                 ) : null;
               const Item3 =
                 posts.length > index + 2 ? (
-                  <PopularPostItem key={index + 2} post={posts[index + 2]} />
+                  <PopularItem3 key={index + 2} post={posts[index + 2]} />
                 ) : null;
               const Item4 =
                 posts.length > index + 3 ? (
-                  <PopularPostItem key={index + 3} post={posts[index + 3]} />
+                  <PopularItem3 key={index + 3} post={posts[index + 3]} />
                 ) : null;
               return (
                 <div key={index} className="grid grid-cols-4 gap-4">
-                  <PopularPostItem key={index} post={post} />
+                  <PopularItem3 key={index} post={post} />
                   {Item2}
                   {Item3}
                   {Item4}
@@ -48,13 +48,13 @@ function PopularPost({ posts }) {
           posts.slice(0, 6).map((post, index) => {
             const nextItem =
               posts.length > index + 1 ? (
-                <PopularPostItem key={index + 1} post={posts[index + 1]} />
+                <PopularItem3 key={index + 1} post={posts[index + 1]} />
               ) : null;
 
             if (index % 2 === 0) {
               return (
                 <div key={index} className="grid grid-cols-2 gap-6">
-                  <PopularPostItem key={index} post={post} />
+                  <PopularItem3 key={index} post={post} />
                   {nextItem}
                 </div>
               );
@@ -69,7 +69,7 @@ function PopularPost({ posts }) {
         {posts &&
           posts
             .slice(0, 3)
-            .map((post, index) => <PopularPostItem key={index} post={post} />)}
+            .map((post, index) => <PopularItem3 key={index} post={post} />)}
       </div>
     );
 
@@ -80,7 +80,7 @@ function PopularPost({ posts }) {
       </div>
       {popular}
       <div className="pt-22">
-        <PinkButton text={"Discover All Streams"} />
+        <PinkButton text={"Discover All Posts"} />
       </div>
     </div>
   );
