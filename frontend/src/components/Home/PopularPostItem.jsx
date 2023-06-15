@@ -1,21 +1,23 @@
+// icons
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
-function TopPostItem({ post }) {
+function PopularPostItem({ post }) {
+
   return (
-    <li>
-      <div className="flex h-full w-full flex-col space-y-6 text-white">
-        <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-2 md:h-32 md:space-x-6 lg:h-20 lg:space-x-2">
-          <div className="flex w-32 items-center justify-center md:w-44 lg:w-32">
-            <img
-              className="h-full w-full overflow-hidden rounded-3xl object-cover"
-              src={post.previewImg}
-            />
-          </div>
-          <div className="flex h-full w-full flex-col justify-between">
+    <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2 bg-self-dark-gray border-zinc-600 py-8 px-4 text-white">
+      <div className="flex w-full items-center justify-center">
+        <img
+          title={post.title}
+          alt="preview"
+          className="h-40 w-full rounded-3xl object-cover lg:max-h-[160px]"
+          src={post.previewImg}
+        />
+      </div>
+      <div className="flex h-full w-full flex-col justify-between">
             <div>
               <div className="flex items-end justify-between space-x-1">
-                <h1 className="text-xl font-bold md:text-3xl lg:text-xl">
+                <h1 className="line-clamp-1 overflow-hidden text-xl font-bold md:pr-36 md:text-2xl lg:pr-0 lg:text-base">
                   {post.title}
                 </h1>
               </div>
@@ -38,9 +40,7 @@ function TopPostItem({ post }) {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </li>
+    </div>
   );
 }
-export default TopPostItem;
+export default PopularPostItem;

@@ -1,39 +1,23 @@
 import { useMediaQuery } from "react-responsive";
 
 // components
-import MainBanner from "../../components/UI/MainBanner";
+import HowToSection from "../../components/Browse/HowToSection";
+import PopularPostSection from "../../components/Browse/PopularPost";
+import CarouselSection from "../../components/Browse/CarouselSection";
+import RankingListSection from "../../components/Browse/RankingListSection";
 
 // css
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import PopularPost from "../../components/Home/PopularPost";
-import MyPostLibrary from "../../components/Home/MyPostLibrary";
 
 function Home() {
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
   const posts = [
     {
-      title: "Lofi Girl1",
-      category: "Music",
-      thumbs: 8,
-      comments: 2,
-      updatedAt: "1993-03-04",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
-      previewImg:
-        "https://i.ytimg.com/vi/9MhHJaFsnuc/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDkgLih_MA8=&rs=AOn4CLB1Q8rOm8mqkhIa1jwR8FBCxckvXw",
-    },
-    {
       title:
         "Unlocking the Secrets of Time Travel: A Journey Through the Unknown",
-      thumbs: 8,
-      comments: 2,
       category: "Science",
-      updatedAt: "1994-03-04",
       Author: {
         name: "Olivia Jenkins",
         avatar:
@@ -45,10 +29,7 @@ function Home() {
     {
       title:
         "Exploring the Mysteries of the Deep Sea: Unveiling the Hidden Wonders",
-      thumbs: 6,
-      comments: 4,
       category: "Financial",
-      updatedAt: "2012-03-16",
       Author: {
         name: "Ava Martinez",
         avatar:
@@ -58,38 +39,10 @@ function Home() {
         "https://images.unsplash.com/photo-1607796884038-3638822d5ee2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=764&q=80",
     },
     {
-      title: "Lofi Girl2",
-      category: "Music",
-      thumbs: 6,
-      comments: 4,
-      updatedAt: "2012-04-16",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
-      previewImg: "https://i.ytimg.com/vi/8r4bqa9mHWg/maxresdefault.jpg",
-    },
-    {
-      title: "Lofi Girl3",
-      category: "Music",
-      thumbs: 8,
-      comments: 2,
-      updatedAt: "2022-05-10",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
-      previewImg: "https://i.ytimg.com/vi/2TvhRJweMuo/maxresdefault.jpg",
-    },
-    {
       title:
         "Mastering the Art of Mindfulness: Finding Inner Peace in a Hectic World",
       category: "Sport",
-      thumbs: 5,
-      comments: 6,
-      updatedAt: "2020-04-10",
+
       Author: {
         name: "Lucas Ramirez",
         avatar:
@@ -101,10 +54,7 @@ function Home() {
     {
       title:
         "The Future of Artificial Intelligence: Advancements and Ethical Implications",
-      thumbs: 5,
-      comments: 20,
       category: "Music",
-      updatedAt: "2018-05-10",
       Author: {
         name: "Mason Rodriguez",
         avatar:
@@ -113,61 +63,77 @@ function Home() {
       previewImg:
         "https://images.unsplash.com/photo-1672872476232-da16b45c9001?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1171&q=80",
     },
+  ];
 
+  const posts2 = [
     {
-      title: "Lofi Girl4",
-      category: "Music",
+      title: "Lofi Girl1",
+      category: "Science",
+      thumbs: 8,
+      comments: 2,
+      previewImg:
+        "https://i.ytimg.com/vi/9MhHJaFsnuc/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGDkgLih_MA8=&rs=AOn4CLB1Q8rOm8mqkhIa1jwR8FBCxckvXw",
+    },
+    {
+      title: "Lofi Girl2",
+      category: "Science",
       thumbs: 6,
       comments: 4,
-      updatedAt: "2018-05-18",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
+      previewImg: "https://i.ytimg.com/vi/8r4bqa9mHWg/maxresdefault.jpg",
+    },
+    {
+      title: "Lofi Girl3",
+      category: "Science",
+      thumbs: 8,
+      comments: 2,
+      previewImg: "https://i.ytimg.com/vi/2TvhRJweMuo/maxresdefault.jpg",
+    },
+    {
+      title: "Lofi Girl4",
+      category: "Science",
+      thumbs: 6,
+      comments: 4,
       previewImg: "https://i.ytimg.com/vi/-cswlH1laHc/maxresdefault.jpg",
     },
     {
       title: "Lofi Girl5",
-      category: "Music",
+      category: "Science",
       thumbs: 8,
       comments: 2,
-      updatedAt: "2018-04-10",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
       previewImg:
         "https://i.ytimg.com/vi/8BAl6z0lXdw/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGBIgYyhyMA8=&rs=AOn4CLBD1P_dhEIHLAVyschlBQstn9uk4Q",
     },
     {
       title: "Lofi Girl6",
-      category: "Music",
+      category: "Science",
       thumbs: 6,
       comments: 4,
-      updatedAt: "2023-04-10",
-      Author: {
-        name: "Sweet Girl",
-        avatar:
-          "https://yt3.ggpht.com/94BDPPz2faTLym08SATAlVgC0yEDo3sHXpiN1HP_I_yKI5dc3xk2PcUEtgtOpc_qZya_Ga4TixA=s48-c-k-c0x00ffffff-no-rj",
-      },
       previewImg: "https://i.ytimg.com/vi/F6Dew1zwff0/maxresdefault.jpg",
     },
   ];
-
+  
   return (
-    <div className="h-full px-6 py-12">
-      <div className="flex justify-center pt-24 md:pt-0">
-        <div className="h-full w-full max-w-5xl rounded-3xl bg-self-dark-gray p-8">
-          <MainBanner />
-          <div className="my-16 w-full border-b border-self-gray" />
-          <PopularPost posts={posts} />
-          <div className="my-16 w-full border-b border-self-gray" />
-          <MyPostLibrary posts={posts} />
+    <>
+      <div className="rounded">
+        <div className="h-full  px-6 py-12">
+          <div className="flex justify-center">
+            <div className="h-full w-full max-w-5xl rounded-3xl bg-self-dark-gray p-6">
+              <div className="flex flex-col items-center justify-center space-x-4 lg:flex-row lg:items-start">
+                <CarouselSection posts={posts} />
+                {!matches1024 && (
+                  <div className="my-16 w-full border-b border-self-gray" />
+                )}
+                <RankingListSection posts={posts2} />
+              </div>
+              <div className="my-16 w-full border-b border-self-gray" />
+              <HowToSection />
+              <div className="my-16 w-full border-b border-self-gray" />
+              <PopularPostSection posts={posts} />
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

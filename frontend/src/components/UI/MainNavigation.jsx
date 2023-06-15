@@ -83,7 +83,7 @@ function MainNavigation() {
                     </Form>
                   </li>
                 )}
-                <div className="pr-0.25 flex cursor-pointer flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs hover:bg-self-pink lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
+                <div className="hover:bg-self-pink-500 pr-0.25 flex cursor-pointer flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs hover:bg-self-pink lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
                   <p>Profile</p>
                   <Link to={token ? "/profile" : "/auth?mode=login"}>
                     <Avatar

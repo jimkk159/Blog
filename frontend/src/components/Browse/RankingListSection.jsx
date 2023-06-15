@@ -1,7 +1,7 @@
 import TopPostItem from "./TopPostItem";
 import SectionTitle from "./SectionTitle";
 
-function RankingList({ posts }) {
+function RankingListSection({ posts }) {
   return (
     <div className="flex h-full w-full flex-col rounded-3xl bg-self-dark p-8 lg:w-fit">
       <div className="flex items-center justify-start">
@@ -21,4 +21,4 @@ function RankingList({ posts }) {
   );
 }
 
-export default RankingList;
+export default RankingListSection;

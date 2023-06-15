@@ -8,6 +8,7 @@ function Button({
   spinner,
   onClick,
   loading = false,
+  textProps,
 }) {
   return (
     <button
@@ -18,9 +19,16 @@ function Button({
     >
       <div className="flex items-center justify-center">
         {loading && (
-          <ClipLoader aria-label="Loading Spinner" size={20} color="white" {...spinner} />
+          <ClipLoader
+            aria-label="Loading Spinner"
+            size={20}
+            color="white"
+            {...spinner}
+          />
         )}
-        <p className="px-2">{children}</p>
+        <p className="px-2" {...textProps}>
+          {children}
+        </p>
       </div>
     </button>
   );

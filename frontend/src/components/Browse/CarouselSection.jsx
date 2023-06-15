@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import SectionTitle from "./SectionTitle";
 import CarouselItem from "./CarouselItem";
 
-function Carousel({ posts }) {
+function CarouselSection({ posts }) {
   // import hooks
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches980 = useMediaQuery({ query: "(min-width: 980px)" });
@@ -21,13 +21,14 @@ function Carousel({ posts }) {
     slidesToScroll: 1,
     slidesToShow,
   };
-  carouselSetting = {
-    ...carouselSetting,
-    autoplaySpeed: 5000,
-  };
+  if (!matches1024)
+    carouselSetting = {
+      ...carouselSetting,
+      autoplaySpeed: 5000,
+    };
 
   return (
-    <div className="mb-16 flex h-full w-full flex-col rounded-3xl bg-self-dark p-8 lg:w-[640px] lg:max-w-3xl">
+    <div className="flex h-full w-full flex-col rounded-3xl bg-self-dark p-8 lg:w-[640px] lg:max-w-3xl">
       <div className="flex items-center justify-start px-6">
         <SectionTitle first={"Featured"} second={"Posts"} />
       </div>
@@ -39,4 +40,4 @@ function Carousel({ posts }) {
     </div>
   );
 }
-export default Carousel;
+export default CarouselSection;
