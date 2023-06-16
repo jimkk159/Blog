@@ -62,7 +62,7 @@ function CreateCategory({ onClose }) {
 
   return (
     <form
-      className="bg-slate-50 p-3 text-gray-800"
+      className="p-3 text-white bg-neutral-700 shadow rounded-b"
       onSubmit={submitHandler}
       onClick={(e) => {
         e.stopPropagation();
@@ -74,9 +74,9 @@ function CreateCategory({ onClose }) {
       <Input
         type="text"
         name="name"
-        placeholder="Category...."
+        placeholder="Input category...."
         errorMessage={"Please enter Category!"}
-        className="h-8 w-full border border-gray-500 pl-2 text-base outline-none"
+        className="h-8 w-full border border-gray-500 rounded-sm pl-2 text-base outline-none"
         onInput={inputHandler}
         validators={(e) => !validator.isEmpty(e)}
       />

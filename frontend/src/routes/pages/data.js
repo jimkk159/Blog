@@ -1,3 +1,36 @@
+export const categories = [
+  {
+    id: 1,
+    name: "root",
+    ParentId: null,
+  },
+  {
+    id: 2,
+    name: "Music",
+    ParentId: 1,
+  },
+  {
+    id: 3,
+    name: "Lofi",
+    ParentId: 2,
+  },
+  {
+    id: 4,
+    name: "Lofi Girl",
+    ParentId: 3,
+  },
+  {
+    id: 5,
+    name: "Sport",
+    ParentId: 1,
+  },
+  {
+    id: 6,
+    name: "Book",
+    ParentId: 1,
+  },
+];
+
 export const posts = [
   {
     title: "Lofi Girl1",

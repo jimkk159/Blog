@@ -19,8 +19,19 @@ export const buildTree = (nodes, parentId = null) => {
 
 export const createCatalogue = (posts, categories) => {
   categories.forEach((category) => {
-    category.posts = posts
-      .filter((post) => post.CategoryId === category.id)
+    category.posts = posts.filter((post) => post.CategoryId === category.id);
   });
-  return buildTree(categories)[0]
+  return buildTree(categories)[0];
+};
+
+export const isCategoryOpen = (category, current) => {
+  if (!category) return false;
+  if (category.name === current) return true;
+  return false;
+};
+
+export const setCatalogueOpen = (catalogue, current) => {
+  catalogue.isEdit = isCategoryOpen(catalogue, current);
+  if (catalogue.children && Array.isArray(catalogue.children))
+    catalogue.children.map((el) => setCatalogueOpen(el, current));
 };

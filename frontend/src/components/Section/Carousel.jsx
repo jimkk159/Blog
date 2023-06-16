@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 import SectionTitle from "./SectionTitle";
 import CarouselItem from "../Items/CarouselItem";
 
-function CarouselSection({ posts }) {
+function Carousel({ posts }) {
   // import hooks
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches980 = useMediaQuery({ query: "(min-width: 980px)" });
@@ -40,4 +40,4 @@ function CarouselSection({ posts }) {
     </div>
   );
 }
-export default CarouselSection;
+export default Carousel;

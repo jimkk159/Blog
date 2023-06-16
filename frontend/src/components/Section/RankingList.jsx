@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import SectionTitle from "./SectionTitle";
 import TopPostItem from "../Items/TopPostItem";
 
-function RankingListSection({ posts }) {
+function RankingList({ posts }) {
   const navigate = useNavigate();
   return (
     <div className="flex h-full w-full flex-col rounded-3xl bg-self-dark p-8 lg:w-fit lg:max-w-xs">
@@ -28,4 +28,4 @@ function RankingListSection({ posts }) {
   );
 }
 
-export default RankingListSection;
+export default RankingList;

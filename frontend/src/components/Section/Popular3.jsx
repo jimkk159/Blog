@@ -5,7 +5,7 @@ import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
 import PopularItem3 from "../UI/Items/PopularItem3";
 
-function PopularPost({ posts }) {
+function Popular3({ posts }) {
   let popular = null;
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -86,4 +86,4 @@ function PopularPost({ posts }) {
   );
 }
 
-export default PopularPost;
+export default Popular3;

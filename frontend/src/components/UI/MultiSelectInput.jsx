@@ -75,7 +75,7 @@ function MultiSelectInput({
       </select>
       <button
         type="button"
-        className="flex w-full flex-col items-center justify-center rounded border bg-white  text-gray-600 shadow ring-gray-200 focus:outline-none"
+        className="flex w-full flex-col items-center justify-center rounded border bg-white text-gray-600 shadow ring-gray-200 focus:outline-none"
       >
         <div
           className={"flex w-full items-center"}

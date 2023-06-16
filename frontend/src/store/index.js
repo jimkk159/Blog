@@ -15,9 +15,9 @@ import { configureStore } from "@reduxjs/toolkit";
 // Slice
 import tag from "./tag-slice";
 import auth from "./auth-slice";
+import catalogue from "./catalogue-slice";
 
-const rootReducer = combineReducers({ auth, tag }); // Combine reducer
-
+const rootReducer = combineReducers({ auth, tag, catalogue }); // Combine reducer
 
 // Redux-Presist config
 const persistConfig = {

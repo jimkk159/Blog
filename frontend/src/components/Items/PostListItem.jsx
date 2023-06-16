@@ -6,30 +6,12 @@ import { AiFillCheckCircle } from "react-icons/ai";
 // components
 import Button from "../UI/Button";
 
-function LiItem1({ title, content }) {
-  return (
-    <li className="flex h-full flex-col items-start justify-start md:pt-8">
-      <h1 className="text-sm font-bold text-white">{title}</h1>
-      <p className="line-clamp-2 w-28 overflow-ellipsis text-xs">{content}</p>
-    </li>
-  );
-}
-
-function LiItem2({ title, content }) {
-  return (
-    <li className="flex h-full flex-col items-start justify-start md:pt-8">
-      <h1 className="text-sm font-bold text-white">{title}</h1>
-      <p className="line-clamp-2 w-28 whitespace-nowrap text-xs">{content}</p>
-    </li>
-  );
-}
-
 function Tag({ name }) {
   return (
     <div>
       <p
         title={name}
-        className="mt-2 max-h-5 min-w-[12px] max-w-[60px] cursor-pointer items-center truncate overflow-ellipsis rounded-2xl bg-gray-600 px-2 py-0.5 text-xs text-gray-50 hover:bg-gray-700"
+        className="mt-2 max-h-5 min-w-[12px] max-w-[60px] cursor-pointer items-center truncate overflow-ellipsis rounded-2xl bg-gray-600 px-2 py-0.5 text-xs text-gray-50 hover:bg-gray-700 lg:max-w-[200px]"
       >
         {name}
       </p>
@@ -45,13 +27,12 @@ function TagList({ post }) {
     post.Tags.forEach((tag) =>
       tags.push(<Tag key={tag.name} name={tag.name} />)
     );
-  return <div className="flex overflow-hidden space-x-1">{tags}</div>;
+  return <div className="flex space-x-1 overflow-hidden">{tags}</div>;
 }
 
 function PostListItem({ post }) {
   // import hooks
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
-  const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
   if (matches768)
     return (

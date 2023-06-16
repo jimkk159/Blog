@@ -7,7 +7,7 @@ import PinkButton from "../UI/PinkButton";
 import PopularItem from "../Items/PopularItem";
 import PopularItem2 from "../Items/PopularItem2";
 
-function PopularPost({ posts, slide, button }) {
+function Popular2({ posts, slide, button }) {
   let popular = null;
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -57,4 +57,4 @@ function PopularPost({ posts, slide, button }) {
   );
 }
 
-export default PopularPost;
+export default Popular2;

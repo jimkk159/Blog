@@ -6,7 +6,7 @@ import SectionTitle from "./SectionTitle";
 import PinkButton from "../UI/PinkButton";
 import PopularItem from "../Items/PopularItem";
 
-function PopularPost({ posts, slide }) {
+function Popular({ posts, slide }) {
   let popular = null;
   const navigate = useNavigate();
 
@@ -91,4 +91,4 @@ function PopularPost({ posts, slide }) {
   );
 }
 
-export default PopularPost;
+export default Popular;

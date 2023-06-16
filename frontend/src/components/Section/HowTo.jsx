@@ -10,7 +10,7 @@ import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
 import HowToItem from "../Items/HotToItem";
 
-function HowToSection() {
+function HowTo() {
   const navigate = useNavigate()
   const items = [
     {
@@ -50,4 +50,4 @@ function HowToSection() {
     </>
   );
 }
-export default HowToSection;
+export default HowTo;

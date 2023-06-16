@@ -57,7 +57,7 @@ function Input({
         onBlur={blurHandler}
         onFocus={onFocus}
       />
-      {isAlarm && <p className="text-self-red">{errorMessage}</p>}
+      {isAlarm && <p className="text-self-red truncate">{errorMessage}</p>}
     </>
   );
 }

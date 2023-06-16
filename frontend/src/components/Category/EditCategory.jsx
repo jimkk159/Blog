@@ -94,7 +94,7 @@ function EditCategory({ current, onClose }) {
     <form
       onSubmit={submitHandler}
       onClick={(e) => e.stopPropagation()}
-      className="absolute left-8 top-0 z-10 w-60 bg-slate-100 p-3 text-gray-800 "
+      className="max-w-32 absolute left-8 top-0 z-10 rounded-sm bg-slate-100 p-4 text-gray-800 "
     >
       <RxCross1
         className="absolute right-1.5 top-1.5 h-3 w-3"
@@ -112,14 +112,14 @@ function EditCategory({ current, onClose }) {
         onInput={inputHandler}
       />
 
-      <div className="mt-1 flex w-full justify-end pt-0.5">
+      <div className="mt-1 flex w-full flex-col justify-end space-y-2 pt-0.5">
         <Button
           type="submit"
           disabled={!formState.isValid || isUpdating}
           loading={isUpdating}
           spinner={{ size: 15 }}
           className={
-            "ml-1.5 rounded-lg bg-blue-700 p-2 text-xs font-bold text-white hover:bg-blue-600 focus:ring-4 focus:ring-blue-300" +
+            "ml-1.5 max-h-9 rounded-lg bg-blue-600 p-2 text-xs font-bold text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300" +
             "disabled:border-blue-300 disabled:bg-blue-300 "
           }
         >
@@ -132,7 +132,7 @@ function EditCategory({ current, onClose }) {
           spinner={{ size: 15, color: "disabled:text-blue-300" }}
           onClick={deleteHandler}
           className={
-            "ml-1.5 rounded-lg border border-blue-700 p-2 text-center text-xs font-bold text-blue-700 shadow-md " +
+            "ml-1.5 max-h-9 truncate rounded-lg border border-blue-700 p-2 text-center text-xs font-bold text-blue-700 shadow-md " +
             "focus:outline-none focus:ring-4 focus:ring-blue-300 " +
             "hover:bg-blue-600 hover:text-white " +
             "disabled:border-blue-300 disabled:text-blue-300 disabled:hover:border-blue-300 disabled:hover:bg-blue-300 disabled:hover:text-white  "

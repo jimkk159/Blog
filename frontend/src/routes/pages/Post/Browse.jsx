@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-import { useRouteLoaderData, useSearchParams } from "react-router-dom";
+// import { useRouteLoaderData, useSearchParams } from "react-router-dom";
 
 // components
 import Container from "../../../components/UI/Container";
 import PostList2 from "../../../components/Post/PostsList2";
 import Popular2 from "../../../components/Section/Popular2";
+import Category2 from "../../../components/Post/Category2";
 import RankingListSection2 from "../../../components/Section/RankingList2";
 
 // css
@@ -23,7 +24,7 @@ function Browse() {
   // import hooks
   // const matches768 = useMediaQuery({ query: "(max-width: 768px)" });
   const matches1280 = useMediaQuery({ query: "(max-width: 1280px)" });
-  const matches1536 = useMediaQuery({ query: "(max-width: 1536px)" });
+  // const matches1536 = useMediaQuery({ query: "(max-width: 1536px)" });
 
   // custom functions
   // const limit = searchParams.get("limit") ?? 15;
@@ -39,8 +40,9 @@ function Browse() {
     setPage(nextPage);
   };
   const RankingList = !matches1280 && (
-    <div className="pl-2">
+    <div className="flex flex-col pl-2 space-y-4">
       <RankingListSection2 posts={posts} show={false} />
+      <Category2 />
     </div>
   );
   return (
