@@ -1,7 +1,9 @@
-import { DataTypes } from "sequelize";
 import User from "./user.js";
+import validator from "validator";
+import { DataTypes } from "sequelize";
 import Category from "./category.js";
 import sequelize from "../config/db-init.js";
+import * as errorTable from "../utils/error/error-table.js";
 
 const Post = sequelize.define(
   "Post",
@@ -23,9 +25,24 @@ const Post = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    summary: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      validate: {
+        validateSummary(value) {
+          if (!validator.isLength(value, { max: 500 })) {
+            throw new errorTable.summaryValidateFailError();
+          }
+        },
+      },
+    },
     content: {
       type: DataTypes.TEXT,
       allowNull: true,
+    },
+    thumbs: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
     },
   },
   {
@@ -44,4 +61,3 @@ Post.belongsTo(User, { foreignKey: "AuthorId", as: "Author" });
 
 await Post.sync();
 export default Post;
-

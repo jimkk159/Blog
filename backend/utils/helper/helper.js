@@ -1,6 +1,6 @@
+import he from "he";
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
-import he from "he";
 
 export const isURL = (input) =>
   !!(input && (input.startsWith("https://") || input.startsWith("http://")));

@@ -110,13 +110,13 @@ export const signup = catchAsync(async (req, res, next) => {
 
   await authHelper.updateEmailCheckToken(userJSON.id, verifyToken);
 
-  // 8) Send it to user's email
-  const host = `${req.protocol}://${req.get("host")}/api/v1`;
+  // // 8) Send it to user's email
+  // const host = `${req.protocol}://${req.get("host")}/api/v1`;
 
-  const email = new Email(req.body.email, req.body.name);
-  await email.sendWelcome(host, verifyToken).catch((err) => {
-    throw errorTable.sendEmailError();
-  });
+  // const email = new Email(req.body.email, req.body.name);
+  // await email.sendWelcome(host, verifyToken).catch((err) => {
+  //   throw errorTable.sendEmailError();
+  // });
 
   res.status(201).json({
     status: "success",

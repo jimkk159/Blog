@@ -146,3 +146,6 @@ export const tagNotExistError = () =>
   );
 export const loginFailError = () =>
   new AppError("Login failed! Please try again later...", 500);
+
+export const summaryValidateFailError = () =>
+  new AppError("Summary must be limited to 500 words.", 400);
