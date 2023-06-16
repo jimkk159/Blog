@@ -239,20 +239,20 @@ describe("createOne()", () => {
     expect(postHelper.checkPostCategory).toHaveBeenLastCalledWith(category);
   });
 
-  test("should check and find post tags if tagId is provided", async () => {
+  test("should check and find post tags if tagIds is provided", async () => {
     let error;
-    req = { body: { tagId: "tagId" } };
+    req = { body: { tagIds: "tagIds" } };
 
     await postController
       .createOne(req, res, next)
       .catch((err) => (error = err));
 
     expect(postHelper.checkAndFindPostTags).toHaveBeenLastCalledWith(
-      req.body.tagId
+      req.body.tagIds
     );
   });
 
-  test("should not check and find post tags if tagId is not provided", async () => {
+  test("should not check and find post tags if tagIds is not provided", async () => {
     let error;
     req = { body: {} };
 
@@ -268,7 +268,7 @@ describe("createOne()", () => {
     const category = { id: "CategoryId" };
     const tags = ["testTags"];
     req = {
-      body: { title: "testTitle", content: "testContent", tagId: "tagId" },
+      body: { title: "testTitle", content: "testContent", tagIds: "tagIds" },
       user: { id: "testUserId" },
     };
     Category.findByPk.mockResolvedValueOnce(category);
@@ -339,7 +339,7 @@ describe("createOne()", () => {
     const author = { author: "testAuthor" };
     const data = { data: "testData" };
     req = {
-      body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
+      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
       user: { id: "testUserId" },
     };
     Category.findByPk.mockResolvedValueOnce(category);
@@ -448,11 +448,11 @@ describe("updateOne()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should check and find post tags if tagId is provided", async () => {
+  test("should check and find post tags if tagIds is provided", async () => {
     const post = "testPost";
     req = {
       params: { id: "testId" },
-      body: { tagId: "testTagId" },
+      body: { tagIds: "testTagIds" },
       user: "testUser",
     };
     Post.findByPk.mockResolvedValueOnce(post);
@@ -460,11 +460,11 @@ describe("updateOne()", () => {
     await postController.updateOne(req, res, next);
 
     expect(postHelper.checkAndFindPostTags).toHaveBeenLastCalledWith(
-      req.body.tagId
+      req.body.tagIds
     );
   });
 
-  test("should not check and find post tags if tagId is not provided", async () => {
+  test("should not check and find post tags if tagIds is not provided", async () => {
     const post = "testPost";
     req = {
       params: { id: "testId" },
@@ -483,7 +483,7 @@ describe("updateOne()", () => {
     const tags = ["testTags"];
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
+      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
       user: "testUser",
     };
     Post.findByPk.mockResolvedValueOnce(post);
@@ -503,7 +503,7 @@ describe("updateOne()", () => {
   test("should get post by id", async () => {
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
+      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
     };
     postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
       "testTag",
@@ -519,7 +519,7 @@ describe("updateOne()", () => {
     const post = "testPost";
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagId: "testTagId" },
+      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
     };
     postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
       "testTag",

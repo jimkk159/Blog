@@ -96,16 +96,16 @@ export const checkPostCategory = (category) => {
     throw errorTable.notAllowChoiceRootError();
 };
 
-export const checkAndFindPostTags = async (tagId) => {
-  if (!tagHelper.isTagIdLegal(tagId))
-    throw errorTable.inputInvalidError("tagId");
+export const checkAndFindPostTags = async (tagIds) => {
+  if (!tagHelper.isTagIdLegal(tagIds))
+    throw errorTable.inputInvalidError("tagIds");
 
   const tags = await Tag.findAll({
     where: {
-      id: tagId,
+      id: tagIds,
     },
   });
-  tagHelper.checkTagsConsistency(tags, tagId);
+  tagHelper.checkTagsConsistency(tags, tagIds);
   return tags;
 };
 
@@ -114,6 +114,7 @@ export const createPostWithTags = async ({
   content,
   CategoryId,
   AuthorId,
+  previewImg,
   tags,
 }) => {
   let post;
@@ -124,6 +125,7 @@ export const createPostWithTags = async ({
         title,
         content,
         CategoryId,
+        previewImg,
         AuthorId,
       },
       { transaction: t }

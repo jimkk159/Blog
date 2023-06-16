@@ -1,8 +1,8 @@
 import express from "express";
 import About from "../module/about.js";
 import { body } from "express-validator";
-import * as factory from "../controllers/handle-factory.js";
 import * as upload from "../utils/file-upload.js";
+import * as factory from "../controllers/handle-factory.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
 

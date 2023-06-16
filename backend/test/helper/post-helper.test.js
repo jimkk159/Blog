@@ -357,54 +357,54 @@ describe("checkAndFindPostTags()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should throw error if tagId is not legal", async () => {
+  test("should throw error if tagIds is not legal", async () => {
     let error;
-    const tagId = "tagId";
+    const tagIds = "tagIds";
     tagHelper.isTagIdLegal.mockImplementationOnce(() => false);
 
-    await postHelper.checkAndFindPostTags(tagId).catch((err) => (error = err));
+    await postHelper.checkAndFindPostTags(tagIds).catch((err) => (error = err));
 
-    expect(tagHelper.isTagIdLegal).toHaveBeenLastCalledWith(tagId);
-    expect(error).toEqual(errorTable.inputInvalidError("tagId"));
+    expect(tagHelper.isTagIdLegal).toHaveBeenLastCalledWith(tagIds);
+    expect(error).toEqual(errorTable.inputInvalidError("tagIds"));
   });
 
-  test("should call tag findAll by tagId", async () => {
+  test("should call tag findAll by tagIds", async () => {
     let error;
-    const tagId = "tagId";
+    const tagIds = "tagIds";
 
-    await postHelper.checkAndFindPostTags(tagId).catch((err) => (error = err));
+    await postHelper.checkAndFindPostTags(tagIds).catch((err) => (error = err));
 
     expect(Tag.findAll).toHaveBeenLastCalledWith({
       where: {
-        id: tagId,
+        id: tagIds,
       },
     });
   });
 
-  test("should check tags consistency by finded tags and provided tagId", async () => {
+  test("should check tags consistency by finded tags and provided tagIds", async () => {
     let error;
-    const tagId = "tagId";
+    const tagIds = "tagIds";
     const testTagsFromDB = "testTagsFromDB";
 
     Tag.findAll.mockImplementationOnce(async () => testTagsFromDB);
 
-    await postHelper.checkAndFindPostTags(tagId).catch((err) => (error = err));
+    await postHelper.checkAndFindPostTags(tagIds).catch((err) => (error = err));
 
     expect(tagHelper.checkTagsConsistency).toHaveBeenLastCalledWith(
       testTagsFromDB,
-      tagId
+      tagIds
     );
   });
 
   test("should return tags from database", async () => {
     let error;
-    const tagId = "tagId";
+    const tagIds = "tagIds";
     const testTagsFromDB = "testTagsFromDB";
 
     Tag.findAll.mockImplementationOnce(async () => testTagsFromDB);
 
     const result = await postHelper
-      .checkAndFindPostTags(tagId)
+      .checkAndFindPostTags(tagIds)
       .catch((err) => (error = err));
 
     expect(result).toBe(testTagsFromDB);

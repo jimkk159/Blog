@@ -74,22 +74,20 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 2) check Tags
   let tags = [];
-  if (req.body.tagId)
-    tags = await postHelper.checkAndFindPostTags(req.body.tagId);
+  if (req.body.tagIds)
+    tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
 
-  // 3) Modify the tags syntax
-  if (tags.length) tags = tags.map((el) => helper.modifySyntax(el));
-
-  // 4) create Post
+  // 3) create Post
   const post = await postHelper.createPostWithTags({
     title: helper.modifySyntax(req.body.title),
     content: helper.modifySyntax(req.body.content),
     CategoryId: category.id,
     AuthorId: req.user.id,
+    previewImg: req.body.previewImg,
     tags,
   });
 
-  // 5) get Post (Lazy Loading)
+  // 4) get Post (Lazy Loading)
   const author = await User.findByPk(post.AuthorId);
   const data = helper.removeKeys(post.toJSON(), ["createdAt"]);
 
@@ -102,8 +100,8 @@ export const createOne = catchAsync(async (req, res, next) => {
 export const updateOne = catchAsync(async (req, res, next) => {
   // 1) check Tag
   let tags = [];
-  if (req.body.tagId)
-    tags = await postHelper.checkAndFindPostTags(req.body.tagId);
+  if (req.body.tagIds)
+    tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
 
   // 2) Modify the tags syntax
   if (tags.length) tags = tags.map((el) => helper.modifySyntax(el));
@@ -114,7 +112,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
     title: helper.modifySyntax(req.body.title),
     CategoryId: req.body.CategoryId,
     content: helper.modifySyntax(req.body.content),
-    isUpdateTags: !!req.body.tagId,
+    isUpdateTags: !!req.body.tagIds,
     tags,
   });
 
