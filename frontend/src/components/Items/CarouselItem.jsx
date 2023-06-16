@@ -15,17 +15,19 @@ function CarouselItem({ post }) {
         </div>
         <div className="flex h-full items-end justify-between">
           <div className="flex h-14 flex-col justify-between">
-            <p className="text-xl font-bold">CS-GO</p>
-            <p className="text-sm text-self-gray">249K Downloads</p>
+            <p className="w-40 truncate text-xl font-bold md:w-48">
+              {post.title}
+            </p>
+            <p className="truncate text-sm text-self-gray">{post.Category.name}</p>
           </div>
           <div className="flex flex-col items-start space-y-0.5">
             <div className="flex items-center justify-end space-x-1">
               <FiThumbsUp className="mb-0.5 w-4" />
-              <p className="text-right text-sm">4.8</p>
+              <p className="text-right text-sm">{post.thumbs}</p>
             </div>
             <div className="flex items-center justify-end space-x-1">
               <FaRegCommentDots className="w-4 text-white" />
-              <p className="text-right text-sm">2.3M</p>
+              <p className="text-right text-sm">{post.comments}</p>
             </div>
           </div>
         </div>

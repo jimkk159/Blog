@@ -1,14 +1,12 @@
 import { defer, Outlet } from "react-router-dom";
 
 import PostsNavigation from "../../../components/Post/PostsNavigation";
+{
+  /* <PostsNavigation /> */
+}
 
 function PostsRoot() {
-  return (
-    <div className="flex min-h-screen w-full">
-      {/* <PostsNavigation /> */}
-      <Outlet />
-    </div>
-  );
+  return <Outlet />;
 }
 
 export default PostsRoot;

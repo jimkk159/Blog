@@ -10,8 +10,8 @@ import defaultImg from "../../assets/imgs/default.jpg";
 // components
 import Avatar from "./Avatar";
 import NavItem from "./NavItem";
-import SearchBar2 from "./SearchBar2";
 import Hamburger from "./Hamburger";
+import SearchBar2 from "./SearchBar2";
 import NavSideDrawer from "./NavSideDrawer";
 
 // hooks

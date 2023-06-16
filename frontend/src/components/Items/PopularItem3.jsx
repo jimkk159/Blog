@@ -2,7 +2,7 @@
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
-function PopularPostItem3({ post }) {
+function PopularItem3({ post }) {
   return (
     <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2 border-zinc-600 bg-self-dark-gray px-4 py-8 text-white">
       <div className="flex w-full items-center justify-center">
@@ -21,7 +21,7 @@ function PopularPostItem3({ post }) {
             </h1>
           </div>
           <p className="text-sm text-self-gray md:text-base lg:text-sm">
-            {post.category}
+            {post.Category.name}
           </p>
         </div>
         <div className="flex justify-end space-x-2 md:space-x-8 lg:space-x-2">
@@ -42,4 +42,4 @@ function PopularPostItem3({ post }) {
     </div>
   );
 }
-export default PopularPostItem3;
+export default PopularItem3;

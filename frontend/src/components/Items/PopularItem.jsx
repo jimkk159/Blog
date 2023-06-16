@@ -4,7 +4,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 // components
 import Avatar from "../UI/Avatar";
 
-function PopularPostItem({ post }) {
+function PopularItem({ post }) {
   return (
     <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2 border-zinc-600  p-4 text-white">
       <div className="flex w-full items-center justify-center">
@@ -23,7 +23,7 @@ function PopularPostItem({ post }) {
             className={"h-10 w-10 border-2 border-white"}
           />
         </div>
-        <div className="flex flex-col items-start space-y-2">
+        <div className="flex w-full flex-col items-start space-y-2">
           <div className="flex items-center space-x-1 text-sm text-self-pink-500 ">
             <AiFillCheckCircle className="h-4 w-4" />
             <p className="w-fit truncate">{post.Author.name}</p>
@@ -36,4 +36,4 @@ function PopularPostItem({ post }) {
     </div>
   );
 }
-export default PopularPostItem;
+export default PopularItem;

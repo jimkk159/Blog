@@ -1,38 +1,20 @@
-import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 // components
 import SectionTitle from "./SectionTitle";
 import PinkButton from "../UI/PinkButton";
 import PopularItem from "../Items/PopularItem";
-import PopularItem2 from "../Items/PopularItem2";
 
 function PopularPost({ posts, slide }) {
   let popular = null;
+  const navigate = useNavigate();
+
+  // import hooks
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
-  // carousel setting
-  const carouselSetting = {
-    autoplay: true,
-    autoplaySpeed: 10000,
-    infinite: true,
-    speed: 500,
-    slidesToScroll: 1,
-    slidesToShow: 4,
-  };
-
-  if (matches768 && matches1024 && slide)
-    popular = (
-      <div className="my-8 w-[860px]">
-        <Slider {...carouselSetting}>
-          {posts.map((post, index) => (
-            <PopularItem2 key={index} post={post} />
-          ))}
-        </Slider>
-      </div>
-    );
-  else if (matches768 && matches1024 && !slide)
+  if (matches768 && matches1024 && !slide)
     popular = (
       <div className="my-8 flex flex-col items-center justify-center space-y-4">
         {posts.slice(0, 4).map((post, index) => {
@@ -100,7 +82,10 @@ function PopularPost({ posts, slide }) {
       {popular}
 
       <div className="pt-22">
-        <PinkButton text={"Discover All Posts"} />
+        <PinkButton
+          text={"Discover All Posts"}
+          onClick={() => navigate("/posts")}
+        />
       </div>
     </div>
   );

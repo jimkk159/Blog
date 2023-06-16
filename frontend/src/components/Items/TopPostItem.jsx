@@ -5,7 +5,7 @@ function TopPostItem({ post }) {
   return (
     <li>
       <div className="flex h-full w-full flex-col space-y-6 text-white">
-        <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-2 md:h-32 md:space-x-6 lg:h-20 lg:space-x-2">
+        <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-4 md:h-32 md:space-x-6 lg:h-20 lg:space-x-3">
           <div className="flex w-32 items-center justify-center md:w-44 lg:w-32">
             <img
               alt="preview"
@@ -21,7 +21,7 @@ function TopPostItem({ post }) {
                 </h1>
               </div>
               <p className="text-sm text-self-gray md:text-base lg:text-sm">
-                {post.category}
+                {post.Category.name}
               </p>
             </div>
             <div className="flex justify-end space-x-2 md:space-x-8 lg:space-x-2">

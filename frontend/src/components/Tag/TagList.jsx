@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TagsToolTip from "./TagsToolTip";
 import { tagActions } from "../../store/tag-slice";
 
-function TagList({ post, title, isEdit = false }) {
+function TagList({ post, isEdit = false }) {
   let categoryTag = post ? (
     <p className=" m-1 max-h-5 min-w-[20px] max-w-[100px] items-center truncate rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
       {`${post.Category && post.Category.name}`}
@@ -41,7 +41,7 @@ function TagList({ post, title, isEdit = false }) {
   if (!isEdit) {
     categoryTag = (
       <Link
-        title={title}
+        title={post.Category.name}
         key="category"
         className="cursor-pointer"
         to={`/posts/search?mode=category&type=id&target=${post.Category.id}`}
@@ -54,7 +54,7 @@ function TagList({ post, title, isEdit = false }) {
       (tag, index) => (
         <Link
           key={index}
-          title={title}
+          title={tag.name}
           className="cursor-pointer"
           to={`/posts/search?mode=tag&type=id&target=${tag.id}`}
         >

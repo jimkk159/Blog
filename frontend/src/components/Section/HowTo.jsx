@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 // icon
 import { GiWhiteBook } from "react-icons/gi";
 import { HiCursorClick } from "react-icons/hi";
@@ -6,9 +8,10 @@ import { BsPencilSquare } from "react-icons/bs";
 // components
 import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
-import HowToItem from "../UI/Items/HotToItem";
+import HowToItem from "../Items/HotToItem";
 
 function HowToSection() {
+  const navigate = useNavigate()
   const items = [
     {
       icon: (
@@ -42,7 +45,7 @@ function HowToSection() {
         ))}
       </ul>
       <div className="pt-16">
-        <PinkButton text={"Sing Up Now"} />
+        <PinkButton text={"Sing Up Now"} onClick={()=>navigate("/auth?mode=signup")}/>
       </div>
     </>
   );
