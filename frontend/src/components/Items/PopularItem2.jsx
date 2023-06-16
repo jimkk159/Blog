@@ -6,13 +6,13 @@ import Avatar from "../UI/Avatar";
 
 function PopularItem2({ post }) {
   return (
-    <div className="px-1">
-      <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2  border-zinc-600 p-4 text-white">
+    <div className="px-2">
+      <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2 border-zinc-600 md:px-4 px-2 py-4 text-white">
         <div className="flex w-full items-center justify-center">
           <img
             title={post.title}
             alt="preview"
-            className="h-[264px] md:h-40 w-full rounded-3xl object-cover lg:max-h-[160px]"
+            className="h-[264px] w-full rounded-3xl object-cover md:h-28 lg:max-h-[160px]"
             src={post.previewImg}
           />
         </div>
@@ -21,15 +21,15 @@ function PopularItem2({ post }) {
             <Avatar
               avatar={post.Author.avatar}
               title={post.Author.name}
-              className={"h-10 w-10 border-2 border-white"}
+              className={"h-10 w-10 border-2 border-white md:h-8 md:w-8"}
             />
           </div>
-          <div className="flex w-full flex-col items-start space-y-2">
+          <div className="flex w-full flex-col items-start space-y-2 overflow-hidden">
             <div className="flex items-center space-x-1 text-sm text-self-pink-500 ">
               <AiFillCheckCircle className="h-4 w-4" />
               <p className="w-fit truncate">{post.Author.name}</p>
             </div>
-            <h1 className="line-clamp-2 h-14 w-fit text-xl font-bold capitalize">
+            <h1 className="line-clamp-2 h-14 w-fit text-xl font-bold capitalize md:h-10 md:text-base">
               {post.title}
             </h1>
           </div>

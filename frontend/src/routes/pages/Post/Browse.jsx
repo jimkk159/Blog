@@ -49,7 +49,7 @@ function Browse() {
         {matches1280 && (
           <>
             <Popular2 posts={posts} slide />
-            <div className="my-16 w-full border-b border-self-gray" />
+            <div className="my-8 w-full border-b border-self-gray" />
           </>
         )}
         <PostList2

@@ -25,7 +25,7 @@ function PopularPost({ posts, slide, button }) {
 
   if (matches768 && slide)
     popular = (
-      <div className="my-8 w-full">
+      <div className="mt-4 w-full">
         <Slider {...carouselSetting}>
           {posts.map((post, index) => (
             <PopularItem2 key={index} post={post} />
@@ -35,7 +35,7 @@ function PopularPost({ posts, slide, button }) {
     );
   else
     popular = (
-      <div className="my-8 flex flex-col items-center justify-center space-y-6">
+      <div className="mt-8 flex flex-col items-center justify-center space-y-6">
         {posts.slice(0, 3).map((post, index) => (
           <PopularItem key={index} post={post} />
         ))}
@@ -43,7 +43,7 @@ function PopularPost({ posts, slide, button }) {
     );
 
   return (
-    <div className="mb-16 flex h-full flex-col rounded-3xl bg-self-dark px-4 py-8 md:p-8">
+    <div className="flex h-full flex-col rounded-3xl bg-self-dark px-4 py-8 md:px-8 md:py-6">
       <div className="flex items-center justify-between">
         <SectionTitle first={"Most Popular"} second={"Posts this week"} />
       </div>

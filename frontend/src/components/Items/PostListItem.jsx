@@ -45,12 +45,7 @@ function TagList({ post }) {
     post.Tags.forEach((tag) =>
       tags.push(<Tag key={tag.name} name={tag.name} />)
     );
-  tags.push(<Tag key={"123"} name={"123"} />);
-  tags.push(<Tag key={"234"} name={"234"} />);
-
-  tags.push(<Tag key={"456"} name={"456"} />);
-
-  return tags;
+  return <div className="flex overflow-hidden space-x-1">{tags}</div>;
 }
 
 function PostListItem({ post }) {
@@ -58,48 +53,18 @@ function PostListItem({ post }) {
   const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
-  if (!post) return null;
-  if (matches1024)
-    return (
-      <div className="flex items-center justify-center border-b border-self-gray py-4">
-        <ul className="grid w-full grid-flow-col gap-4">
-          <img
-            className="h-32 w-32 min-w-[128px] rounded-3xl border border-self-gray object-cover"
-            alt="preview"
-            src={post.previewImg}
-          />
-          <LiItem1 title="Title" content={post.title} />
-          <LiItem1 title="Category" content={post.Category.name} />
-          <LiItem2 title="Date" content={post.updatedAt} />
-          <LiItem1 title="Author" content={post.Author.name} />
-          <div className="flex w-full items-center justify-start">
-            <Button
-              type="button"
-              //   disabled={isSubmitting}
-              //   loading={true}
-              className={
-                "ml-4 rounded-3xl border-2 border-self-gray bg-transparent px-8 py-2.5 text-self-gray shadow-xl " +
-                "hover:border-self-pink-500 hover:text-self-pink-500"
-              }
-              spinner={{ color: "text-self-pink-500" }}
-            >
-              Browse
-            </Button>
-          </div>
-        </ul>
-      </div>
-    );
-
   if (matches768)
     return (
       <div className="flex items-center justify-center border-b border-self-gray py-4">
-        <ul className="flex w-full space-x-4">
-          <img
-            className="h-32 w-32 min-w-[128px] rounded-3xl border border-self-gray object-cover"
-            alt="preview"
-            src={post.previewImg}
-          />
-          <div className="flex h-full w-full flex-col items-start justify-start">
+        <ul className="flex h-full w-full space-x-4">
+          <div className="h-32 w-32">
+            <img
+              className="h-32 w-32 min-w-[128px] rounded-3xl border border-self-gray object-cover"
+              alt="preview"
+              src={post.previewImg}
+            />
+          </div>
+          <div className="flex w-full flex-col items-start justify-start">
             <div className="flex items-center justify-center space-x-2">
               <div className="flex w-full">
                 <AiFillCheckCircle className="h-[14px] w-[14px] text-self-pink-500" />
@@ -114,9 +79,10 @@ function PostListItem({ post }) {
             <div className="line-clamp-1 w-full overflow-ellipsis text-xl font-bold text-white">
               {post.title}
             </div>
-            <div className="mt-1 line-clamp-4 w-full overflow-ellipsis pr-1 text-justify text-xs text-self-gray">
+            <div className="my-1 line-clamp-3 w-full flex-grow overflow-ellipsis pr-1 text-justify text-xs text-self-gray">
               {post.summary}
             </div>
+            <TagList post={post} />
           </div>
           <div className="flex w-fit items-center justify-start">
             <Button
