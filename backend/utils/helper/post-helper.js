@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import Tag from "../../module/tag.js";
 import Post from "../../module/post.js";
+import Comment from "../../module/comment.js";
 import sequelize from "../../config/db-init.js";
 import * as errorTable from "../error/error-table.js";
 import { GetFeatures } from "../api-features.js";
@@ -72,6 +73,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
           ],
         },
       },
+      { model: Comment },
       "Category",
       { model: Tag, through: { attributes: [] } },
     ],
@@ -111,6 +113,7 @@ export const checkAndFindPostTags = async (tagIds) => {
 
 export const createPostWithTags = async ({
   title,
+  summary,
   content,
   CategoryId,
   AuthorId,
@@ -123,6 +126,7 @@ export const createPostWithTags = async ({
     post = await Post.create(
       {
         title,
+        summary,
         content,
         CategoryId,
         previewImg,
@@ -143,17 +147,21 @@ export const checkUserUpdatePostPermission = (user, post) => {
 
 export const updatePostContentAndTags = async ({
   postId,
-  title,
   CategoryId,
+  title,
+  summary,
   content,
   isUpdateTags,
   tags,
 }) => {
   const post = await Post.findByPk(postId);
+  if (!post) throw errorTable.idNotFoundError();
+
   await sequelize.transaction(async (t) => {
     await Post.update(
       {
         title,
+        summary,
         content,
         CategoryId,
       },
