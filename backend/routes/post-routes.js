@@ -7,6 +7,10 @@ import * as shareController from "../controllers/share-controller.js";
 const router = express.Router();
 
 router.get("/", postController.getAll);
+router.get("/home", postController.getHome);
+router.get("/view", postController.getView);
+router.get("/thumb", postController.getThumb);
+router.get("/comment", postController.getComment);
 
 router.get("/relation", postController.getAllTitle);
 
@@ -20,7 +24,9 @@ router.get(
   postController.getAll
 );
 
+
 router.get("/:id", postController.getOne);
+router.patch("/:id/thumb", postController.updateThumb);
 
 router.use(authController.authUserByToken);
 

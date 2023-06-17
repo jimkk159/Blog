@@ -6,6 +6,13 @@ import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
+import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
+
+export const delay = catchAsync(async (req, res, next) => {
+  setTimeout(() => {
+    next();
+  }, 10000);
+});
 
 export const getMe = catchAsync(async (req, res, next) => {
   req.query = {
@@ -67,6 +74,56 @@ export const getAll = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getHome = catchAsync(async (req, res, next) => {
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  const total = await Post.count({ where: req.count });
+
+  res.status(200).json({
+    status: "success",
+    total,
+    count: data.length,
+    data,
+  });
+});
+
+export const getView = catchAsync(async (req, res, next) => {
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  const total = await Post.count({ where: req.count });
+
+  res.status(200).json({
+    status: "success",
+    total,
+    count: data.length,
+    data,
+  });
+});
+
+export const getThumb = catchAsync(async (req, res, next) => {
+  req.query.sort = [
+    "thumbs",
+    ...apiFeatureHelper.getQueryElements(req.query.sort),
+  ].join(",");
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+
+  res.status(200).json({
+    status: "success",
+    count: data.length,
+    data,
+  });
+});
+
+export const getComment = catchAsync(async (req, res, next) => {
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  const total = await Post.count({ where: req.count });
+
+  res.status(200).json({
+    status: "success",
+    total,
+    count: data.length,
+    data,
+  });
+});
+
 export const createOne = catchAsync(async (req, res, next) => {
   // 1) check Category
   const category = await Category.findByPk(req.body.CategoryId);
@@ -80,6 +137,7 @@ export const createOne = catchAsync(async (req, res, next) => {
   // 3) create Post
   const post = await postHelper.createPostWithTags({
     title: helper.modifySyntax(req.body.title),
+    summary: helper.modifySyntax(req.body.summary),
     content: helper.modifySyntax(req.body.content),
     CategoryId: category.id,
     AuthorId: req.user.id,
@@ -109,8 +167,9 @@ export const updateOne = catchAsync(async (req, res, next) => {
   // 3) update Post
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
-    title: helper.modifySyntax(req.body.title),
     CategoryId: req.body.CategoryId,
+    title: helper.modifySyntax(req.body.title),
+    summary: helper.modifySyntax(req.body.summary),
     content: helper.modifySyntax(req.body.content),
     isUpdateTags: !!req.body.tagIds,
     tags,
@@ -123,6 +182,29 @@ export const updateOne = catchAsync(async (req, res, next) => {
     status: "success",
     data: post,
   });
+});
+
+export const updateThumb = catchAsync(async (req, res, next) => {
+  const mode = req.query.mode;
+  // 1) Find the post
+  const post = await Post.findByPk(req.params.id);
+  if (!post) throw errorTable.idNotFoundError();
+
+  // 2) update post thumbs
+  switch (mode) {
+    case "dec":
+      if (post.thumbs > 0)
+        await post.decrement({
+          thumbs: 1,
+        });
+      break;
+    default:
+      await post.increment({
+        thumbs: 1,
+      });
+  }
+
+  res.status(204).json({});
 });
 
 export const updateCategory = catchAsync(async (req, res, next) => {
