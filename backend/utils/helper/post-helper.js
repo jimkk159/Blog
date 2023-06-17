@@ -1,16 +1,16 @@
 import { Op } from "sequelize";
 import Tag from "../../module/tag.js";
+import User from "../../module/user.js";
 import Post from "../../module/post.js";
 import Comment from "../../module/comment.js";
+import Category from "../../module/category.js";
 import sequelize from "../../config/db-init.js";
 import * as errorTable from "../error/error-table.js";
 import { GetFeatures } from "../api-features.js";
+import * as helper from "../helper/helper.js";
 import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";
 import * as categoryHelper from "../helper/category-helper.js";
-import Category from "../../module/category.js";
-import * as helper from "../helper/helper.js";
-import User from "../../module/user.js";
 
 export const isValidSearch = (query, allowType, allowMode) =>
   !!(
@@ -45,6 +45,7 @@ export const getFullPost = async (postId) =>
         },
       },
       "Category",
+      { model: Comment },
       { model: Tag, through: { attributes: [] } },
     ],
   });
@@ -73,8 +74,8 @@ export const getFullPosts = async (query, customQuery = {}) => {
           ],
         },
       },
-      { model: Comment },
       "Category",
+      { model: Comment },
       { model: Tag, through: { attributes: [] } },
     ],
     ...customQuery,
@@ -164,6 +165,7 @@ export const updatePostContentAndTags = async ({
         summary,
         content,
         CategoryId,
+        editedAt: Date.now(),
       },
       { where: { id: postId }, transaction: t }
     );
@@ -303,4 +305,60 @@ export const getSearchQueryByText = async (mode, target) => {
 export const getSearchQuery = async (mode, type, target) => {
   if (type === "id") return postHelper.getSearchQueryById(mode, target);
   return postHelper.getSearchQueryByText(mode, target);
+};
+
+export const orderByComments = (query, target) => {
+  if (!query && !target) return query;
+  if (!target) return query;
+  if (typeof query === "object" && Object.keys(query).includes(target))
+    return query;
+
+  const output = {
+    include: [
+      {
+        model: User,
+        as: "Author",
+        attributes: {
+          exclude: [
+            "description",
+            "email",
+            "role",
+            "createdAt",
+            "updatedAt",
+            "updatePasswordAt",
+            "isEmailValidated",
+          ],
+        },
+      },
+      "Category",
+      { model: Comment },
+      { model: Tag, through: { attributes: [] } },
+    ],
+    attributes: [
+      "id",
+      "previewImg",
+      "title",
+      "content",
+      "thumbs",
+      "views",
+      "editedAt",
+      [
+        sequelize.literal(
+          "(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)"
+        ),
+        "commentCount",
+      ],
+    ],
+  };
+
+  if (target.includes("-"))
+    output.order = [[sequelize.literal("commentCount"), "DESC"]];
+  else output.order = [[sequelize.literal("commentCount"), "ASC"]];
+
+  if (query)
+    return {
+      ...query,
+      ...output,
+    };
+  return output;
 };

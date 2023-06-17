@@ -47,7 +47,7 @@ export const updateImage = catchAsync(async (req, res, next) => {
 
 export const createAbout = catchAsync(async (req, res) => {
   // create About
-  await About.create({ content: helper.modifySyntax(req.body.content) });
+  await About.create({ content: helper.modeifiedSyntax(req.body.content) });
 
   res.status(200).json({ status: "success" });
 });

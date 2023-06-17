@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.get("/", postController.getAll);
 router.get("/home", postController.getHome);
-router.get("/view", postController.getView);
-router.get("/thumb", postController.getThumb);
-router.get("/comment", postController.getComment);
+router.get("/views", postController.getView);
+router.get("/thumbs", postController.getThumb);
+router.get("/comments", postController.getComment);
 
 router.get("/relation", postController.getAllTitle);
 

@@ -1,6 +1,6 @@
 import User from "./user.js";
 import validator from "validator";
-import { DataTypes } from "sequelize";
+import { Sequelize, DataTypes } from "sequelize";
 import Category from "./category.js";
 import sequelize from "../config/db-init.js";
 import * as errorTable from "../utils/error/error-table.js";
@@ -17,14 +17,6 @@ const Post = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    previewSummary: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     summary: {
       type: DataTypes.TEXT,
       validate: {
@@ -34,6 +26,11 @@ const Post = sequelize.define(
           }
         },
       },
+      allowNull: true,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     content: {
       type: DataTypes.TEXT,
@@ -47,11 +44,15 @@ const Post = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    editedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Date.now,
+    },
   },
   {
     defaultScope: {
       attributes: {
-        exclude: ["createdAt"],
+        exclude: ["createdAt", "updatedAt"],
       },
     },
   }

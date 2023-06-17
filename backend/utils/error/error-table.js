@@ -121,6 +121,8 @@ export const categoryNotFound = () => new AppError("Category not found", 400);
 
 export const postNotFound = () => new AppError("Post not found", 400);
 
+export const commentNotFound = () => new AppError("Comment not found", 400);
+
 export const parentNotFound = () =>
   new AppError("Category parent not found", 400);
 

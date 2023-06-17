@@ -6,7 +6,6 @@ import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
-import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
 
 export const delay = catchAsync(async (req, res, next) => {
   setTimeout(() => {
@@ -41,6 +40,9 @@ export const getOne = catchAsync(async (req, res, next) => {
   const post = await postHelper.getFullPost(req.params.id);
   if (!post) throw errorTable.idNotFoundError();
 
+  // increment the number of views
+  await post.increment({ views: 1 });
+
   res.status(200).json({
     status: "success",
     data: post,
@@ -48,7 +50,7 @@ export const getOne = catchAsync(async (req, res, next) => {
 });
 
 export const getAllTitle = catchAsync(async (req, res, next) => {
-  req.query = { fields: "-content,-AuthorId" };
+  req.query = { fields: "-content,-AuthorId", sort: "-editedAt" };
   const getFeature = new GetFeatures(Post, req.query).select();
   const data = await getFeature.findAll({ raw: true });
 
@@ -63,6 +65,7 @@ export const getAllTitle = catchAsync(async (req, res, next) => {
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
+  req.query = { sort: "-editedAt" };
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
   const total = await Post.count({ where: req.count });
 
@@ -75,34 +78,53 @@ export const getAll = catchAsync(async (req, res, next) => {
 });
 
 export const getHome = catchAsync(async (req, res, next) => {
-  const data = await postHelper.getFullPosts(req.query, req.customQuery);
-  const total = await Post.count({ where: req.count });
+  const featured = await postHelper.getFullPosts(
+    { limit: 5 },
+    postHelper.orderByComments({}, "-Comments")
+  );
+
+  const top = await postHelper.getFullPosts(
+    { sort: helper.modifySort(null, "thumbs"), limit: 10 },
+    {}
+  );
+
+  const popular = await postHelper.getFullPosts(
+    { sort: helper.modifySort(null, "views"), limit: 10 },
+    {}
+  );
 
   res.status(200).json({
     status: "success",
-    total,
-    count: data.length,
-    data,
+    data: {
+      featured: {
+        count: featured.length,
+        data:featured,
+      },
+      top: {
+        count: top.length,
+        data:top,
+      },
+      popular: {
+        count: popular.length,
+        data:popular,
+      },
+    },
   });
 });
 
 export const getView = catchAsync(async (req, res, next) => {
+  req.query.sort = helper.modifySort(req.query.sort, "views");
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
-  const total = await Post.count({ where: req.count });
 
   res.status(200).json({
     status: "success",
-    total,
     count: data.length,
     data,
   });
 });
 
 export const getThumb = catchAsync(async (req, res, next) => {
-  req.query.sort = [
-    "thumbs",
-    ...apiFeatureHelper.getQueryElements(req.query.sort),
-  ].join(",");
+  req.query.sort = helper.modifySort(req.query.sort, "thumbs");
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
 
   res.status(200).json({
@@ -113,12 +135,11 @@ export const getThumb = catchAsync(async (req, res, next) => {
 });
 
 export const getComment = catchAsync(async (req, res, next) => {
+  req.customQuery = postHelper.orderByComments(req.customQuery, "-Comments");
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
-  const total = await Post.count({ where: req.count });
 
   res.status(200).json({
     status: "success",
-    total,
     count: data.length,
     data,
   });
@@ -136,9 +157,9 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 3) create Post
   const post = await postHelper.createPostWithTags({
-    title: helper.modifySyntax(req.body.title),
-    summary: helper.modifySyntax(req.body.summary),
-    content: helper.modifySyntax(req.body.content),
+    title: helper.modeifiedSyntax(req.body.title),
+    summary: helper.modeifiedSyntax(req.body.summary),
+    content: helper.modeifiedSyntax(req.body.content),
     CategoryId: category.id,
     AuthorId: req.user.id,
     previewImg: req.body.previewImg,
@@ -147,7 +168,8 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 4) get Post (Lazy Loading)
   const author = await User.findByPk(post.AuthorId);
-  const data = helper.removeKeys(post.toJSON(), ["createdAt"]);
+  const data = helper.removeKeys(post.toJSON(), ["createdAt", "updatedAt"]);
+  if (data.editedAt) data.editedAt = new Date(data.editedAt);
 
   res.status(200).json({
     status: "success",
@@ -161,16 +183,13 @@ export const updateOne = catchAsync(async (req, res, next) => {
   if (req.body.tagIds)
     tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
 
-  // 2) Modify the tags syntax
-  if (tags.length) tags = tags.map((el) => helper.modifySyntax(el));
-
-  // 3) update Post
+  // 2) update Post
   await postHelper.updatePostContentAndTags({
     postId: req.params.id,
     CategoryId: req.body.CategoryId,
-    title: helper.modifySyntax(req.body.title),
-    summary: helper.modifySyntax(req.body.summary),
-    content: helper.modifySyntax(req.body.content),
+    title: helper.modeifiedSyntax(req.body.title),
+    summary: helper.modeifiedSyntax(req.body.summary),
+    content: helper.modeifiedSyntax(req.body.content),
     isUpdateTags: !!req.body.tagIds,
     tags,
   });
@@ -250,7 +269,7 @@ export const search = catchAsync(async (req, res, next) => {
   [initQuery, forceQuery] = await postHelper.getSearchQuery(
     req.query.mode,
     req.query.type,
-    helper.modifySyntax(req.query.target)
+    helper.modeifiedSyntax(req.query.target)
   );
 
   req.query = {
