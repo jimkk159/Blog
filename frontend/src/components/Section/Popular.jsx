@@ -77,10 +77,9 @@ function Popular({ posts, slide }) {
   return (
     <div className="mb-16 flex h-full flex-col rounded-3xl bg-self-dark px-4 py-8 md:p-8">
       <div className="flex items-center justify-between">
-        <SectionTitle first={"Most Popular"} second={"Posts this week"} />
+        <SectionTitle first={"Most Popular"} second={"Posts"} />
       </div>
       {popular}
-
       <div className="pt-22">
         <PinkButton
           text={"Discover All Posts"}

@@ -52,7 +52,7 @@ function PostList({
       titleCSS = "py-1 text-xl";
   }
 
-  if (!posts)
+  if (!posts || !Array.isArray(posts))
     return (
       <div className="flex flex-col">
         <ul className="w-full max-w-5xl"></ul>

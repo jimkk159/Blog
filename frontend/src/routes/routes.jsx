@@ -42,9 +42,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <RootLayout />,
     errorElement: <ErrorPage />,
-    loader: authHelper.getAuthToken,
+    loader: lazyLoader("./pages/Root"),
     children: [
-      { index: true, element: <HomePage /> },
+      {
+        index: true,
+        element: <HomePage />,
+      },
       {
         id: "relation",
         path: "posts",
@@ -136,6 +139,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: SuspenseWrapper(<ProfilePage />),
+            loader: authHelper.checkAuthTokenLoader,
             action: lazyAction("./pages/User/Profile"),
           },
           {

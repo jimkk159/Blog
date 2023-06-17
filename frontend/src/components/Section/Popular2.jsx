@@ -45,7 +45,7 @@ function Popular2({ posts, slide, button }) {
   return (
     <div className="flex h-full flex-col rounded-3xl bg-self-dark px-4 py-8 md:px-8 md:py-6">
       <div className="flex items-center justify-between">
-        <SectionTitle first={"Most Popular"} second={"Posts this week"} />
+        <SectionTitle first={"Most Popular"} second={"Posts"} />
       </div>
       {popular}
       {button && (

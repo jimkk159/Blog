@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
-// import { useRouteLoaderData, useSearchParams } from "react-router-dom";
+import { useRouteLoaderData, useSearchParams } from "react-router-dom";
 
 // components
 import Container from "../../../components/UI/Container";
@@ -12,54 +12,62 @@ import RankingListSection2 from "../../../components/Section/RankingList2";
 // css
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import { posts } from "../data";
+import { AwaitWrapper } from "../../helper/Wrapper";
 
 function Browse() {
+  const [page, setPage] = useState(1);
+
   // react-routers
-  // const { posts } = useRouteLoaderData("posts");
-  // const { relation } = useRouteLoaderData("relation");
-  // const [searchParams, setSearchParams] = useSearchParams();
+  const { posts } = useRouteLoaderData("posts");
+  const { posts: rankPosts } = useRouteLoaderData("root");
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // import hooks
-  // const matches768 = useMediaQuery({ query: "(max-width: 768px)" });
   const matches1280 = useMediaQuery({ query: "(max-width: 1280px)" });
-  // const matches1536 = useMediaQuery({ query: "(max-width: 1536px)" });
 
   // custom functions
-  // const limit = searchParams.get("limit") ?? 15;
-  // const navPageHandler = (nextPage) =>
-  //   setSearchParams({ page: nextPage, limit });
-  const limit = 15;
-  const inputs = posts.slice(0, limit);
-  const [page, setPage] = useState(1);
-  const [inputPosts, setInputPosts] = useState(inputs);
-
+  const limit = searchParams.get("limit") ?? 15;
   const navPageHandler = (nextPage) => {
-    setInputPosts(posts.slice(0 + limit * (nextPage - 1), limit * nextPage));
+    setSearchParams({ page: nextPage, limit });
     setPage(nextPage);
   };
+
   const RankingList = !matches1280 && (
-    <div className="flex flex-col pl-2 space-y-4">
-      <RankingListSection2 posts={posts} show={false} />
+    <div className="flex flex-col space-y-4 pl-2">
+      <AwaitWrapper resolve={rankPosts}>
+        {(loadPosts) => {
+          const topPosts = loadPosts?.thumbs?.data ?? [];
+
+          return <RankingListSection2 posts={topPosts} show={false} />;
+        }}
+      </AwaitWrapper>
       <Category2 />
     </div>
   );
+
   return (
     <Container right={RankingList}>
       <div className="w-full rounded-3xl bg-self-dark-gray p-6">
         {matches1280 && (
-          <>
-            <Popular2 posts={posts} slide />
-            <div className="my-8 w-full border-b border-self-gray" />
-          </>
+          <AwaitWrapper resolve={rankPosts}>
+            {(loadPosts) => {
+              const popularPosts = loadPosts?.views?.data ?? [];
+
+              return (
+                <>
+                  <Popular2 posts={popularPosts} slide />
+                  <div className="my-8 w-full border-b border-self-gray" />
+                </>
+              );
+            }}
+          </AwaitWrapper>
         )}
         <PostList2
           limit={15}
           size="small"
           page={page}
-          posts={inputPosts}
-          total={posts.length}
+          posts={posts}
+          total={posts.total}
           onNavPage={navPageHandler}
         />
       </div>

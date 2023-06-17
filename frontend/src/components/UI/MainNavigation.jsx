@@ -83,17 +83,17 @@ function MainNavigation() {
                     </Form>
                   </li>
                 )}
-                <div className="hover:bg-self-pink-500 pr-0.25 flex cursor-pointer flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs hover:bg-self-pink lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
-                  <p>Profile</p>
-                  <Link to={token ? "/profile" : "/auth?mode=login"}>
+                <Link to={token ? "/profile" : "/auth?mode=login"}>
+                  <div className="pr-0.25 hover:bg-self-pink flex cursor-pointer flex-row items-center justify-between space-x-1.5 rounded-full bg-self-dark-gray py-1.5 pl-3.5 pr-2 text-xs hover:bg-self-pink-500 lg:space-x-2.5 lg:py-2 lg:pl-6 lg:text-sm">
+                    <p>Profile</p>
                     <Avatar
                       className={
                         "border-2 border-white md:h-[24px] md:w-[24px] lg:h-[32px] lg:w-[32px]"
                       }
                       avatar={token ? avatar : defaultImg}
                     />
-                  </Link>
-                </div>
+                  </div>
+                </Link>
               </ul>
             </div>
           </div>

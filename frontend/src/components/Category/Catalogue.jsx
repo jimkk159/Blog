@@ -10,7 +10,7 @@ function Catalogue({ catalogue, isFirst }) {
 
   // react-router
   const navigate = useNavigate();
-  
+
   if (!catalogue.ParentId)
     return (
       <>
@@ -20,7 +20,7 @@ function Catalogue({ catalogue, isFirst }) {
         <div className="relative">
           <button
             className={
-              "mt-1.5 w-full rounded border text-center font-bold bg-stone-200 text-zinc-700 outline-none ring-1 hover:bg-gray-300 " +
+              "mt-1.5 w-full rounded border bg-stone-200 text-center font-bold text-zinc-700 outline-none ring-1 hover:bg-gray-300 " +
               `${isDrop ? "p-1 text-sm lg:text-base" : "p-0.5 text-2xl"}`
             }
             onClick={() => setIsDrop((prev) => !prev)}
@@ -61,7 +61,7 @@ function Catalogue({ catalogue, isFirst }) {
               }
               onClick={() => navigate(`/posts/${post.id}`)}
             >
-              post.title
+              {post.title}
             </li>
           ))}
         </ul>

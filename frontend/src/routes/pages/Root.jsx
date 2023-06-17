@@ -1,5 +1,11 @@
 import { useEffect } from "react";
-import { Outlet, useSubmit, useLoaderData } from "react-router-dom";
+import {
+  json,
+  defer,
+  Outlet,
+  useSubmit,
+  useLoaderData,
+} from "react-router-dom";
 
 // image
 import cubeImg from "../img/cube.png";
@@ -14,7 +20,7 @@ import MainNavigation from "../../components/UI/MainNavigation";
 function Root() {
   // react-router
   const submit = useSubmit();
-  const token = useLoaderData();
+  const { token } = useLoaderData();
 
   // custom functions
   const handleStorageChange = (event) => {
@@ -54,3 +60,23 @@ function Root() {
 }
 
 export default Root;
+
+async function PostsLoader() {
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/home`
+  );
+
+  if (!response.ok)
+    throw json({ message: "Could not fetch posts." }, { status: 404 });
+
+  const resJSON = await response.json();
+
+  if (!resJSON.data)
+    throw json({ message: "Could not fetch posts." }, { status: 404 });
+
+  return resJSON.data;
+}
+
+export function loader() {
+  return defer({ posts: PostsLoader(), token: authHelper.getAuthToken() });
+}

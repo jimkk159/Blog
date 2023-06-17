@@ -1,4 +1,4 @@
-import { defer, Outlet, redirect } from "react-router-dom";
+import { defer, Outlet } from "react-router-dom";
 
 import * as authHelper from "../../../utils/auth";
 
@@ -79,8 +79,6 @@ async function postsLoader(uid) {
 }
 
 export async function loader({ params }) {
-  const token = authHelper.getAuthToken();
-  if (!token) return redirect("/");
   if (!params.id)
     return defer({
       author: await selfAuthorLoader(),
