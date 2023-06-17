@@ -23,6 +23,7 @@ import usersRouters from "../routes/user-routes.js";
 import postsRouters from "../routes/post-routes.js";
 import tagsRouters from "../routes/tag-routes.js";
 import otherRoutes from "../routes/other-routes.js";
+import commentsRouters from "../routes/comment-routes.js";
 import categoriesRouters from "../routes/category-routes.js";
 
 // Error
@@ -102,10 +103,11 @@ app.use(
 //Route
 const host = "/api/v1";
 app.use(host + "/auth", authRouters);
+app.use(host + "/tags", tagsRouters);
 app.use(host + "/oauth", oauthRouters);
 app.use(host + "/users", usersRouters);
 app.use(host + "/posts", postsRouters);
-app.use(host + "/tags", tagsRouters);
+app.use(host + "/comments", commentsRouters);
 app.use(host + "/categories", categoriesRouters);
 app.use(host, otherRoutes);
 

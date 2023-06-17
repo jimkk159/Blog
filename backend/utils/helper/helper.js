@@ -1,6 +1,7 @@
 import he from "he";
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
+import * as apiFeatureHelper from "../helper/api-feature-helper.js";
 
 export const isURL = (input) =>
   !!(input && (input.startsWith("https://") || input.startsWith("http://")));
@@ -71,3 +72,13 @@ export const getImgUrlFromS3 = (file) =>
   "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/" + file;
 
 export const modifySyntax = (input) => he.decode(input);
+
+export const modeifiedSyntax = (input) =>
+  input ? helper.modifySyntax(input) : undefined;
+
+export const modifySort = (sort, target) => {
+  if (!sort) return `-${target}`;
+  if (sort && !sort.includes(target))
+    return [target, ...apiFeatureHelper.getQueryElements(sort)].join(",");
+  return sort;
+};

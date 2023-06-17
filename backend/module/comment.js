@@ -14,23 +14,34 @@ const Comment = sequelize.define(
     },
     content: {
       type: DataTypes.STRING,
-      allowNull: true,
-    }
+      allowNull: false,
+    },
   },
   {
     defaultScope: {
       attributes: {
-        exclude: ["createdAt"],
+        exclude: ["createdAt", "updatedAt"],
       },
     },
   }
 );
 
-Post.hasMany(Comment);
-Comment.belongsTo(Post);
+Post.hasMany(Comment, {
+  foreignKey: {
+    allowNull: false,
+    notNull: true,
+  },
+  onDelete: "CASCADE",
+});
+Comment.belongsTo(Post, {
+  foreignKey: {
+    allowNull: false,
+    notNull: true,
+  },
+  onDelete: "CASCADE",
+});
 User.hasMany(Comment, { foreignKey: "AuthorId" });
 Comment.belongsTo(User, { foreignKey: "AuthorId", as: "Author" });
 
 await Comment.sync();
 export default Comment;
-
