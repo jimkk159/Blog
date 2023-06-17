@@ -27,11 +27,10 @@ const Post = sequelize.define(
     },
     summary: {
       type: DataTypes.TEXT,
-      allowNull: true,
       validate: {
         validateSummary(value) {
           if (!validator.isLength(value, { max: 500 })) {
-            throw new errorTable.summaryValidateFailError();
+            throw errorTable.summaryValidateFailError();
           }
         },
       },
@@ -41,6 +40,10 @@ const Post = sequelize.define(
       allowNull: true,
     },
     thumbs: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    views: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
