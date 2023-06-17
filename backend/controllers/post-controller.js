@@ -78,17 +78,17 @@ export const getAll = catchAsync(async (req, res, next) => {
 });
 
 export const getHome = catchAsync(async (req, res, next) => {
-  const featured = await postHelper.getFullPosts(
+  const comments = await postHelper.getFullPosts(
     { limit: 5 },
     postHelper.orderByComments({}, "-Comments")
   );
 
-  const top = await postHelper.getFullPosts(
+  const thumbs = await postHelper.getFullPosts(
     { sort: helper.modifySort(null, "thumbs"), limit: 10 },
     {}
   );
 
-  const popular = await postHelper.getFullPosts(
+  const views = await postHelper.getFullPosts(
     { sort: helper.modifySort(null, "views"), limit: 10 },
     {}
   );
@@ -96,17 +96,17 @@ export const getHome = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: {
-      featured: {
-        count: featured.length,
-        data:featured,
+      comments: {
+        count: comments.length,
+        data: comments,
       },
-      top: {
-        count: top.length,
-        data:top,
+      thumbs: {
+        count: thumbs.length,
+        data: thumbs,
       },
-      popular: {
-        count: popular.length,
-        data:popular,
+      views: {
+        count: views.length,
+        data: views,
       },
     },
   });
