@@ -50,8 +50,11 @@ export const getOne = catchAsync(async (req, res, next) => {
 });
 
 export const getAllTitle = catchAsync(async (req, res, next) => {
-  req.query = { fields: "-content,-AuthorId", sort: "-editedAt" };
-  const getFeature = new GetFeatures(Post, req.query).select();
+  req.query = {
+    fields: "-content,-AuthorId,-previewImg,-summary,-thumbs,-views,-editedAt",
+    sort: "-editedAt",
+  };
+  const getFeature = new GetFeatures(Post, req.query).filter().select();
   const data = await getFeature.findAll({ raw: true });
 
   const total = await Post.count({ where: req.count });

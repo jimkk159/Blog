@@ -82,6 +82,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
   };
 
   let posts = await getFeature.findAll(forceQuery);
+  
   posts = posts
     .map((el) => el.toJSON())
     .map((el) => {
@@ -89,7 +90,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
         el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
       return el;
     });
-
+  
   return posts;
 };
 
@@ -235,7 +236,7 @@ export const getTagSearchQueryByText = async (target) => {
     },
   });
 
-  const getFeature = new GetFeatures(Post, {})
+  const getFeature = new GetFeatures(Post, { sort: "-editedAt" })
     .filter()
     .sort()
     .select()
@@ -265,7 +266,7 @@ export const getSearchQueryById = async (mode, target) => {
 
     case "tag":
       // The reason why for query two time is searching for tag will not return the complete tag inside the post
-      const getFeature = new GetFeatures(Post, {})
+      const getFeature = new GetFeatures(Post, { sort: "-editedAt" })
         .filter()
         .sort()
         .select()

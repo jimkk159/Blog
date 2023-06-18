@@ -7,7 +7,7 @@ import * as shareController from "../controllers/share-controller.js";
 const router = express.Router();
 
 router.get("/", postController.getAll);
-router.get("/home", postController.getHome);
+router.get("/home",postController.getHome);
 router.get("/views", postController.getView);
 router.get("/thumbs", postController.getThumb);
 router.get("/comments", postController.getComment);
