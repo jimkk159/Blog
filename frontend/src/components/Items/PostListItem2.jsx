@@ -61,7 +61,7 @@ function TagList({ post }) {
   );
 }
 
-function PostListItem({ post }) {
+function PostListItem2({ post }) {
   const navigate = useNavigate();
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
@@ -211,4 +211,4 @@ function PostListItem({ post }) {
   );
 }
 
-export default PostListItem;
+export default PostListItem2;

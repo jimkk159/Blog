@@ -4,9 +4,16 @@ import {
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
+// components
+import Container from "../../../components/UI/Container";
 import PostsList from "../../../components/Post/PostsList";
-import PostsNavigation from "../../../components/Post/PostsNavigation";
+import PostsList2 from "../../../components/Post/PostsList2";
+import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
+
+// helper
+import { AwaitWrapper } from "../../helper/Wrapper";
 
 const defaultPage = 1;
 const defaultLimit = 15;
@@ -20,19 +27,41 @@ function Search() {
   const target = searchParams.get("target") ?? "";
   const limit = searchParams.get("limit") ?? defaultLimit;
 
+  // import hooks
+  const matches1024 = useMediaQuery({ query: "(max-width: 1024px)" });
+
   // custom functions
   const navPageHandler = (nextPage) =>
     setSearchParams({ mode, type, target, page: nextPage, limit });
 
-  return (
-    <div className="flex min-h-screen">
-      <PostsNavigation />
-      <PostsList
-        posts={posts}
-        total={posts.length}
-        onNavPage={navPageHandler}
-      />
+  const left = !matches1024 && (
+    <div className="flex w-full justify-end pr-2">
+      <PostsNavigation2 />
     </div>
+  );
+
+  return (
+    <Container left={left}>
+      <div className="w-full rounded-3xl bg-self-dark-gray p-6">
+        <div className="mb-4 mt-8 h-8 w-full px-4 text-zinc-500">
+          <h1 className="mb-8 mt-1 w-full border-b border-self-gray text-3xl">
+            Search:
+            <span className="pl-2 text-2xl text-gray-400">{`${type} of ${mode} is ${target}`}</span>
+          </h1>
+        </div>
+        <AwaitWrapper resolve={posts}>
+          {(loadPosts) => {
+            return (
+              <PostsList
+                posts={loadPosts}
+                total={loadPosts.length}
+                onNavPage={navPageHandler}
+              />
+            );
+          }}
+        </AwaitWrapper>
+      </div>
+    </Container>
   );
 }
 
@@ -65,7 +94,7 @@ export async function loader({ request }) {
   const limit = searchParams.get("limit");
 
   return defer({
-    posts: await postsLoader({ mode, type, target, page, limit }),
+    posts: postsLoader({ mode, type, target, page, limit }),
   });
 }
 

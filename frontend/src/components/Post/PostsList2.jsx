@@ -1,6 +1,6 @@
 // components
 import Pagination from "../UI/Pagination";
-import PostListItem from "../Items/PostListItem";
+import PostListItem2 from "../Items/PostListItem2";
 
 function PostsList2({
   posts,
@@ -11,10 +11,10 @@ function PostsList2({
   limit = 15,
 }) {
   return (
-    <div className="mb-16 flex h-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8 md:p-8">
+    <div className="mb-16 flex h-full w-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8">
       <div className="overflow-auto">
         {posts &&
-          posts.map((post, index) => <PostListItem key={index} post={post} />)}
+          posts.map((post, index) => <PostListItem2 key={index} post={post} />)}
       </div>
       <div className="w-full max-w-5xl">
         <Pagination

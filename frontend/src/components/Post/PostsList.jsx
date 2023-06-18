@@ -1,10 +1,14 @@
-import Pagination from "../UI/Pagination";
 import MDEditor from "@uiw/react-md-editor";
+import { AiOutlineTag } from "react-icons/ai";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
+// components
 import Avatar from "../UI/Avatar";
 import TagList from "../Tag/TagList";
+import Pagination from "../UI/Pagination";
 import TagListSmall from "../Tag/TagListSmall";
+import PostListItem from "../Items/PostListItem";
+import PostListItem2 from "../Items/PostListItem2";
 
 const defaultPage = 1;
 const defaultLimit = 15;
@@ -58,6 +62,24 @@ function PostList({
         <ul className="w-full max-w-5xl"></ul>
       </div>
     );
+
+  return (
+    <div className="mb-16 flex h-full w-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8">
+      <div className="overflow-auto">
+        {posts &&
+          posts.map((post, index) => <PostListItem key={index} post={post} />)}
+      </div>
+      <div className="w-full max-w-5xl">
+        <Pagination
+          size={size}
+          total={total}
+          current={page}
+          limit={limit}
+          onNavPage={onNavPage}
+        />
+      </div>
+    </div>
+  );
 
   return (
     <div className="inline-flex h-full w-full flex-col items-center">

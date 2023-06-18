@@ -27,7 +27,7 @@ function SearchBar() {
     >
       <div className="relative">
         <AiOutlineSearch
-          className="absolute right-1 top-2 text-black"
+          className="absolute right-1 top-2 cursor-pointer text-black"
           onClick={searchHandler}
         />
         <input

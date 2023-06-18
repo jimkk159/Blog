@@ -24,7 +24,7 @@ function MainNavigation() {
   const avatar = useSelector((state) => state.auth.avatar);
 
   // react-router
-  const token = useRouteLoaderData("root");
+  const { token } = useRouteLoaderData("root");
 
   // import hooks
   const matches = useMediaQuery({ query: "(min-width: 768px)" });
@@ -36,7 +36,7 @@ function MainNavigation() {
   useEffect(() => {
     if (matches) setIsDrawer(false);
   }, [matches]);
-
+ 
   return (
     <>
       <header

@@ -21,33 +21,39 @@ function Home() {
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
   return (
-    <AwaitWrapper resolve={posts}>
-      {(loadPosts) => {
-        const featuredPosts = loadPosts?.comments?.data ?? [];
-        const topPosts = loadPosts?.thumbs?.data ?? [];
-        const popularPosts = loadPosts?.views?.data ?? [];
+    <Container>
+      <div className="w-full rounded-3xl bg-self-dark-gray p-6">
+        <MainBanner />
+        <div className="my-16 w-full border-b border-self-gray" />
+        <div className="flex flex-col items-center justify-center space-x-4 lg:flex-row lg:items-start">
+          <AwaitWrapper resolve={posts}>
+            {(loadPosts) => {
+              const featuredPosts = loadPosts?.comments?.data ?? [];
 
-        return (
-          <Container>
-            <div className="w-full rounded-3xl bg-self-dark-gray p-6">
-              <MainBanner />
-              <div className="my-16 w-full border-b border-self-gray" />
-              <div className="flex flex-col items-center justify-center space-x-4 lg:flex-row lg:items-start">
-                <Carousel posts={featuredPosts} />
-                {!matches1024 && (
-                  <div className="my-16 w-full border-b border-self-gray" />
-                )}
-                <RankingList posts={topPosts} />
-              </div>
-              <div className="my-16 w-full border-b border-self-gray" />
-              <HowTo />
-              <div className="my-16 w-full border-b border-self-gray" />
-              <Popular posts={popularPosts} />
-            </div>
-          </Container>
-        );
-      }}
-    </AwaitWrapper>
+              return <Carousel posts={featuredPosts} />;
+            }}
+          </AwaitWrapper>
+          {!matches1024 && (
+            <div className="my-16 w-full border-b border-self-gray" />
+          )}
+          <AwaitWrapper resolve={posts}>
+            {(loadPosts) => {
+              const topPosts = loadPosts?.thumbs?.data ?? [];
+              return <RankingList posts={topPosts} />;
+            }}
+          </AwaitWrapper>
+        </div>
+        <div className="my-16 w-full border-b border-self-gray" />
+        <HowTo />
+        <div className="my-16 w-full border-b border-self-gray" />
+        <AwaitWrapper resolve={posts}>
+          {(loadPosts) => {
+            const popularPosts = loadPosts?.views?.data ?? [];
+            return <Popular posts={popularPosts} />;
+          }}
+        </AwaitWrapper>
+      </div>
+    </Container>
   );
 }
 

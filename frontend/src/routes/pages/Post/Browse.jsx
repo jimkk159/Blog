@@ -6,7 +6,7 @@ import { useRouteLoaderData, useSearchParams } from "react-router-dom";
 import Container from "../../../components/UI/Container";
 import PostList2 from "../../../components/Post/PostsList2";
 import Popular2 from "../../../components/Section/Popular2";
-import Category2 from "../../../components/Post/Category2";
+import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 import RankingListSection2 from "../../../components/Section/RankingList2";
 
 // css
@@ -32,27 +32,30 @@ function Browse() {
     setPage(nextPage);
   };
 
-  const RankingList = !matches1280 && (
-    <div className="flex flex-col space-y-4 pl-2">
+  const right = !matches1280 && (
+    <div className="pl-2">
       <AwaitWrapper resolve={rankPosts}>
         {(loadPosts) => {
           const topPosts = loadPosts?.thumbs?.data ?? [];
-
           return <RankingListSection2 posts={topPosts} show={false} />;
         }}
       </AwaitWrapper>
-      <Category2 />
+    </div>
+  );
+
+  const left = !matches1280 && (
+    <div className="flex w-full justify-end pr-2">
+      <PostsNavigation2 limit />
     </div>
   );
 
   return (
-    <Container right={RankingList}>
+    <Container left={left} right={right}>
       <div className="w-full rounded-3xl bg-self-dark-gray p-6">
         {matches1280 && (
           <AwaitWrapper resolve={rankPosts}>
             {(loadPosts) => {
               const popularPosts = loadPosts?.views?.data ?? [];
-
               return (
                 <>
                   <Popular2 posts={popularPosts} slide />
