@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
+// components
 import * as authHelper from "../../utils/auth";
+import { creatPreviewImg } from "../../utils/helper";
 
 function CarouselItem({ post }) {
   // react-router
@@ -47,7 +49,7 @@ function CarouselItem({ post }) {
             alt="preview"
             title={post.title}
             className="h-full w-full rounded-3xl object-cover"
-            src={post.previewImg}
+            src={creatPreviewImg(post.previewImg)}
           />
         </div>
         <div className="flex h-full items-end justify-between">

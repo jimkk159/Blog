@@ -12,7 +12,7 @@ import PostsList from "../../../components/Post/PostsList";
 import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 
 // helper
-import { AwaitWrapper } from "../../helper/Wrapper";
+import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 
 const defaultPage = 1;
 const defaultLimit = 15;

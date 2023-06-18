@@ -8,7 +8,7 @@ import HomePage from "./pages/Home";
 import ErrorPage from "./pages/Error";
 import RootLayout from "./pages/Root";
 import * as authHelper from "../utils/auth";
-import { SuspenseWrapper } from "./helper/Wrapper";
+import { SuspenseWrapper } from "../components/Wrapper/AwaitWrapper";
 
 const AuthPage = lazy(() => import("./pages/Auth/Auth"));
 const OauthPage = lazy(() => import("./pages/Auth/Oauth"));

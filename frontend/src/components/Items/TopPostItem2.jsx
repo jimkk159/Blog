@@ -5,7 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
+// custom functions
 import * as authHelper from "../../utils/auth";
+import { creatPreviewImg } from "../../utils/helper";
 
 function TopPostItem2({ post }) {
   // react-router
@@ -44,7 +46,7 @@ function TopPostItem2({ post }) {
             <img
               alt="preview"
               className="h-full w-full cursor-pointer overflow-hidden rounded-3xl object-cover opacity-90"
-              src={post.previewImg}
+              src={creatPreviewImg(post.previewImg)}
               onClick={() => navigate(`/posts/${post.id}`)}
             />
           </div>

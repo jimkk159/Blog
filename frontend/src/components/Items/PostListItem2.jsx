@@ -9,6 +9,10 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import Avatar from "../UI/Avatar";
 import Button from "../UI/Button";
 
+// custom functions
+import { creatPreviewImg } from "../../utils/helper";
+
+
 function Tag({ name, mode, type, target }) {
   const navigate = useNavigate();
 
@@ -77,7 +81,7 @@ function PostListItem2({ post }) {
             <img
               className="h-32 w-32 min-w-[128px] cursor-pointer rounded-3xl border border-self-gray object-cover"
               alt="preview"
-              src={post.previewImg}
+              src={creatPreviewImg(post.previewImg)}
               onClick={() => navigate(`/posts/${post.id}`)}
             />
           </div>
@@ -143,7 +147,7 @@ function PostListItem2({ post }) {
         <img
           className="h-28 w-28 min-w-[112px] cursor-pointer rounded-3xl border border-self-gray object-cover"
           alt="preview"
-          src={post.previewImg}
+          src={creatPreviewImg(post.previewImg)}
           onClick={() => navigate(`/posts/${post.id}`)}
         />
       </div>

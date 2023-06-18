@@ -7,7 +7,7 @@ import { CSSTransition } from "react-transition-group";
 import { tagActions } from "../../store/tag-slice";
 
 // components
-import { AwaitWrapper } from "../../routes/helper/Wrapper";
+import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 
 // helper
 import * as authHelper from "../../utils/auth";

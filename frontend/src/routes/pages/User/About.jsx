@@ -2,8 +2,12 @@ import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
 import { json, defer, useNavigate, useRouteLoaderData } from "react-router-dom";
 
+// components
+import PostWrapper from "../../../components/Wrapper/PostWrapper";
+import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
+
+// helper
 import * as helper from "../../../utils/helper";
-import { AwaitWrapper } from "../../helper/Wrapper";
 
 function About() {
   // redux
@@ -13,44 +17,39 @@ function About() {
   const navigate = useNavigate();
   const { about } = useRouteLoaderData("about");
 
-  return (
-    <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-4 py-12 md:px-8">
-      <div className="relative flex h-full w-full max-w-5xl flex-col justify-center rounded bg-self-dark-gray p-6 text-black md:py-16">
-        <div className="flex w-full flex-col justify-center rounded">
-          <div className="mx-auto w-full max-w-3xl">
-            <div className="min-h-screen rounded bg-white p-8">
-              <AwaitWrapper
-                resolve={about}
-                spinner={{ color: "#ec6090", full: true }}
-              >
-                {(about) => {
-                  let input = null;
-                  if (about[0] && about[0].content) input = about[0].content;
-                  return <MDEditor.Markdown source={input} />;
-                }}
-              </AwaitWrapper>
-            </div>
-            <div className="mt-8">
-              <div className="flex justify-end font-pt-serif ">
-                {helper.hasPermissionToAbout(auth) && (
-                  <AwaitWrapper resolve={about}>
-                    {() => (
-                      <button
-                        type="submit"
-                        className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white disabled:border-blue-400 disabled:bg-blue-400 disabled:text-white"
-                        onClick={() => navigate("edit")}
-                      >
-                        EDIT
-                      </button>
-                    )}
-                  </AwaitWrapper>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  const bottom = (
+    <div className="flex justify-end font-pt-serif ">
+      {helper.hasPermissionToAbout(auth) && (
+        <AwaitWrapper resolve={about}>
+          {() => (
+            <button
+              type="submit"
+              className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white disabled:border-blue-400 disabled:bg-blue-400 disabled:text-white"
+              onClick={() => navigate("edit")}
+            >
+              EDIT
+            </button>
+          )}
+        </AwaitWrapper>
+      )}
     </div>
+  );
+
+  return (
+    <PostWrapper bottom={bottom}>
+      <div className="min-h-screen rounded bg-white p-8">
+        <AwaitWrapper
+          resolve={about}
+          spinner={{ color: "#ec6090", full: true }}
+        >
+          {(about) => {
+            let input = null;
+            if (about[0] && about[0].content) input = about[0].content;
+            return <MDEditor.Markdown source={input} />;
+          }}
+        </AwaitWrapper>
+      </div>
+    </PostWrapper>
   );
 }
 

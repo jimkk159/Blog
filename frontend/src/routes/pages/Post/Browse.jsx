@@ -3,10 +3,10 @@ import { useMediaQuery } from "react-responsive";
 import { json, defer, useLoaderData, useSearchParams } from "react-router-dom";
 
 // components
-import { AwaitWrapper } from "../../helper/Wrapper";
 import Container from "../../../components/UI/Container";
 import PostList2 from "../../../components/Post/PostsList2";
 import Popular2 from "../../../components/Section/Popular2";
+import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 import RankingListSection2 from "../../../components/Section/RankingList2";
 

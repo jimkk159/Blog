@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 // icons
 import { AiFillCheckCircle } from "react-icons/ai";
 
-import { useNavigate } from "react-router-dom";
-
 // components
 import Avatar from "../UI/Avatar";
+
+// custom functions
+import { creatPreviewImg } from "../../utils/helper";
 
 function PopularItem({ post }) {
   const navigate = useNavigate();
@@ -15,7 +18,7 @@ function PopularItem({ post }) {
           title={post.title}
           alt="preview"
           className="h-[264px] w-full cursor-pointer rounded-3xl object-cover lg:max-h-[160px]"
-          src={post.previewImg}
+          src={creatPreviewImg(post.previewImg)}
           onClick={() => navigate(`/posts/${post.id}`)}
         />
       </div>

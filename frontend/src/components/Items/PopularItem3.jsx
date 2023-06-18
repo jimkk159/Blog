@@ -2,6 +2,9 @@
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
+// custom functions
+import { creatPreviewImg } from "../../utils/helper";
+
 function PopularItem3({ post }) {
   return (
     <div className="box-border flex w-full flex-col space-y-4 rounded-3xl border-2 border-zinc-600 bg-self-dark-gray px-4 py-8 text-white">
@@ -10,7 +13,7 @@ function PopularItem3({ post }) {
           title={post.title}
           alt="preview"
           className="h-40 w-full rounded-3xl object-cover lg:max-h-[160px]"
-          src={post.previewImg}
+          src={creatPreviewImg(post.previewImg)}
         />
       </div>
       <div className="flex h-full w-full flex-col justify-between">

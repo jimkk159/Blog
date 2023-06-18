@@ -1,5 +1,12 @@
 import * as authHelper from "../utils/auth";
 
+const defaultCover = [
+  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover.jpg",
+  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover-2.jpg",
+  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover-3.jpg",
+];
+
+
 export const hasPermissionToPost = ({ auth, AuthorId }) => {
   const token = authHelper.getAuthToken();
   return token && (auth.isRoot || AuthorId === auth.id);
@@ -30,4 +37,12 @@ export const uploadImg = async (img) => {
   if (!(resJSON && resJSON.data && resJSON.data.img)) return;
 
   return resJSON.data.img;
+};
+
+export const creatPreviewImg = (img) => {
+  if (!img) {
+    const randomIndex = Math.floor(Math.random() * defaultCover.length);
+    return defaultCover[randomIndex];
+  }
+  return img;
 };

@@ -6,6 +6,9 @@ import { AiFillCheckCircle } from "react-icons/ai";
 // components
 import Avatar from "../UI/Avatar";
 
+// custom functions
+import { creatPreviewImg } from "../../utils/helper";
+
 function PopularItem2({ post }) {
   const navigate = useNavigate();
 
@@ -17,7 +20,7 @@ function PopularItem2({ post }) {
             title={post.title}
             alt="preview"
             className="h-[264px] w-full cursor-pointer rounded-3xl object-cover md:h-28 lg:max-h-[160px]"
-            src={post.previewImg}
+            src={creatPreviewImg(post.previewImg)}
             onClick={() => navigate(`/posts/${post.id}`)}
           />
         </div>

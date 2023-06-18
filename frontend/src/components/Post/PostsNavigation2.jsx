@@ -4,7 +4,7 @@ import { useRouteLoaderData } from "react-router-dom";
 
 // components
 import Catalogue from "../Category/Catalogue";
-import { AwaitWrapper } from "../../routes/helper/Wrapper";
+import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 
 // Redux Actions
 import { catalogueActions } from "../../store/catalogue-slice";

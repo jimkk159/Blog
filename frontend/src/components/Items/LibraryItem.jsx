@@ -3,6 +3,9 @@ import { useMediaQuery } from "react-responsive";
 // components
 import Button from "../Button";
 
+// custom functions
+import { creatPreviewImg } from "../../utils/helper";
+
 function LiItem1({ title, content }) {
   return (
     <li className="flex h-full flex-col items-start justify-start pt-8">
@@ -51,7 +54,7 @@ function LibraryItem({ post }) {
           <img
             className="h-32 w-32 rounded-3xl border border-self-gray object-cover"
             alt="preview"
-            src={post.previewImg}
+            src={creatPreviewImg(post.previewImg)}
           />
           <LiItem1 title="Title" content={post.title} />
           <LiItem1 title="Category" content={post.Category.name} />
@@ -83,7 +86,7 @@ function LibraryItem({ post }) {
           <img
             className="h-32 w-32 rounded-3xl border border-self-gray object-cover"
             alt="preview"
-            src={post.previewImg}
+            src={creatPreviewImg(post.previewImg)}
           />
           <LiItem3 title="Title" content={post.title} />
           <LiItem3 title="Category" content={post.Category.name} />
@@ -114,7 +117,7 @@ function LibraryItem({ post }) {
       <img
         className="h-20 w-20 rounded-3xl border border-self-gray object-cover"
         alt="preview"
-        src={post.previewImg}
+        src={creatPreviewImg(post.previewImg)}
       />
       <ul className="grid grid-cols-2 gap-y-6">
         <LiItem4 title="Title" content={post.title} />

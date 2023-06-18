@@ -2,13 +2,13 @@ import { useMediaQuery } from "react-responsive";
 import { json, defer, useLoaderData } from "react-router-dom";
 
 // components
-import { AwaitWrapper } from "../helper/Wrapper";
 import HowTo from "../../components/Section/HowTo";
 import Container from "../../components/UI/Container";
 import Popular from "../../components/Section/Popular";
 import MainBanner from "../../components/UI/MainBanner";
 import Carousel from "../../components/Section/Carousel";
 import RankingList from "../../components/Section/RankingList";
+import { AwaitWrapper } from "../../components/Wrapper/AwaitWrapper";
 
 // css
 import "slick-carousel/slick/slick.css";

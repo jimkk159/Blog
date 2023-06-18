@@ -14,7 +14,8 @@ import Code from "../Plugins";
 import Button from "../UI/Button";
 import TagList from "../Tag/TagList";
 import * as editHelper from "../../utils/edit";
-import { AwaitWrapper } from "../../routes/helper/Wrapper";
+import PostWrapper from "../Wrapper/PostWrapper";
+import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -96,17 +97,81 @@ function PostEditor({ method, post }) {
     }
   }, [data]);
 
+  const bottom = (
+    <div className="my-8 rounded px-4 md:mt-16 md:p-0">
+      <div className="flex flex-wrap items-center justify-start">
+        <p className="mr-4 text-base font-bold capitalize text-self-pink-500 md:mr-6 md:text-2xl">
+          <span className="text-white underline">Which topic</span>
+          {" does it belong to?"}
+        </p>
+        <div className="mt-2 w-40 md:w-60">
+          <AwaitWrapper resolve={relation}>
+            {(response) => {
+              const data = response?.data?.categories?.data ?? [];
+              return (
+                <select
+                  id="CategoryId"
+                  name="CategoryId"
+                  className="h-8 w-full truncate rounded-sm border border-black p-1 font-pt-serif text-base outline-none"
+                  defaultValue={post ? post.CategoryId : null}
+                >
+                  {data
+                    .filter((el) => el.name !== "root")
+                    .map((el, index) => (
+                      <option key={index} value={el.id}>
+                        {el.name}
+                      </option>
+                    ))}
+                </select>
+              );
+            }}
+          </AwaitWrapper>
+        </div>
+      </div>
+      <div className="mt-8 flex flex-col ">
+        {!isTouched && submigErrorMessage && (
+          <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
+            {submigErrorMessage}
+          </p>
+        )}
+        <div className="flex justify-end font-pt-serif ">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            className={
+              "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
+              "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+            }
+            spinner={{ color: "text-blue-600" }}
+          >
+            Save
+          </Button>
+          <Button
+            type="button"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            onClick={cancelHandler}
+            className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
+          >
+            Cancel
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
-    <div className="flex min-h-[960px] w-full justify-center p-6 md:px-8 md:py-12">
-      <div className="h-full w-full max-w-3xl rounded bg-white px-4 py-8 text-black md:px-8 md:pt-12">
-        <Form
-          method={method}
-          onClick={(e) => {
-            e.stopPropagation();
-            if (isDrop) setIsDrop(false);
-          }}
-          onBlur={() => setIsDrop(false)}
-        >
+    <PostWrapper>
+      <Form
+        method={method}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (isDrop) setIsDrop(false);
+        }}
+        onBlur={() => setIsDrop(false)}
+      >
+        <div className="h-full min-h-screen rounded bg-white p-4 pt-8 md:p-8">
           <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
             <textarea
               ref={titleRef}
@@ -166,70 +231,13 @@ function PostEditor({ method, post }) {
             name="avatar"
             onChange={inputImageHandler}
           />
-          <div className="mt-12 flex flex-wrap items-center justify-start space-y-2 font-pt-serif">
-            <p className="mr-4 whitespace-nowrap pl-1 pr-2 text-lg italic underline">
-              Which topic does this post belog to?
-            </p>
-            <div className="w-2/5">
-              <AwaitWrapper resolve={relation}>
-                {(response) => {
-                  const data = response?.data?.categories?.data ?? [];
-                  return (
-                    <select
-                      id="CategoryId"
-                      name="CategoryId"
-                      className="h-8 w-full truncate rounded-sm border border-black p-1 text-base outline-none"
-                      defaultValue={post ? post.CategoryId : null}
-                    >
-                      {data
-                        .filter((el) => el.name !== "root")
-                        .map((el, index) => (
-                          <option key={index} value={el.id}>
-                            {el.name}
-                          </option>
-                        ))}
-                    </select>
-                  );
-                }}
-              </AwaitWrapper>
-            </div>
+          <div className="mt-4">
+            <TagList post={post} isEdit={true} />
           </div>
-          <div className="mt-8 flex flex-col ">
-            {!isTouched && submigErrorMessage && (
-              <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
-                {submigErrorMessage}
-              </p>
-            )}
-            <div className="my-2 flex flex-col space-y-2">
-              <TagList post={post} isEdit={true} />
-              <div className="flex justify-end font-pt-serif ">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  loading={isSubmitting}
-                  className={
-                    "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
-                    "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                  }
-                  spinner={{ color: "text-blue-600" }}
-                >
-                  Save
-                </Button>
-                <Button
-                  type="button"
-                  disabled={isSubmitting}
-                  loading={isSubmitting}
-                  onClick={cancelHandler}
-                  className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Form>
-      </div>
-    </div>
+        </div>
+        {bottom}
+      </Form>
+    </PostWrapper>
   );
 }
 

@@ -17,10 +17,10 @@ import * as helper from "../../../utils/helper";
 import * as authHelper from "../../../utils/auth";
 
 // components
-import { AwaitWrapper } from "../../helper/Wrapper";
 import Button from "../../../components/UI/Button";
 import TagList from "../../../components/Tag/TagList";
 import Chapter from "../../../components/Post/Chapter";
+import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 
 function PostDetail() {
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");

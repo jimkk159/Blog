@@ -3,7 +3,7 @@ import { useRouteLoaderData } from "react-router-dom";
 // components
 import Catalogue from "../Category/Catalogue";
 import * as categoryHelper from "../../utils/category";
-import { AwaitWrapper } from "../../routes/helper/Wrapper";
+import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 
 function PostsNavigation() {
   // react-router

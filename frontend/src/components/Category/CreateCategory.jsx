@@ -6,7 +6,7 @@ import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import MultiSelectInput from "../UI/MultiSelectInput";
-import { AwaitWrapper } from "../../routes/helper/Wrapper";
+import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 
 // hooks
 import useForm from "../../hooks/form-hook";
