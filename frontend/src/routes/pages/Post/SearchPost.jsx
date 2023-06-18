@@ -9,7 +9,6 @@ import { useMediaQuery } from "react-responsive";
 // components
 import Container from "../../../components/UI/Container";
 import PostsList from "../../../components/Post/PostsList";
-import PostsList2 from "../../../components/Post/PostsList2";
 import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 
 // helper

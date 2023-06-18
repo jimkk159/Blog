@@ -23,7 +23,6 @@ const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
 const BrowsePage = lazy(() => import("./pages/Post/Browse"));
 const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
 const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
-const PostsLayout = lazy(() => import("./pages/Post/PostsRoot"));
 const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
 const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
 const PostsRelationRootLayout = lazy(() =>
@@ -45,8 +44,10 @@ const router = createBrowserRouter([
     loader: lazyLoader("./pages/Root"),
     children: [
       {
+        id: "home",
         index: true,
         element: <HomePage />,
+        loader: lazyLoader("./pages/Home"),
       },
       {
         id: "relation",
@@ -55,40 +56,33 @@ const router = createBrowserRouter([
         element: SuspenseWrapper(<PostsRelationRootLayout />),
         children: [
           {
-            id: "posts",
-            path: "",
-            loader: lazyLoader("./pages/Post/PostsRoot"),
-            element: SuspenseWrapper(<PostsLayout />),
+            index: true,
+            element: SuspenseWrapper(<BrowsePage />),
+            loader: lazyLoader("./pages/Post/Browse"),
+          },
+          {
+            id: "post-detail",
+            path: ":pid",
+            loader: lazyLoader("./pages/Post/PostDetail"),
             children: [
               {
                 index: true,
-                element: SuspenseWrapper(<BrowsePage />),
+                element: SuspenseWrapper(<PostDetailPage />),
+                action: lazyAction("./pages/Post/PostDetail"),
               },
               {
-                id: "post-detail",
-                path: ":pid",
-                loader: lazyLoader("./pages/Post/PostDetail"),
-                children: [
-                  {
-                    index: true,
-                    element: SuspenseWrapper(<PostDetailPage />),
-                    action: lazyAction("./pages/Post/PostDetail"),
-                  },
-                  {
-                    path: "edit",
-                    element: SuspenseWrapper(<EditPostPage />),
-                    loader: authHelper.checkAuthTokenLoader,
-                    action: lazyAction("./pages/Post/EditPost"),
-                  },
-                ],
-              },
-              {
-                path: "new",
-                element: SuspenseWrapper(<NewPostPage />),
+                path: "edit",
+                element: SuspenseWrapper(<EditPostPage />),
                 loader: authHelper.checkAuthTokenLoader,
-                action: lazyAction("./pages/Post/NewPost"),
+                action: lazyAction("./pages/Post/EditPost"),
               },
             ],
+          },
+          {
+            path: "new",
+            element: SuspenseWrapper(<NewPostPage />),
+            loader: authHelper.checkAuthTokenLoader,
+            action: lazyAction("./pages/Post/NewPost"),
           },
           {
             path: "search",

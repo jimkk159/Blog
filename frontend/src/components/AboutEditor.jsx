@@ -79,81 +79,86 @@ function AboutEditor({ method, about }) {
   }, [data]);
 
   return (
-    <div className="flex min-h-[960px] w-full justify-center px-8 py-12 ">
-      <div className="h-full w-full max-w-3xl rounded bg-white p-16 font-akaya text-black">
-        <Form method={method}>
-          <textarea
-            name="content"
-            className="hidden"
-            value={markdown}
-            onChange={() => {}}
-          />
-          <div onDragEnter={startDragHandler} className="relative">
-            <MDEditor
-              ref={editorRef}
-              value={markdown}
-              onChange={changeEditorHandler}
-              commands={editHelper.editChoice(inputRef)}
-              preview="edit"
-              textareaProps={{
-                placeholder: "Tell about your story...",
-              }}
-              previewOptions={{
-                components: {
-                  code: Code,
-                },
-              }}
-              height={700}
-            />
-            {isDrag && (
-              <div
-                className="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
-                onDrop={dropHandler}
-                onDragEnter={dragHandler}
-                onDragOver={dragHandler}
-                onDragLeave={dragHandler}
-              ></div>
-            )}
+    <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-4 py-12 md:px-8">
+      <div className="relative flex h-full w-full max-w-5xl flex-col justify-center rounded bg-self-dark-gray p-6 text-black md:py-16">
+        <div className="flex w-full flex-col justify-center rounded">
+          <div className="mx-auto w-full max-w-3xl">
+            <Form method={method}>
+              <div className="min-h-screen h-full rounded bg-white p-8">
+                <textarea
+                  name="content"
+                  className="hidden"
+                  value={markdown}
+                  onChange={() => {}}
+                />
+                <div onDragEnter={startDragHandler} className="relative">
+                  <MDEditor
+                    ref={editorRef}
+                    value={markdown}
+                    onChange={changeEditorHandler}
+                    commands={editHelper.editChoice(inputRef)}
+                    preview="edit"
+                    textareaProps={{
+                      placeholder: "Tell about your story...",
+                    }}
+                    previewOptions={{
+                      components: {
+                        code: Code,
+                      },
+                    }}
+                    height={"100vh"}
+                  />
+                  {isDrag && (
+                    <div
+                      className="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+                      onDrop={dropHandler}
+                      onDragEnter={dragHandler}
+                      onDragOver={dragHandler}
+                      onDragLeave={dragHandler}
+                    ></div>
+                  )}
+                </div>
+                <input
+                  ref={inputRef}
+                  className="hidden"
+                  type="file"
+                  accept=".jpg,.png,.jpeg,.jfif,.gif"
+                  name="avatar"
+                  onChange={inputImageHandler}
+                />
+              </div>
+              <div className="my-8 flex flex-col ">
+                {!isTouched && submigErrorMessage && (
+                  <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
+                    {submigErrorMessage}
+                  </p>
+                )}
+                <div className="flex justify-end font-pt-serif ">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    loading={isSubmitting}
+                    className={
+                      "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
+                      "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                    }
+                    spinner={{ color: "text-blue-600" }}
+                  >
+                    Save
+                  </Button>
+                  <Button
+                    type="button"
+                    disabled={isSubmitting}
+                    onClick={cancelHandler}
+                    className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            </Form>
           </div>
-          <input
-            ref={inputRef}
-            className="hidden"
-            type="file"
-            accept=".jpg,.png,.jpeg,.jfif,.gif"
-            name="avatar"
-            onChange={inputImageHandler}
-          />
-          <div className="my-8 flex flex-col ">
-            {!isTouched && submigErrorMessage && (
-              <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
-                {submigErrorMessage}
-              </p>
-            )}
-            <div className="flex justify-end font-pt-serif ">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                loading={isSubmitting}
-                className={
-                  "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
-                  "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-                }
-                spinner={{ color: "text-blue-600" }}
-              >
-                Save
-              </Button>
-              <Button
-                type="button"
-                disabled={isSubmitting}
-                loading={isSubmitting}
-                onClick={cancelHandler}
-                className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </Form>
+        </div>
       </div>
     </div>
   );

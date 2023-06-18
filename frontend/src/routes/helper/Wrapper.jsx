@@ -1,15 +1,24 @@
 import { Suspense } from "react";
 import { Await } from "react-router-dom";
-
-// components
 import { PacmanLoader } from "react-spinners";
 
-export function SuspenseWrapper(component) {
+export function SuspenseWrapper(component, spinner) {
+  const full = spinner?.full;
+  const color = spinner?.color;
+
   return (
     <Suspense
       fallback={
-        <div className="flex h-full w-full items-center justify-center">
-          <PacmanLoader aria-label="Loading Spinner" size={20} color="white" />{" "}
+        <div
+          className={`${
+            full && "h-screen"
+          } flex w-full items-center justify-center`}
+        >
+          <PacmanLoader
+            aria-label="Loading Spinner"
+            size={20}
+            color={color ? color : "white"}
+          />
         </div>
       }
     >
@@ -18,6 +27,6 @@ export function SuspenseWrapper(component) {
   );
 }
 
-export function AwaitWrapper({ children, resolve }) {
-  return SuspenseWrapper(<Await resolve={resolve}>{children}</Await>);
+export function AwaitWrapper({ resolve, spinner, children }) {
+  return SuspenseWrapper(<Await resolve={resolve}>{children}</Await>, spinner);
 }

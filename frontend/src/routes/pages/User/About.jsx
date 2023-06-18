@@ -13,35 +13,42 @@ function About() {
   const navigate = useNavigate();
   const { about } = useRouteLoaderData("about");
 
-
   return (
     <div className="flex h-full min-h-[calc(100vh-4rem)] w-full justify-center px-4 py-12 md:px-8">
-      <div className="relative flex h-full w-full max-w-3xl flex-col justify-between rounded bg-white p-6 text-black md:p-16">
-        <AwaitWrapper resolve={about}>
-          {(about) => {
-            let input = null;
-            if (about[0] && about[0].content) input = about[0].content;
-            return (
-              <>
-                <MDEditor.Markdown source={input} />
-                <div className="h-full w-full"></div>
-                <div className="my-8 flex flex-col">
-                  <div className="flex justify-end font-pt-serif ">
-                    {helper.hasPermissionToAbout(auth) && (
+      <div className="relative flex h-full w-full max-w-5xl flex-col justify-center rounded bg-self-dark-gray p-6 text-black md:py-16">
+        <div className="flex w-full flex-col justify-center rounded">
+          <div className="mx-auto w-full max-w-3xl">
+            <div className="min-h-screen rounded bg-white p-8">
+              <AwaitWrapper
+                resolve={about}
+                spinner={{ color: "#ec6090", full: true }}
+              >
+                {(about) => {
+                  let input = null;
+                  if (about[0] && about[0].content) input = about[0].content;
+                  return <MDEditor.Markdown source={input} />;
+                }}
+              </AwaitWrapper>
+            </div>
+            <div className="mt-8">
+              <div className="flex justify-end font-pt-serif ">
+                {helper.hasPermissionToAbout(auth) && (
+                  <AwaitWrapper resolve={about}>
+                    {() => (
                       <button
                         type="submit"
-                        className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white"
+                        className="ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl hover:border-blue-600 hover:bg-blue-600 hover:text-white disabled:border-blue-400 disabled:bg-blue-400 disabled:text-white"
                         onClick={() => navigate("edit")}
                       >
                         EDIT
                       </button>
                     )}
-                  </div>
-                </div>
-              </>
-            );
-          }}
-        </AwaitWrapper>
+                  </AwaitWrapper>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

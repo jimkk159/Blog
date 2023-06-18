@@ -9,10 +9,12 @@ import {
   useRouteLoaderData,
 } from "react-router-dom";
 
+// components
 import Code from "../Plugins";
 import Button from "../UI/Button";
 import TagList from "../Tag/TagList";
 import * as editHelper from "../../utils/edit";
+import { AwaitWrapper } from "../../routes/helper/Wrapper";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -30,7 +32,7 @@ function PostEditor({ method, post }) {
   const data = useActionData();
   const navigate = useNavigate();
   const navigation = useNavigation();
-  const { categories } = useRouteLoaderData("relation");
+  const { relation } = useRouteLoaderData("relation");
 
   const isSubmitting = navigation.state === "submitting";
 
@@ -169,22 +171,27 @@ function PostEditor({ method, post }) {
               Which topic does this post belog to?
             </p>
             <div className="w-2/5">
-              <select
-                id="CategoryId"
-                name="CategoryId"
-                className="h-8 w-full truncate rounded-sm border border-black p-1 text-base outline-none"
-                defaultValue={post ? post.CategoryId : null}
-              >
-                {categories &&
-                  categories.length &&
-                  categories
-                    .filter((el) => el.name !== "root")
-                    .map((el, index) => (
-                      <option key={index} value={el.id}>
-                        {el.name}
-                      </option>
-                    ))}
-              </select>
+              <AwaitWrapper resolve={relation}>
+                {(response) => {
+                  const data = response?.data?.categories?.data ?? [];
+                  return (
+                    <select
+                      id="CategoryId"
+                      name="CategoryId"
+                      className="h-8 w-full truncate rounded-sm border border-black p-1 text-base outline-none"
+                      defaultValue={post ? post.CategoryId : null}
+                    >
+                      {data
+                        .filter((el) => el.name !== "root")
+                        .map((el, index) => (
+                          <option key={index} value={el.id}>
+                            {el.name}
+                          </option>
+                        ))}
+                    </select>
+                  );
+                }}
+              </AwaitWrapper>
             </div>
           </div>
           <div className="mt-8 flex flex-col ">

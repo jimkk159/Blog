@@ -5,6 +5,7 @@ import { useNavigate, useRouteLoaderData } from "react-router-dom";
 // components
 import Button from "../UI/Button";
 import MultiSelectInput from "../UI/MultiSelectInput";
+import { AwaitWrapper } from "../../routes/helper/Wrapper";
 
 // hooks
 import useForm from "../../hooks/form-hook";
@@ -17,12 +18,7 @@ function EditCategory({ current, onClose }) {
   // react-router
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
-  const { categories } = useRouteLoaderData("relation");
-  const choices =
-    categories.map((el) => ({
-      ...el,
-      value: el.id,
-    })) ?? [];
+  const { relation } = useRouteLoaderData("relation");
 
   // custom hooks
   const { formState, inputHandler, setFormData } = useForm(
@@ -100,18 +96,29 @@ function EditCategory({ current, onClose }) {
         className="absolute right-1.5 top-1.5 h-3 w-3"
         onClick={onClose}
       />
-      <MultiSelectInput
-        name="ParentId"
-        defaultName="None"
-        choices={choices}
-        choiceElement={<li />}
-        defaultValue="Blongs to..."
-        current={current}
-        isDrop={isDrop}
-        onDrop={setIsDrop}
-        onInput={inputHandler}
-      />
+      <AwaitWrapper resolve={relation}>
+        {(response) => {
+          const choices =
+            response?.data?.categories?.data.map((el) => ({
+              ...el,
+              value: el.id,
+            })) ?? [];        
 
+          return (
+            <MultiSelectInput
+              name="ParentId"
+              defaultName="None"
+              choices={choices}
+              choiceElement={<li />}
+              defaultValue="Blongs to..."
+              current={current}
+              isDrop={isDrop}
+              onDrop={setIsDrop}
+              onInput={inputHandler}
+            />
+          );
+        }}
+      </AwaitWrapper>
       <div className="mt-1 flex w-full flex-col justify-end space-y-2 pt-0.5">
         <Button
           type="submit"

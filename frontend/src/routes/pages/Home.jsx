@@ -1,5 +1,5 @@
 import { useMediaQuery } from "react-responsive";
-import { json, defer, useRouteLoaderData } from "react-router-dom";
+import { json, defer, useLoaderData } from "react-router-dom";
 
 // components
 import { AwaitWrapper } from "../helper/Wrapper";
@@ -17,7 +17,7 @@ import "slick-carousel/slick/slick-theme.css";
 // import { posts } from "./data";
 
 function Home() {
-  const { posts } = useRouteLoaderData("root");
+  const { posts } = useLoaderData();
   const matches1024 = useMediaQuery({ query: "(min-width: 1024px)" });
 
   return (
@@ -27,9 +27,8 @@ function Home() {
         <div className="my-16 w-full border-b border-self-gray" />
         <div className="flex flex-col items-center justify-center space-x-4 lg:flex-row lg:items-start">
           <AwaitWrapper resolve={posts}>
-            {(loadPosts) => {
-              const featuredPosts = loadPosts?.comments?.data ?? [];
-
+            {(response) => {
+              const featuredPosts = response?.data?.comments?.data ?? [];
               return <Carousel posts={featuredPosts} />;
             }}
           </AwaitWrapper>
@@ -37,8 +36,8 @@ function Home() {
             <div className="my-16 w-full border-b border-self-gray" />
           )}
           <AwaitWrapper resolve={posts}>
-            {(loadPosts) => {
-              const topPosts = loadPosts?.thumbs?.data ?? [];
+            {(response) => {
+              const topPosts = response?.data?.thumbs?.data ?? [];
               return <RankingList posts={topPosts} />;
             }}
           </AwaitWrapper>
@@ -47,8 +46,8 @@ function Home() {
         <HowTo />
         <div className="my-16 w-full border-b border-self-gray" />
         <AwaitWrapper resolve={posts}>
-          {(loadPosts) => {
-            const popularPosts = loadPosts?.views?.data ?? [];
+          {(response) => {
+            const popularPosts = response?.data?.views?.data ?? [];
             return <Popular posts={popularPosts} />;
           }}
         </AwaitWrapper>
@@ -59,7 +58,7 @@ function Home() {
 
 export default Home;
 
-async function PostsLoader() {
+async function postsLoader() {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/posts/home`
   );
@@ -67,14 +66,9 @@ async function PostsLoader() {
   if (!response.ok)
     throw json({ message: "Could not fetch posts." }, { status: 404 });
 
-  const resJSON = await response.json();
-
-  if (!resJSON.data)
-    throw json({ message: "Could not fetch posts." }, { status: 404 });
-
-  return resJSON.data;
+  return response.json();
 }
 
 export function loader() {
-  return defer({ posts: PostsLoader() });
+  return defer({ posts: postsLoader() });
 }

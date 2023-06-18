@@ -6,6 +6,7 @@ import { useNavigate, useRouteLoaderData } from "react-router-dom";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import MultiSelectInput from "../UI/MultiSelectInput";
+import { AwaitWrapper } from "../../routes/helper/Wrapper";
 
 // hooks
 import useForm from "../../hooks/form-hook";
@@ -17,12 +18,7 @@ function CreateCategory({ onClose }) {
   // react-router
   const navigate = useNavigate();
   const token = useRouteLoaderData("root");
-  const { categories } = useRouteLoaderData("relation");
-  const choices =
-    categories.map((el) => ({
-      ...el,
-      value: el.id,
-    })) ?? [];
+  const { relation } = useRouteLoaderData("relation");
 
   // custom hooks
   const { formState, inputHandler } = useForm(
@@ -62,7 +58,7 @@ function CreateCategory({ onClose }) {
 
   return (
     <form
-      className="p-3 text-white bg-neutral-700 shadow rounded-b"
+      className="rounded-b bg-neutral-700 p-3 text-white shadow"
       onSubmit={submitHandler}
       onClick={(e) => {
         e.stopPropagation();
@@ -76,21 +72,33 @@ function CreateCategory({ onClose }) {
         name="name"
         placeholder="Input category...."
         errorMessage={"Please enter Category!"}
-        className="h-8 w-full border border-gray-500 rounded-sm pl-2 text-base outline-none"
+        className="h-8 w-full rounded-sm border border-gray-500 pl-2 text-base outline-none"
         onInput={inputHandler}
         validators={(e) => !validator.isEmpty(e)}
       />
       <p className="pl-1 pt-4 text-base font-bold">Parent</p>
-      <MultiSelectInput
-        name="ParentId"
-        defaultName="Top"
-        choices={choices}
-        choiceElement={<li />}
-        defaultValue="This category belongs to..."
-        isDrop={isDrop}
-        onDrop={setIsDrop}
-        onInput={inputHandler}
-      />
+      <AwaitWrapper resolve={relation}>
+        {(response) => {
+          const choices =
+            response?.data?.categories?.data.map((el) => ({
+              ...el,
+              value: el.id,
+            })) ?? [];
+
+          return (
+            <MultiSelectInput
+              name="ParentId"
+              defaultName="Top"
+              choices={choices}
+              choiceElement={<li />}
+              defaultValue="This category belongs to..."
+              isDrop={isDrop}
+              onDrop={setIsDrop}
+              onInput={inputHandler}
+            />
+          );
+        }}
+      </AwaitWrapper>
       <div className="mt-4 flex w-full justify-end pt-0.5">
         <Button
           type="submit"

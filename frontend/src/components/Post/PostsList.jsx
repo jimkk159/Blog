@@ -1,5 +1,4 @@
 import MDEditor from "@uiw/react-md-editor";
-import { AiOutlineTag } from "react-icons/ai";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 // components
@@ -8,7 +7,6 @@ import TagList from "../Tag/TagList";
 import Pagination from "../UI/Pagination";
 import TagListSmall from "../Tag/TagListSmall";
 import PostListItem from "../Items/PostListItem";
-import PostListItem2 from "../Items/PostListItem2";
 
 const defaultPage = 1;
 const defaultLimit = 15;
