@@ -12,6 +12,9 @@ import Button from "../UI/Button";
 // custom functions
 import { creatPreviewImg } from "../../utils/helper";
 
+// helper
+import { formatDate } from "../../utils/helper";
+
 function Tag({ name, mode, type, target }) {
   const navigate = useNavigate();
 
@@ -104,7 +107,7 @@ function PostListItem({ post }) {
                 </p>
               </div>
               <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-                {post.updatedAt}
+                {formatDate(post.editedAt)}
               </p>
             </div>
             <div
@@ -171,7 +174,7 @@ function PostListItem({ post }) {
               </p>
             </div>
             <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-              {post.updatedAt}
+              {formatDate(post.editedAt)}
             </p>
           </div>
           <div

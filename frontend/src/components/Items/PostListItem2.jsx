@@ -12,6 +12,8 @@ import Button from "../UI/Button";
 // custom functions
 import { creatPreviewImg } from "../../utils/helper";
 
+// helper
+import { formatDate } from "../../utils/helper";
 
 function Tag({ name, mode, type, target }) {
   const navigate = useNavigate();
@@ -105,7 +107,7 @@ function PostListItem2({ post }) {
                 </p>
               </div>
               <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-                {post.updatedAt}
+                {formatDate(post.editedAt)}
               </p>
             </div>
             <div
@@ -172,7 +174,7 @@ function PostListItem2({ post }) {
               </p>
             </div>
             <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-              {post.updatedAt}
+              {formatDate(post.editedAt)}
             </p>
           </div>
           <div
@@ -182,13 +184,13 @@ function PostListItem2({ post }) {
             {post.title}
           </div>
           <div
-            className="line-clamp-2 w-full cursor-pointer pr-4 overflow-ellipsis text-xs text-self-gray hover:text-zinc-500"
+            className="line-clamp-2 w-full cursor-pointer overflow-ellipsis pr-4 text-xs text-self-gray hover:text-zinc-500"
             onClick={() => navigate(`/posts/${post.id}`)}
           >
             {post.summary}
           </div>
         </div>
-        <div className="flex w-full justify-between pt-2 space-x-4">
+        <div className="flex w-full justify-between space-x-4 pt-2">
           <Tag
             name={post.Category.name}
             mode={"category"}

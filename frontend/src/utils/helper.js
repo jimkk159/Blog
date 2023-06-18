@@ -1,11 +1,10 @@
 import * as authHelper from "../utils/auth";
 
 const defaultCover = [
-  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover.jpg",
+  // "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover.jpg",
   "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover-2.jpg",
-  "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover-3.jpg",
+  // "https://jimkk159-blog-img.s3.ap-northeast-1.amazonaws.com/default-cover-3.jpg",
 ];
-
 
 export const hasPermissionToPost = ({ auth, AuthorId }) => {
   const token = authHelper.getAuthToken();
@@ -46,3 +45,10 @@ export const creatPreviewImg = (img) => {
   }
   return img;
 };
+
+export const formatDate = (date) =>
+  new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });

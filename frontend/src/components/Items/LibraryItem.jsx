@@ -6,6 +6,9 @@ import Button from "../Button";
 // custom functions
 import { creatPreviewImg } from "../../utils/helper";
 
+//helper
+import { formatDate } from "../../utils/helper";
+
 function LiItem1({ title, content }) {
   return (
     <li className="flex h-full flex-col items-start justify-start pt-8">
@@ -58,7 +61,7 @@ function LibraryItem({ post }) {
           />
           <LiItem1 title="Title" content={post.title} />
           <LiItem1 title="Category" content={post.Category.name} />
-          <LiItem2 title="Date" content={post.updatedAt} />
+          <LiItem2 title="Date" content={formatDate(post.editedAt)} />
           <LiItem1 title="Author" content={post.Author.name} />
           <div className="flex w-full items-center justify-start">
             <Button
@@ -90,7 +93,7 @@ function LibraryItem({ post }) {
           />
           <LiItem3 title="Title" content={post.title} />
           <LiItem3 title="Category" content={post.Category.name} />
-          <LiItem3 title="Date" content={post.updatedAt} />
+          <LiItem3 title="Date" content={formatDate(post.editedAt)} />
           <LiItem3 title="Author" content={post.Author.name} />
           <div className="flex w-full items-center justify-start">
             <Button
@@ -122,7 +125,7 @@ function LibraryItem({ post }) {
       <ul className="grid grid-cols-2 gap-y-6">
         <LiItem4 title="Title" content={post.title} />
         <LiItem4 title="Category" content={post.Category.name} />
-        <LiItem4 title="Date" content={post.updatedAt} />
+        <LiItem4 title="Date" content={formatDate(post.editedAt)} />
         <LiItem4 title="Author" content={post.Author.name} />
       </ul>
       <div className="flex w-full items-center justify-center">
