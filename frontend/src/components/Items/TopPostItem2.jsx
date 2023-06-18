@@ -35,6 +35,7 @@ function TopPostItem2({ post }) {
     },
     [postId, navigate]
   );
+
   return (
     <li>
       <div className="flex h-full w-full flex-col space-y-6 text-white">
@@ -79,7 +80,7 @@ function TopPostItem2({ post }) {
               <div className="flex cursor-pointer items-center justify-end space-x-1 md:space-x-1.5 lg:space-x-1">
                 <FaRegCommentDots className="mb-1 w-4  hover:text-gray-300 md:h-8 md:w-8 lg:mb-0.5 lg:w-4" />
                 <p className="text-right text-sm md:text-2xl lg:text-sm">
-                  {post.comments && post.comments.length}
+                  {post.Comments && post.Comments.length}
                 </p>
               </div>
             </div>
