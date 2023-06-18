@@ -1,9 +1,13 @@
 import gravatar from "gravatar";
+import Tag from "../module/tag.js";
+import Post from "../module/post.js";
 import About from "../module/about.js";
 import normalize from "normalize-path";
 import * as s3 from "../utils/aws/s3.js";
+import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
 import { validationResult } from "express-validator";
+import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as shareController from "./share-controller.js";
@@ -50,6 +54,48 @@ export const createAbout = catchAsync(async (req, res) => {
   await About.create({ content: helper.modeifiedSyntax(req.body.content) });
 
   res.status(200).json({ status: "success" });
+});
+
+export const getRelation = catchAsync(async (req, res, next) => {
+  // Posts just title
+  const query = {
+    fields: "-content,-AuthorId,-previewImg,-summary,-thumbs,-views,-editedAt",
+    sort: "-editedAt",
+  };
+  const getPosts = new GetFeatures(Post, query).filter().select();
+  const posts = await getPosts.findAll({ raw: true });
+
+  // Categories
+  const getCategory = new GetFeatures(Category, {})
+    .filter()
+    .sort()
+    .select()
+    .paginate();
+
+  const categories = await getCategory.findAll({ raw: true });
+
+  // Tags
+  const getTags = new GetFeatures(Tag, {}).filter().sort().select().paginate();
+
+  const tags = await getTags.findAll({ raw: true });
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      tags: {
+        count: tags.length,
+        data: tags,
+      },
+      posts: {
+        count: posts.length,
+        data: posts,
+      },
+      categories: {
+        count: categories.length,
+        data: categories,
+      },
+    },
+  });
 });
 
 //reference: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function

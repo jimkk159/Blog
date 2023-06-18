@@ -11,9 +11,6 @@ router.get("/home",postController.getHome);
 router.get("/views", postController.getView);
 router.get("/thumbs", postController.getThumb);
 router.get("/comments", postController.getComment);
-
-router.get("/relation", postController.getAllTitle);
-
 router.get("/search", postController.search, postController.getAll);
 
 router.get(

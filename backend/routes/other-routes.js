@@ -9,6 +9,7 @@ import * as shareController from "../controllers/share-controller.js";
 const router = express.Router();
 
 router.get("/about", factory.getAll(About));
+router.get("/relation", shareController.getRelation);
 
 router.use(authController.authUserByToken);
 

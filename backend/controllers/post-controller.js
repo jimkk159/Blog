@@ -49,24 +49,6 @@ export const getOne = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getAllTitle = catchAsync(async (req, res, next) => {
-  req.query = {
-    fields: "-content,-AuthorId,-previewImg,-summary,-thumbs,-views,-editedAt",
-    sort: "-editedAt",
-  };
-  const getFeature = new GetFeatures(Post, req.query).filter().select();
-  const data = await getFeature.findAll({ raw: true });
-
-  const total = await Post.count({ where: req.count });
-
-  res.status(200).json({
-    status: "success",
-    total,
-    count: data.length,
-    data,
-  });
-});
-
 export const getAll = catchAsync(async (req, res, next) => {
   req.query = { sort: "-editedAt" };
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
