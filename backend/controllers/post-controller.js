@@ -1,8 +1,9 @@
+import validator from "validator";
+
 import User from "../module/user.js";
 import Post from "../module/post.js";
 import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
-import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
@@ -50,7 +51,11 @@ export const getOne = catchAsync(async (req, res, next) => {
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
-  req.query = { sort: "-editedAt" };
+  req.query.sort = req.query.sort
+    ? req.query.sort.includes("editedAt")
+      ? req.query.sort
+      : req.query.sort + " -editedAt"
+    : "-editedAt";
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
   const total = await Post.count({ where: req.count });
 
@@ -139,6 +144,10 @@ export const createOne = catchAsync(async (req, res, next) => {
   let tags = [];
   if (req.body.tagIds)
     tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
+
+  // 3) check previewImg
+  if (!(req.body.previewImg && validator.isURL(req.body.previewImg)))
+    req.body.previewImg = "";
 
   // 3) create Post
   const post = await postHelper.createPostWithTags({

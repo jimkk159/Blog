@@ -15,18 +15,21 @@ const Post = sequelize.define(
     },
     previewImg: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      defaultValue: "",
     },
     summary: {
       type: DataTypes.TEXT,
       validate: {
         validateSummary(value) {
+          if (!value) return true;
           if (!validator.isLength(value, { max: 500 })) {
             throw errorTable.summaryValidateFailError();
           }
         },
       },
-      allowNull: true,
+      allowNull: false,
+      defaultValue: "",
     },
     title: {
       type: DataTypes.STRING,
