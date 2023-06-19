@@ -13,8 +13,8 @@ import TagList from "../Tag/TagList";
 import SelectCategory from "./SelectCategory";
 import * as editHelper from "../../utils/edit";
 import PostWrapper from "../Wrapper/PostWrapper";
-import EditPostModal from "../Modal/EditPostModal";
 import PostEditorBottom from "./PostEditorBottom";
+import EditPostModal from "../Modal/EditPostModal";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -24,6 +24,8 @@ function PostEditor({ method, post }) {
   const [isDrag, setIsDrag] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
   const [markdown, setMarkdown] = useState("");
+  const [summary, setSummary] = useState("");
+  const [previewImg, setPreviewImg] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
   const [isEditTag, setIsEditTag] = useState(false);
@@ -84,10 +86,16 @@ function PostEditor({ method, post }) {
   // useEffect
   const postTitle = post?.title ? post.title : "";
   const postContent = post?.content ? post.content : "";
+  const postSummary = post?.summary ? post.summary : "";
+  const postCategoryId = post?.CategoryId ? post.CategoryId : "";
+  const postPreviewImg = post?.previewImg ? post.previewImg : "";
   useEffect(() => {
     setTitle(postTitle);
     setMarkdown(postContent);
-  }, [postTitle, postContent]);
+    setSummary(postSummary);
+    setCategoryId(postCategoryId);
+    setPreviewImg(postPreviewImg);
+  }, [postTitle, postContent, postSummary, postCategoryId, postPreviewImg]);
 
   useEffect(() => {
     if (data && data.message) {
@@ -208,6 +216,10 @@ function PostEditor({ method, post }) {
         onCancel={() => setIsShowModal(false)}
         title={title}
         onTitle={titleChangeHandler}
+        summary={summary}
+        onSmmary={setSummary}
+        previewImg={previewImg}
+        onPreviewImg={setPreviewImg}
         content={markdown}
         selectCategory={selectCategory2}
         onSave={() => setIsShowModal(true)}

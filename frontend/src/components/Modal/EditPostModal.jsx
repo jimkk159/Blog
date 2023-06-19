@@ -16,12 +16,15 @@ function EditPostModal({
   onTitle,
   onCancel,
   selectCategory,
+  summary,
+  onSmmary,
+  previewImg,
+  onPreviewImg,
 }) {
   const token = authHelper.getAuthToken();
 
   const previewImgtRef = useRef(null);
   const [isDrop, setIsDrop] = useState(false);
-  const [previewImg, setPreviewImg] = useState(undefined);
   const [previewImgStyle, setPreviewImgStyle] = useState(0);
 
   // react-router
@@ -81,7 +84,7 @@ function EditPostModal({
               rows="7"
               placeholder="Put your image url here"
               value={previewImg}
-              onChange={(e) => setPreviewImg(e.target.value)}
+              onChange={(e) => onPreviewImg(e.target.value)}
             />
           </div>
         </div>
@@ -107,10 +110,10 @@ function EditPostModal({
         ).catch((err) => err);
 
         const uploadedImg = (await resoponse.json()).data.img;
-        setPreviewImg(uploadedImg);
+        onPreviewImg(uploadedImg);
       }
     },
-    [token]
+    [token, onPreviewImg]
   );
 
   return (
@@ -144,7 +147,7 @@ function EditPostModal({
               name="previewImg"
               className="hidden"
               value={previewImg}
-              onChange={setPreviewImg}
+              onChange={onPreviewImg}
             />
             <input
               ref={previewImgtRef}
@@ -195,6 +198,8 @@ function EditPostModal({
                         className="w-full resize-none border-0 bg-transparent focus:outline-none"
                         rows="4"
                         placeholder="Write your summary here"
+                        value={summary}
+                        onChange={(e) => onSmmary(e.target.value)}
                       />
                     </div>
                   </div>

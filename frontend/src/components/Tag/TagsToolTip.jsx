@@ -60,7 +60,7 @@ function TagsToolTip({
         onToggle();
       }}
     >
-      <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 text-[4px] text-base text-gray-50 outline-none">
+      <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 text-[4px] text-base text-gray-50 outline-none cursor-pointer">
         +
       </p>
       {

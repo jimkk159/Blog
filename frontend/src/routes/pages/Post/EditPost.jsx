@@ -21,15 +21,15 @@ export async function action({ request, params }) {
   const method = request.method;
   const data = await request.formData();
   const token = authHelper.getAuthToken();
-  const tagId = store?.getState()?.tag?.tags.map((el) => el.id);
+  const tagIds = store?.getState()?.tag?.tags.map((el) => el.id);
 
   const postData = {
-    CategoryId: data.get("CategoryId"),
     title: data.get("title"),
     content: data.get("content"),
     summary: data.get("summary"),
+    CategoryId: data.get("CategoryId"),
     previewImg: data.get("previewImg"),
-    tagId,
+    tagIds,
   };
 
   const postId = params.pid;
