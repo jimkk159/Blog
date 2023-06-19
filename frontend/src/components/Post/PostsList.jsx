@@ -12,7 +12,7 @@ const defaultPage = 1;
 const defaultLimit = 15;
 
 // reducer
-const formDate = (date) =>
+const formatDate = (date) =>
   new Date(date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "short",
@@ -114,7 +114,7 @@ function PostList({
                       isShowAuthor && "-ml-1 "
                     }`}
                   >
-                    {formDate(post?.updatedAt)}
+                    {formatDate(post?.updatedAt)}
                   </p>
                   {isTagOnTopRight && <TagListSmall post={post} />}
                 </div>

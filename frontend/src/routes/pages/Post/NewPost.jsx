@@ -20,6 +20,8 @@ export async function action({ request }) {
     CategoryId: data.get("CategoryId"),
     title: data.get("title"),
     content: data.get("content"),
+    summary: data.get("summary"),
+    previewImg: data.get("previewImg"),
     tagId,
   };
 

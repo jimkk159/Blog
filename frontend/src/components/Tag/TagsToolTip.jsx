@@ -12,9 +12,15 @@ import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 // helper
 import * as authHelper from "../../utils/auth";
 
-function TagsToolTip({ postTags, category, isNew = false }) {
+function TagsToolTip({
+  postTags,
+  category,
+  isNew = false,
+  isEdit,
+  onClose,
+  onToggle,
+}) {
   const inputRef = useRef(null);
-  const [isEdit, setIsEdit] = useState(false);
   const [searchTag, setSearchTag] = useState("");
   const [isTouched, setIsTouched] = useState(false);
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
@@ -51,7 +57,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
       className="relative"
       onClick={(e) => {
         e.stopPropagation();
-        setIsEdit((prev) => !prev);
+        onToggle();
       }}
     >
       <p className="m-0.5 flex w-[30px] items-center justify-center rounded-2xl bg-gray-600 px-2 text-[4px] text-base text-gray-50 outline-none">
@@ -121,7 +127,7 @@ function TagsToolTip({ postTags, category, isNew = false }) {
                     tags.push(tag);
                     dispatch(tagActions.add({ tag }));
                     setSearchTag("");
-                    setIsEdit(false);
+                    onClose();
                   }
                 };
 

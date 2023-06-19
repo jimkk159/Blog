@@ -6,13 +6,16 @@ import { useCallback, useRef, useState } from "react";
 import { json, useRouteLoaderData } from "react-router-dom";
 import { BsFillKeyFill, BsPersonCircle } from "react-icons/bs";
 
-import * as authHelper from "../../../utils/auth";
+// components
 import Avatar from "../../../components/UI/Avatar";
 import { authActions } from "../../../store/auth-slice";
 import Selection from "../../../components/UI/Selection";
 import Password from "../../../components/Profile/Password";
 import EditProfile from "../../../components/Profile/EditProfile";
 import ProfilePosts from "../../../components/Profile/ProfilePosts";
+
+// helper
+import * as authHelper from "../../../utils/auth";
 
 function Profile() {
   const token = authHelper.getAuthToken();

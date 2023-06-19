@@ -2,20 +2,19 @@ import MDEditor from "@uiw/react-md-editor";
 // import rehypeSanitize from "rehype-sanitize";
 import { useRef, useEffect, useState, useCallback } from "react";
 import {
-  Form,
   useNavigate,
   useActionData,
-  useNavigation,
   useRouteLoaderData,
 } from "react-router-dom";
 
 // components
 import Code from "../Plugins";
-import Button from "../UI/Button";
 import TagList from "../Tag/TagList";
+import SelectCategory from "./SelectCategory";
 import * as editHelper from "../../utils/edit";
 import PostWrapper from "../Wrapper/PostWrapper";
-import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
+import EditPostModal from "../Modal/EditPostModal";
+import PostEditorBottom from "./PostEditorBottom";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
@@ -25,17 +24,17 @@ function PostEditor({ method, post }) {
   const [isDrag, setIsDrag] = useState(false);
   const [isDrop, setIsDrop] = useState(false);
   const [markdown, setMarkdown] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
+  const [isEditTag, setIsEditTag] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   // react-router
   const data = useActionData();
   const navigate = useNavigate();
-  const navigation = useNavigation();
   const { relation } = useRouteLoaderData("relation");
-
-  const isSubmitting = navigation.state === "submitting";
 
   // custom functions
   const inputImageHandler = useCallback(async (event) => {
@@ -97,146 +96,122 @@ function PostEditor({ method, post }) {
     }
   }, [data]);
 
+  const selectCategory = (
+    <SelectCategory
+      className="h-8 w-full p-1 font-pt-serif text-base"
+      relation={relation}
+      value={categoryId}
+      onChange={setCategoryId}
+    />
+  );
+
+  const selectCategory2 = (
+    <SelectCategory
+      id="category"
+      name="CategoryId"
+      className="max-w-32 h-6 font-pt-serif text-sm"
+      relation={relation}
+      value={categoryId}
+      onChange={setCategoryId}
+    />
+  );
+
   const bottom = (
-    <div className="my-8 rounded px-4 md:mt-16 md:p-0">
-      <div className="flex flex-wrap items-center justify-start">
-        <p className="mr-4 text-base font-bold capitalize text-self-pink-500 md:mr-6 md:text-2xl">
-          <span className="text-white underline">Which topic</span>
-          {" does it belong to?"}
-        </p>
-        <div className="mt-2 w-40 md:w-60">
-          <AwaitWrapper resolve={relation}>
-            {(response) => {
-              const data = response?.data?.categories?.data ?? [];
-              return (
-                <select
-                  id="CategoryId"
-                  name="CategoryId"
-                  className="h-8 w-full truncate rounded-sm border border-black p-1 font-pt-serif text-base outline-none"
-                  defaultValue={post ? post.CategoryId : null}
-                >
-                  {data
-                    .filter((el) => el.name !== "root")
-                    .map((el, index) => (
-                      <option key={index} value={el.id}>
-                        {el.name}
-                      </option>
-                    ))}
-                </select>
-              );
-            }}
-          </AwaitWrapper>
-        </div>
-      </div>
-      <div className="mt-8 flex flex-col ">
-        {!isTouched && submigErrorMessage && (
-          <p className="px-1 pb-2 text-left font-pt-serif text-sm text-self-red">
-            {submigErrorMessage}
-          </p>
-        )}
-        <div className="flex justify-end font-pt-serif ">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-            className={
-              "ml-4 rounded-xl border-2 border-blue-500 bg-transparent px-4 py-1.5 text-blue-500 shadow-xl " +
-              "hover:border-blue-600 hover:bg-blue-600 hover:text-white"
-            }
-            spinner={{ color: "text-blue-600" }}
-          >
-            Save
-          </Button>
-          <Button
-            type="button"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-            onClick={cancelHandler}
-            className="ml-4 rounded-xl bg-blue-500 px-4 py-1.5 text-white shadow-xl hover:bg-blue-600"
-          >
-            Cancel
-          </Button>
-        </div>
-      </div>
-    </div>
+    <PostEditorBottom
+      isTouched={isTouched}
+      submigErrorMessage={submigErrorMessage}
+      onCancel={cancelHandler}
+      onNext={() => setIsShowModal(true)}
+    >
+      {selectCategory}
+    </PostEditorBottom>
   );
 
   return (
-    <PostWrapper>
-      <Form
-        method={method}
-        onClick={(e) => {
-          e.stopPropagation();
-          if (isDrop) setIsDrop(false);
-        }}
-        onBlur={() => setIsDrop(false)}
-      >
-        <div className="h-full min-h-screen rounded bg-white p-4 pt-8 md:p-8">
-          <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
-            <textarea
-              ref={titleRef}
-              id="title"
-              type="text"
-              name="title"
-              required
-              className={
-                `h-[${titleHeigh}px] ` +
-                `w-full resize-none overflow-y-hidden border-b-2 border-gray-300 pl-1 font-pt-serif text-3xl outline-none `
-              }
-              placeholder="Untitle"
-              value={title}
-              onChange={titleChangeHandler}
-            />
-            <textarea
-              name="content"
-              className="hidden"
-              value={markdown}
-              onChange={() => {}}
-            />
-          </div>
-          <div onDragEnter={startDragHandler} className="relative">
-            <MDEditor
-              ref={editorRef}
-              value={markdown}
-              onChange={changeEditorHandler}
-              commands={editHelper.editChoice(inputRef)}
-              preview="edit"
-              textareaProps={{
-                placeholder: "Tell about your story...",
-              }}
-              previewOptions={{
-                // This will make the components lose efficacy
-                // rehypePlugins: [[rehypeSanitize]],
-                components: {
-                  code: Code,
-                },
-              }}
-              height={700}
-            />
-            {isDrag && (
-              <div
-                className="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
-                onDrop={dropHandler}
-                onDragEnter={dragHandler}
-                onDragOver={dragHandler}
-                onDragLeave={dragHandler}
-              ></div>
-            )}
-          </div>
-          <input
-            ref={inputRef}
-            className="hidden"
-            type="file"
-            accept=".jpg,.png,.jpeg,.jfif,.gif"
-            name="avatar"
-            onChange={inputImageHandler}
+    <PostWrapper
+      bottom={bottom}
+      onClick={(e) => {
+        if (isDrop) setIsDrop(false);
+        if (isEditTag) setIsEditTag(false);
+      }}
+    >
+      <div className="h-full min-h-screen rounded bg-white p-4 pt-8 md:p-8">
+        <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
+          <textarea
+            ref={titleRef}
+            required
+            className={
+              `h-[${titleHeigh}px] ` +
+              `w-full resize-none overflow-y-hidden border-b-2 border-gray-300 pl-1 font-pt-serif text-3xl outline-none `
+            }
+            placeholder="Untitle"
+            value={title}
+            onChange={titleChangeHandler}
           />
-          <div className="mt-4">
-            <TagList post={post} isEdit={true} />
-          </div>
+          <textarea
+            name="content"
+            className="hidden"
+            value={markdown}
+            onChange={() => {}}
+          />
         </div>
-        {bottom}
-      </Form>
+        <div onDragEnter={startDragHandler} className="relative">
+          <MDEditor
+            ref={editorRef}
+            value={markdown}
+            onChange={changeEditorHandler}
+            commands={editHelper.editChoice(inputRef)}
+            preview="edit"
+            textareaProps={{
+              placeholder: "Tell about your story...",
+            }}
+            previewOptions={{
+              // This will make the components lose efficacy
+              // rehypePlugins: [[rehypeSanitize]],
+              components: {
+                code: Code,
+              },
+            }}
+            height={700}
+          />
+          {isDrag && (
+            <div
+              className="absolute bottom-0 left-0 right-0 top-0 h-full w-full"
+              onDrop={dropHandler}
+              onDragEnter={dragHandler}
+              onDragOver={dragHandler}
+              onDragLeave={dragHandler}
+            ></div>
+          )}
+        </div>
+        <input
+          ref={inputRef}
+          className="hidden"
+          type="file"
+          accept=".jpg,.png,.jpeg,.jfif,.gif"
+          name="avatar"
+          onChange={inputImageHandler}
+        />
+        <div className="mt-4">
+          <TagList
+            post={post}
+            isEditMode={true}
+            isEdit={isEditTag}
+            onClose={() => setIsEditTag(false)}
+            onToggle={() => setIsEditTag((prev) => !prev)}
+          />
+        </div>
+      </div>
+      <EditPostModal
+        method={method}
+        show={isShowModal}
+        onCancel={() => setIsShowModal(false)}
+        title={title}
+        onTitle={titleChangeHandler}
+        content={markdown}
+        selectCategory={selectCategory2}
+        onSave={() => setIsShowModal(true)}
+      />
     </PostWrapper>
   );
 }

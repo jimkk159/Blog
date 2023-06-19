@@ -6,7 +6,13 @@ import { useSelector, useDispatch } from "react-redux";
 import TagsToolTip from "./TagsToolTip";
 import { tagActions } from "../../store/tag-slice";
 
-function TagList({ post, isEdit = false }) {
+function TagList({
+  post,
+  isEditMode = false,
+  isEdit = false,
+  onClose,
+  onToggle,
+}) {
   let categoryTag = post ? (
     <p className=" m-1 max-h-5 min-w-[20px] max-w-[100px] items-center truncate rounded-2xl bg-gray-600 p-0.5 px-3 text-[4px] text-gray-50 hover:bg-gray-700">
       {`${post.Category && post.Category.name}`}
@@ -36,9 +42,9 @@ function TagList({ post, isEdit = false }) {
     return () => dispatch(tagActions.reset());
   }, [dispatch]);
 
-  if (!isEdit && !post) return;
+  if (!isEditMode && !post) return;
 
-  if (!isEdit) {
+  if (!isEditMode) {
     categoryTag = (
       <Link
         title={post.Category.name}
@@ -71,7 +77,14 @@ function TagList({ post, isEdit = false }) {
       <div className="text-md mt-2 flex flex-wrap items-center">
         <AiOutlineTag className="mr-1 h-[20px] w-[20px]" />
         {otherTags}
-        {isEdit && <TagsToolTip isNew />}
+        {isEditMode && (
+          <TagsToolTip
+            isNew
+            isEdit={isEdit}
+            onClose={onClose}
+            onToggle={onToggle}
+          />
+        )}
       </div>
     );
   }
@@ -81,7 +94,15 @@ function TagList({ post, isEdit = false }) {
       <AiOutlineTag className="mr-1 h-[20px] w-[20px]" />
       {categoryTag}
       {otherTags}
-      {isEdit && <TagsToolTip postTags={post.Tags} category={post.Category} />}
+      {isEditMode && (
+        <TagsToolTip
+          postTags={post.Tags}
+          category={post.Category}
+          isEdit={isEdit}
+          onClose={onClose}
+          onToggle={onToggle}
+        />
+      )}
     </div>
   );
 }

@@ -11,7 +11,8 @@ function Backdrop({ onClick }) {
     <div
       className="fixed left-0 top-0 z-10 h-screen w-full bg-black bg-opacity-75"
       onClick={clickHandler}
-    ></div>
+    >
+    </div>
   );
 
   return ReactDOM.createPortal(content, document.getElementById("backdrop"));
