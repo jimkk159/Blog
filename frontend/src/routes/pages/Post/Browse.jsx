@@ -97,7 +97,7 @@ async function homeLoader() {
 async function postsLoader({ page, limit }) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/posts?page=${page}&limit=${limit}&fields=updatedAt`
+      `/api/v1/posts?page=${page}`
   );
 
   if (!response.ok) throw new Error();

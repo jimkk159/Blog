@@ -63,7 +63,7 @@ async function selfpostsLoader() {
 async function postsLoader(uid) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/posts/search?mode=author&type=id&target=${uid}&fields=updatedAt`
+      `/api/v1/posts/search?mode=author&type=id&target=${uid}`
   );
   if (!response.ok)
     return {
