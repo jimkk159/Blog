@@ -7,6 +7,7 @@ import * as authHelper from "../../../utils/auth";
 // components
 import Detail from "../../../components/Post/Detail";
 import Container from "../../../components/UI/Container";
+import Comment from "../../../components/Comment/Comment";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 
@@ -25,7 +26,13 @@ function PostDetail() {
   return (
     <Container left={left}>
       <AwaitWrapper resolve={post}>
-        {(loadPost) => <Detail post={loadPost} />}
+        {(loadPost) => (
+          <>
+            <Detail post={loadPost} />
+            <div className="my-6 w-full" />
+            <Comment post={loadPost} />
+          </>
+        )}
       </AwaitWrapper>
     </Container>
   );

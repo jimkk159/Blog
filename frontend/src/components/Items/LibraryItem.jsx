@@ -66,8 +66,6 @@ function LibraryItem({ post }) {
           <div className="flex w-full items-center justify-start">
             <Button
               type="button"
-              //   disabled={isSubmitting}
-              //   loading={true}
               className={
                 "ml-4 rounded-3xl border-2 border-self-gray bg-transparent px-8 py-2.5 text-self-gray shadow-xl " +
                 "hover:border-self-pink-500 hover:text-self-pink-500"
