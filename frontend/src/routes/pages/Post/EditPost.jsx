@@ -50,5 +50,5 @@ export async function action({ request, params }) {
       { status: 500 }
     );
 
-  return redirect(`/${params.pid}`);
+  return redirect(`/posts/${params.pid}`);
 }
