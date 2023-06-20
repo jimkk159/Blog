@@ -13,7 +13,7 @@ import Button from "../UI/Button";
 import { creatPreviewImg } from "../../utils/helper";
 
 // helper
-import { formatDate } from "../../utils/helper";
+import * as helper from "../../utils/helper";
 
 function Tag({ name, mode, type, target }) {
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ function PostListItem2({ post }) {
                 </p>
               </div>
               <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-                {formatDate(post.editedAt)}
+                {helper.formatDate(post.editedAt)}
               </p>
             </div>
             <div
@@ -174,7 +174,7 @@ function PostListItem2({ post }) {
               </p>
             </div>
             <p className="overflow-ellipsis whitespace-nowrap text-xs italic">
-              {formatDate(post.editedAt)}
+              {helper.formatDate(post.editedAt)}
             </p>
           </div>
           <div

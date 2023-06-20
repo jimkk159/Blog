@@ -13,7 +13,7 @@ function TopPostItem({ post }) {
   // react-router
   const navigate = useNavigate();
 
-  // components
+  // custom functions
   const postId = post.id;
   const increaseThumbs = useCallback(
     async (event) => {

@@ -1,3 +1,4 @@
+import { RxCross1 } from "react-icons/rx";
 import { useRef, useState, useCallback } from "react";
 import { Form, useNavigation } from "react-router-dom";
 
@@ -133,8 +134,12 @@ function EditPostModal({
               if (isDrop) setIsDrop(false);
             }}
             onBlur={() => setIsDrop(false)}
-            className="h-92 w-[520px] rounded bg-white text-black"
+            className="h-92 relative w-[520px] rounded bg-white text-black"
           >
+            <RxCross1
+              className="absolute right-4 top-4 text-gray-500"
+              onClick={() => onCancel()}
+            />
             <textarea
               type="text"
               name="content"
