@@ -6,6 +6,14 @@ import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as commentHelper from "../utils/helper/comment-helper.js";
 
+export const setPostId = catchAsync(async (req, res, next) => {
+  const PostId = req.params.postId
+    ? req.params.postId
+    : req.params.id;
+  req.body = { ...req.body, PostId };
+  next();
+});
+
 export const checkPermission = catchAsync(async (req, res, next) => {
   // 1) find post
   const comment = await Comment.findByPk(req.params.id);

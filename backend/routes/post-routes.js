@@ -3,11 +3,16 @@ import { check } from "express-validator";
 import * as postController from "../controllers/post-controller.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
+import * as commentController from "../controllers/comment-controller.js";
+
+import commentsRouters from "../routes/comment-routes.js";
 
 const router = express.Router();
 
+router.use("/:postId/comments", commentController.setPostId, commentsRouters);
+
 router.get("/", postController.getAll);
-router.get("/home",postController.getHome);
+router.get("/home", postController.getHome);
 router.get("/views", postController.getView);
 router.get("/thumbs", postController.getThumb);
 router.get("/comments", postController.getComment);
@@ -20,7 +25,6 @@ router.get(
   postController.search,
   postController.getAll
 );
-
 
 router.get("/:id", postController.getOne);
 router.patch("/:id/thumb", postController.updateThumb);

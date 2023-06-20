@@ -6,7 +6,7 @@ import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
 import * as commentController from "../controllers/comment-controller.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.get("/", commentController.getAll);
 router.get("/:id", factory.getOne(Comment));
