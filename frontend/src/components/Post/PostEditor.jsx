@@ -142,7 +142,16 @@ function PostEditor({ method, post }) {
         if (isDrop) setIsDrop(false);
         if (isEditTag) setIsEditTag(false);
       }}
+      className=""
     >
+      <input
+        ref={inputRef}
+        className="hidden"
+        type="file"
+        accept=".jpg,.png,.jpeg,.jfif,.gif"
+        name="avatar"
+        onChange={inputImageHandler}
+      />
       <div className="h-full min-h-screen rounded bg-white p-4 pt-8 md:p-8">
         <div className={`${submigErrorMessage ? "" : "pb-2"}`}>
           <textarea
@@ -192,14 +201,6 @@ function PostEditor({ method, post }) {
             ></div>
           )}
         </div>
-        <input
-          ref={inputRef}
-          className="hidden"
-          type="file"
-          accept=".jpg,.png,.jpeg,.jfif,.gif"
-          name="avatar"
-          onChange={inputImageHandler}
-        />
         <div className="mt-4">
           <TagList
             post={post}

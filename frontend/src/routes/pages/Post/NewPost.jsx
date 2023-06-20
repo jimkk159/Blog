@@ -1,11 +1,27 @@
 import { redirect } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 import store from "../../../store";
 import * as authHelper from "../../../utils/auth";
+import Container from "../../../components/UI/Container";
 import PostEditor from "../../../components/Post/PostEditor";
+import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 
 function NewPost() {
-  return <PostEditor method="post" />;
+  // import hooks
+  const matches1280 = useMediaQuery({ query: "(max-width: 1280px)" });
+
+  const left = !matches1280 && (
+    <div className="flex w-full justify-end pr-2">
+      <PostsNavigation2 limit />
+    </div>
+  );
+
+  return (
+    <Container left={left}>
+      <PostEditor method="post" />
+    </Container>
+  );
 }
 
 export default NewPost;

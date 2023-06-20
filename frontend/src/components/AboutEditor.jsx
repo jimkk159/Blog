@@ -83,7 +83,7 @@ function AboutEditor({ method, about }) {
   }, [data]);
 
   return (
-    <PostWrapper>
+    <PostWrapper className="px-2 pb-12 pt-32 md:px-8 md:pt-12" >
       <Form method={method}>
         <div className="h-full min-h-screen rounded bg-white p-8">
           <textarea

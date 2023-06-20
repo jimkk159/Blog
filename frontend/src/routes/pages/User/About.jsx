@@ -36,7 +36,7 @@ function About() {
   );
 
   return (
-    <PostWrapper bottom={bottom}>
+    <PostWrapper bottom={bottom} className="px-2 pb-12 pt-32 md:px-8 md:pt-12">
       <div className="min-h-screen rounded bg-white p-8">
         <AwaitWrapper
           resolve={about}
