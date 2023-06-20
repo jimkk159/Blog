@@ -31,7 +31,7 @@ function CommentItem({ comment }) {
       setIsSubmitting(true);
       const token = authHelper.getAuthToken();
 
-      if (token && !!comment) {
+      if (token && !!commentId) {
         await fetch(
           process.env.REACT_APP_BACKEND_URL + `/api/v1/comments/${commentId}`,
           {

@@ -19,7 +19,7 @@ import * as authHelper from "../../../utils/auth";
 // components
 import Button from "../../../components/UI/Button";
 import TagList from "../../../components/Tag/TagList";
-import Chapter from "../../../components/Post/Chapter";
+import Chapter from "../../../components/Post/Chapter2";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 
 function PostDetail() {

@@ -6,6 +6,7 @@ import * as authHelper from "../../../utils/auth";
 
 // components
 import Detail from "../../../components/Post/Detail";
+import Chapter2 from "../../../components/Post/Chapter2";
 import Container from "../../../components/UI/Container";
 import Comment from "../../../components/Comment/Comment";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
@@ -22,17 +23,20 @@ function PostDetail() {
       <PostsNavigation2 limit />
     </div>
   );
+  const right = !matches1280 && <Chapter2 post={post} />;
 
   return (
-    <Container left={left}>
+    <Container left={left} right={right}>
       <AwaitWrapper resolve={post}>
-        {(loadPost) => (
-          <>
-            <Detail post={loadPost} />
-            <div className="my-6 w-full" />
-            <Comment post={loadPost} />
-          </>
-        )}
+        {(loadPost) => {
+          return (
+            <>
+              <Detail post={loadPost} />
+              <div className="my-6 w-full" />
+              <Comment post={loadPost} />
+            </>
+          );
+        }}
       </AwaitWrapper>
     </Container>
   );
