@@ -82,7 +82,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
   };
 
   let posts = await getFeature.findAll(forceQuery);
-  
+
   posts = posts
     .map((el) => el.toJSON())
     .map((el) => {
@@ -90,7 +90,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
         el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
       return el;
     });
-  
+
   return posts;
 };
 
@@ -154,6 +154,7 @@ export const updatePostContentAndTags = async ({
   summary,
   content,
   isUpdateTags,
+  previewImg,
   tags,
 }) => {
   const post = await Post.findByPk(postId);
@@ -166,6 +167,7 @@ export const updatePostContentAndTags = async ({
         summary,
         content,
         CategoryId,
+        previewImg,
         editedAt: Date.now(),
       },
       { where: { id: postId }, transaction: t }

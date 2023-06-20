@@ -8,7 +8,7 @@ import * as commentController from "../controllers/comment-controller.js";
 
 const router = express.Router();
 
-router.get("/", factory.getAll(Comment));
+router.get("/", commentController.getAll);
 router.get("/:id", factory.getOne(Comment));
 
 router.use(authController.authUserByToken);

@@ -185,6 +185,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
     summary: helper.modeifiedSyntax(req.body.summary),
     content: helper.modeifiedSyntax(req.body.content),
     isUpdateTags: !!req.body.tagIds,
+    previewImg: req.body.previewImg,
     tags,
   });
 

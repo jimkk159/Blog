@@ -13,8 +13,12 @@ const Comment = sequelize.define(
       autoIncrement: true,
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
+    },
+    editedAt: {
+      type: DataTypes.DATE,
+      defaultValue: Date.now,
     },
   },
   {
