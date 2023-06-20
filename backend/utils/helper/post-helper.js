@@ -51,45 +51,26 @@ export const getFullPost = async (postId) =>
   });
 
 export const getFullPosts = async (query, customQuery = {}) => {
+  query.pop = ["Author", "Category", "Comment", "Tag", query.pop].join(
+    ","
+  );
+
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
     .select()
-    .paginate();
+    .paginate()
+    .pop();
 
-  const forceQuery = {
-    include: [
-      {
-        model: User,
-        as: "Author",
-        attributes: {
-          exclude: [
-            "description",
-            "email",
-            "role",
-            "createdAt",
-            "updatedAt",
-            "updatePasswordAt",
-            "isEmailValidated",
-          ],
-        },
-      },
-      "Category",
-      { model: Comment },
-      { model: Tag, through: { attributes: [] } },
-    ],
-    ...customQuery,
-  };
+  let posts = await getFeature.findAll(customQuery);
 
-  let posts = await getFeature.findAll(forceQuery);
-
-  posts = posts
-    .map((el) => el.toJSON())
-    .map((el) => {
-      if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
-        el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
-      return el;
-    });
+  // posts = posts
+  //   .map((el) => el.toJSON())
+  //   .map((el) => {
+  //     if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
+  //       el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
+  //     return el;
+  //   });
 
   return posts;
 };
@@ -242,7 +223,8 @@ export const getTagSearchQueryByText = async (target) => {
     .filter()
     .sort()
     .select()
-    .paginate();
+    .paginate()
+    .pop();
 
   const posts = await getFeature.findAll({
     include: [
@@ -272,7 +254,8 @@ export const getSearchQueryById = async (mode, target) => {
         .filter()
         .sort()
         .select()
-        .paginate();
+        .paginate()
+        .pop();
 
       const posts = await getFeature.findAll({
         include: [

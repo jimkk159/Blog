@@ -151,3 +151,9 @@ export const loginFailError = () =>
 
 export const summaryValidateFailError = () =>
   new AppError("Summary must be limited to 500 words.", 400);
+
+export const populateFailError = (inputs) =>
+  new AppError(
+    `Fail to populate for ${inputs.map((el) => "「" + el + "」").join(", ")}`,
+    400
+  );

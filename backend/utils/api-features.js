@@ -20,7 +20,7 @@ export class GetFeatures {
     let filterQuery = {};
     let queryObj = { ...this.query };
 
-    const exlcude = ["sort", "limit", "page", "count", "fields", "all"];
+    const exlcude = ["sort", "limit", "page", "count", "fields", "all", "pop"];
     const allowOperators = ["gt", "gte", "lt", "lte"];
     queryObj = apiFeatureHelper.sanitizeFilterObj(queryObj, allowOperators);
     filterQuery = apiFeatureHelper.replaceFilterOperators(queryObj);
@@ -76,6 +76,12 @@ export class GetFeatures {
     this.sqlQuery = !!+this.query.all
       ? { ...this.sqlQuery }
       : { ...this.sqlQuery, limit, offset };
+    return this;
+  }
+
+  pop() {
+    const pop = apiFeatureHelper.createPopulateObjs(this.query.pop);
+    this.sqlQuery = { ...this.sqlQuery, ...pop };
     return this;
   }
 }

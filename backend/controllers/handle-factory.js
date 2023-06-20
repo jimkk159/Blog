@@ -1,13 +1,13 @@
-import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
+import catchAsync from "../utils/error/catch-async.js";
 import { GetFeatures } from "../utils/api-features.js";
 import * as errorTable from "../utils/error/error-table.js";
+import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
 
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    const data = await Model.findByPk(req.params.id, {
-      raw: true,
-    });
+    const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
+    const data = await Model.findByPk(req.params.id, sqlQuery);
     if (!data) throw errorTable.idNotFoundError();
     if (data.avatar && !helper.isURL(data.avatar))
       data.avatar = helper.getImgUrlFromS3(data.avatar);
@@ -24,7 +24,8 @@ export const getAll = (Model) =>
       .filter()
       .sort()
       .select()
-      .paginate();
+      .paginate()
+      .pop();
 
     const data = await getFeature.findAll({ raw: true });
     await helper.getAvatarsUrlFromS3(data);

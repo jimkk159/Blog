@@ -30,9 +30,10 @@ export const getAll = catchAsync(async (req, res, next) => {
     .filter()
     .sort()
     .select()
-    .paginate();
+    .paginate()
+    .pop();
 
-  const data = await getFeature.findAll({ raw: true });
+  const data = await getFeature.findAll();
   // await helper.getAvatarsUrlFromS3(data);
 
   res.status(200).json({

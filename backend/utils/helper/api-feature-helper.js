@@ -1,5 +1,55 @@
 import { Op } from "sequelize";
 import * as helper from "./helper.js";
+import * as errorTable from "../error/error-table.js";
+import * as apiFeatureHelperhelper from "./api-feature-helper.js";
+
+import Tag from "../../module/tag.js";
+import User from "../../module/user.js";
+import Post from "../../module/post.js";
+import Comment from "../../module/comment.js";
+import Category from "../../module/category.js";
+
+const fieldsToModelTable = {
+  Author: {
+    model: User,
+    as: "Author",
+    attributes: {
+      exclude: [
+        "description",
+        "email",
+        "role",
+        "createdAt",
+        "updatedAt",
+        "updatePasswordAt",
+        "isEmailValidated",
+      ],
+    },
+  },
+  AuthorId: {
+    model: User,
+    as: "Author",
+    attributes: {
+      exclude: [
+        "description",
+        "email",
+        "role",
+        "createdAt",
+        "updatedAt",
+        "updatePasswordAt",
+        "isEmailValidated",
+      ],
+    },
+  },
+  Post: { model: Post },
+  PostId: { model: Post },
+  CategoryId: { model: Category },
+  Category: { model: Category },
+  Comment: { model: Comment },
+  Tag: { model: Tag, through: { attributes: [] } },
+  Tags: { model: Tag, through: { attributes: [] } },
+};
+
+export const createModelByFields = () => {};
 
 export const isOnlyOperator = (obj) => {
   if (!helper.isObject(obj))
@@ -71,3 +121,27 @@ export const createSequelizeAttributes = (fields) =>
 
 export const createSequelizeExclude = (fields) =>
   fields.filter((el) => el.startsWith("-")).map((el) => el.slice(1));
+
+export const toFirstWordCapitalize = (input) => {
+  if (input.length > 1) return input.slice(0, 1).toUpperCase() + input.slice(1);
+  if (input.length > 0) return input.slice(0, 1).toUpperCase();
+  return input;
+};
+
+export const createPopulateObj = (query) => {
+  if (!query) return null;
+  const createdPopObj =
+    fieldsToModelTable[apiFeatureHelperhelper.toFirstWordCapitalize(query)];
+  if (!createdPopObj) throw errorTable.populateFailError([query]);
+  return createdPopObj;
+};
+
+export const createPopulateObjs = (query) => {
+  if (!query) return;
+  const createdPopObjs = query
+    .split(",")
+    .map((el) => apiFeatureHelperhelper.createPopulateObj(el));
+  return {
+    include: createdPopObjs,
+  };
+};
