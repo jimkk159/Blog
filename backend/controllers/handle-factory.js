@@ -31,7 +31,7 @@ export const getAll = (Model) =>
       .pop();
 
     const data = await getFeature.findAll({ raw: true });
-    await helper.getAvatarsUrlFromS3(data);
+    helper.getAvatarsUrlFromS3(data);
 
     res.status(200).json({
       status: "success",

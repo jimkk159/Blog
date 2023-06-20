@@ -27,9 +27,6 @@ export const isUserAllowUpdatePost = (user, post) =>
   user.role === "root" || user.id === post.AuthorId;
 
 export const getFullPost = async (postId, query) => {
-  const popOptions = ["Author", "Category", "Comment", "Tag"].join(",");
-  query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
-
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
@@ -45,8 +42,6 @@ export const getFullPost = async (postId, query) => {
 };
 
 export const getFullPosts = async (query, customQuery = {}) => {
-  query.pop = ["Author", "Category", "Comment", "Tag", query.pop].join(",");
-
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()

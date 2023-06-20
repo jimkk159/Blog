@@ -143,24 +143,27 @@ export const createPopulateObj = (query) => {
   let populateObj = null;
   for (let i = fields.length - 1; i >= 0; i--) {
     const field = fields[i];
-    // console.log(field)
-    const populateOptions =
-      fieldsToModelTable[apiFeatureHelperhelper.toFirstWordCapitalize(field)];
-    console.log(field, populateOptions);
+
+    const populateOptions = {
+      ...fieldsToModelTable[
+        apiFeatureHelperhelper.toFirstWordCapitalize(field)
+      ],
+    };
+
     if (!populateOptions) throw errorTable.populateFailError([query]);
     if (populateObj) populateOptions.include = populateObj;
     populateObj = populateOptions;
   }
-
   return populateObj;
 };
 
 export const createPopulateObjs = (query) => {
   if (!query) return;
 
-  const createdPopObjs = query
-    .split(",")
-    .map((el) => apiFeatureHelperhelper.createPopulateObj(el));
+  const createdPopObjs = query.split(",").map((el) => {
+    const output = apiFeatureHelperhelper.createPopulateObj(el);
+    return output;
+  });
 
   return {
     include: createdPopObjs,

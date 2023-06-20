@@ -57,12 +57,10 @@ export const commandToS3Avatar = async (file, command) => {
 export const deleteAvatarUrlFromS3 = async (file) =>
   helper.commandToS3Avatar(file, upload.deleteFileFromS3);
 
-export const getAvatarsUrlFromS3 = async (data) =>
-  Promise.all(
-    data.map(async (el) => {
-      if (el.avatar) el.avatar = helper.getImgUrlFromS3(el.avatar);
-    })
-  );
+export const getAvatarsUrlFromS3 = (data) =>
+  data.map((el) => {
+    if (el.avatar) el.avatar = helper.getImgUrlFromS3(el.avatar);
+  });
 
 // export const getImgUrlFromS3 = async (file) => upload.getFileFromS3(file);
 
@@ -81,4 +79,11 @@ export const modifySort = (sort, target) => {
   if (sort && !sort.includes(target))
     return [target, ...apiFeatureHelper.getQueryElements(sort)].join(",");
   return sort;
+};
+
+export const setDefault = (query, target, isNegative = true, join = " ") => {
+  const defaultTarget = !!isNegative ? "-" + target : target;
+  if (!query) return defaultTarget;
+  if (query.includes(target)) return query;
+  return [query, defaultTarget].join(join);
 };
