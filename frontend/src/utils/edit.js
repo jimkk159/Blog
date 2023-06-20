@@ -134,6 +134,7 @@ function VideoChildren({ close, execute, getState, textApi, dispatch }) {
       <input
         type="text"
         className="mx-0 my-1.5 box-border h-6 w-full overflow-ellipsis rounded-sm border border-gray-400 bg-[#f8f8f8] px-1.5 text-base outline-none focus:bg-[#ebebeb]"
+        value={value}
         onChange={(e) => setValue(e.target.value)}
       />
       <div className="flex justify-start">
