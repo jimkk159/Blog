@@ -27,6 +27,16 @@ export const isUserAllowUpdatePost = (user, post) =>
   user.role === "root" || user.id === post.AuthorId;
 
 export const getFullPost = async (postId, query) => {
+  const popOptions = [
+    "Author",
+    "Category",
+    "Comment",
+    "Tag",
+    "Comment.Author",
+  ].join(",");
+  query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
+  query.sort = helper.setDefault(query.sort, "editedAt");
+
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
@@ -42,6 +52,11 @@ export const getFullPost = async (postId, query) => {
 };
 
 export const getFullPosts = async (query, customQuery = {}) => {
+  const popOptions = ["Author", "Category", "Tag"].join(",");
+  query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
+  query.sort = helper.setDefault(query.sort, "editedAt");
+  query.fields = helper.setDefault(query.fields, "content");
+
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
@@ -287,33 +302,13 @@ export const orderByComments = (query, target) => {
     return query;
 
   const output = {
-    include: [
-      {
-        model: User,
-        as: "Author",
-        attributes: {
-          exclude: [
-            "description",
-            "email",
-            "role",
-            "createdAt",
-            "updatedAt",
-            "updatePasswordAt",
-            "isEmailValidated",
-          ],
-        },
-      },
-      "Category",
-      { model: Comment },
-      { model: Tag, through: { attributes: [] } },
-    ],
     attributes: [
       "id",
       "previewImg",
       "title",
-      "content",
-      "thumbs",
       "views",
+      "summary",
+      "thumbs",
       "editedAt",
       [
         sequelize.literal(

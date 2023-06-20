@@ -38,16 +38,6 @@ export const checkPermission = catchAsync(async (req, res, next) => {
 });
 
 export const getOne = catchAsync(async (req, res, next) => {
-  const popOptions = [
-    // "Author",
-    // "Category",
-    "Comment",
-    // "Tag",
-    "Comment.Author",
-  ].join(",");
-  req.query.pop = req.query.pop ? popOptions + "," + req.query.pop : popOptions;
-  req.query.sort = helper.setDefault(req.query.sort, "editedAt");
-
   const post = await postHelper.getFullPost(req.params.id, req.query);
   if (!post) throw errorTable.idNotFoundError();
 
@@ -61,11 +51,6 @@ export const getOne = catchAsync(async (req, res, next) => {
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
-  const popOptions = ["Author", "Category", "Tag"].join(",");
-  req.query.pop = req.query.pop ? popOptions + "," + req.query.pop : popOptions;
-  req.query.sort = helper.setDefault(req.query.sort, "editedAt");
-  req.query.fields = helper.setDefault(req.query.fields, "content");
-
   const data = await postHelper.getFullPosts(req.query, req.customQuery);
   const total = await Post.count({ where: req.count });
 

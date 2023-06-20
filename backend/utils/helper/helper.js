@@ -81,7 +81,7 @@ export const modifySort = (sort, target) => {
   return sort;
 };
 
-export const setDefault = (query, target, isNegative = true, join = " ") => {
+export const setDefault = (query, target, isNegative = true, join = ",") => {
   const defaultTarget = !!isNegative ? "-" + target : target;
   if (!query) return defaultTarget;
   if (query.includes(target)) return query;
