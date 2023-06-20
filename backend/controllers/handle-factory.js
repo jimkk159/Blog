@@ -6,7 +6,10 @@ import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
 
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // 1) Create populate
     const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
+    
+    // 2) Get data
     const data = await Model.findByPk(req.params.id, sqlQuery);
     if (!data) throw errorTable.idNotFoundError();
     if (data.avatar && !helper.isURL(data.avatar))

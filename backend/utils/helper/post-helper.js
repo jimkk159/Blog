@@ -26,34 +26,26 @@ export const isValidSearch = (query, allowType, allowMode) =>
 export const isUserAllowUpdatePost = (user, post) =>
   user.role === "root" || user.id === post.AuthorId;
 
-export const getFullPost = async (postId) =>
-  Post.findByPk(postId, {
-    include: [
-      {
-        model: User,
-        as: "Author",
-        attributes: {
-          exclude: [
-            "description",
-            "email",
-            "role",
-            "createdAt",
-            "updatedAt",
-            "updatePasswordAt",
-            "isEmailValidated",
-          ],
-        },
-      },
-      "Category",
-      { model: Comment },
-      { model: Tag, through: { attributes: [] } },
-    ],
-  });
+export const getFullPost = async (postId, query) => {
+  const popOptions = ["Author", "Category", "Comment", "Tag"].join(",");
+  query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
+
+  const getFeature = new GetFeatures(Post, query)
+    .filter()
+    .sort()
+    .select()
+    .paginate()
+    .pop();
+
+  let post = await getFeature.findByPk(postId, query);
+  if (post.Author && post.Author.avatar && !helper.isURL(post.Author.avatar))
+    post.Author.avatar = helper.getImgUrlFromS3(post.Author.avatar);
+
+  return post;
+};
 
 export const getFullPosts = async (query, customQuery = {}) => {
-  query.pop = ["Author", "Category", "Comment", "Tag", query.pop].join(
-    ","
-  );
+  query.pop = ["Author", "Category", "Comment", "Tag", query.pop].join(",");
 
   const getFeature = new GetFeatures(Post, query)
     .filter()
@@ -64,13 +56,13 @@ export const getFullPosts = async (query, customQuery = {}) => {
 
   let posts = await getFeature.findAll(customQuery);
 
-  // posts = posts
-  //   .map((el) => el.toJSON())
-  //   .map((el) => {
-  //     if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
-  //       el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
-  //     return el;
-  //   });
+  posts = posts
+    .map((el) => el.toJSON())
+    .map((el) => {
+      if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
+        el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
+      return el;
+    });
 
   return posts;
 };

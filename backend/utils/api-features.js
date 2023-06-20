@@ -8,6 +8,14 @@ export class GetFeatures {
     this.sqlQuery = {};
   }
 
+  async findByPk(id, queryString, options) {
+    return this.Model.findByPk(
+      id,
+      { ...this.sqlQuery, ...queryString },
+      options
+    );
+  }
+
   async findAll(queryString, options) {
     return this.Model.findAll({ ...this.sqlQuery, ...queryString }, options);
   }

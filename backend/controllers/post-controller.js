@@ -38,7 +38,12 @@ export const checkPermission = catchAsync(async (req, res, next) => {
 });
 
 export const getOne = catchAsync(async (req, res, next) => {
-  const post = await postHelper.getFullPost(req.params.id);
+  req.query.sort = req.query.sort
+    ? req.query.sort.includes("editedAt")
+      ? req.query.sort
+      : req.query.sort + " -editedAt"
+    : "-editedAt";
+  const post = await postHelper.getFullPost(req.params.id, req.query);
   if (!post) throw errorTable.idNotFoundError();
 
   // increment the number of views
@@ -190,7 +195,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
   });
 
   // 4) get Post (Eager Loading)
-  const post = await postHelper.getFullPost(req.params.id);
+  const post = await postHelper.getFullPost(req.params.id, req.query);
 
   res.status(200).json({
     status: "success",
@@ -237,7 +242,7 @@ export const updateCategory = catchAsync(async (req, res, next) => {
   );
 
   // 3) get Post (Eager Loading)
-  post = await postHelper.getFullPost(req.params.id);
+  post = await postHelper.getFullPost(req.params.id, req.query);
 
   res.status(200).json({
     status: "success",

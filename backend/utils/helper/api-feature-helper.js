@@ -41,10 +41,17 @@ const fieldsToModelTable = {
     },
   },
   Post: { model: Post },
+  Posts: { model: Post },
   PostId: { model: Post },
-  CategoryId: { model: Category },
+  PostIds: { model: Post },
   Category: { model: Category },
+  Categories: { model: Category },
+  CategoryId: { model: Category },
+  CategoryIds: { model: Category },
   Comment: { model: Comment },
+  Comments: { model: Comment },
+  CommentId: { model: Comment },
+  CommentIds: { model: Comment },
   Tag: { model: Tag, through: { attributes: [] } },
   Tags: { model: Tag, through: { attributes: [] } },
 };
@@ -130,17 +137,31 @@ export const toFirstWordCapitalize = (input) => {
 
 export const createPopulateObj = (query) => {
   if (!query) return null;
-  const createdPopObj =
-    fieldsToModelTable[apiFeatureHelperhelper.toFirstWordCapitalize(query)];
-  if (!createdPopObj) throw errorTable.populateFailError([query]);
-  return createdPopObj;
+
+  const fields = query.split(".");
+
+  let populateObj = null;
+  for (let i = fields.length - 1; i >= 0; i--) {
+    const field = fields[i];
+    // console.log(field)
+    const populateOptions =
+      fieldsToModelTable[apiFeatureHelperhelper.toFirstWordCapitalize(field)];
+    console.log(field, populateOptions);
+    if (!populateOptions) throw errorTable.populateFailError([query]);
+    if (populateObj) populateOptions.include = populateObj;
+    populateObj = populateOptions;
+  }
+
+  return populateObj;
 };
 
 export const createPopulateObjs = (query) => {
   if (!query) return;
+
   const createdPopObjs = query
     .split(",")
     .map((el) => apiFeatureHelperhelper.createPopulateObj(el));
+
   return {
     include: createdPopObjs,
   };
