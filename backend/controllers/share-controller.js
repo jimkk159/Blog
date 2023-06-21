@@ -98,4 +98,10 @@ export const getRelation = catchAsync(async (req, res, next) => {
   });
 });
 
+export const delay = catchAsync(async (req, res, next) => {
+  setTimeout(() => {
+    next();
+  }, 10000);
+});
+
 //reference: https://stackoverflow.com/questions/72336177/error-reqlogout-requires-a-callback-function

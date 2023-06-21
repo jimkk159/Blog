@@ -8,12 +8,6 @@ import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
 
-export const delay = catchAsync(async (req, res, next) => {
-  setTimeout(() => {
-    next();
-  }, 10000);
-});
-
 export const getMe = catchAsync(async (req, res, next) => {
   req.query = {
     ...req.query,
