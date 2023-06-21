@@ -13,7 +13,7 @@ import * as authHelper from "../../utils/auth";
 // actions
 import { authActions } from "../../store/auth-slice";
 
-function EditProfileAvatar({ defaultValue }) {
+function EditProfileAvatar({ defaultValue, isEdit }) {
   const token = authHelper.getAuthToken();
 
   const inputRef = useRef(null);
@@ -25,6 +25,7 @@ function EditProfileAvatar({ defaultValue }) {
   const inputAvatarHandler = useCallback(() => inputRef.current.click(), []);
   const updateAvatarHander = useCallback(
     async (event) => {
+      if (!isEdit) return;
       if (event.target.files && event.target.files.length === 1) {
         const avatar = event.target.files[0];
 
@@ -47,7 +48,7 @@ function EditProfileAvatar({ defaultValue }) {
         window.location.reload();
       }
     },
-    [dispatch, token]
+    [dispatch, token, isEdit]
   );
 
   return (
@@ -56,19 +57,23 @@ function EditProfileAvatar({ defaultValue }) {
         avatar={defaultValue}
         className="m-auto h-60 w-60 border-2 border-white"
       >
-        <AiFillCamera
-          className="absolute bottom-3 right-3 z-10 h-8 w-8 cursor-pointer bg-transparent text-gray-200 text-opacity-80"
-          onClick={inputAvatarHandler}
-        />
+        {isEdit && (
+          <AiFillCamera
+            className="absolute bottom-3 right-3 z-10 h-8 w-8 cursor-pointer bg-transparent text-gray-200 text-opacity-80"
+            onClick={inputAvatarHandler}
+          />
+        )}
       </Avatar2>
-      <input
-        ref={inputRef}
-        style={{ display: "none" }}
-        type="file"
-        accept=".jpg,.png,.jpeg,.jfif,.gif"
-        name="avatar"
-        onChange={updateAvatarHander}
-      />
+      {isEdit && (
+        <input
+          ref={inputRef}
+          style={{ display: "none" }}
+          type="file"
+          accept=".jpg,.png,.jpeg,.jfif,.gif"
+          name="avatar"
+          onChange={updateAvatarHander}
+        />
+      )}
     </>
   );
 }

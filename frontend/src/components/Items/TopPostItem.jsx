@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { FiThumbsUp } from "react-icons/fi";
 import { FaRegCommentDots } from "react-icons/fa";
 
-// custom functions
+// helper
+import * as helper from "../../utils/helper";
 import * as authHelper from "../../utils/auth";
-import { creatPreviewImg } from "../../utils/helper";
 
 function TopPostItem({ post }) {
   // react-router
@@ -49,7 +49,7 @@ function TopPostItem({ post }) {
             <img
               alt="preview"
               className="h-full w-full overflow-hidden rounded-3xl object-cover"
-              src={creatPreviewImg(post.previewImg)}
+              src={helper.creatPreviewImg(post.previewImg)}
             />
           </div>
           <div className="flex h-full w-full flex-col justify-between lg:max-w-[120px]">

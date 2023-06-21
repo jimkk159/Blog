@@ -8,7 +8,7 @@ import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 // helper
 import * as authHelper from "../../utils/auth";
 
-function EditProfileName({ defaultValue }) {
+function EditProfileName({ defaultValue, isEdit }) {
   const token = authHelper.getAuthToken();
 
   const [name, setName] = useState("");
@@ -19,6 +19,7 @@ function EditProfileName({ defaultValue }) {
     async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (!isEdit) return;
       setIsLoading(true);
       if (!!name) {
         const response = await fetch(
@@ -38,7 +39,7 @@ function EditProfileName({ defaultValue }) {
       }
       setIsEditName(false);
     },
-    [token, name]
+    [token, name, isEdit]
   );
 
   useEffect(() => {
@@ -54,10 +55,12 @@ function EditProfileName({ defaultValue }) {
           <h1 className="-mt-2 flex truncate bg-transparent font-kanit text-2xl font-bold">
             {name}
           </h1>
-          <BiEdit className="h-4 w-4" onClick={() => setIsEditName(true)} />
+          {isEdit && (
+            <BiEdit className="h-4 w-4" onClick={() => setIsEditName(true)} />
+          )}
         </>
       )}
-      {isEditName && (
+      {isEdit && isEditName && (
         <>
           {!isLoading && (
             <div className="flex w-full items-center justify-center space-x-3">

@@ -8,7 +8,7 @@ import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 // helper
 import * as authHelper from "../../utils/auth";
 
-function EditProfileDescription({ defaultValue }) {
+function EditProfileDescription({ defaultValue, isEdit }) {
   const token = authHelper.getAuthToken();
 
   const [description, setDescription] = useState("");
@@ -19,6 +19,7 @@ function EditProfileDescription({ defaultValue }) {
     async (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (!isEdit) return;
       setIsLoading(true);
       if (!!description) {
         const response = await fetch(
@@ -38,7 +39,7 @@ function EditProfileDescription({ defaultValue }) {
       }
       setIsEditDescription(false);
     },
-    [token, description]
+    [token, description, isEdit]
   );
 
   useEffect(() => {
@@ -49,16 +50,18 @@ function EditProfileDescription({ defaultValue }) {
     <>
       {!isEditDescription && (
         <>
-          <BiEdit
-            className="h-8 w-8"
-            onClick={() => setIsEditDescription(true)}
-          />
+          {isEdit && (
+            <BiEdit
+              className="h-8 w-8"
+              onClick={() => setIsEditDescription(true)}
+            />
+          )}
           <p className="h-full w-full overflow-auto rounded-lg text-justify font-kanit text-sm text-white outline-none">
             {description}
           </p>
         </>
       )}
-      {isEditDescription && (
+      {isEdit && isEditDescription && (
         <>
           {!isLoading && (
             <div className="flex space-x-2">
