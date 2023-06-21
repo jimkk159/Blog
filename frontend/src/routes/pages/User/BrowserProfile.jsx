@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { defer, redirect, useLoaderData } from "react-router-dom";
+import {
+  defer,
+  redirect,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
 
 // redux
 import store from "../../../store";
@@ -18,9 +23,14 @@ function BrowserProfile() {
 
   // react-router
   const { author, posts } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navPageHandler = (nextPage) => setPage(nextPage);
-
+  // custom functions
+  const limit = searchParams.get("limit") ?? 5;
+  const navPageHandler = (nextPage) => {
+    setSearchParams({ page: nextPage, limit });
+    setPage(nextPage);
+  };
   return (
     <Container>
       <div className="flex w-full items-center justify-center">
@@ -57,6 +67,7 @@ function BrowserProfile() {
               {(response) => (
                 <PostList3
                   size="small"
+                  limit={5}
                   page={page}
                   posts={response.data ?? []}
                   total={response?.total}
@@ -82,10 +93,10 @@ async function authorLoader(uid) {
   return response.json();
 }
 
-async function postsLoader(uid) {
+async function postsLoader({ userId, page, limit }) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/posts/search?mode=author&type=id&target=${uid}`
+      `/api/v1/posts/search?mode=author&type=id&target=${userId}&?fields=editedAt,-content,-AuthorId,-CategoryId,-thumbs,-views&page=${page}&limit=${limit}`
   );
   if (!response.ok)
     return {
@@ -96,12 +107,16 @@ async function postsLoader(uid) {
   return response.json();
 }
 
-export async function loader({ params }) {
+export async function loader({ request, params }) {
   const state = store.getState();
   if (state?.auth?.id + "" === params.id) return redirect("/profile");
 
+  const searchParams = new URL(request.url).searchParams;
+  const page = searchParams.get("page") || 1;
+  const limit = searchParams.get("limit") || 5;
+
   return defer({
     author: authorLoader(params.id),
-    posts: postsLoader(params.id),
+    posts: postsLoader({ userId: params.id, page, limit }),
   });
 }

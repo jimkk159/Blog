@@ -94,7 +94,7 @@ async function homeLoader() {
   return response.json();
 }
 
-async function postsLoader({ page, limit }) {
+async function postsLoader({ page }) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/posts?page=${page}`
   );

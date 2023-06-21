@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { defer, useLoaderData } from "react-router-dom";
+import { defer, useLoaderData, useSearchParams } from "react-router-dom";
 
 // icons
 import { BsFillKeyFill } from "react-icons/bs";
@@ -24,9 +24,14 @@ function Profile() {
 
   // react-router
   const { author, posts } = useLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const navPageHandler = (nextPage) => setPage(nextPage);
-
+  // custom functions
+  const limit = searchParams.get("limit") ?? 5;
+  const navPageHandler = (nextPage) => {
+    setSearchParams({ page: nextPage, limit });
+    setPage(nextPage);
+  };
   return (
     <Container>
       <div className="flex w-full items-center justify-center">
@@ -89,6 +94,7 @@ function Profile() {
                   {(response) => (
                     <PostList3
                       size="small"
+                      limit={5}
                       page={page}
                       posts={response.data ?? []}
                       total={response?.total}
@@ -107,9 +113,7 @@ function Profile() {
 
 export default Profile;
 
-async function myAuthorLoader() {
-  const token = authHelper.getAuthToken();
-
+async function myAuthorLoader(token) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`,
     {
@@ -123,12 +127,10 @@ async function myAuthorLoader() {
   return response.json();
 }
 
-async function myPostsLoader() {
-  const token = authHelper.getAuthToken();
-
+async function myPostsLoader({ token, page, limit }) {
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/posts/me?fields=updatedAt,-content,-AuthorId&all=1`,
+      `/api/v1/posts/me?fields=editedAt,-content,-AuthorId,-CategoryId,-thumbs,-views&page=${page}&limit=${limit}`,
     {
       headers: {
         Authorization: "Bearer " + token,
@@ -144,9 +146,15 @@ async function myPostsLoader() {
   return response.json();
 }
 
-export async function loader() {
+export async function loader({ request }) {
+  const token = authHelper.getAuthToken();
+
+  const searchParams = new URL(request.url).searchParams;
+  const page = searchParams.get("page") || 1;
+  const limit = searchParams.get("limit") || 5;
+
   return defer({
-    author: myAuthorLoader(),
-    posts: myPostsLoader(),
+    author: myAuthorLoader(token),
+    posts: myPostsLoader({ token, page, limit }),
   });
 }
