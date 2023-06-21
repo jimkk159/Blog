@@ -2,7 +2,6 @@ import { Op } from "sequelize";
 import Tag from "../../module/tag.js";
 import User from "../../module/user.js";
 import Post from "../../module/post.js";
-import Comment from "../../module/comment.js";
 import Category from "../../module/category.js";
 import sequelize from "../../config/db-init.js";
 import * as errorTable from "../error/error-table.js";
@@ -11,6 +10,24 @@ import * as helper from "../helper/helper.js";
 import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";
 import * as categoryHelper from "../helper/category-helper.js";
+
+export const defaultAttributeSetting = {
+  attributes: [
+    "id",
+    "previewImg",
+    "title",
+    "views",
+    "summary",
+    "thumbs",
+    "editedAt",
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)"
+      ),
+      "commentCount",
+    ],
+  ],
+};
 
 export const isValidSearch = (query, allowType, allowMode) =>
   !!(
@@ -301,23 +318,7 @@ export const orderByComments = (query, target) => {
   if (typeof query === "object" && Object.keys(query).includes(target))
     return query;
 
-  const output = {
-    attributes: [
-      "id",
-      "previewImg",
-      "title",
-      "views",
-      "summary",
-      "thumbs",
-      "editedAt",
-      [
-        sequelize.literal(
-          "(SELECT COUNT(*) FROM Comments WHERE Comments.postId = Post.id)"
-        ),
-        "commentCount",
-      ],
-    ],
-  };
+  const output = defaultAttributeSetting;
 
   if (target.includes("-"))
     output.order = [[sequelize.literal("commentCount"), "DESC"]];

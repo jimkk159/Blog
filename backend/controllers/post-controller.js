@@ -69,13 +69,19 @@ export const getHome = catchAsync(async (req, res, next) => {
   );
 
   const thumbs = await postHelper.getFullPosts(
-    { sort: helper.modifySort(null, "thumbs"), limit: 10 },
-    {}
+    {
+      sort: helper.modifySort(null, "thumbs"),
+      limit: 10,
+    },
+    postHelper.defaultAttributeSetting
   );
 
   const views = await postHelper.getFullPosts(
-    { sort: helper.modifySort(null, "views"), limit: 10 },
-    {}
+    {
+      sort: helper.modifySort(null, "views"),
+      limit: 10,
+    },
+    postHelper.defaultAttributeSetting
   );
 
   res.status(200).json({
