@@ -11,7 +11,7 @@ function PostsList2({
   limit = 15,
 }) {
   return (
-    <div className="mb-16 flex h-full w-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8">
+    <div className="flex h-full w-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8">
       <div className="overflow-auto">
         {posts &&
           posts.map((post, index) => <PostListItem2 key={index} post={post} />)}

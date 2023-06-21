@@ -1,7 +1,7 @@
 // components
 import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
-import LibraryItem from "../UI/Items/LibraryItem";
+import LibraryItem from "../Items/LibraryItem";
 
 function MyPostLibrary({ posts }) {
 

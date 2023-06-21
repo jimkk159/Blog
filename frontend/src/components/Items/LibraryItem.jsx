@@ -1,7 +1,7 @@
 import { useMediaQuery } from "react-responsive";
 
 // components
-import Button from "../Button";
+import Button from "../UI/Button";
 
 // custom functions
 import { creatPreviewImg } from "../../utils/helper";

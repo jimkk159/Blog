@@ -67,7 +67,6 @@ function Browse() {
         <AwaitWrapper resolve={posts}>
           {(response) => (
             <PostList2
-              limit={15}
               size="small"
               page={page}
               posts={response.data}
@@ -76,6 +75,7 @@ function Browse() {
             />
           )}
         </AwaitWrapper>
+        <div className="mb-16" />
       </div>
     </Container>
   );
@@ -96,8 +96,7 @@ async function homeLoader() {
 
 async function postsLoader({ page, limit }) {
   const response = await fetch(
-    process.env.REACT_APP_BACKEND_URL +
-      `/api/v1/posts?page=${page}`
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/posts?page=${page}`
   );
 
   if (!response.ok) throw new Error();

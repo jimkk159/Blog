@@ -80,7 +80,10 @@ function CarouselItem({ post }) {
               <p className="text-right text-sm">{post.thumbs}</p>
             </div>
             <div className="flex items-center justify-end space-x-1">
-              <FaRegCommentDots className="w-4 cursor-pointer hover:text-gray-200" />
+              <FaRegCommentDots
+                className="w-4 cursor-pointer hover:text-gray-200"
+                onClick={() => navigate(`/posts/${post.id}`)}
+              />
               <p className="text-right text-sm">{post.commentCount}</p>
             </div>
           </div>
