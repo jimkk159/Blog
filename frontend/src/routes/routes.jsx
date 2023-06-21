@@ -15,9 +15,8 @@ const OauthPage = lazy(() => import("./pages/Auth/Oauth"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword"));
 
 const AboutPage = lazy(() => import("./pages/User/About"));
-const EditAboutPage = lazy(() => import("./pages/User/EditAbout"));
 const ProfilePage = lazy(() => import("./pages/User/Profile"));
-const ProfileRootLayout = lazy(() => import("./pages/User/ProfileRoot"));
+const EditAboutPage = lazy(() => import("./pages/User/EditAbout"));
 const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
 
 const BrowsePage = lazy(() => import("./pages/Post/Browse"));
@@ -126,19 +125,16 @@ const router = createBrowserRouter([
       },
       {
         path: "profile",
-        id: "profile",
-        element: SuspenseWrapper(<ProfileRootLayout />),
-        loader: lazyLoader("./pages/User/ProfileRoot"),
         children: [
           {
             index: true,
             element: SuspenseWrapper(<ProfilePage />),
-            loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/User/Profile"),
+            loader: lazyLoader("./pages/User/Profile"),
           },
           {
             path: ":id",
             element: SuspenseWrapper(<BrowserProfilePage />),
+            loader: lazyLoader("./pages/User/BrowserProfile"),
           },
         ],
       },

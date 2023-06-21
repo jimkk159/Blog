@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { defer, useLoaderData } from "react-router-dom";
 // import { useMediaQuery } from "react-responsive";
-import { json, useRouteLoaderData } from "react-router-dom";
 
 // icons
 import { BsFillKeyFill } from "react-icons/bs";
@@ -8,10 +8,9 @@ import { BsFillKeyFill } from "react-icons/bs";
 // components
 import Container from "../../../components/UI/Container";
 import PinkButton from "../../../components/UI/PinkButton";
-import Password from "../../../components/Profile/Password";
 import PostList2 from "../../../components/Post/PostsList2";
 import SectionTitle from "../../../components/Section/SectionTitle";
-import ProfilePosts from "../../../components/Profile/ProfilePosts";
+import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 import EditProfileName from "../../../components/Profile/EditProfileName";
 import EditProfileAvatar from "../../../components/Profile/EditProfileAvatar";
 import EditProfilePassword from "../../../components/Profile/EditProfilePassword";
@@ -22,11 +21,10 @@ import * as authHelper from "../../../utils/auth";
 
 function Profile() {
   const [page, setPage] = useState(1);
-  const [status, setStatus] = useState();
   const [isUpdatePassword, setIsUpdatePassword] = useState();
 
   // react-router
-  const { author, posts } = useRouteLoaderData("profile");
+  const { author, posts } = useLoaderData();
 
   // import hooks
   // const matches768 = useMediaQuery({ query: "(min-width: 768px)" });
@@ -163,20 +161,30 @@ function Profile() {
         <div className="flex w-full items-center justify-center rounded-xl bg-self-dark-gray p-6 lg:max-w-3xl">
           <div className="flex h-full w-full flex-col rounded-xl bg-self-dark p-8 text-white lg:w-[640px] ">
             <div className="flex w-full items-center justify-center rounded-2xl py-4">
-              <EditProfileAvatar defaultValue={author.avatar} />
+              <AwaitWrapper resolve={author}>
+                {(response) => (
+                  <EditProfileAvatar defaultValue={response?.data?.avatar} />
+                )}
+              </AwaitWrapper>
             </div>
             <div className="flex w-full items-center justify-start space-x-4">
               <div className="h-8 w-[calc(50%-90px)]" />
-              <EditProfileName defaultValue={author.name} />
-              <PinkButton
-                className="px-4 py-2"
-                onClick={() => setIsUpdatePassword((prev) => !prev)}
-              >
-                <div className="flex items-center justify-center space-x-0.5">
-                  <BsFillKeyFill className="h-[20px] w-[20px]" />
-                  <p className="text-xs">Password</p>
-                </div>
-              </PinkButton>
+              <AwaitWrapper resolve={author}>
+                {(response) => (
+                  <>
+                    <EditProfileName defaultValue={response.data.name} />
+                    <PinkButton
+                      className="px-4 py-2"
+                      onClick={() => setIsUpdatePassword((prev) => !prev)}
+                    >
+                      <div className="flex items-center justify-center space-x-0.5">
+                        <BsFillKeyFill className="h-[20px] w-[20px]" />
+                        <p className="text-xs">Password</p>
+                      </div>
+                    </PinkButton>
+                  </>
+                )}
+              </AwaitWrapper>
             </div>
             {isUpdatePassword && (
               <div className="mt-2">
@@ -189,27 +197,30 @@ function Profile() {
             {!isUpdatePassword && (
               <>
                 <div className="mb-4 mt-4 flex h-40 flex-col items-center justify-center space-y-2 border border-self-gray bg-yellow-700 bg-opacity-20 p-2">
-                  <EditProfileDescription defaultValue={author.description} />
+                  <AwaitWrapper resolve={author}>
+                    {(response) => (
+                      <EditProfileDescription
+                        defaultValue={response?.data?.description}
+                      />
+                    )}
+                  </AwaitWrapper>
                 </div>
                 <div className="flex items-center justify-between pt-4">
                   <SectionTitle first={"My Posts"} second={"Library"} />
                 </div>
-                <PostList2
-                  size="small"
-                  page={page}
-                  posts={posts.data}
-                  total={posts.total}
-                  onNavPage={navPageHandler}
-                />
+                <AwaitWrapper resolve={posts}>
+                  {(response) => (
+                    <PostList2
+                      size="small"
+                      page={page}
+                      posts={response.data ?? []}
+                      total={response?.total}
+                      onNavPage={navPageHandler}
+                    />
+                  )}
+                </AwaitWrapper>
               </>
             )}
-            <>
-              {/* {!status && <EditProfile author={author} />} */}
-              {status === "auth" && (
-                <Password onCancel={() => setStatus(null)} />
-              )}
-              {status === "posts" && <ProfilePosts />}
-            </>
           </div>
         </div>
       </div>
@@ -219,37 +230,46 @@ function Profile() {
 
 export default Profile;
 
-export async function action({ request }) {
+async function myAuthorLoader() {
   const token = authHelper.getAuthToken();
-  const data = await request.formData();
-  const userData = {
-    name: data.get("name"),
-    description: data.get("description"),
-  };
 
   const response = await fetch(
     process.env.REACT_APP_BACKEND_URL + `/api/v1/users/me`,
     {
-      method: "PATCH",
       headers: {
-        "Content-Type": "application/json",
         Authorization: "Bearer " + token,
       },
-      body: JSON.stringify(userData),
     }
   );
+  if (!response.ok) throw new Error();
 
-  if (!response.ok)
-    return json(
-      {
-        status: 500,
-        message: `Something wrong happen when updating profile...`,
+  return response.json();
+}
+
+async function myPostsLoader() {
+  const token = authHelper.getAuthToken();
+
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL +
+      `/api/v1/posts/me?fields=updatedAt,-content,-AuthorId&all=1`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
       },
-      { status: 500 }
-    );
-
-  return json(
-    { status: 200, message: "Update successfully!" },
-    { status: 200 }
+    }
   );
+  if (!response.ok)
+    return {
+      data: [],
+      total: 0,
+    };
+
+  return response.json();
+}
+
+export async function loader({}) {
+  return defer({
+    author: myAuthorLoader(),
+    posts: myPostsLoader(),
+  });
 }
