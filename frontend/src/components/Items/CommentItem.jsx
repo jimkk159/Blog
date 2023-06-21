@@ -23,6 +23,11 @@ function CommentItem({ comment }) {
   const navigate = useNavigate();
 
   // custom functions
+  const cancelHandler = () => {
+    const alert = window.confirm("Are you sure?");
+    if (alert) removeCommentHandler();
+  };
+
   const commentId = comment.id;
   const removeCommentHandler = useCallback(
     async (event) => {
@@ -78,7 +83,7 @@ function CommentItem({ comment }) {
         {authId === comment.Author.id && !isSubmitting && (
           <MdOutlineRemoveCircleOutline
             className="h-6 w-6 text-gray-400 hover:text-gray-200"
-            onClick={removeCommentHandler}
+            onClick={cancelHandler}
           />
         )}
         {isSubmitting && (
