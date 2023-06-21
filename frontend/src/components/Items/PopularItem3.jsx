@@ -37,7 +37,7 @@ function PopularItem3({ post }) {
           <div className="flex items-center justify-end space-x-1 md:space-x-1.5 lg:space-x-1">
             <FaRegCommentDots className="mb-1 w-4 text-white md:h-8 md:w-8 lg:mb-0.5 lg:w-4" />
             <p className="text-right text-sm md:text-2xl lg:text-sm">
-              {post.comments}
+              {post.commentCount}
             </p>
           </div>
         </div>

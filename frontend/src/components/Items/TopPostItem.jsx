@@ -32,7 +32,7 @@ function TopPostItem({ post }) {
             },
           }
         ).catch((err) => err);
-        navigate(".")
+        navigate(".");
       }
     },
     [postId, navigate]
@@ -84,7 +84,7 @@ function TopPostItem({ post }) {
               <div className="flex items-center justify-end space-x-1 md:space-x-1.5 lg:space-x-1">
                 <FaRegCommentDots className="mb-1 w-4 cursor-pointer hover:text-gray-200 md:h-8 md:w-8 lg:mb-0.5 lg:w-4" />
                 <p className="w-4 text-right text-sm md:text-2xl lg:text-sm">
-                  {post.Comments && post.Comments.length}
+                  {post.commentCount}
                 </p>
               </div>
             </div>

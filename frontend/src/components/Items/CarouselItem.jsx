@@ -81,9 +81,7 @@ function CarouselItem({ post }) {
             </div>
             <div className="flex items-center justify-end space-x-1">
               <FaRegCommentDots className="w-4 cursor-pointer hover:text-gray-200" />
-              <p className="text-right text-sm">
-                {post.Comments && post.Comments.length}
-              </p>
+              <p className="text-right text-sm">{post.commentCount}</p>
             </div>
           </div>
         </div>
