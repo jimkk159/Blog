@@ -19,7 +19,7 @@ import * as authHelper from "../../utils/auth";
 // components
 import Avatar from "../UI/Avatar";
 import Button from "../../components/UI/Button";
-import TagList from "../../components/Tag/TagList";
+import TagList from "../../components/Tag/List";
 import PostWrapper from "../../components/Wrapper/PostWrapper";
 
 function Detail({ post }) {

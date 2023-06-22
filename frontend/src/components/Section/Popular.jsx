@@ -4,7 +4,7 @@ import { useMediaQuery } from "react-responsive";
 // components
 import SectionTitle from "./SectionTitle";
 import PinkButton from "../UI/PinkButton";
-import PopularItem from "../Items/PopularItem";
+import PopularItem from "../Items/Popular";
 
 function Popular({ posts, slide }) {
   let popular = null;

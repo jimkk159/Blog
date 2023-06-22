@@ -14,15 +14,15 @@ import store from "../../../store";
 import { BsFillKeyFill } from "react-icons/bs";
 
 // components
+import PostList3 from "../../../components/Post/List3";
 import Container from "../../../components/UI/Container";
-import PostList3 from "../../../components/Post/PostsList3";
 import PinkButton from "../../../components/UI/PinkButton";
 import SectionTitle from "../../../components/Section/SectionTitle";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
-import EditProfileName from "../../../components/Profile/EditProfileName";
-import EditProfileAvatar from "../../../components/Profile/EditProfileAvatar";
-import EditProfilePassword from "../../../components/Profile/EditProfilePassword";
-import EditProfileDescription from "../../../components/Profile/EditProfileDescription";
+import EditProfileName from "../../../components/Profile/EditName";
+import EditProfileAvatar from "../../../components/Profile/EditAvatar";
+import EditProfilePassword from "../../../components/Profile/EditPassword";
+import EditProfileDescription from "../../../components/Profile/EditDescription";
 
 // helper
 import * as authHelper from "../../../utils/auth";

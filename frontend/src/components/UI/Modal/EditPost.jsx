@@ -3,10 +3,10 @@ import { useRef, useState, useCallback } from "react";
 import { Form, useNavigation } from "react-router-dom";
 
 // components
-import Button from "../UI/Button";
+import Button from "../Button";
 
 // helper
-import * as authHelper from "../../utils/auth";
+import * as authHelper from "../../../utils/auth";
 
 function EditPostModal({
   method,

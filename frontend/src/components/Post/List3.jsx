@@ -1,8 +1,8 @@
 // components
 import Pagination from "../UI/Pagination";
-import PostListItem2 from "../Items/PostListItem2";
+import PostListItem3 from "../Items/List3";
 
-function PostsList2({
+function List3({
   posts,
   total,
   onNavPage,
@@ -14,7 +14,7 @@ function PostsList2({
     <div className="flex h-full w-full flex-col space-y-4 rounded-3xl bg-self-dark px-4 py-8">
       <div className="overflow-auto">
         {posts &&
-          posts.map((post, index) => <PostListItem2 key={index} post={post} />)}
+          posts.map((post, index) => <PostListItem3 key={index} post={post} />)}
       </div>
       <div className="w-full max-w-5xl">
         <Pagination
@@ -29,4 +29,4 @@ function PostsList2({
   );
 }
 
-export default PostsList2;
+export default List3;

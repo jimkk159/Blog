@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 // components
 import SectionTitle from "./SectionTitle";
-import TopPostItem from "../Items/TopPostItem";
+import RankItem from "../Items/Rank";
 
 function RankingList({ posts }) {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ function RankingList({ posts }) {
       </div>
       <ul className="mt-8 space-y-6 border-b border-self-gray pb-4 md:pb-8">
         {posts.slice(0, 5).map((post, index) => (
-          <TopPostItem key={index} post={post} />
+          <RankItem key={index} post={post} />
         ))}
       </ul>
       <div className="mt-8 flex items-center justify-center lg:mt-8">

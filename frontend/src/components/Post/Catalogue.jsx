@@ -4,7 +4,7 @@ import { AwaitWrapper } from "../Wrapper/AwaitWrapper";
 // helper
 import * as helper from "../../utils/helper";
 
-function Chapters({ post }) {
+function Catalogue({ post }) {
   return (
     <div className="ml-2 overflow-y-auto rounded-3xl bg-self-dark px-4 py-6 md:block xl:w-72">
       <div className="box-border flex w-full flex-col space-y-2 pl-3 pr-4 lg:pl-5 lg:pr-6">
@@ -22,4 +22,4 @@ function Chapters({ post }) {
   );
 }
 
-export default Chapters;
+export default Catalogue;

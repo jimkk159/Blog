@@ -1,9 +1,9 @@
+import { useState } from "react";
 import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
 
 // components
+import RankItem2 from "../Items/Rank2";
 import SectionTitle from "./SectionTitle";
-import TopPostItem2 from "../Items/TopPostItem2";
-import { useState } from "react";
 
 function RankingList2({ posts }) {
   const [show, setShow] = useState(true);
@@ -22,7 +22,7 @@ function RankingList2({ posts }) {
         <>
           <ul className="mt-8 space-y-6">
             {posts.slice(0, 5).map((post, index) => (
-              <TopPostItem2 key={index} post={post} />
+              <RankItem2 key={index} post={post} />
             ))}
           </ul>
           <div className="flex items-center justify-center border-t border-self-gray py-2 mt-4">

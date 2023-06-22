@@ -4,8 +4,8 @@ import { useMediaQuery } from "react-responsive";
 import store from "../../../store";
 import * as authHelper from "../../../utils/auth";
 import Container from "../../../components/UI/Container";
-import PostEditor from "../../../components/Post/PostEditor";
-import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
+import PostEditor from "../../../components/UI/Editor/Post";
+import PostsNavigation from "../../../components/Post/Navigation";
 
 function NewPost() {
   // import hooks
@@ -13,7 +13,7 @@ function NewPost() {
 
   const left = !matches1280 && (
     <div className="flex w-full justify-end pr-2">
-      <PostsNavigation2 limit />
+      <PostsNavigation limit />
     </div>
   );
 

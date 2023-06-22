@@ -2,12 +2,12 @@ import { useSearchParams } from "react-router-dom";
 
 // components
 import Pagination from "../UI/Pagination";
-import PostListItem from "../Items/PostListItem";
+import PostListItem from "../Items/List";
 
 const defaultPage = 1;
 const defaultLimit = 15;
 
-function PostList({
+function List({
   posts,
   total,
   onNavPage,
@@ -47,4 +47,4 @@ function PostList({
   );
 }
 
-export default PostList;
+export default List;

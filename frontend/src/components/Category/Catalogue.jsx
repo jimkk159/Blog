@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Category from "./Category";
-import CreateCategory from "./CreateCategory";
+import CreateCategory from "./Create";
 
 function Catalogue({ catalogue, isFirst }) {
   const [isOpen, setIsOpen] = useState(false);

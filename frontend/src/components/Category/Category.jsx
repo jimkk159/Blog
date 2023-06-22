@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { BiChevronDown, BiChevronRight } from "react-icons/bi";
 
 // components
-import EditCategory from "./EditCategory";
+import EditCategory from "./Edit";
 
 // Redux Action
 import { catalogueActions } from "../../store/catalogue-slice";

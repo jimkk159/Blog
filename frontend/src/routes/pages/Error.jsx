@@ -5,7 +5,7 @@ function Error() {
 
   let title = "An error occurred";
   let message = "Unknown Error";
-
+  console.log(error)
   if (error.status === 500) {
     message = error.data.message;
   }

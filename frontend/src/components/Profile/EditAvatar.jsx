@@ -5,7 +5,7 @@ import { useRef, useCallback } from "react";
 import { AiFillCamera } from "react-icons/ai";
 
 // components
-import Avatar2 from "../../components/UI/Avatar2";
+import Avatar2 from "../UI/Avatar2";
 
 // helper
 import * as authHelper from "../../utils/auth";

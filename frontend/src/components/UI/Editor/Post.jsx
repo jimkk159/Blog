@@ -8,13 +8,13 @@ import {
 } from "react-router-dom";
 
 // components
-import Code from "../Plugins";
-import TagList from "../Tag/TagList";
-import SelectCategory from "./SelectCategory";
-import * as editHelper from "../../utils/edit";
-import PostWrapper from "../Wrapper/PostWrapper";
-import PostEditorBottom from "./PostEditorBottom";
-import EditPostModal from "../Modal/EditPostModal";
+import Code from "./Plugins";
+import TagList from "../../Tag/List";
+import PostEditorBottom from "./PostBottom";
+import EditPostModal from "../Modal/EditPost";
+import * as editHelper from "../../../utils/edit";
+import PostWrapper from "../../Wrapper/PostWrapper";
+import SelectCategory from "../../Post/SelectCategory";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);

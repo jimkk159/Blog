@@ -7,9 +7,9 @@ import {
 import { useMediaQuery } from "react-responsive";
 
 // components
+import PostsList from "../../../components/Post/List";
 import Container from "../../../components/UI/Container";
-import PostsList from "../../../components/Post/PostsList";
-import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
+import PostsNavigation from "../../../components/Post/Navigation";
 
 // helper
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
@@ -35,7 +35,7 @@ function Search() {
 
   const left = !matches1024 && (
     <div className="flex w-full justify-end pr-2">
-      <PostsNavigation2 />
+      <PostsNavigation />
     </div>
   );
 

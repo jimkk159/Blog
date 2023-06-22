@@ -2,7 +2,7 @@ import { redirect, json, useRouteLoaderData } from "react-router-dom";
 
 import store from "../../../store";
 import * as authHelper from "../../../utils/auth";
-import PostEditor from "../../../components/Post/PostEditor";
+import PostEditor from "../../../components/UI/Editor/Post";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 
 function EditPost() {

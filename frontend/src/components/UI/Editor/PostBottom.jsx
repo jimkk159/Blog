@@ -1,5 +1,7 @@
-import Button from "../UI/Button";
 import { useNavigation } from "react-router-dom";
+
+// components
+import Button from "../../UI/Button";
 
 function PostEditorBottom({
   onNext,

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineTag } from "react-icons/ai";
 import { useSelector, useDispatch } from "react-redux";
 
-import TagsToolTip from "./TagsToolTip";
+import TagsToolTip from "./ToolTip";
 import { tagActions } from "../../store/tag-slice";
 
 function TagList({

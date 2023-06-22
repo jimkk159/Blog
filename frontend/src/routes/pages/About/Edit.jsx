@@ -1,7 +1,7 @@
 import { redirect, json, useRouteLoaderData } from "react-router-dom";
 
 import * as authHelper from "../../../utils/auth";
-import AboutEditor from "../../../components/AboutEditor";
+import AboutEditor from "../../../components/UI/Editor/About";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
 
 function EditAbout() {

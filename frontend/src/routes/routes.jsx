@@ -14,18 +14,17 @@ const AuthPage = lazy(() => import("./pages/Auth/Auth"));
 const OauthPage = lazy(() => import("./pages/Auth/Oauth"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgotPassword"));
 
-const AboutPage = lazy(() => import("./pages/User/About"));
+const AboutPage = lazy(() => import("./pages/About/Index"));
 const ProfilePage = lazy(() => import("./pages/User/Profile"));
-const EditAboutPage = lazy(() => import("./pages/User/EditAbout"));
-const BrowserProfilePage = lazy(() => import("./pages/User/BrowserProfile"));
+const EditAboutPage = lazy(() => import("./pages/About/Edit"));
 
 const BrowsePage = lazy(() => import("./pages/Post/Browse"));
-const NewPostPage = lazy(() => import("./pages/Post/NewPost"));
-const EditPostPage = lazy(() => import("./pages/Post/EditPost"));
-const SearchPage = lazy(() => import("./pages/Post/SearchPost"));
-const PostDetailPage = lazy(() => import("./pages/Post/PostDetail"));
+const NewPostPage = lazy(() => import("./pages/Post/New"));
+const EditPostPage = lazy(() => import("./pages/Post/Edit"));
+const SearchPage = lazy(() => import("./pages/Post/Search"));
+const PostDetailPage = lazy(() => import("./pages/Post/Detail"));
 const PostsRelationRootLayout = lazy(() =>
-  import("./pages/Post/PostsRelationRoot")
+  import("./pages/Post/RelationRoot")
 );
 
 const lazyLoader = (path) => (input) =>
@@ -51,7 +50,7 @@ const router = createBrowserRouter([
       {
         id: "relation",
         path: "posts",
-        loader: lazyLoader("./pages/Post/PostsRelationRoot"),
+        loader: lazyLoader("./pages/Post/RelationRoot"),
         element: SuspenseWrapper(<PostsRelationRootLayout />),
         children: [
           {
@@ -62,18 +61,18 @@ const router = createBrowserRouter([
           {
             id: "post-detail",
             path: ":pid",
-            loader: lazyLoader("./pages/Post/PostDetail"),
+            loader: lazyLoader("./pages/Post/Detail"),
             children: [
               {
                 index: true,
                 element: SuspenseWrapper(<PostDetailPage />),
-                action: lazyAction("./pages/Post/PostDetail"),
+                action: lazyAction("./pages/Post/Detail"),
               },
               {
                 path: "edit",
                 element: SuspenseWrapper(<EditPostPage />),
                 loader: authHelper.checkAuthTokenLoader,
-                action: lazyAction("./pages/Post/EditPost"),
+                action: lazyAction("./pages/Post/Edit"),
               },
             ],
           },
@@ -81,13 +80,13 @@ const router = createBrowserRouter([
             path: "new",
             element: SuspenseWrapper(<NewPostPage />),
             loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/Post/NewPost"),
+            action: lazyAction("./pages/Post/New"),
           },
           {
             path: "search",
             element: SuspenseWrapper(<SearchPage />),
-            loader: lazyLoader("./pages/Post/SearchPost"),
-            action: lazyAction("./pages/Post/SearchPost"),
+            loader: lazyLoader("./pages/Post/Search"),
+            action: lazyAction("./pages/Post/Search"),
           },
         ],
       },
@@ -99,7 +98,7 @@ const router = createBrowserRouter([
       {
         id: "about",
         path: "about",
-        loader: lazyLoader("./pages/User/About"),
+        loader: lazyLoader("./pages/About/Index"),
         children: [
           {
             index: true,
@@ -109,7 +108,7 @@ const router = createBrowserRouter([
             path: "edit",
             element: SuspenseWrapper(<EditAboutPage />),
             loader: authHelper.checkAuthTokenLoader,
-            action: lazyAction("./pages/User/EditAbout"),
+            action: lazyAction("./pages/About/Edit"),
           },
         ],
       },
@@ -133,8 +132,8 @@ const router = createBrowserRouter([
           },
           {
             path: ":id",
-            element: SuspenseWrapper(<BrowserProfilePage />),
-            loader: lazyLoader("./pages/User/BrowserProfile"),
+            element: SuspenseWrapper(<ProfilePage />),
+            loader: lazyLoader("./pages/User/Profile"),
           },
         ],
       },

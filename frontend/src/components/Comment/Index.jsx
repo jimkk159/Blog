@@ -1,7 +1,7 @@
 // components
-import NewComment from "./NewComment";
+import NewComment from "./New";
 import PostWrapper from "../Wrapper/PostWrapper";
-import CommentItem from "../Items/CommentItem";
+import CommentItem from "../Items/Comment";
 
 function Comment({ post }) {
   return (

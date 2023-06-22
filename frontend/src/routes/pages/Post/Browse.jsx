@@ -4,10 +4,10 @@ import { json, defer, useLoaderData, useSearchParams } from "react-router-dom";
 
 // components
 import Container from "../../../components/UI/Container";
-import PostList2 from "../../../components/Post/PostsList2";
+import PostList2 from "../../../components/Post/List2";
 import Popular2 from "../../../components/Section/Popular2";
+import PostsNavigation from "../../../components/Post/Navigation";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
-import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 import RankingListSection2 from "../../../components/Section/RankingList2";
 
 // css
@@ -44,7 +44,7 @@ function Browse() {
 
   const left = !matches1280 && (
     <div className="flex w-full justify-end pr-2">
-      <PostsNavigation2 limit />
+      <PostsNavigation limit />
     </div>
   );
 

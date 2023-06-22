@@ -12,7 +12,7 @@ import { catalogueActions } from "../../store/catalogue-slice";
 // helper
 import * as categoryHelper from "../../utils/category";
 
-function PostsNavigation2({ limit }) {
+function PostsNavigation({ limit }) {
   // redux
   const dispatch = useDispatch();
 
@@ -44,4 +44,4 @@ function PostsNavigation2({ limit }) {
   );
 }
 
-export default PostsNavigation2;
+export default PostsNavigation;

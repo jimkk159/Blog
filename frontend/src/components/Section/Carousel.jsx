@@ -3,7 +3,7 @@ import { useMediaQuery } from "react-responsive";
 
 // components
 import SectionTitle from "./SectionTitle";
-import CarouselItem from "../Items/CarouselItem";
+import CarouselItem from "../Items/Carousel";
 
 function Carousel({ posts }) {
   // import hooks

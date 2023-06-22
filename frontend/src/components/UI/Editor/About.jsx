@@ -9,11 +9,11 @@ import {
 
 // components
 import Code from "./Plugins";
-import Button from "./UI/Button";
-import PostWrapper from "./Wrapper/PostWrapper";
+import Button from "../../UI/Button";
+import PostWrapper from "../../Wrapper/PostWrapper";
 
 // helper
-import * as editHelper from "../utils/edit";
+import * as editHelper from "../../../utils/edit";
 
 function AboutEditor({ method, about }) {
   const inputRef = useRef(null);

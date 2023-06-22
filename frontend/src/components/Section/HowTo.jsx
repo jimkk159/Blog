@@ -8,7 +8,7 @@ import { BsPencilSquare } from "react-icons/bs";
 // components
 import PinkButton from "../UI/PinkButton";
 import SectionTitle from "./SectionTitle";
-import HowToItem from "../Items/HotToItem";
+import HowToItem from "../Items/HotTo";
 
 function HowTo() {
   const navigate = useNavigate()

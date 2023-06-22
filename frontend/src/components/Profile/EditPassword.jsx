@@ -6,7 +6,7 @@ import Button from "../UI/Button";
 // helper
 import * as authHelper from "../../utils/auth";
 
-function EditProfilePassword({ onCancel, onConfirm = () => {} }) {
+function EditProfilePassword({ onCancel, onConfirm = () => {}, isEdit }) {
   const token = authHelper.getAuthToken();
 
   const [password, setPassword] = useState("");
@@ -18,7 +18,7 @@ function EditProfilePassword({ onCancel, onConfirm = () => {} }) {
     async (event) => {
       event.preventDefault();
       event.stopPropagation();
-      
+
       setIsLoading(true);
       if (!!password && !!newPassword && !!confirmNewPassword) {
         const response = await fetch(
@@ -45,7 +45,7 @@ function EditProfilePassword({ onCancel, onConfirm = () => {} }) {
     },
     [token, password, newPassword, confirmNewPassword, onConfirm]
   );
-
+  if (!isEdit) return;
   return (
     <div className="flex flex-col items-center justify-center space-y-4">
       <div className="flex flex-col items-center justify-center space-y-4 bg-slate-600">

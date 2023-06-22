@@ -6,11 +6,11 @@ import * as authHelper from "../../../utils/auth";
 
 // components
 import Detail from "../../../components/Post/Detail";
-import Chapter2 from "../../../components/Post/Chapter2";
+import Chapter2 from "../../../components/Post/Catalogue";
 import Container from "../../../components/UI/Container";
-import Comment from "../../../components/Comment/Comment";
+import Comment from "../../../components/Comment/Index";
+import PostsNavigation from "../../../components/Post/Navigation";
 import { AwaitWrapper } from "../../../components/Wrapper/AwaitWrapper";
-import PostsNavigation2 from "../../../components/Post/PostsNavigation2";
 
 function PostDetail() {
   const { post } = useRouteLoaderData("post-detail");
@@ -20,7 +20,7 @@ function PostDetail() {
 
   const left = !matches1280 && (
     <div className="flex w-full justify-end pr-2">
-      <PostsNavigation2 limit />
+      <PostsNavigation limit />
     </div>
   );
   const right = !matches1280 && <Chapter2 post={post} />;
