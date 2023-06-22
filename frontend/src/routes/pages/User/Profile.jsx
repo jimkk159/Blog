@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { defer, useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  defer,
+  redirect,
+  useParams,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
+
+// redux
+import store from "../../../store";
 
 // icons
 import { BsFillKeyFill } from "react-icons/bs";
@@ -23,6 +32,7 @@ function Profile() {
   const [isUpdatePassword, setIsUpdatePassword] = useState();
 
   // react-router
+  const { id } = useParams();
   const { author, posts } = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -32,6 +42,7 @@ function Profile() {
     setSearchParams({ page: nextPage, limit });
     setPage(nextPage);
   };
+
   return (
     <Container>
       <div className="flex w-full items-center justify-center">
@@ -41,35 +52,44 @@ function Profile() {
               <AwaitWrapper resolve={author}>
                 {(response) => (
                   <EditProfileAvatar
+                    isEdit={!id}
                     defaultValue={response?.data?.avatar}
-                    isEdit
                   />
                 )}
               </AwaitWrapper>
             </div>
-            <div className="flex w-full items-center justify-start space-x-4">
-              <div className="h-8 w-[calc(50%-90px)]" />
+            <div
+              className={`flex w-full items-center space-x-4 ${
+                !id ? "justify-start" : "justify-center"
+              }`}
+            >
+              {!id && <div className="h-8 w-[calc(50%-90px)]" />}
               <AwaitWrapper resolve={author}>
                 {(response) => (
                   <>
-                    <EditProfileName defaultValue={response.data.name} isEdit />
-                    <PinkButton
-                      className="px-4 py-2"
-                      onClick={() => setIsUpdatePassword((prev) => !prev)}
-                    >
-                      <div className="flex items-center justify-center space-x-0.5">
-                        <BsFillKeyFill className="h-[20px] w-[20px]" />
-                        <p className="text-xs">Password</p>
-                      </div>
-                    </PinkButton>
+                    <EditProfileName
+                      isEdit={!id}
+                      defaultValue={response.data.name}
+                    />
+                    {!id && (
+                      <PinkButton
+                        className="px-4 py-2"
+                        onClick={() => setIsUpdatePassword((prev) => !prev)}
+                      >
+                        <div className="flex items-center justify-center space-x-0.5">
+                          <BsFillKeyFill className="h-[20px] w-[20px]" />
+                          <p className="text-xs">Password</p>
+                        </div>
+                      </PinkButton>
+                    )}
                   </>
                 )}
               </AwaitWrapper>
             </div>
-            {isUpdatePassword && (
+            {!id && isUpdatePassword && (
               <div className="mt-2">
                 <EditProfilePassword
-                  isEdit
+                  isEdit={!id}
                   onCancel={() => setIsUpdatePassword(false)}
                   onConfirm={() => setIsUpdatePassword(false)}
                 />
@@ -81,7 +101,7 @@ function Profile() {
                   <AwaitWrapper resolve={author}>
                     {(response) => (
                       <EditProfileDescription
-                        isEdit
+                        isEdit={!id}
                         defaultValue={response?.data?.description}
                       />
                     )}
@@ -146,15 +166,47 @@ async function myPostsLoader({ token, page, limit }) {
   return response.json();
 }
 
-export async function loader({ request }) {
+async function authorLoader(userId) {
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL + `/api/v1/users/${userId}`
+  );
+  if (!response.ok) throw new Error();
+
+  return response.json();
+}
+
+async function postsLoader({ userId, page, limit }) {
+  const response = await fetch(
+    process.env.REACT_APP_BACKEND_URL +
+      `/api/v1/posts/search?mode=author&type=id&target=${userId}&?fields=editedAt,-content,-AuthorId,-CategoryId,-thumbs,-views&page=${page}&limit=${limit}`
+  );
+  if (!response.ok)
+    return {
+      data: [],
+      total: 0,
+    };
+
+  return response.json();
+}
+
+export async function loader({ request, params }) {
   const token = authHelper.getAuthToken();
 
   const searchParams = new URL(request.url).searchParams;
   const page = searchParams.get("page") || 1;
   const limit = searchParams.get("limit") || 5;
 
+  if (!params.id)
+    return defer({
+      author: myAuthorLoader(token),
+      posts: myPostsLoader({ token, page, limit }),
+    });
+
+  const state = store.getState();
+  if (state?.auth?.id + "" === params.id) return redirect("/profile");
+
   return defer({
-    author: myAuthorLoader(token),
-    posts: myPostsLoader({ token, page, limit }),
+    author: authorLoader(params.id),
+    posts: postsLoader({ userId: params.id, page, limit }),
   });
 }
