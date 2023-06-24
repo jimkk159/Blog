@@ -36,7 +36,7 @@ function MainNavigation() {
   useEffect(() => {
     if (matches) setIsDrawer(false);
   }, [matches]);
- 
+
   return (
     <>
       <header
@@ -62,7 +62,7 @@ function MainNavigation() {
             </div>
             <Hamburger
               className="block justify-center md:hidden"
-              onClick={() => setIsDrawer(true)}
+              onClick={() => setIsDrawer((prev) => !prev)}
             />
             <div className="hidden h-full w-full justify-between md:flex">
               <SearchBar2 />

@@ -16,7 +16,7 @@ import { BiLogIn, BiLogOut } from "react-icons/bi";
 
 function NavSideDrawer({ show, className, onCancel }) {
   // react-router
-  const token = useRouteLoaderData("root");
+  const { token } = useRouteLoaderData("root");
 
   // redux
   const avatar = useSelector((state) => state.auth.avatar);
@@ -24,9 +24,9 @@ function NavSideDrawer({ show, className, onCancel }) {
   return (
     <SideDrawer show={show} className={className} onCancel={onCancel}>
       <>
-        <div className="h-4 border-b border-white bg-purple-500" />
+        <div className="h-4 border-b border-white bg-self-dark" />
         <div
-          className={`py-auto flex h-20 items-center justify-between bg-red-500 px-2`}
+          className={`py-auto flex h-20 items-center justify-between bg-self-dark px-2`}
         >
           <Link
             to={token ? "/profile" : "/auth?mode=login"}
