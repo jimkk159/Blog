@@ -46,7 +46,18 @@ export const isExpired = (expire_in) =>
 export const isNumber = (id) =>
   !!id && !helper.isObject(id) && !Array.isArray(id) && !isNaN(id);
 
-export const deepClone = (input) => JSON.parse(JSON.stringify(input));
+export const deepClone = (obj) => {
+  if (typeof obj !== "object" || obj === null) return obj;
+
+  // Create an array or obj to hold the values
+  const newObject = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    const value = obj[key];
+    newObject[key] = deepClone(value);
+  }
+
+  return newObject;
+};
 
 export const commandToS3Avatar = async (file, command) => {
   if (file && !isURL(file)) return command(file);

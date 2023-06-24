@@ -74,7 +74,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
   query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
   query.sort = helper.setDefault(query.sort, "editedAt");
   query.fields = helper.setDefault(query.fields, "content");
-  
+
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
@@ -318,7 +318,7 @@ export const orderByComments = (query, target) => {
   if (typeof query === "object" && Object.keys(query).includes(target))
     return query;
 
-  const output = defaultAttributeSetting;
+  const output = { ...defaultAttributeSetting };
 
   if (target.includes("-"))
     output.order = [[sequelize.literal("commentCount"), "DESC"]];
