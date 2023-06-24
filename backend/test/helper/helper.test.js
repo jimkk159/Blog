@@ -2,6 +2,7 @@ import * as helper from "../../utils/helper/helper";
 import * as upload from "../../utils/aws/s3.js";
 import { afterAll, beforeAll, beforeEach } from "vitest";
 
+vi.mock("sequelize");
 vi.mock("../aws/s3.js");
 describe("isURL()", () => {
   test("should return false if input is null", () => {

@@ -1,6 +1,7 @@
 import * as tagHelper from "../../utils/helper/tag-helper";
 import * as errorTable from "../../utils/error/error-table";
 
+vi.mock("sequelize");
 describe("isTagIdLegal()", () => {
   test("should retrun true if number type of number is provided", () => {
     expect(tagHelper.isTagIdLegal(1)).toBe(true);

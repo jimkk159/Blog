@@ -4,6 +4,7 @@ import * as errorTable from "../../utils/error/error-table";
 import * as handleFactory from "../../controllers/handle-factory";
 import * as apiFeatureHelper from "../../utils/helper/api-feature-helper";
 
+vi.mock("sequelize");
 vi.mock("../../utils/api-features");
 describe("getOne()", () => {
   let req = { params: { id: 1 }, query: {} };
