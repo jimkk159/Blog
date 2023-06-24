@@ -1,10 +1,11 @@
 import ReactDOM from "react-dom";
 import Backdrop from "./Backdrop";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 function SideDrawer({ show, className, onClick, onCancel, children }) {
   const sideDrawerContent = ReactDOM.createPortal(
-    <AnimatePresence>
+    // <AnimatePresence>
+    <>
       {show && (
         <motion.aside
           transition={{ ease: "easeIn", duration: 0.5 }}
@@ -17,7 +18,8 @@ function SideDrawer({ show, className, onClick, onCancel, children }) {
           {children}
         </motion.aside>
       )}
-    </AnimatePresence>,
+    </>,
+    // </AnimatePresence>,
     document.getElementById("drawer")
   );
 
