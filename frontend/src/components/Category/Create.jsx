@@ -72,7 +72,7 @@ function CreateCategory({ onClose }) {
         name="name"
         placeholder="Input category...."
         errorMessage={"Please enter Category!"}
-        className="h-8 w-full rounded-sm border border-gray-500 pl-2 text-base outline-none"
+        className="h-8 w-full rounded-sm border border-gray-500 pl-2 text-base outline-none text-black"
         onInput={inputHandler}
         validators={(e) => !validator.isEmpty(e)}
       />
