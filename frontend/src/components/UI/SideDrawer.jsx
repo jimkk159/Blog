@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom";
 import Backdrop from "./Backdrop";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 
 function SideDrawer({ show, className, onClick, onCancel, children }) {
   const sideDrawerContent = ReactDOM.createPortal(
