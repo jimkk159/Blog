@@ -61,7 +61,8 @@ export const getFullPost = async (postId, query) => {
     .paginate()
     .pop();
 
-  let post = await getFeature.findByPk(postId, query);
+  const post = await getFeature.findByPk(postId, query);
+  if (!post) throw errorTable.idNotFoundError();
   if (post.Author && post.Author.avatar && !helper.isURL(post.Author.avatar))
     post.Author.avatar = helper.getImgUrlFromS3(post.Author.avatar);
 
@@ -73,7 +74,7 @@ export const getFullPosts = async (query, customQuery = {}) => {
   query.pop = query.pop ? popOptions + "," + query.pop : popOptions;
   query.sort = helper.setDefault(query.sort, "editedAt");
   query.fields = helper.setDefault(query.fields, "content");
-
+  
   const getFeature = new GetFeatures(Post, query)
     .filter()
     .sort()
@@ -82,7 +83,6 @@ export const getFullPosts = async (query, customQuery = {}) => {
     .pop();
 
   let posts = await getFeature.findAll(customQuery);
-
   posts = posts
     .map((el) => el.toJSON())
     .map((el) => {

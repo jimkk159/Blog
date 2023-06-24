@@ -12,6 +12,9 @@ import * as errorTable from "../../utils/error/error-table";
 import * as postHelper from "../../utils/helper/post-helper";
 import * as categoryHelper from "../../utils/helper/category-helper";
 
+const date = new Date(1998, 11, 19);
+vi.useFakeTimers();
+vi.setSystemTime(date);
 vi.mock("sequelize");
 describe("isValidSearch()", () => {
   let query, allowType, allowMode;
@@ -115,48 +118,6 @@ describe("isUserAllowUpdatePost()", () => {
 });
 
 describe("getFullPost()", () => {
-  beforeAll(() => {
-    vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should get Post by property", async () => {
-    const postId = "postId";
-
-    await postHelper.getFullPost(postId);
-
-    expect(Post.findByPk).toHaveBeenLastCalledWith(postId, {
-      include: [
-        {
-          model: User,
-          as: "Author",
-          attributes: {
-            exclude: [
-              "description",
-              "email",
-              "role",
-              "createdAt",
-              "updatedAt",
-              "updatePasswordAt",
-              "isEmailValidated",
-            ],
-          },
-        },
-        "Category",
-        { model: Tag, through: { attributes: [] } },
-      ],
-    });
-  });
-});
-
-describe("getFullPosts()", () => {
   let GetFeatures;
   beforeAll(() => {
     GetFeatures = {
@@ -164,9 +125,11 @@ describe("getFullPosts()", () => {
       sort: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),
       paginate: vi.fn().mockReturnThis(),
-      findAll: vi.fn(),
+      pop: vi.fn().mockReturnThis(),
+      findByPk: vi.fn().mockImplementation(() => ({})),
     };
     vi.spyOn(helper, "isURL").mockImplementation(() => false);
+    vi.spyOn(helper, "setDefault").mockImplementation(() => {});
     vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(() => {});
     vi.spyOn(ApiFeature, "GetFeatures").mockImplementation(() => GetFeatures);
   });
@@ -179,73 +142,241 @@ describe("getFullPosts()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should call GetFeatures by Post and query", async () => {
-    let error;
-    const testQuery = "testQuery";
+  test("should set deault sort post by editedAt", async () => {
+    const postId = "postId";
+    const query = { sort: "testSort", pop: {} };
+    helper.setDefault.mockImplementationOnce(() => "setDefaultedSort");
 
-    await postHelper.getFullPosts(testQuery).catch((err) => (error = err));
+    await postHelper.getFullPost(postId, query);
 
-    expect(ApiFeature.GetFeatures).toHaveBeenLastCalledWith(Post, testQuery);
+    expect(helper.setDefault).toHaveBeenLastCalledWith("testSort", "editedAt");
+  });
+
+  test("should call GetFeatures() by Post Model and query", async () => {
+    const postId = "postId";
+    const query = { sort: {}, pop: {} };
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(ApiFeature.GetFeatures).toHaveBeenLastCalledWith(Post, query);
   });
 
   test("should call GetFeatures filter", async () => {
-    let error;
-    await postHelper.getFullPosts().catch((err) => (error = err));
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+
+    await postHelper.getFullPost(postId, query).catch(() => {});
 
     expect(GetFeatures.filter).toHaveBeenCalled();
   });
 
   test("should call GetFeatures sort", async () => {
-    let error;
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
 
-    await postHelper.getFullPosts().catch((err) => (error = err));
+    await postHelper.getFullPost(postId, query).catch(() => {});
 
     expect(GetFeatures.sort).toHaveBeenCalled();
   });
 
   test("should call GetFeatures select", async () => {
-    let error;
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
 
-    await postHelper.getFullPosts().catch((err) => (error = err));
+    await postHelper.getFullPost(postId, query).catch(() => {});
 
     expect(GetFeatures.select).toHaveBeenCalled();
-    expect(GetFeatures.paginate).toHaveBeenCalled();
   });
 
   test("should call GetFeatures paginate", async () => {
-    let error;
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
 
-    await postHelper.getFullPosts().catch((err) => (error = err));
+    await postHelper.getFullPost(postId, query).catch(() => {});
 
     expect(GetFeatures.paginate).toHaveBeenCalled();
   });
 
-  test("should call GetFeatures findAll", async () => {
+  test("should call GetFeatures pop", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+
+    await postHelper.getFullPost(postId, query).catch(() => {});
+
+    expect(GetFeatures.pop).toHaveBeenCalled();
+  });
+
+  test("should set default sort posts by editedAt from new to old", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(GetFeatures.findByPk).toHaveBeenLastCalledWith(postId, query);
+  });
+
+  test("should throw if post not exist", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    GetFeatures.findByPk.mockImplementationOnce(async () => {});
+
     let error;
-    const customQuery = {
-      include: [
-        {
-          model: User,
-          as: "Author",
-          attributes: {
-            exclude: [
-              "description",
-              "email",
-              "role",
-              "createdAt",
-              "updatedAt",
-              "updatePasswordAt",
-              "isEmailValidated",
-            ],
-          },
-        },
-        "Category",
-        { model: Tag, through: { attributes: [] } },
-      ],
+    try {
+      await postHelper.getFullPost(postId, query);
+    } catch (err) {
+      error = err;
+    }
+
+    expect(error).toEqual(errorTable.idNotFoundError());
+  });
+
+  test("should not replace Author avatar if Author not exist", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({}));
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(helper.getImgUrlFromS3).not.toHaveBeenCalled();
+  });
+
+  test("should not replace Author avatar if avatar not exist", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({ Author: "" }));
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(helper.getImgUrlFromS3).not.toHaveBeenCalled();
+  });
+
+  test("should not replace Author avatar if avatar is url", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    helper.isURL.mockImplementationOnce(() => true);
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({
+      Author: { avatar: "testAvatar" },
+    }));
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(helper.isURL).toHaveBeenLastCalledWith("testAvatar");
+    expect(helper.getImgUrlFromS3).not.toHaveBeenCalled();
+  });
+
+  test("should replace Author avatar if avatar is not url", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({
+      Author: { avatar: "testAvatar" },
+    }));
+
+    await postHelper.getFullPost(postId, query);
+
+    expect(helper.getImgUrlFromS3).toHaveBeenLastCalledWith("testAvatar");
+  });
+
+  test("should return target post if all good", async () => {
+    const postId = "postId";
+    const query = { pop: {}, sort: {} };
+    helper.getImgUrlFromS3.mockImplementationOnce(() => "replacedAvatar");
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({
+      id: "testPostId",
+      Author: { avatar: "testAvatar" },
+    }));
+
+    const output = await postHelper.getFullPost(postId, query);
+
+    expect(output).toEqual({
+      id: "testPostId",
+      Author: { avatar: "replacedAvatar" },
+    });
+  });
+});
+
+describe("getFullPosts()", () => {
+  let GetFeatures;
+  const testQuery = {
+    pop: "testPoP",
+    sort: "testSort",
+    fields: "testFields",
+  };
+  beforeAll(() => {
+    GetFeatures = {
+      filter: vi.fn().mockReturnThis(),
+      sort: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      paginate: vi.fn().mockReturnThis(),
+      pop: vi.fn().mockReturnThis(),
+      findAll: vi.fn(),
     };
+    vi.spyOn(helper, "isURL").mockImplementation(() => false);
+    vi.spyOn(helper, "setDefault").mockImplementation((input) => {
+      const dict = {
+        testSort: "testSettedDefaultSort",
+        testFields: "testSettedDefaultFields",
+      };
+      return dict[input];
+    });
+    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(() => {});
+    vi.spyOn(ApiFeature, "GetFeatures").mockImplementation(() => GetFeatures);
+  });
 
-    await postHelper.getFullPosts().catch((err) => (error = err));
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should set query sort and fields default value", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+
+    expect(helper.setDefault).toHaveBeenCalledWith("testSort", "editedAt");
+    expect(helper.setDefault).toHaveBeenCalledWith("testFields", "content");
+  });
+
+  test("should call GetFeatures by Post and query", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+
+    expect(ApiFeature.GetFeatures).toHaveBeenLastCalledWith(Post, {
+      pop: "Author,Category,Tag,testPoP",
+      sort: "testSettedDefaultSort",
+      fields: "testSettedDefaultFields",
+    });
+  });
+
+  test("should call GetFeatures filter", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+    expect(GetFeatures.filter).toHaveBeenCalled();
+  });
+
+  test("should call GetFeatures sort", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+    expect(GetFeatures.sort).toHaveBeenCalled();
+  });
+
+  test("should call GetFeatures select", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+    expect(GetFeatures.select).toHaveBeenCalled();
+  });
+
+  test("should call GetFeatures paginate", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+    expect(GetFeatures.paginate).toHaveBeenCalled();
+  });
+
+  test("should call GetFeatures pop", async () => {
+    await postHelper.getFullPosts({ ...testQuery }).catch(() => {});
+    expect(GetFeatures.pop).toHaveBeenCalled();
+  });
+
+  test("should call GetFeatures findAll", async () => {
+    const customQuery = "testCustomQuery";
+    await postHelper
+      .getFullPosts({ ...testQuery }, customQuery)
+      .catch(() => {});
     expect(GetFeatures.findAll).toHaveBeenLastCalledWith(customQuery);
   });
 
@@ -254,8 +385,8 @@ describe("getFullPosts()", () => {
     GetFeatures.findAll.mockImplementationOnce(() => posts);
 
     const result = await postHelper
-      .getFullPosts()
-      .catch((err) => (error = err));
+      .getFullPosts({ ...testQuery })
+      .catch(() => {});
 
     expect(result).toEqual(posts);
   });
@@ -265,22 +396,22 @@ describe("getFullPosts()", () => {
     GetFeatures.findAll.mockImplementationOnce(() => posts);
 
     const result = await postHelper
-      .getFullPosts()
-      .catch((err) => (error = err));
+      .getFullPosts({ ...testQuery })
+      .catch(() => {});
 
     expect(result).toEqual(posts);
   });
 
   test("should not replace the posts author avatar if avatar is URL", async () => {
     const posts = [
-      { toJSON: vi.fn().mockReturnThis(), Author: { avatar: "testURL" } },
+      { toJSON: vi.fn().mockReturnThis(), Author: { avatar: "testAvatar" } },
     ];
-    GetFeatures.findAll.mockImplementationOnce(() => posts);
     helper.isURL.mockImplementationOnce(() => true);
+    GetFeatures.findAll.mockImplementationOnce(() => posts);
 
     const result = await postHelper
-      .getFullPosts()
-      .catch((err) => (error = err));
+      .getFullPosts({ ...testQuery })
+      .catch(() => {});
 
     expect(result).toEqual(posts);
   });
@@ -289,12 +420,12 @@ describe("getFullPosts()", () => {
     const posts = [
       { toJSON: vi.fn().mockReturnThis(), Author: { avatar: "testAvatar" } },
     ];
-    GetFeatures.findAll.mockImplementationOnce(() => posts);
     helper.getImgUrlFromS3.mockImplementationOnce(() => "testAvatarFromS3");
+    GetFeatures.findAll.mockImplementationOnce(() => posts);
 
     const result = await postHelper
-      .getFullPosts()
-      .catch((err) => (error = err));
+      .getFullPosts({ ...testQuery })
+      .catch(() => {});
 
     expect(helper.getImgUrlFromS3).toHaveBeenLastCalledWith("testAvatar");
     expect(posts[0].Author.avatar).toBe("testAvatarFromS3");
@@ -519,6 +650,10 @@ describe("updatePostContentAndTags()", () => {
     postId: "testPostId",
     title: "testTitle",
     content: "testContent",
+    summary: "testSummary",
+    CategoryId: "testCategoryId",
+    previewImg: "testPreviewImg",
+    editedAt: Date.now(),
   };
   const input = {
     ...postInput,
@@ -556,26 +691,22 @@ describe("updatePostContentAndTags()", () => {
   });
 
   test("should transact sequelize by property", async () => {
-    let error;
-
-    await postHelper
-      .updatePostContentAndTags(input)
-      .catch((err) => (error = err));
+    await postHelper.updatePostContentAndTags(input).catch(() => {});
 
     expect(sequelize.transaction).toHaveBeenCalled();
   });
 
   test("should update Post by property", async () => {
-    let error;
-
-    await postHelper
-      .updatePostContentAndTags(input)
-      .catch((err) => (error = err));
+    await postHelper.updatePostContentAndTags(input).catch(() => {});
 
     expect(Post.update).toHaveBeenLastCalledWith(
       {
         title: input.title,
         content: input.content,
+        summary: input.summary,
+        CategoryId: input.CategoryId,
+        previewImg: input.previewImg,
+        editedAt: Date.now(),
       },
       { where: { id: input.postId }, transaction: session }
     );
@@ -716,6 +847,7 @@ describe("getTagSearchQueryByText()", () => {
       select: vi.fn().mockReturnThis(),
       paginate: vi.fn().mockReturnThis(),
       findAll: vi.fn().mockImplementation(async () => []),
+      pop: vi.fn().mockReturnThis(),
     };
     vi.spyOn(Tag, "findAll").mockImplementation(async () => []);
     vi.spyOn(ApiFeature, "GetFeatures").mockImplementation(() => GetFeatures);
@@ -793,6 +925,7 @@ describe("getSearchQueryById()", () => {
       select: vi.fn().mockReturnThis(),
       paginate: vi.fn().mockReturnThis(),
       findAll: vi.fn().mockImplementation(async () => []),
+      pop: vi.fn().mockReturnThis(),
     };
     vi.spyOn(ApiFeature, "GetFeatures").mockImplementation(() => GetFeatures);
   });

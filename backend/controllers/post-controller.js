@@ -1,5 +1,3 @@
-import validator from "validator";
-
 import User from "../module/user.js";
 import Post from "../module/post.js";
 import Category from "../module/category.js";
@@ -141,10 +139,9 @@ export const createOne = catchAsync(async (req, res, next) => {
     tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
 
   // 3) check previewImg
-  if (!(req.body.previewImg && validator.isURL(req.body.previewImg)))
-    req.body.previewImg = "";
+  if (!helper.isImgURL(req.body.previewImg)) req.body.previewImg = "";
 
-  // 3) create Post
+  // 4) create Post
   const post = await postHelper.createPostWithTags({
     title: helper.modeifiedSyntax(req.body.title),
     summary: helper.modeifiedSyntax(req.body.summary),

@@ -11,6 +11,7 @@ export const getOne = (Model) =>
     
     // 2) Get data
     const data = await Model.findByPk(req.params.id, sqlQuery);
+
     if (!data) throw errorTable.idNotFoundError();
     if (data.avatar && !helper.isURL(data.avatar))
       data.avatar = helper.getImgUrlFromS3(data.avatar);

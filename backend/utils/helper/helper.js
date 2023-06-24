@@ -1,4 +1,6 @@
 import he from "he";
+import validator from "validator";
+
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
 import * as apiFeatureHelper from "../helper/api-feature-helper.js";
@@ -87,3 +89,5 @@ export const setDefault = (query, target, isNegative = true, join = ",") => {
   if (query.includes(target)) return query;
   return [query, defaultTarget].join(join);
 };
+
+export const isImgURL = (img) => !!(img && validator.isURL(img));

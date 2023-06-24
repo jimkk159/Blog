@@ -1,15 +1,17 @@
 import * as helper from "../../utils/helper/helper";
-import * as handleFactory from "../../controllers/handle-factory";
-import * as errorTable from "../../utils/error/error-table";
 import { GetFeatures } from "../../utils/api-features";
-import { afterAll, beforeAll } from "vitest";
+import * as errorTable from "../../utils/error/error-table";
+import * as handleFactory from "../../controllers/handle-factory";
+import * as apiFeatureHelper from "../../utils/helper/api-feature-helper";
 
 vi.mock("../../utils/api-features");
-
 describe("getOne()", () => {
-  let req = { params: { id: 1 } };
+  let req = { params: { id: 1 }, query: {} };
   let res, next, error;
   beforeEach(() => {
+    vi.spyOn(apiFeatureHelper, "createPopulateObjs").mockImplementation(
+      () => {}
+    );
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     error = undefined;
@@ -44,7 +46,7 @@ describe("getOne()", () => {
 
 describe("getAll()", () => {
   let req = { query: {} };
-  let res, next, filter, sort, select, paginate;
+  let res, next, filter, sort, select, paginate, pop;
 
   beforeAll(() => {
     vi.spyOn(helper, "getAvatarsUrlFromS3").mockImplementation(async () => {});
@@ -53,6 +55,7 @@ describe("getAll()", () => {
     sort = vi.fn().mockReturnThis();
     select = vi.fn().mockReturnThis();
     paginate = vi.fn().mockReturnThis();
+    pop = vi.fn().mockReturnThis();
 
     GetFeatures.mockImplementation((Model, query) => ({
       findAll: vi.fn(async () => Model.findAndCountAll()),
@@ -60,6 +63,7 @@ describe("getAll()", () => {
       sort,
       select,
       paginate,
+      pop,
     }));
   });
 

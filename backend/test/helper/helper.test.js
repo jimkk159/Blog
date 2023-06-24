@@ -241,12 +241,9 @@ describe("getAvatarsUrlFromS3()", () => {
   });
 
   test("should get avatars", async () => {
-    let error;
     const avatars = [{ avatar: "avatar1" }, { avatar: "avatar2" }];
 
-    const result = await helper
-      .getAvatarsUrlFromS3(avatars)
-      .catch((err) => (error = err));
+    await helper.getAvatarsUrlFromS3(avatars);
 
     expect(avatars).toEqual([
       { avatar: "testAvatarFromS3" + "avatar1" },

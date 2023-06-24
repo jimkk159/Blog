@@ -29,11 +29,14 @@ describe("getOne()", () => {
 
   test("should find post by parameter Id", async () => {
     let error;
-    req = { params: { id: "testID" } };
+    req = { params: { id: "testID" }, query: "testQuery" };
 
     await postController.getOne(req, res, next).catch((err) => (error = err));
 
-    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(req.params.id);
+    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(
+      req.params.id,
+      req.query
+    );
   });
 
   test("should throw error if post not found", async () => {
@@ -46,9 +49,21 @@ describe("getOne()", () => {
     expect(error).toEqual(errorTable.idNotFoundError());
   });
 
+  test("should call increase the post views if get post", async () => {
+    let error;
+    const increment = vi.fn().mockImplementationOnce(async () => {});
+    const post = { increment };
+    req = { params: { id: "testID" } };
+    postHelper.getFullPost.mockResolvedValueOnce(post);
+
+    await postController.getOne(req, res, next).catch((err) => (error = err));
+
+    expect(increment).toHaveBeenLastCalledWith({ views: 1 });
+  });
+
   test("should response post", async () => {
     let error;
-    const post = "testPost";
+    const post = { increment: vi.fn().mockImplementationOnce(async () => {}) };
     req = { params: { id: "testID" } };
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
@@ -58,72 +73,6 @@ describe("getOne()", () => {
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
       data: post,
-    });
-  });
-});
-
-describe("getAllTitle()", () => {
-  let req, res, next, select, findAll;
-
-  beforeAll(() => {
-    req = {};
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
-    vi.spyOn(Post, "count").mockImplementation(async () => {});
-
-    select = vi.fn().mockReturnThis();
-    findAll = vi.fn(async () => {});
-    GetFeatures.mockImplementation(() => ({
-      findAll,
-      select,
-    }));
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should get all posts title by the Post Model and req.query", async () => {
-    req.query = { fields: "-content,-AuthorId" };
-
-    await postController
-      .getAllTitle(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(GetFeatures).toHaveBeenLastCalledWith(Post, req.query);
-    expect(select).toHaveBeenCalled();
-    expect(findAll).toHaveBeenLastCalledWith({ raw: true });
-  });
-
-  test("should count the posts by request count", async () => {
-    req.count = "testCount";
-
-    await postController
-      .getAllTitle(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.count).toHaveBeenLastCalledWith({ where: req.count });
-  });
-
-  test("should response the information if get all title successfully~", async () => {
-    const data = ["testData", "testData2"];
-    findAll.mockResolvedValueOnce(data);
-    Post.count.mockResolvedValueOnce("testTotal");
-
-    await postController
-      .getAllTitle(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      total: "testTotal",
-      count: data.length,
-      data,
     });
   });
 });
@@ -205,7 +154,8 @@ describe("createOne()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(helper, "removeKeys").mockImplementation(() => {});
-    vi.spyOn(helper, "modifySyntax").mockImplementation((input) => input);
+    vi.spyOn(helper, "isImgURL").mockImplementation(() => {});
+    vi.spyOn(helper, "modeifiedSyntax").mockImplementation(() => {});
     vi.spyOn(User, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
     vi.spyOn(postHelper, "checkPostCategory").mockImplementation(() => {});
@@ -263,12 +213,18 @@ describe("createOne()", () => {
     expect(postHelper.checkAndFindPostTags).not.toHaveBeenCalled();
   });
 
-  test("should created post with tags", async () => {
+  test("should sanitize title, summary, content", async () => {
     let error;
     const category = { id: "CategoryId" };
     const tags = ["testTags"];
     req = {
-      body: { title: "testTitle", content: "testContent", tagIds: "tagIds" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        summary: "testSummary",
+        previewImg: "testPreviewImg",
+        tagIds: "tagIds",
+      },
       user: { id: "testUserId" },
     };
     Category.findByPk.mockResolvedValueOnce(category);
@@ -278,11 +234,87 @@ describe("createOne()", () => {
       .createOne(req, res, next)
       .catch((err) => (error = err));
 
+    expect(helper.modeifiedSyntax).toHaveBeenCalledWith(req.body.title);
+    expect(helper.modeifiedSyntax).toHaveBeenCalledWith(req.body.summary);
+    expect(helper.modeifiedSyntax).toHaveBeenCalledWith(req.body.content);
+  });
+
+  test("should created post with tags", async () => {
+    let error;
+    const category = { id: "CategoryId" };
+    const tags = ["testTags"];
+    req = {
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        summary: "testSummary",
+        previewImg: "testPreviewImg",
+        tagIds: "tagIds",
+      },
+      user: { id: "testUserId" },
+    };
+    Category.findByPk.mockResolvedValueOnce(category);
+    postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
+    helper.isImgURL.mockReturnValueOnce(true);
+    const dictionary = {
+      testTitle: "modifiedTestTitle",
+      testSummary: "modifiedTestSummary",
+      testContent: "modifiedTestContent",
+    };
+    helper.modeifiedSyntax.mockImplementation((input) => dictionary[input]);
+
+    await postController
+      .createOne(req, res, next)
+      .catch((err) => (error = err));
+
+    expect(helper.modeifiedSyntax).toHaveBeenCalled;
     expect(postHelper.createPostWithTags).toHaveBeenLastCalledWith({
-      title: req.body.title,
-      content: req.body.content,
+      title: "modifiedTestTitle",
+      content: "modifiedTestContent",
+      summary: "modifiedTestSummary",
       CategoryId: category.id,
       AuthorId: req.user.id,
+      previewImg: "testPreviewImg",
+      tags,
+    });
+  });
+
+  test("should created post with empty previewImg if previewImg is not an URL", async () => {
+    let error;
+    const category = { id: "CategoryId" };
+    const tags = ["testTags"];
+    req = {
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        summary: "testSummary",
+        previewImg: "testPreviewImg",
+        tagIds: "tagIds",
+      },
+      user: { id: "testUserId" },
+    };
+    Category.findByPk.mockResolvedValueOnce(category);
+    postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
+    helper.isImgURL.mockReturnValueOnce(false);
+    const dictionary = {
+      testTitle: "modifiedTestTitle",
+      testSummary: "modifiedTestSummary",
+      testContent: "modifiedTestContent",
+    };
+    helper.modeifiedSyntax.mockImplementation((input) => dictionary[input]);
+
+    await postController
+      .createOne(req, res, next)
+      .catch((err) => (error = err));
+
+    expect(helper.modeifiedSyntax).toHaveBeenCalled;
+    expect(postHelper.createPostWithTags).toHaveBeenLastCalledWith({
+      title: "modifiedTestTitle",
+      content: "modifiedTestContent",
+      summary: "modifiedTestSummary",
+      CategoryId: category.id,
+      AuthorId: req.user.id,
+      previewImg: "",
       tags,
     });
   });
@@ -324,7 +356,7 @@ describe("createOne()", () => {
       .catch((err) => (error = err));
 
     expect(helper.removeKeys).toHaveBeenLastCalledWith("testPost", [
-      "createdAt",
+      "createdAt", "updatedAt"
     ]);
   });
 
@@ -339,7 +371,11 @@ describe("createOne()", () => {
     const author = { author: "testAuthor" };
     const data = { data: "testData" };
     req = {
-      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
       user: { id: "testUserId" },
     };
     Category.findByPk.mockResolvedValueOnce(category);
@@ -483,7 +519,11 @@ describe("updateOne()", () => {
     const tags = ["testTags"];
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
       user: "testUser",
     };
     Post.findByPk.mockResolvedValueOnce(post);
@@ -503,7 +543,12 @@ describe("updateOne()", () => {
   test("should get post by id", async () => {
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
+      query: "testQuery",
     };
     postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
       "testTag",
@@ -511,7 +556,10 @@ describe("updateOne()", () => {
 
     await postController.updateOne(req, res, next);
 
-    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(req.params.id);
+    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(
+      req.params.id,
+      req.query
+    );
   });
 
   test("should response post", async () => {
@@ -519,7 +567,11 @@ describe("updateOne()", () => {
     const post = "testPost";
     req = {
       params: { id: "testId" },
-      body: { title: "testTitle", content: "testContent", tagIds: "testTagIds" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
     };
     postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
       "testTag",
@@ -597,12 +649,18 @@ describe("updateCategory()", () => {
 
   test("should get post", async () => {
     const category = { id: "testCategoryId" };
-    req = { params: { id: "testId", CategoryId: "testCategoryId" } };
+    req = {
+      params: { id: "testId", CategoryId: "testCategoryId" },
+      query: "testQuery",
+    };
     Category.findByPk.mockResolvedValueOnce(category);
 
     await postController.updateCategory(req, res, next);
 
-    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(req.params.id);
+    expect(postHelper.getFullPost).toHaveBeenLastCalledWith(
+      req.params.id,
+      req.query
+    );
   });
 
   test("should response the updated category post", async () => {
