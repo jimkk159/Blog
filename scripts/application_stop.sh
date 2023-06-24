@@ -11,3 +11,4 @@ if [ -n "$PID" ]; then
 else
   echo "Node process is not running"
 fi
+
