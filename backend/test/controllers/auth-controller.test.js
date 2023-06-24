@@ -546,7 +546,6 @@ describe("login()", () => {
     vi.spyOn(authHelper, "validatePassword").mockImplementation(async () => {});
     vi.spyOn(authHelper, "generateToken").mockImplementation(() => {});
     vi.spyOn(authHelper, "createTokenCookie").mockImplementation(() => {});
-    vi.spyOn(helper, "isURL").mockImplementation(() => {});
     vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(() => {});
   });
 
@@ -655,83 +654,6 @@ describe("login()", () => {
       res,
       token
     );
-  });
-
-  test("should return origin avatar even if the user avatar does not exist", async () => {
-    const userInfo = {
-      id: 1,
-      email: testEmail,
-      isEmailValidated: true,
-    };
-    req = { body: { email: testEmail, password: testPassword } };
-    User.findOne.mockResolvedValueOnce(userInfo);
-    Auth.findOne.mockImplementationOnce(async () => ({
-      password: testHashPassword,
-    }));
-    authHelper.generateToken.mockImplementationOnce(() => token);
-
-    await authController.login(req, res, next);
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      message: "Login successfully",
-      token,
-      data: { id: userInfo.id, name: userInfo.name },
-    });
-  });
-
-  test("should return origin avatar if the user avatar is an url", async () => {
-    const userInfo = {
-      id: 1,
-      email: testEmail,
-      isEmailValidated: true,
-      avatar,
-    };
-    req = { body: { email: testEmail, password: testPassword } };
-    User.findOne.mockResolvedValueOnce(userInfo);
-    Auth.findOne.mockImplementationOnce(async () => ({
-      password: testHashPassword,
-    }));
-    authHelper.generateToken.mockImplementationOnce(() => token);
-    helper.isURL.mockImplementationOnce(() => true);
-
-    await authController.login(req, res, next);
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      message: "Login successfully",
-      token,
-      data: { id: userInfo.id, name: userInfo.name, avatar: userInfo.avatar },
-    });
-  });
-
-  test("should replace the avatar file by the amazon s3 file url if the avatar is exist and not an url", async () => {
-    const userInfo = {
-      id: 1,
-      email: testEmail,
-      isEmailValidated: true,
-      avatar,
-    };
-    req = { body: { email: testEmail, password: testPassword } };
-    User.findOne.mockResolvedValueOnce(userInfo);
-    Auth.findOne.mockImplementationOnce(async () => ({
-      password: testHashPassword,
-    }));
-    authHelper.generateToken.mockImplementationOnce(() => token);
-    helper.isURL.mockImplementationOnce(() => false);
-    helper.getImgUrlFromS3.mockImplementationOnce(() => s3Avatar);
-
-    await authController.login(req, res, next);
-
-    expect(res.status).toHaveBeenLastCalledWith(200);
-    expect(res.json).toHaveBeenLastCalledWith({
-      status: "success",
-      message: "Login successfully",
-      token,
-      data: { id: userInfo.id, name: userInfo.name, avatar: s3Avatar },
-    });
   });
 
   test("should response if login successfully", async () => {

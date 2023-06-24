@@ -37,6 +37,7 @@ Post.hasMany(Comment, {
   },
   onDelete: "CASCADE",
 });
+
 Comment.belongsTo(Post, {
   foreignKey: {
     allowNull: false,

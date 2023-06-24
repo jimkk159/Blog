@@ -226,33 +226,6 @@ describe("deleteAvatarUrlFromS3()", () => {
   });
 });
 
-describe("getAvatarsUrlFromS3()", () => {
-  beforeAll(() => {
-    vi.spyOn(helper, "getImgUrlFromS3").mockImplementation(
-      (el) => "testAvatarFromS3" + el
-    );
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should get avatars", async () => {
-    const avatars = [{ avatar: "avatar1" }, { avatar: "avatar2" }];
-
-    await helper.getAvatarsUrlFromS3(avatars);
-
-    expect(avatars).toEqual([
-      { avatar: "testAvatarFromS3" + "avatar1" },
-      { avatar: "testAvatarFromS3" + "avatar2" },
-    ]);
-  });
-});
-
 describe("deleteImgUrlFromS3()", () => {
   test("should delete the img by file", async () => {
     const inputFile = "test";

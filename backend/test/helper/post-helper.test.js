@@ -126,7 +126,7 @@ describe("getFullPost()", () => {
       select: vi.fn().mockReturnThis(),
       paginate: vi.fn().mockReturnThis(),
       pop: vi.fn().mockReturnThis(),
-      findByPk: vi.fn().mockImplementation(() => ({})),
+      findByPk: vi.fn().mockImplementation(() => ({ Comments: [] })),
     };
     vi.spyOn(helper, "isURL").mockImplementation(() => false);
     vi.spyOn(helper, "setDefault").mockImplementation(() => {});
@@ -240,10 +240,12 @@ describe("getFullPost()", () => {
     expect(helper.getImgUrlFromS3).not.toHaveBeenCalled();
   });
 
-  test("should not replace Author avatar if avatar not exist", async () => {
+  test("should not replace Author avatar if avatar is undefined", async () => {
     const postId = "postId";
     const query = { pop: {}, sort: {} };
-    GetFeatures.findByPk.mockImplementationOnce(async () => ({ Author: "" }));
+    GetFeatures.findByPk.mockImplementationOnce(async () => ({
+      Author: "",
+    }));
 
     await postHelper.getFullPost(postId, query);
 
@@ -382,7 +384,7 @@ describe("getFullPosts()", () => {
 
   test("should not replace the posts author avatar if author does not exist", async () => {
     const posts = [{ toJSON: vi.fn().mockReturnThis() }];
-    GetFeatures.findAll.mockImplementationOnce(() => posts);
+    GetFeatures.findAll.mockImplementationOnce(async () => posts);
 
     const result = await postHelper
       .getFullPosts({ ...testQuery })

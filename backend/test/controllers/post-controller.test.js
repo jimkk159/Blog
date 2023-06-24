@@ -154,7 +154,7 @@ describe("createOne()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(helper, "removeKeys").mockImplementation(() => {});
-    vi.spyOn(helper, "isImgURL").mockImplementation(() => {});
+    vi.spyOn(helper, "isURL").mockImplementation(() => {});
     vi.spyOn(helper, "modeifiedSyntax").mockImplementation(() => {});
     vi.spyOn(User, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
@@ -255,7 +255,7 @@ describe("createOne()", () => {
     };
     Category.findByPk.mockResolvedValueOnce(category);
     postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
-    helper.isImgURL.mockReturnValueOnce(true);
+    helper.isURL.mockReturnValueOnce(true);
     const dictionary = {
       testTitle: "modifiedTestTitle",
       testSummary: "modifiedTestSummary",
@@ -295,7 +295,7 @@ describe("createOne()", () => {
     };
     Category.findByPk.mockResolvedValueOnce(category);
     postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
-    helper.isImgURL.mockReturnValueOnce(false);
+    helper.isURL.mockReturnValueOnce(false);
     const dictionary = {
       testTitle: "modifiedTestTitle",
       testSummary: "modifiedTestSummary",

@@ -1,5 +1,4 @@
 import he from "he";
-import validator from "validator";
 
 import * as helper from "./helper.js";
 import * as upload from "../aws/s3.js";
@@ -64,18 +63,8 @@ export const commandToS3Avatar = async (file, command) => {
   return file;
 };
 
-// export const getAvatarUrlFromS3 = async (file) =>
-//   commandToS3Avatar(file, upload.getFileFromS3);
-
 export const deleteAvatarUrlFromS3 = async (file) =>
   helper.commandToS3Avatar(file, upload.deleteFileFromS3);
-
-export const getAvatarsUrlFromS3 = (data) =>
-  data.map((el) => {
-    if (el.avatar) el.avatar = helper.getImgUrlFromS3(el.avatar);
-  });
-
-// export const getImgUrlFromS3 = async (file) => upload.getFileFromS3(file);
 
 export const deleteImgUrlFromS3 = async (file) => upload.deleteFileFromS3(file);
 
@@ -101,4 +90,12 @@ export const setDefault = (query, target, isNegative = true, join = ",") => {
   return [query, defaultTarget].join(join);
 };
 
-export const isImgURL = (img) => !!(img && validator.isURL(img));
+export const avatarToS3URL = (input) => {
+  if (helper.isURL(input)) return input;
+  return helper.getImgUrlFromS3(input);
+};
+
+export const avatarsToS3URL = (data) =>
+  data.forEach((el) => {
+    if (el.avatar) el.avatar = helper.avatarToS3URL(el.avatar);
+  });

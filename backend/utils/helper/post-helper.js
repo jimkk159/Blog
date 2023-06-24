@@ -63,8 +63,16 @@ export const getFullPost = async (postId, query) => {
 
   const post = await getFeature.findByPk(postId, query);
   if (!post) throw errorTable.idNotFoundError();
-  if (post.Author && post.Author.avatar && !helper.isURL(post.Author.avatar))
-    post.Author.avatar = helper.getImgUrlFromS3(post.Author.avatar);
+
+  // 1) populate Author avatar
+  if (post.Author && post.Author.avatar)
+    post.Author.avatar = helper.avatarToS3URL(post.Author.avatar);
+
+  // 2) populate Comments avatar
+  if (post.Comments && post.Comments.length)
+    post.Comments = post.Comments.forEach(
+      (el) => (el.Author.avatar = helper.avatarToS3URL(el.Author.avatar))
+    );
 
   return post;
 };
@@ -83,13 +91,21 @@ export const getFullPosts = async (query, customQuery = {}) => {
     .pop();
 
   let posts = await getFeature.findAll(customQuery);
-  posts = posts
-    .map((el) => el.toJSON())
-    .map((el) => {
-      if (el.Author && el.Author.avatar && !helper.isURL(el.Author.avatar))
-        el.Author.avatar = helper.getImgUrlFromS3(el.Author.avatar);
-      return el;
-    });
+  posts = posts.map((el) => el.toJSON());
+
+  // 1) populate Author avatar
+  posts.forEach((el) => {
+    if (el.Author && el.Author.avatar)
+      el.Author.avatar = helper.avatarToS3URL(el.Author.avatar);
+  });
+
+  // 2) populate Comments avatar
+  posts.forEach((el) => {
+    if (el.Comments && el.Comments.length)
+      el.Comments.forEach((el) => {
+        el.Author.avatar = helper.avatarToS3URL(el.Author.avatar);
+      });
+  });
 
   return posts;
 };

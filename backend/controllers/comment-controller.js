@@ -7,9 +7,7 @@ import * as errorTable from "../utils/error/error-table.js";
 import * as commentHelper from "../utils/helper/comment-helper.js";
 
 export const setPostId = catchAsync(async (req, res, next) => {
-  const PostId = req.params.postId
-    ? req.params.postId
-    : req.params.id;
+  const PostId = req.params.postId ? req.params.postId : req.params.id;
   req.body = { ...req.body, PostId };
   next();
 });
@@ -42,7 +40,10 @@ export const getAll = catchAsync(async (req, res, next) => {
     .pop();
 
   const data = await getFeature.findAll();
-  // await helper.getAvatarsUrlFromS3(data);
+  data.forEach((el) => {
+    if (el && el.Author && el.Author.avatar)
+      el.Author.avatar = helper.avatarToS3URL(el.Author.avatar);
+  });
 
   res.status(200).json({
     status: "success",

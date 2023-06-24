@@ -8,13 +8,11 @@ export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
     // 1) Create populate
     const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
-    
+
     // 2) Get data
     const data = await Model.findByPk(req.params.id, sqlQuery);
 
     if (!data) throw errorTable.idNotFoundError();
-    if (data.avatar && !helper.isURL(data.avatar))
-      data.avatar = helper.getImgUrlFromS3(data.avatar);
 
     res.status(200).json({
       status: "success",
@@ -32,7 +30,6 @@ export const getAll = (Model) =>
       .pop();
 
     const data = await getFeature.findAll({ raw: true });
-    helper.getAvatarsUrlFromS3(data);
 
     res.status(200).json({
       status: "success",
@@ -59,8 +56,6 @@ export const updateOne = (Model) =>
 
     const data = await Model.findByPk(req.params.id, { raw: true });
     if (!data) throw errorTable.idNotFoundError();
-    if (data.avatar && !helper.isURL(data.avatar))
-      data.avatar = helper.getImgUrlFromS3(data.avatar);
 
     res.status(200).json({
       status: "success",

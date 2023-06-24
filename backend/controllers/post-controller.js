@@ -139,7 +139,7 @@ export const createOne = catchAsync(async (req, res, next) => {
     tags = await postHelper.checkAndFindPostTags(req.body.tagIds);
 
   // 3) check previewImg
-  if (!helper.isImgURL(req.body.previewImg)) req.body.previewImg = "";
+  if (!helper.isURL(req.body.previewImg)) req.body.previewImg = "";
 
   // 4) create Post
   const post = await postHelper.createPostWithTags({

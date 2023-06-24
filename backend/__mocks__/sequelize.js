@@ -18,6 +18,7 @@ export const Sequelize = vi.fn().mockImplementation(() => ({
     destroy: vi.fn(),
     count: vi.fn(),
     belongsToMany: vi.fn(),
+    addHook: vi.fn(),
   })),
 }));
 
