@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useRouteLoaderData } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { motion, AnimatePresence } from "framer-motion";
+// import { motion, AnimatePresence } from "framer-motion";
 
 // redux
 import { tagActions } from "../../store/tag-slice";
