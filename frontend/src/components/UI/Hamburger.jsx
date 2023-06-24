@@ -1,8 +1,6 @@
 function Hamburger2({
   className,
   onClick,
-  lineWidth = "2px",
-  lineLength = "20px",
 }) {
   return (
     <button
@@ -11,13 +9,13 @@ function Hamburger2({
       onClick={onClick}
     >
       <span
-        className={`h-[${lineWidth}] w-6 rounded bg-self-pink-500 transition-all duration-500 `}
+        className={`h-0.5 w-6 rounded bg-self-pink-500 transition-all duration-500 `}
       />
       <span
-        className={`h-[${lineWidth}] w-8 rounded bg-self-pink-500 transition-all duration-500 `}
+        className={`h-0.5 w-8 rounded bg-self-pink-500 transition-all duration-500 `}
       />
       <span
-        className={`h-[${lineWidth}] w-6 rounded bg-self-pink-500 transition-all duration-500 `}
+        className={`h-0.5 w-6 rounded bg-self-pink-500 transition-all duration-500 `}
       />
     </button>
   );
