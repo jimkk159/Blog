@@ -60,6 +60,7 @@ export const redirectOauth = catchAsync((req, res, next) => {
     avatar: req.user.avatar,
     token,
   };
+
   // 4) Remove the user info in session, we don't need it
   req.logout((err) => {
     if (err) return next(err);
