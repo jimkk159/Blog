@@ -84,16 +84,14 @@ describe("createOne()", () => {
     );
   });
 
-  test("should find or create category", async () => {
+  test("should create category", async () => {
     req = { body: { name: "testName", ParentId: testParentID } };
 
     await categoryController.createOne(req, res, next);
 
-    expect(Category.findOrCreate).toHaveBeenLastCalledWith({
-      where: { name: req.body.name },
-      defaults: {
-        ParentId: req.body.ParentId,
-      },
+    expect(Category.create).toHaveBeenLastCalledWith({
+      ParentId: req.body.ParentId,
+      name: helper.modeifiedSyntax(req.body.name),
     });
   });
 
@@ -121,7 +119,7 @@ describe("createOne()", () => {
       createdAt: "createdAt",
       toJSON: () => resCategory,
     };
-    Category.findOrCreate.mockResolvedValueOnce([category, true]);
+    Category.create.mockResolvedValueOnce(category);
 
     await categoryController.createOne(req, res, next);
 
@@ -144,7 +142,7 @@ describe("createOne()", () => {
       createdAt: "createdAt",
       toJSON: () => resCategory,
     };
-    Category.findOrCreate.mockResolvedValueOnce([category, true]);
+    Category.create.mockResolvedValueOnce(category);
 
     await categoryController.createOne(req, res, next);
 

@@ -11,6 +11,8 @@ const router = express.Router();
 router.get("/", factory.getAll(Category));
 router.get("/:id", factory.getOne(Category));
 
+router.use(authController.authUserByToken);
+
 router.post(
   "/",
   [check("name").not().isEmpty(), check("ParentId").not().isEmpty()],
@@ -18,7 +20,7 @@ router.post(
   categoryController.createOne
 );
 
-router.use(authController.authUserByToken, authController.restrictTo("root"));
+router.use(authController.restrictTo("root"));
 
 router
   .route("/:id")

@@ -24,19 +24,17 @@ export const createOne = catchAsync(async (req, res, next) => {
     throw errorTable.notNumberError("ParentId");
   await categoryHelper.checkParentIsExist(req.body.ParentId);
 
-  // 2) find or create category
-  let [category, created] = await Category.findOrCreate({
-    where: { name: helper.modeifiedSyntax(req.body.name) },
-    defaults: {
-      ParentId: req.body.ParentId,
-    },
+  // 2) create category
+  let data = await Category.create({
+    ParentId: req.body.ParentId,
+    name: helper.modeifiedSyntax(req.body.name),
   });
-  if (!created) throw errorTable.categoryAlreadyExistError();
-  category = helper.removeKeys(category.toJSON(), ["updatedAt", "createdAt"]);
+  if (!data) throw errorTable.categoryAlreadyExistError();
+  data = helper.removeKeys(data.toJSON(), ["updatedAt", "createdAt"]);
 
   res.status(200).json({
     status: "success",
-    data: category,
+    data,
   });
 });
 
@@ -61,7 +59,10 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 4) update category ParentId
   await Category.update(
-    { name: helper.modeifiedSyntax(req.body.name), ParentId: req.body.ParentId },
+    {
+      name: helper.modeifiedSyntax(req.body.name),
+      ParentId: req.body.ParentId,
+    },
     { where: { id: req.params.id } }
   );
 
