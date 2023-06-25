@@ -30,7 +30,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://blog.backend.jimkk159.com/api/v1/oauth/google/redirect",
+      callbackURL: process.env.SERVER_URL+"/api/v1/oauth/google/redirect",
     },
     oauthController.oauthGoogle
   )
