@@ -17,7 +17,7 @@ function EditCategory({ current, onClose }) {
 
   // react-router
   const navigate = useNavigate();
-  const token = useRouteLoaderData("root");
+  const { token } = useRouteLoaderData("root");
   const { relation } = useRouteLoaderData("relation");
 
   // custom hooks
@@ -90,7 +90,7 @@ function EditCategory({ current, onClose }) {
     <form
       onSubmit={submitHandler}
       onClick={(e) => e.stopPropagation()}
-      className="max-w-32 absolute left-8 top-0 z-10 rounded-sm bg-slate-100 p-4 text-gray-800 "
+      className="max-w-32 absolute left-8 top-0 z-10 rounded-sm bg-slate-100 p-4 text-gray-800"
     >
       <RxCross1
         className="absolute right-1.5 top-1.5 h-3 w-3"
@@ -102,7 +102,7 @@ function EditCategory({ current, onClose }) {
             response?.data?.categories?.data.map((el) => ({
               ...el,
               value: el.id,
-            })) ?? [];        
+            })) ?? [];
 
           return (
             <MultiSelectInput

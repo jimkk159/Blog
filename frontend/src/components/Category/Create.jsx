@@ -17,7 +17,7 @@ function CreateCategory({ onClose }) {
 
   // react-router
   const navigate = useNavigate();
-  const token = useRouteLoaderData("root");
+  const { token } = useRouteLoaderData("root");
   const { relation } = useRouteLoaderData("relation");
 
   // custom hooks
@@ -72,7 +72,7 @@ function CreateCategory({ onClose }) {
         name="name"
         placeholder="Input category...."
         errorMessage={"Please enter Category!"}
-        className="h-8 w-full rounded-sm border border-gray-500 pl-2 text-base outline-none text-black"
+        className="h-8 w-full rounded-sm border border-gray-500 pl-2 text-base text-black outline-none"
         onInput={inputHandler}
         validators={(e) => !validator.isEmpty(e)}
       />

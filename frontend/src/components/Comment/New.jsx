@@ -27,6 +27,7 @@ function NewComment({ post }) {
       event.stopPropagation();
       setIsSubmitting(true);
       const token = authHelper.getAuthToken();
+      
       if (token && !!comment) {
         await fetch(
           process.env.REACT_APP_BACKEND_URL +

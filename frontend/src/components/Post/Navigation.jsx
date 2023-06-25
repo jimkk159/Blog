@@ -27,7 +27,7 @@ function PostsNavigation({ limit }) {
     <div
       className={`${
         limit && "max-h-[512px]"
-      } overflow-y-auto rounded-3xl bg-self-dark md:block md:w-44 lg:w-52 xl:w-60`}
+      } h-[512px] overflow-y-auto rounded-3xl bg-self-dark md:block md:w-44 lg:w-52 xl:w-60`}
     >
       <div className="box-border w-full py-8 pl-3 pr-4 lg:pl-5 lg:pr-6">
         <AwaitWrapper resolve={relation}>

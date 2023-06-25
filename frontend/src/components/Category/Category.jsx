@@ -8,11 +8,7 @@ import EditCategory from "./Edit";
 // Redux Action
 import { catalogueActions } from "../../store/catalogue-slice";
 
-function Category({
-  category,
-  isOpen = false,
-  setIsOpen = () => {},
-}) {
+function Category({ category, isOpen = false, setIsOpen = () => {} }) {
   // redux
   const dispatch = useDispatch();
   const { isRoot } = useSelector((state) => state.auth);
@@ -58,7 +54,8 @@ function Category({
             className="ml-2"
             onClick={(e) => {
               e.stopPropagation();
-              dispatch(catalogueActions.set({ name: category.name }));
+              if (name === category.name) dispatch(catalogueActions.reset());
+              else dispatch(catalogueActions.set({ name: category.name }));
             }}
           />
         )}
