@@ -1,24 +1,28 @@
 version: 0.2
-env:
-  variables:
-    REACT_APP_BACKEND_URL: https://blog.backend.jimkk159.com
 phases:
   install:
     runtime-versions:
       nodejs: 18
     commands:
       - echo "Installing dependencies..."
-      - cd frontend
+      - cd backend
       - npm install
-  build:
+  pre_build:
     commands:
-      - echo "Start building..."
-      # Build react project
-      - npm run build
+      - echo "Start testing..."
+      # Discover and run unit tests in the 'tests' directory
+      - npm test
     finally:
-      - echo "Finish building..."
+      - echo "Finish testing..."
   post_build:
     commands:
-      - echo "Updating files in the S3 bucet..."
-      - aws s3 sync build s3://jim-blog-frontend --delete
-      
+      # Remove existing node_modules to clear dev dependencies
+      - rm -r node_modules
+      # Install runtime dependencies
+      - npm install --production   
+artifacts:
+  files:
+    - README.md
+    - appspec.yml
+    - scripts/*
+    - backend/**/*
