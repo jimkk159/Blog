@@ -1,5 +1,6 @@
-// redux
 import { redirect } from "react-router-dom";
+
+// redux
 import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
 
@@ -16,5 +17,5 @@ export async function loader({ request }) {
   );
 
   localStorage.setItem("token", searchParams.get("token"));
-  redirect("/oauth/close");
+  return redirect("/oauth/close");
 }

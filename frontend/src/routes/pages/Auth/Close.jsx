@@ -1,3 +1,3 @@
 export async function loader() {
-  window.close();
+  return window.close();
 }
