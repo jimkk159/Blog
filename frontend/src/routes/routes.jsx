@@ -23,9 +23,7 @@ const NewPostPage = lazy(() => import("./pages/Post/New"));
 const EditPostPage = lazy(() => import("./pages/Post/Edit"));
 const SearchPage = lazy(() => import("./pages/Post/Search"));
 const PostDetailPage = lazy(() => import("./pages/Post/Detail"));
-const PostsRelationRootLayout = lazy(() =>
-  import("./pages/Post/RelationRoot")
-);
+const PostsRelationRootLayout = lazy(() => import("./pages/Post/RelationRoot"));
 
 const lazyLoader = (path) => (input) =>
   import(`${path}`).then((module) => module.loader(input));
@@ -112,7 +110,14 @@ const router = createBrowserRouter([
           },
         ],
       },
-      { path: "oauth/success", element: SuspenseWrapper(<OauthPage />) },
+      {
+        path: "oauth",
+
+        children: [
+          { path: "success", loader: lazyLoader("./pages/Auth/Oauth") },
+          { path: "close", loader: lazyLoader("./pages/Auth/Close") },
+        ],
+      },
       {
         path: "logout",
         action: lazyAction("./pages/Auth/Logout"),

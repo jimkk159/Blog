@@ -1,26 +1,20 @@
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSearchParams } from "react-router-dom";
+// redux
+import { redirect } from "react-router-dom";
+import store from "../../../store";
 import { authActions } from "../../../store/auth-slice";
 
-function OauthPage() {
-  // redux
-  const dispatch = useDispatch();
-  const searchParams = useSearchParams()[0];
+export async function loader({ request }) {
+  const searchParams = new URL(request.url).searchParams;
 
-  // useEffect
-  useEffect(() => {
-    dispatch(
-      authActions.login({
-        id: searchParams.get("id"),
-        role: searchParams.get("role"),
-        name: searchParams.get("name"),
-        avatar: searchParams.get("avatar"),
-      })
-    );
-    localStorage.setItem("token", searchParams.get("token"));
-    window.close();
-  }, [dispatch, searchParams]);
+  store.dispatch(
+    authActions.login({
+      id: searchParams.get("id"),
+      role: searchParams.get("role"),
+      name: searchParams.get("name"),
+      avatar: searchParams.get("avatar"),
+    })
+  );
+
+  localStorage.setItem("token", searchParams.get("token"));
+  redirect("/oauth/close");
 }
-
-export default OauthPage;
