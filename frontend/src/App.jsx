@@ -1,21 +1,20 @@
 import React from "react";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
-//Custom component
-import Card from "./shared/components/UI/Card";
-import Navigation from "./shared/components/Navigation/Navigation";
+//Redux Store
+import store, { persistor } from "./store";
 
-import './APP.module.css';
+//Custom Component
+import CustomRoute from "./routes/routes";
 
 function App() {
   return (
-    <div>
-      <Navigation />
-      <main>
-        <Card>
-          <h1>Hello world2</h1>
-        </Card>
-      </main>
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <CustomRoute />
+      </PersistGate>
+    </Provider>
   );
 }
 
