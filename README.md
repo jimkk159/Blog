@@ -55,7 +55,7 @@
     - [Cloud Services](#cloud-services)
     - [Architecture](#architecture)
 - [Frontend](#frontend)
-    - [Setup](#setup)
+    - [Setup](#setup-1)
     - [Sitemap](#sitemap)
     - [Third Party Library](#third-party-library)
     - [Cloud Services](#cloud-services)
