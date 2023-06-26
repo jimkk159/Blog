@@ -9,21 +9,17 @@
 
 👩‍💻 Test Account: test@test.com / Password: 123456
 
-- Home Page
-<img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_1.gif">
-
-<br />
 <br />
 
 - Responsive Web Design(RWD)
     
-| Sidedrawer on mobile | RWD  |
+| Sidedrawer | Break point  |
 |---	|---    |
 |<img width="200" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_2.gif">|<img width="300" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_3.gif"> |
 
 - Editor
     
-| Cover Upload Post Cover  | 
+| Upload Post Cover  | 
 |---	|
 | <div align="center"><img height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_4.gif"></div>|  
     
