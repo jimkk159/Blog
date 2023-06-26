@@ -17,7 +17,7 @@
 <br />
 <br />
 
-- Support for Responsive Web Design(RWD)
+- Responsive Web Design(RWD)
     
 | Sidedrawer on mobile | RWD  |
 |---	|---    |
@@ -27,15 +27,15 @@
     
 | Cover Upload Post Cover  | 
 |---	|
-| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_4.gif"></div>|  
+| <div align="center"><img height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_4.gif"></div>|  
     
 | KaTeX Plugin | Mermaid Plugin |
 |---	|---	|
-| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_5.gif"></div>| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_6.gif"></div>   | 
+| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_5.gif"></div>| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_6.gif"></div>   | 
 
 | Upload image   | DnD image | Embed Yt   | 
 |---	|---	|---	|
-| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |  <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_10.gif"></div> |   
+| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="320" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |
 
 ## Table of Contents
 - [Branch Rule](#branch-rule)
@@ -44,8 +44,9 @@
     - [Networking](#networking-protocol)
     - [Version Control](#version-control)
 - [Database](#database)
-    - [Database Schema](#database-schema)
+    - [Schema](#schema)
 - [Backend](#backend)
+    - [Setup](#setup)
     - [Design Pattern](#design-pattern)
     - [Env](#env)
     - [Env Requirement](#env-requirement)
@@ -53,6 +54,14 @@
     - [Test](#test)
     - [Cloud Services](#cloud-services)
     - [Architecture](#architecture)
+- [Frontend](#frontend)
+    - [Setup](#setup)
+    - [Sitemap](#sitemap)
+    - [Third Party Library](#third-party-library)
+    - [Cloud Services](#cloud-services)
+    - [Architecture](#architecture)
+- [API Doc](#api-doc)
+- [Contact](#contact)
 
 ## Branch Rule
 Main branch is **`master`**。
@@ -87,7 +96,7 @@ Frontend branch is **`frontendv2`**。
 
 - MySQL on RDS
 
-### Database Schema
+### Schema
 
 <div align="center">
     <img width="600" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/blog-database-schema.png">
@@ -101,8 +110,6 @@ Frontend branch is **`frontendv2`**。
 git checkout backend
 cd backend
 npm i
-npm run start:dev
-npm start
 ```
 - development mode
 ```
