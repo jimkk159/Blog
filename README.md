@@ -14,11 +14,28 @@
     <img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_1.gif">
 </div>
 
+<br />
+<br />
+
 - Support for Responsive Web Design(RWD)
-<div align="center" style={{display:flex;justify-content: space-between;}}>
-    <img width="200" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_2.gif">
-    <img width="300" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_3.gif">
-</div>
+    
+| Sidedrawer on mobile | RWD  |
+|---	|---    |
+|<img width="200" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_2.gif">|<img width="300" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_3.gif"> |
+
+- Editor
+    
+| Cover Upload Post Cover  | 
+|---	|
+| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_4.gif"></div>|  
+    
+| KaTeX Plugin | Mermaid Plugin |
+|---	|---	|
+| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_5.gif"></div>| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_6.gif"></div>   | 
+
+| Upload image   | DnD image | Embed Yt   | 
+|---	|---	|---	|
+| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |  <div align="center"><img width="200" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_10.gif"></div> |   
 
 ## Table of Contents
 - [Branch Rule](#branch-rule)
