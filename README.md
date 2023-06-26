@@ -172,8 +172,8 @@ npm start
 ### React (hooks) & Sitemap
 
 - SPA with functional components
+<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/sitemap.png">
 
-![image](https://github.com/jimkk159/Blog/blob/main/readmeImg/sitemap.png)
 
 ### Third Party Library
 
