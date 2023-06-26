@@ -33,9 +33,13 @@
 |---	|---	|
 | <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_5.gif"></div>| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_6.gif"></div>   | 
 
-| Upload image   | DnD image | Embed Yt   | 
-|---	|---	|---	|
-| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="320" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |
+| Upload image   | DnD image |
+|---	|---	|
+| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="320" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | 
+
+| Embed Yt   | 
+|---	|
+|<div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |
 
 ## Table of Contents
 - [Branch Rule](#branch-rule)
@@ -97,10 +101,7 @@ Frontend branch is **`frontendv2`**。
 - MySQL on RDS
 
 ### Schema
-
-<div align="center">
-    <img width="600" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/blog-database-schema.png">
-</div>
+<img height="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/blog-database-schema.png">
 
 ## Backend
 
@@ -158,8 +159,8 @@ npm start
 ## Architecture
 
 - Server Architecture (Support CI/CD)
+<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
 
-  ![image](https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png)
 
 ## Frontend
 Frontent is made from create-react-app
@@ -190,8 +191,7 @@ npm start
 ## Architecture
 
 - Frontend Architecture (Support CI/CD)
-  
-  ![image](https://github.com/jimkk159/Blog/blob/main/readmeImg/frontend-architecture.png)
+<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/frontend-architecture.png">
 
 ## API Doc
 [API doc]()
