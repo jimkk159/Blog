@@ -159,7 +159,7 @@ npm start
 ## Architecture
 
 - Server Architecture (Support CI/CD)
-<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
+<img width="500" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
 
 
 ## Frontend
