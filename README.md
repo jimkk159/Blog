@@ -66,9 +66,9 @@
 - [Contact](#contact)
 
 ## Branch Rule
-Main branch is **`master`**。
-Backend branch is **`backend`**。
-Frontend branch is **`frontendv2`**。
+Main branch is **`master`**。  
+Backend branch is **`backend`**。  
+Frontend branch is **`frontendv2`**。  
 
 ## Commit
 1. Add feature：**`feat: xxx`**
