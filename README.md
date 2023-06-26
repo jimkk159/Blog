@@ -10,9 +10,7 @@
 👩‍💻 Test Account: test@test.com / Password: 123456
 
 - Home Page
-<div align="center">
-    <img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_1.gif">
-</div>
+<img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_1.gif">
 
 <br />
 <br />
@@ -159,7 +157,7 @@ npm start
 ## Architecture
 
 - Server Architecture (Support CI/CD)
-<img width="500" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
+<img width="600" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
 
 
 ## Frontend
