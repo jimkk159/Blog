@@ -14,7 +14,7 @@ export const authUserByToken = catchAsync(async (req, res, next) => {
   // 1) Allow preflight
   if (req.method === "OPTIONS") return next();
 
-  // 2) Verify token:'Bearer TOKEN'
+  // 2) Verify token:'Bearer token'
   if (!authHelper.isHearderAuthorization(req.headers))
     throw errorTable.authTokenNotExistError();
   const token = req.headers.authorization.split(" ")[1];
@@ -128,7 +128,6 @@ export const signup = catchAsync(async (req, res, next) => {
 export const login = catchAsync(async (req, res, next) => {
   const provider = "local";
   // 1) Confirm email exist
-
   const user = await User.findOne({
     where: { email: req.body.email },
     raw: true,

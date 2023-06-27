@@ -30,7 +30,15 @@ import categoriesRouters from "../routes/category-routes.js";
 import AppError from "../utils/error/app-error.js";
 import errorHandler from "../utils/error/handle-error.js";
 
+// Document
+import specs from "../docs/index.js"
+import swaggerUi from "swagger-ui-express";
+
+
 export const app = express();
+
+//Implement Swagger
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 //Implement CORS
 app.use(cors());

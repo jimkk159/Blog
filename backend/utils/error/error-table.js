@@ -19,7 +19,7 @@ export const dbBadTimeStampError = () =>
   new AppError(`You have an error in your query TimeStamp;`, 422);
 
 export const authTokenNotExistError = () =>
-  new AppError("Authentication failed!", 400);
+  new AppError("Authentication failed!", 401);
 
 export const isNotLegalUserError = () =>
   new AppError("Authentication failed!", 400);
@@ -40,7 +40,7 @@ export const passwordNotMatchError = () =>
   new AppError("Password are not match.", 400);
 
 export const wrongPasswordError = () =>
-  new AppError("Wrong password, please check your password.", 401);
+  new AppError("Wrong password, please check your password.", 403);
 
 export const validatePasswordError = () =>
   new AppError(
@@ -58,7 +58,7 @@ export const duplicatedSignUpError = () =>
   new AppError("You have signed up already, please login instead.", 422);
 
 export const userNotExistError = () =>
-  new AppError("User not exists, singup an account first.", 422);
+  new AppError("User not exists, singup an account first.", 404);
 
 export const passwordNoProvidError = () =>
   new AppError("Please provide your password", 400);
@@ -100,7 +100,7 @@ export const validateError = (errors) =>
     `Invalid inputs, please check your input ${errors
       .map((el) => el.param)
       .join(", ")} is correct.`,
-    422
+    400
   );
 
 export const permissionDenyError = () => new AppError("Permission deny", 403);
@@ -117,14 +117,14 @@ export const initialCategoryTableFailError = () =>
 export const notNumberError = (input) =>
   new AppError(`${input} should be a Number`, 400);
 
-export const categoryNotFound = () => new AppError("Category not found", 400);
+export const categoryNotFound = () => new AppError("Category not found", 404);
 
-export const postNotFound = () => new AppError("Post not found", 400);
+export const postNotFound = () => new AppError("Post not found", 404);
 
-export const commentNotFound = () => new AppError("Comment not found", 400);
+export const commentNotFound = () => new AppError("Comment not found", 404);
 
 export const parentNotFound = () =>
-  new AppError("Category parent not found", 400);
+  new AppError("Category parent not found", 404);
 
 export const circularReferenceHappenError = () =>
   new AppError("Circular reference happen! Not allow to update!", 400);
