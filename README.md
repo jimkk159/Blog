@@ -188,7 +188,7 @@ npm start
 <img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/frontend-architecture.png">
 
 ## API Doc
-[API doc]()
+[API doc](https://blog.backend.jimkk159.com/api-docs)
 
 ## Contact
 
