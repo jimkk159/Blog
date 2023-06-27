@@ -60,7 +60,7 @@ export const encryptPassword = async (password) =>
 export const validatePassword = async (password, hash) => {
   let valid = false;
   try {
-    valid = await bcrypt.compare(password, hash);
+    valid = await bcrypt.compare("" + password, hash);
   } catch (err) {
     throw errorTable.validatePasswordError();
   }

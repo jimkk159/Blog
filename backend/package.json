@@ -41,6 +41,8 @@
     "sequelize": "^6.30.0",
     "sqlite3": "^5.1.6",
     "supertest": "^6.3.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",
     "validator": "^13.9.0",
     "vitest": "^0.29.8",
