@@ -1,70 +1,198 @@
-# Getting Started with Create React App
+# Blog
+<div align="center">
+    <img width="200" src="https://github.com/jimkk159/Blog/assets/105664533/0c5a7720-af4b-404f-9779-6be5c89f6d98">
+</div>
+📜This project is a blog website that allow you and your friends to edit blog post together
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Demo
+🕹️ Demon Website URL: https://blogv2.jimkk159.com/  
 
-## Available Scripts
+👩‍💻 Test Account: test@test.com / Password: 123456
 
-In the project directory, you can run:
+<br />
 
-### `npm start`
+- Responsive Web Design(RWD)
+    
+| Sidedrawer | Break point  |
+|---	|---    |
+|<img width="200" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_2.gif">|<img width="300" height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_3.gif"> |
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Editor
+    
+| Upload Post Cover  | 
+|---	|
+| <div align="center"><img height="250" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_4.gif"></div>|  
+    
+| KaTeX Plugin | Mermaid Plugin |
+|---	|---	|
+| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_5.gif"></div>| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_6.gif"></div>   | 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+| Upload image   | DnD image |
+|---	|---	|
+| <div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_7.gif"></div>| <div align="center"><img width="320" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_8.gif"></div>   | 
 
-### `npm test`
+| Embed Yt   | 
+|---	|
+|<div align="center"><img width="300" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/demo_9.gif"></div>  |
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Table of Contents
+- [Branch Rule](#branch-rule)
+- [Commit](#commit)
+- [Main Features](#main-features)
+    - [Networking](#networking-protocol)
+    - [Version Control](#version-control)
+- [Database](#database)
+    - [Schema](#schema)
+- [Backend](#backend)
+    - [Setup](#setup)
+    - [Design Pattern](#design-pattern)
+    - [Env](#env)
+    - [Env Requirement](#env-requirement)
+    - [Third Party Library](#third-party-library)
+    - [Test](#test)
+    - [Cloud Services](#cloud-services)
+    - [Architecture](#architecture)
+- [Frontend](#frontend)
+    - [Setup](#setup-1)
+    - [Sitemap](#sitemap)
+    - [Third Party Library](#third-party-library)
+    - [Cloud Services](#cloud-services)
+    - [Architecture](#architecture)
+- [API Doc](#api-doc)
+- [Contact](#contact)
 
-### `npm run build`
+## Branch Rule
+Main branch is **`master`**。  
+Backend branch is **`backend`**。  
+Frontend branch is **`frontendv2`**。  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Commit
+1. Add feature：**`feat: xxx`**
+2. Fix bug：**`fix: xxx`**
+3. Refactor code：**`refactor: xxx`**
+4. Documents：**`docs: xxx `**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Main Features
+- Users can sign in locally or use Google OAuth 2.0.
+- User authentication with Json Web Token.
+- Enable two-step email authentication for local email and password login.
+- Supports mobile devices so you can update content anytime anywhere.
+- Permission control/management. Only the host(root user) has the authority to revoke access to your posts and modify or update public topics.
+- Hosting images on aws S3
+- Unit test by vitest on backend
+- Setup CI/CD pipeline with aws codebuild, codedeploy and codepipeline.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Networking Protocol
 
-### `npm run eject`
+- HTTP & HTTPS
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Version Control
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Git/GitHub
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Database
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- MySQL on RDS
 
-## Learn More
+### Schema
+<img height="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/blog-database-schema.png">
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Backend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Setup
 
-### Code Splitting
+```
+git checkout backend
+cd backend
+npm i
+```
+- development mode
+```
+npm run start:dev
+```
+- production mode
+```
+npm start
+```
+### Design Pattern
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+- MVC Pattern
+  
+### Env
 
-### Analyzing the Bundle Size
+- Node.js
+- Express.js
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Env Requirement
 
-### Making a Progressive Web App
+- Node version >= 18
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Third Party Library
 
-### Advanced Configuration
+- passport.js
+- mysql2
+- sequelize
+- nodemailer
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Test
 
-### Deployment
+- Unit test: Vitest
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Cloud Services
 
-### `npm run build` fails to minify
+- S3
+- EC2
+- RDS
+- Route 53
+- Codebuild
+- Codedeploy
+- Codepipline
+- Load Balancer
+- Certificate Manager
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Architecture
+
+- Server Architecture (Support CI/CD)
+<img width="600" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
+
+
+## Frontend
+Frontent is made from create-react-app
+
+### Setup
+```
+npm start
+```
+
+### React (hooks) & Sitemap
+
+- SPA with functional components
+<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/sitemap.png">
+
+
+### Third Party Library
+
+- Tailwind CSS
+- React Router
+- Redux (redux-toolkit)
+- @uiw/react-md-editor
+
+### Cloud Services
+
+- S3
+- Codebuild
+  
+## Architecture
+
+- Frontend Architecture (Support CI/CD)
+<img width="400" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/frontend-architecture.png">
+
+## API Doc
+[API doc]()
+
+## Contact
+
+✍️ Jim Chung
+<br/>
+
+📧Email: jimkk159@gmail.com
