@@ -157,10 +157,13 @@ npm start
 
 
 ## Frontend
-Frontent is made from create-react-app
+Frontent is made from **create-react-app**
 
 ### Setup
 ```
+git checkout frontendv2
+cd frontend
+npm i
 npm start
 ```
 
