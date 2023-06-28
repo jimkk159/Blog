@@ -31,7 +31,7 @@ export const onImageUpload = async (file, setMarkdown) => {
   );
   if (!insertedMarkdown) return;
 
-  setMarkdown(insertedMarkdown);
+  setMarkdown((prev) => prev + insertedMarkdown);
 };
 
 export const extractYouTubeId = (url) => {
@@ -194,7 +194,7 @@ export const videoBtn = () =>
 
     //   const transToVideoIframe = (url) => {
     //     const ytId = extractYouTubeId(url);
-    //     return `<div class="relative flex justify-cneter w-full h-0" style="min-height: 100px; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation allow-forms allow-same-origin allow-storage-access-by-user-activation" allowfullscreen="" 
+    //     return `<div class="relative flex justify-cneter w-full h-0" style="min-height: 100px; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/${ytId}" frameborder="0" sandbox="allow-scripts allow-popups allow-top-navigation-by-user-activation allow-forms allow-same-origin allow-storage-access-by-user-activation" allowfullscreen=""
     //   class="absolute left-0 top-0 w-full h-full rounded-sm pointer-events-auto bg-[rgb(25, 25, 25)]"
     //   ></iframe></div>`;
     //   };
