@@ -23,9 +23,9 @@ function CommentItem({ comment }) {
   const navigate = useNavigate();
 
   // custom functions
-  const cancelHandler = () => {
+  const cancelHandler = (event) => {
     const alert = window.confirm("Are you sure?");
-    if (alert) removeCommentHandler();
+    if (alert) removeCommentHandler(event);
   };
 
   const commentId = comment.id;
@@ -57,13 +57,15 @@ function CommentItem({ comment }) {
   return (
     <>
       <div className="flex items-end justify-end space-x-3">
-        <Avatar
-          title={comment.Author.name}
-          avatar={comment.Author.avatar}
-          className={"h-9 w-9 border-2 border-white md:h-10 md:w-10"}
-          onClick={() => navigate(`/profile/${comment.Author.id}`)}
-        />
-        <div className="flex w-full flex-col items-start space-y-0.5 md:h-10">
+        <div className="self-start">
+          <Avatar
+            title={comment.Author.name}
+            avatar={comment.Author.avatar}
+            className={"h-9 w-9 border-2 border-white md:h-10 md:w-10"}
+            onClick={() => navigate(`/profile/${comment.Author.id}`)}
+          />
+        </div>
+        <div className="flex w-full flex-col items-start space-y-0.5">
           <div className="flex space-x-2">
             <p
               className="flex w-fit cursor-pointer truncate text-xs text-self-pink-500 hover:text-self-pink-600"
@@ -76,7 +78,7 @@ function CommentItem({ comment }) {
               {helper.formatDate(comment.editedAt)}
             </p>
           </div>
-          <p className="h-4 w-full bg-transparent font-poppins text-base text-white">
+          <p className="w-full font-poppins text-base text-white">
             {comment.content}
           </p>
         </div>
