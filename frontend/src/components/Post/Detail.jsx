@@ -127,7 +127,7 @@ function Detail({ post }) {
               onClick={() => navigate("edit")}
             >
               EDIT
-            </button>{" "}
+            </button>
             <Button
               type="button"
               disabled={isSubmitting}

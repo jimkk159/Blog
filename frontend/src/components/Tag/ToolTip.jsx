@@ -72,6 +72,7 @@ function TagsToolTip({
               animate={{ width: 200, height: 150 }}
               exit={{ width: 0, height: 0 }}
               className="absolute bottom-8 z-10 overflow-hidden rounded-sm border-2 border-gray-200 bg-white p-1.5 shadow ring-1"
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="relative h-full w-full px-1 py-0.5">
                 <AwaitWrapper resolve={relation}>

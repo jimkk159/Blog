@@ -205,7 +205,7 @@ function PostEditor({ method, post }) {
           <TagList
             post={post}
             isEditMode={true}
-            isEdit={isEditTag}
+            isEditting={isEditTag}
             onClose={() => setIsEditTag(false)}
             onToggle={() => setIsEditTag((prev) => !prev)}
           />
