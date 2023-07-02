@@ -100,6 +100,7 @@ function PostEditor({ method, post }) {
   useEffect(() => {
     if (data && data.message) {
       setIsTouched(false);
+      setIsShowModal(false);
       setSubmigErrorMessage(data.message);
     }
   }, [data]);

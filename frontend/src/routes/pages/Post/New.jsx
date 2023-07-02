@@ -1,4 +1,4 @@
-import { redirect } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 import store from "../../../store";
@@ -32,6 +32,9 @@ export async function action({ request }) {
   const token = authHelper.getAuthToken();
   const tagIds = store?.getState()?.tag?.tags.map((el) => el.id);
 
+  if (!data.get("content"))
+    return json({ message: "Content should not be null..." }, { status: 400 });
+
   const postData = {
     title: data.get("title"),
     content: data.get("content"),
@@ -52,6 +55,7 @@ export async function action({ request }) {
   });
 
   const resJSON = await response.json();
+
   const postId = resJSON.data.id;
   return redirect("/posts/" + postId);
 }

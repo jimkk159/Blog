@@ -26,7 +26,7 @@ function Detail({ post }) {
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   // react-router
-  const data = useActionData;
+  const data = useActionData();
   const submit = useSubmit();
   const navigate = useNavigate();
 
