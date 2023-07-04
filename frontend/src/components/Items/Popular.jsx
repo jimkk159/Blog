@@ -17,7 +17,7 @@ function PopularItem({ post }) {
         <img
           title={post.title}
           alt="preview"
-          className="h-[264px] w-full cursor-pointer rounded-3xl object-cover lg:max-h-[160px]"
+          className="h-[240px] w-full cursor-pointer rounded-3xl object-cover lg:max-h-[160px]"
           src={creatPreviewImg(post.previewImg)}
           onClick={() => navigate(`/posts/${post.id}`)}
         />

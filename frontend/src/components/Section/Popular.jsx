@@ -6,6 +6,7 @@ import SectionTitle from "./SectionTitle";
 import PinkButton from "../UI/PinkButton";
 import PopularItem from "../Items/Popular";
 
+// TODO
 function Popular({ posts, slide }) {
   let popular = null;
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ function Popular({ posts, slide }) {
 
           if (index % 2 === 0) {
             return (
-              <div key={index} className="grid grid-cols-2 gap-6">
+              <div key={index} className="w-full grid grid-cols-2 gap-6">
                 <PopularItem key={index} post={post} />
                 {nextItem}
               </div>

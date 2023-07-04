@@ -9,7 +9,7 @@ function RankingList2({ posts }) {
   const [show, setShow] = useState(true);
 
   return (
-    <div className="flex h-fit w-20 min-w-[100px] max-w-xs flex-col rounded-3xl bg-self-dark p-8 pb-2 lg:w-fit lg:p-6">
+    <div className="flex h-fit w-20 min-w-[260px] max-w-xs flex-col rounded-3xl bg-self-dark p-8 pb-2 lg:w-fit lg:p-6">
       <div className="flex items-center justify-start">
         <SectionTitle first={"Top"} second={"Posts"} />
       </div>

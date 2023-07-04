@@ -57,8 +57,11 @@ export const formatDate = (date) =>
   });
 
 export const slugify = (text) => {
+  // trim
+  const trimedText = text.trim();
+
   // Remove emojis from the title
-  const titleWithoutEmojis = text.replace(
+  const titleWithoutEmojis = trimedText.replace(
     /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
     ""
   );
