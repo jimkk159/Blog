@@ -9,7 +9,7 @@ export async function loader({ request }) {
 
   store.dispatch(
     authActions.login({
-      id: searchParams.get("id"),
+      id: searchParams.get("id") ? +searchParams.get("id") : undefined,
       role: searchParams.get("role"),
       name: searchParams.get("name"),
       avatar: searchParams.get("avatar"),
