@@ -147,7 +147,7 @@ function PostEditor({ method, post }) {
         if (isDrop) setIsDrop(false);
         if (isEditTag) setIsEditTag(false);
       }}
-      className=""
+      className="my-8"
     >
       <input
         ref={inputRef}
