@@ -30,7 +30,7 @@ function Root() {
     if (authHelper.isTokenExpired(token))
       return submit(null, { action: "/logout", method: "post" });
 
-    const timePreservation = 5;
+    const timePreservation = 60 * 1000;
     const tokenDuration = authHelper.getTokenDuration(token) - timePreservation;
 
     setTimeout(() => {
