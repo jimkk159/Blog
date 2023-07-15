@@ -2,33 +2,23 @@ import { useState, useRef } from "react";
 import * as helper from "./helper";
 import { commands } from "@uiw/react-md-editor";
 
-export const insertToTextArea = (intsertString) => {
-  const textarea = document.querySelector("textarea");
-  if (!textarea) return null;
-
-  let sentence = textarea.value;
-  const len = sentence.length;
-  const pos = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-
-  const front = sentence.slice(0, pos);
-  const back = sentence.slice(pos, len);
-
-  sentence = front + intsertString + back;
-
-  textarea.value = sentence;
-  textarea.selectionEnd = end + intsertString.length;
-
-  return sentence;
-};
-
-export const onImageUpload = async (file, setMarkdown) => {
+export const onImageUpload = async (file, api) => {
   const url = await helper.uploadImg(file);
 
-  const insertedMarkdown = insertToTextArea(
+  const insertedMarkdown =
     `**![](${url})**` +
-      `<!--rehype:style=display: flex; justify-content: center; width: 100%; max-width: 1041px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`
-  );
+    `<!--rehype:style=display: flex; justify-content: center; width: 100%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
+  if (!insertedMarkdown) return;
+
+  api.replaceSelection(insertedMarkdown);
+};
+
+export const onImageUpload2 = async (file, setMarkdown) => {
+  const url = await helper.uploadImg(file);
+
+  const insertedMarkdown =
+    `**![](${url})**` +
+    `<!--rehype:style=display: flex; justify-content: center; width: 100%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`;
   if (!insertedMarkdown) return;
 
   setMarkdown((prev) => prev + insertedMarkdown);
@@ -44,18 +34,18 @@ export const extractYouTubeId = (url) => {
   return;
 };
 
-export const onVideoEmbed = async (link, setMarkdown) => {
-  const ytId = extractYouTubeId(link);
-  const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
+// export const onVideoEmbed = async (link, setMarkdown) => {
+//   const ytId = extractYouTubeId(link);
+//   const cover = `https://i.ytimg.com/vi/${ytId}/hq720.jpg`;
 
-  const insertedMarkdown = insertToTextArea(
-    `**[![](${cover})](${link})**` +
-      `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`
-  );
-  if (!insertedMarkdown) return;
-
-  setMarkdown(insertedMarkdown);
-};
+//   const insertedMarkdown = insertToTextArea(
+//     `**[![](${cover})](${link})**` +
+//       `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`
+//   );
+//   if (!insertedMarkdown) return;
+//   console.log(1111, insertedMarkdown);
+//   setMarkdown(insertedMarkdown);
+// };
 
 export const onImageDrop = async (dataTransfer, setMarkdown) => {
   const files = [];
@@ -66,11 +56,11 @@ export const onImageDrop = async (dataTransfer, setMarkdown) => {
   }
 
   await Promise.all(
-    files.map(async (file) => onImageUpload(file, setMarkdown))
+    files.map(async (file) => onImageUpload2(file, setMarkdown))
   );
 };
 
-export const imgBtn = (inputRef) => ({
+export const imgBtn = (inputRef, textApiRef) => ({
   name: "Text To Image",
   keyCommand: "text2image",
   render: (command, disabled, executeCommand) => {
@@ -80,7 +70,7 @@ export const imgBtn = (inputRef) => ({
         aria-label="Insert title3"
         disabled={disabled}
         onClick={() => {
-          inputRef.current.click();
+          executeCommand(command, command.groupName);
         }}
       >
         <svg width="12" height="12" viewBox="0 0 20 20">
@@ -91,6 +81,10 @@ export const imgBtn = (inputRef) => ({
         </svg>
       </button>
     );
+  },
+  execute: (state, api) => {
+    inputRef.current.click();
+    textApiRef.current = api;
   },
 });
 
@@ -210,7 +204,7 @@ export const videoBtn = () =>
     // },
   });
 
-export const editChoice = (inputRef) => [
+export const editChoice = (inputRef, textApiRef) => [
   commands.bold,
   commands.italic,
   commands.strikethrough,
@@ -222,7 +216,7 @@ export const editChoice = (inputRef) => [
   commands.code,
   commands.codeBlock,
   commands.comment,
-  imgBtn(inputRef),
+  imgBtn(inputRef, textApiRef),
   videoBtn(),
   commands.divider,
   commands.unorderedListCommand,
