@@ -26,14 +26,12 @@ function Root() {
 
   // useEffect
   useEffect(() => {
-    // const timePreservation = 5;
-
     if (!token) return;
     if (authHelper.isTokenExpired(token))
       return submit(null, { action: "/logout", method: "post" });
 
-    // const tokenDuration = authHelper.getTokenDuration(token) - timePreservation;
-    const tokenDuration = 10 * 1000;
+    const timePreservation = 5;
+    const tokenDuration = authHelper.getTokenDuration(token) - timePreservation;
 
     setTimeout(() => {
       submit(null, { action: "/logout", method: "post" });
