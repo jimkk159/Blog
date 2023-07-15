@@ -2,6 +2,7 @@ import MDEditor from "@uiw/react-md-editor";
 // import rehypeSanitize from "rehype-sanitize";
 import { useRef, useEffect, useState, useCallback } from "react";
 import {
+  useSubmit,
   useNavigate,
   useActionData,
   useRouteLoaderData,
@@ -12,6 +13,7 @@ import Code from "./Plugins";
 import TagList from "../../Tag/List";
 import PostEditorBottom from "./PostBottom";
 import EditPostModal from "../Modal/EditPost";
+import * as authHelper from "../../../utils/auth";
 import * as editHelper from "../../../utils/edit";
 import PostWrapper from "../../Wrapper/PostWrapper";
 import SelectCategory from "../../Post/SelectCategory";
@@ -33,9 +35,11 @@ function PostEditor({ method, post }) {
   const [isEditTag, setIsEditTag] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
+  const [preserveToken, setPreserveToken] = useState("");
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   // react-router
+  const submit = useSubmit();
   const data = useActionData();
   const navigate = useNavigate();
   const { relation } = useRouteLoaderData("relation");
@@ -93,7 +97,13 @@ function PostEditor({ method, post }) {
   const postSummary = post?.summary ? post.summary : "";
   const postCategoryId = post?.CategoryId ? post.CategoryId : "";
   const postPreviewImg = post?.previewImg ? post.previewImg : "";
+
   useEffect(() => {
+    // set preserve token
+    const token = authHelper.getAuthToken();
+    if (!!token) setPreserveToken(token);
+
+    // set property
     setTitle(postTitle);
     setMarkdown(postContent);
     setSummary(postSummary);
@@ -108,6 +118,48 @@ function PostEditor({ method, post }) {
       setSubmigErrorMessage(data.message);
     }
   }, [data]);
+
+  const isPostExist = !!post;
+  const postId = post?.id;
+
+  useEffect(() => {
+    return async () => {
+      const token = authHelper.getAuthToken();
+      if (!token && !!preserveToken && markdown) {
+        const relationData = await relation;
+        const categories = relationData?.categories?.data ?? [];
+        const notRootCategoryId = !!categoryId
+          ? categoryId
+          : editHelper.getNotRootCategoryId(categories);
+        submit(
+          {
+            title,
+            content: markdown,
+            summary,
+            CategoryId: notRootCategoryId,
+            previewImg,
+            token: preserveToken,
+          },
+          {
+            action: isPostExist ? `/posts/${postId}/edit` : "/posts/new",
+            method,
+          }
+        );
+      }
+    };
+  }, [
+    relation,
+    submit,
+    isPostExist,
+    postId,
+    method,
+    preserveToken,
+    title,
+    markdown,
+    summary,
+    categoryId,
+    previewImg,
+  ]);
 
   const selectCategory = (
     <SelectCategory

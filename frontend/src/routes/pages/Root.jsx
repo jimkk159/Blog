@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  defer,
-  Outlet,
-  useSubmit,
-  useLoaderData,
-} from "react-router-dom";
+import { defer, Outlet, useSubmit, useLoaderData } from "react-router-dom";
 
 // image
 import cubeImg from "../img/cube.png";
@@ -31,11 +26,15 @@ function Root() {
 
   // useEffect
   useEffect(() => {
+    // const timePreservation = 5;
+
     if (!token) return;
     if (authHelper.isTokenExpired(token))
       return submit(null, { action: "/logout", method: "post" });
 
-    const tokenDuration = authHelper.getTokenDuration(token);
+    // const tokenDuration = authHelper.getTokenDuration(token) - timePreservation;
+    const tokenDuration = 10 * 1000;
+
     setTimeout(() => {
       submit(null, { action: "/logout", method: "post" });
     }, tokenDuration);

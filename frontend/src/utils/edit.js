@@ -43,7 +43,6 @@ export const extractYouTubeId = (url) => {
 //       `<!--rehype:style=display: flex; justify-content: center; width: 50%; max-width: 500px; margin: auto; margin-top: 4px; margin-bottom: 4px; -->`
 //   );
 //   if (!insertedMarkdown) return;
-//   console.log(1111, insertedMarkdown);
 //   setMarkdown(insertedMarkdown);
 // };
 
@@ -223,3 +222,9 @@ export const editChoice = (inputRef, textApiRef) => [
   commands.orderedListCommand,
   commands.checkedListCommand,
 ];
+
+export const getNotRootCategoryId = (array) => {
+  const filteredArray = array.filter((item) => +item !== 1);
+  const sortedArray = filteredArray.sort((a, b) => a - b);
+  return sortedArray[0];
+};
