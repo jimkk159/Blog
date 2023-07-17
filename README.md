@@ -81,6 +81,9 @@ Frontend branch is **`frontendv2`**。
 - Hosting images on aws S3
 - Unit test by vitest on backend
 - Setup CI/CD pipeline with aws codebuild, codedeploy and codepipeline.
+- Defalut auto logout account is 3 hours.
+- Support auto save post when auto logout account.
+- Support Redis for cache to reduce Database query pressure.
 
 ### Networking Protocol
 
@@ -146,6 +149,7 @@ npm start
 - Route 53
 - Codebuild
 - Codedeploy
+- ElastiCache
 - Codepipline
 - Load Balancer
 - Certificate Manager
@@ -154,7 +158,6 @@ npm start
 
 - Server Architecture (Support CI/CD)
 <img width="600" src="https://github.com/jimkk159/Blog/blob/main/readmeImg/backend-architecture.png">
-
 
 ## Frontend
 Frontent is made from **create-react-app**
