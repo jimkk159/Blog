@@ -4,14 +4,14 @@ import Post from "../module/post.js";
 import About from "../module/about.js";
 import normalize from "normalize-path";
 import * as s3 from "../utils/aws/s3.js";
-import * as cache from "../config/cache.js";
 import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
 import { validationResult } from "express-validator";
 import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
-import * as errorTable from "../utils/error/error-table.js";
 import * as shareController from "./share-controller.js";
+import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/category-helper.js";
 
 // Validate the req
 export const validation = (req, res, next) => {
@@ -104,7 +104,10 @@ export const getRelation = catchAsync(async (req, res, next) => {
   };
 
   // Get Data from DB or Cache
-  const result = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
   const data = JSON.parse(result);
 
   res.status(200).json({

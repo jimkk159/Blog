@@ -2,8 +2,8 @@ import * as helper from "../utils/helper/helper.js";
 import catchAsync from "../utils/error/catch-async.js";
 import { GetFeatures } from "../utils/api-features.js";
 import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
-import * as cache from "../config/cache.js";
 
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -17,7 +17,10 @@ export const getOne = (Model) =>
     };
 
     // Get Data from DB or Cache
-    const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+    const data = await cacheHelper.getOrSetCache(
+      req.originalUrl,
+      getDataFromDB
+    );
     if (!data) throw errorTable.idNotFoundError();
 
     res.status(200).json({
@@ -41,7 +44,10 @@ export const getAll = (Model) =>
     };
 
     // Get Data from DB or Cache
-    const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+    const data = await cacheHelper.getOrSetCache(
+      req.originalUrl,
+      getDataFromDB
+    );
 
     res.status(200).json({
       status: "success",

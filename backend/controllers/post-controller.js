@@ -1,11 +1,11 @@
 import User from "../module/user.js";
 import Post from "../module/post.js";
-import * as cache from "../config/cache.js";
 import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as postHelper from "../utils/helper/post-helper.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 
 export const getMe = catchAsync(async (req, res, next) => {
   req.query = {
@@ -43,7 +43,7 @@ export const getOne = catchAsync(async (req, res, next) => {
   };
 
   // Get Data from DB or Cache
-  const post = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const post = await cacheHelper.getOrSetCache(req.originalUrl, getDataFromDB);
   const data = JSON.parse(post);
 
   res.status(200).json({
@@ -62,7 +62,10 @@ export const getAll = catchAsync(async (req, res, next) => {
   };
 
   // Get Data from DB or Cache
-  const result = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
   const { data, total } = JSON.parse(result);
 
   res.status(200).json({

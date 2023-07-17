@@ -1,12 +1,11 @@
-import * as cache from "../../config/cache";
+import Post from "../../module/post";
+import User from "../../module/user";
+import Category from "../../module/category";
 import * as helper from "../../utils/helper/helper";
 import * as errorTable from "../../utils/error/error-table";
 import * as postHelper from "../../utils/helper/post-helper";
+import * as cacheHelper from "../../utils/helper/cache-helper";
 import * as postController from "../../controllers/post-controller";
-import Category from "../../module/category";
-import User from "../../module/user";
-import { describe, expect } from "vitest";
-import Post from "../../module/post";
 
 vi.mock("redis");
 vi.mock("sequelize");
@@ -17,7 +16,7 @@ describe("getOne()", () => {
     req = {};
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
-    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
       cb()
     );
     vi.spyOn(postHelper, "getFullPost").mockImplementation(async () => {});
@@ -41,7 +40,7 @@ describe("getOne()", () => {
 
     await postController.getOne(req, res, next).catch((err) => (error = err));
 
-    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by parameter Id", async () => {
@@ -102,7 +101,7 @@ describe("getAll()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(postHelper, "getFullPosts").mockImplementation(async () => {});
-    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
       cb()
     );
     vi.spyOn(Post, "count").mockImplementation(async () => {});
@@ -125,7 +124,7 @@ describe("getAll()", () => {
 
     await postController.getAll(req, res, next).catch((err) => (error = err));
 
-    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by query", async () => {

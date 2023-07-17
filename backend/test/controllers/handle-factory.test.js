@@ -1,7 +1,7 @@
-import * as cache from "../../config/cache";
 import * as helper from "../../utils/helper/helper";
 import { GetFeatures } from "../../utils/api-features";
 import * as errorTable from "../../utils/error/error-table";
+import * as cacheHelper from "../../utils/helper/cache-helper";
 import * as handleFactory from "../../controllers/handle-factory";
 import * as apiFeatureHelper from "../../utils/helper/api-feature-helper";
 
@@ -18,7 +18,7 @@ describe("getOne()", () => {
     vi.spyOn(apiFeatureHelper, "createPopulateObjs").mockImplementation(
       () => {}
     );
-    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
       cb()
     );
   });
@@ -38,7 +38,7 @@ describe("getOne()", () => {
     const getOneFunc = handleFactory.getOne(TestModel);
     await getOneFunc(req, res, next);
 
-    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should get data if id is existed in database", async () => {
@@ -88,7 +88,7 @@ describe("getAll()", () => {
       pop,
     }));
 
-    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
       cb()
     );
   });
@@ -105,7 +105,7 @@ describe("getAll()", () => {
     const getOneFunc = handleFactory.getOne(TestModel);
     await getOneFunc(req, res, next);
 
-    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should get data back if query is correct", async () => {

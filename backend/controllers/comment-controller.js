@@ -1,10 +1,10 @@
 import Post from "../module/post.js";
 import Comment from "../module/comment.js";
-import * as cache from "../config/cache.js";
 import * as helper from "../utils/helper/helper.js";
 import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 import * as commentHelper from "../utils/helper/comment-helper.js";
 
 export const setPostId = catchAsync(async (req, res, next) => {
@@ -52,7 +52,7 @@ export const getAll = catchAsync(async (req, res, next) => {
   };
 
   // Get Data from DB or Cache
-  const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const data = await cacheHelper.getOrSetCache(req.originalUrl, getDataFromDB);
 
   res.status(200).json({
     status: "success",
