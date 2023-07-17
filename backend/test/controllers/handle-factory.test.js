@@ -288,6 +288,7 @@ describe("deleteOne()", () => {
     vi.spyOn(helper, "deleteAvatarUrlFromS3").mockImplementation(
       async () => {}
     );
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {

@@ -91,5 +91,6 @@ export const deleteOne = (Model) =>
       await helper.deleteAvatarUrlFromS3(data.avatar);
 
     await Model.destroy({ where: { id: req.params.id } });
+    await cacheHelper.delCache(req.originalUrl);
     res.status(204).json();
   });
