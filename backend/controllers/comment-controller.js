@@ -1,5 +1,6 @@
 import Post from "../module/post.js";
 import Comment from "../module/comment.js";
+import * as cache from "../config/cache.js";
 import * as helper from "../utils/helper/helper.js";
 import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
@@ -26,24 +27,32 @@ export const checkPermission = catchAsync(async (req, res, next) => {
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
-  req.query.sort = req.query.sort
-    ? req.query.sort.includes("editedAt")
-      ? req.query.sort
-      : req.query.sort + " -editedAt"
-    : "-editedAt";
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    req.query.sort = req.query.sort
+      ? req.query.sort.includes("editedAt")
+        ? req.query.sort
+        : req.query.sort + " -editedAt"
+      : "-editedAt";
 
-  const getFeature = new GetFeatures(Comment, req.query)
-    .filter()
-    .sort()
-    .select()
-    .paginate()
-    .pop();
+    const getFeature = new GetFeatures(Comment, req.query)
+      .filter()
+      .sort()
+      .select()
+      .paginate()
+      .pop();
 
-  const data = await getFeature.findAll();
-  data.forEach((el) => {
-    if (el && el.Author && el.Author.avatar)
-      el.Author.avatar = helper.avatarToS3URL(el.Author.avatar);
-  });
+    const data = await getFeature.findAll();
+    data.forEach((el) => {
+      if (el && el.Author && el.Author.avatar)
+        el.Author.avatar = helper.avatarToS3URL(el.Author.avatar);
+    });
+
+    return data;
+  };
+
+  // Get Data from DB or Cache
+  const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
 
   res.status(200).json({
     status: "success",

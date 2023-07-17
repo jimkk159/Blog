@@ -1,3 +1,4 @@
+import * as cache from "../../config/cache";
 import * as helper from "../../utils/helper/helper";
 import * as errorTable from "../../utils/error/error-table";
 import * as postHelper from "../../utils/helper/post-helper";
@@ -6,8 +7,8 @@ import Category from "../../module/category";
 import User from "../../module/user";
 import { describe, expect } from "vitest";
 import Post from "../../module/post";
-import { GetFeatures } from "../../utils/api-features";
 
+vi.mock("redis");
 vi.mock("sequelize");
 vi.mock("../../utils/api-features");
 describe("getOne()", () => {
@@ -16,6 +17,9 @@ describe("getOne()", () => {
     req = {};
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
+    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
     vi.spyOn(postHelper, "getFullPost").mockImplementation(async () => {});
   });
 
@@ -25,6 +29,19 @@ describe("getOne()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    let error;
+    req = {
+      originalUrl: "testOriginalUrl",
+      params: { id: "testID" },
+      query: "testQuery",
+    };
+
+    await postController.getOne(req, res, next).catch((err) => (error = err));
+
+    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by parameter Id", async () => {
@@ -63,7 +80,8 @@ describe("getOne()", () => {
 
   test("should response post", async () => {
     let error;
-    const post = { increment: vi.fn().mockImplementationOnce(async () => {}) };
+    const increment = vi.fn().mockImplementationOnce(async () => {});
+    const post = { title: "testTitle", increment };
     req = { params: { id: "testID" } };
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
@@ -72,7 +90,7 @@ describe("getOne()", () => {
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
-      data: post,
+      data: { title: "testTitle" },
     });
   });
 });
@@ -84,6 +102,9 @@ describe("getAll()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(postHelper, "getFullPosts").mockImplementation(async () => {});
+    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
     vi.spyOn(Post, "count").mockImplementation(async () => {});
   });
 
@@ -93,6 +114,18 @@ describe("getAll()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    let error;
+    req = {
+      originalUrl: "testOriginalUrl",
+      query: "testQuery",
+    };
+
+    await postController.getAll(req, res, next).catch((err) => (error = err));
+
+    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by query", async () => {
@@ -356,7 +389,8 @@ describe("createOne()", () => {
       .catch((err) => (error = err));
 
     expect(helper.removeKeys).toHaveBeenLastCalledWith("testPost", [
-      "createdAt", "updatedAt"
+      "createdAt",
+      "updatedAt",
     ]);
   });
 

@@ -1,11 +1,10 @@
 import express from "express";
 import { check } from "express-validator";
+import commentsRouters from "../routes/comment-routes.js";
 import * as postController from "../controllers/post-controller.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
 import * as commentController from "../controllers/comment-controller.js";
-
-import commentsRouters from "../routes/comment-routes.js";
 
 const router = express.Router();
 

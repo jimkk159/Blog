@@ -1,5 +1,6 @@
 import User from "../module/user.js";
 import Post from "../module/post.js";
+import * as cache from "../config/cache.js";
 import Category from "../module/category.js";
 import * as helper from "../utils/helper/helper.js";
 import catchAsync from "../utils/error/catch-async.js";
@@ -30,21 +31,39 @@ export const checkPermission = catchAsync(async (req, res, next) => {
 });
 
 export const getOne = catchAsync(async (req, res, next) => {
-  const post = await postHelper.getFullPost(req.params.id, req.query);
-  if (!post) throw errorTable.idNotFoundError();
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    const post = await postHelper.getFullPost(req.params.id, req.query);
+    if (!post) throw errorTable.idNotFoundError();
 
-  // increment the number of views
-  await post.increment({ views: 1 });
+    // increment the number of views
+    await post.increment({ views: 1 });
+
+    return JSON.stringify(post);
+  };
+
+  // Get Data from DB or Cache
+  const post = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const data = JSON.parse(post);
 
   res.status(200).json({
     status: "success",
-    data: post,
+    data,
   });
 });
 
 export const getAll = catchAsync(async (req, res, next) => {
-  const data = await postHelper.getFullPosts(req.query, req.customQuery);
-  const total = await Post.count({ where: req.count });
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    const data = await postHelper.getFullPosts(req.query, req.customQuery);
+    const total = await Post.count({ where: req.count });
+
+    return JSON.stringify({ data, total });
+  };
+
+  // Get Data from DB or Cache
+  const result = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
+  const { data, total } = JSON.parse(result);
 
   res.status(200).json({
     status: "success",

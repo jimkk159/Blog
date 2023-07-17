@@ -1,21 +1,44 @@
+import * as cache from "../../config/cache";
 import * as helper from "../../utils/helper/helper";
 import { GetFeatures } from "../../utils/api-features";
 import * as errorTable from "../../utils/error/error-table";
 import * as handleFactory from "../../controllers/handle-factory";
 import * as apiFeatureHelper from "../../utils/helper/api-feature-helper";
 
+vi.mock("redis");
 vi.mock("sequelize");
 vi.mock("../../utils/api-features");
 describe("getOne()", () => {
-  let req = { params: { id: 1 }, query: {} };
+  let req = { params: { id: 1 }, query: {}, originalUrl: "testOriginalUrl" };
   let res, next, error;
-  beforeEach(() => {
+  beforeAll(() => {
+    error = undefined;
+    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
+    next = vi.fn();
     vi.spyOn(apiFeatureHelper, "createPopulateObjs").mockImplementation(
       () => {}
     );
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
+    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
     error = undefined;
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    const TestModel = { findByPk: vi.fn().mockResolvedValueOnce() };
+
+    const getOneFunc = handleFactory.getOne(TestModel);
+    await getOneFunc(req, res, next);
+
+    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should get data if id is existed in database", async () => {
@@ -64,12 +87,25 @@ describe("getAll()", () => {
       paginate,
       pop,
     }));
+
+    vi.spyOn(cache, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
   });
 
   beforeEach(() => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.clearAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    const TestModel = { findByPk: vi.fn().mockResolvedValueOnce() };
+
+    const getOneFunc = handleFactory.getOne(TestModel);
+    await getOneFunc(req, res, next);
+
+    expect(cache.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should get data back if query is correct", async () => {

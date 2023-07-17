@@ -3,15 +3,21 @@ import catchAsync from "../utils/error/catch-async.js";
 import { GetFeatures } from "../utils/api-features.js";
 import * as errorTable from "../utils/error/error-table.js";
 import * as apiFeatureHelper from "../utils/helper/api-feature-helper.js";
+import * as cache from "../config/cache.js";
 
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
-    // 1) Create populate
-    const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
+    // Get Data from DB
+    const getDataFromDB = async () => {
+      // 1) Create populate
+      const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
 
-    // 2) Get data
-    const data = await Model.findByPk(req.params.id, sqlQuery);
+      // 2) Get data
+      return Model.findByPk(req.params.id, sqlQuery);
+    };
 
+    // Get Data from DB or Cache
+    const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
     if (!data) throw errorTable.idNotFoundError();
 
     res.status(200).json({
@@ -22,14 +28,20 @@ export const getOne = (Model) =>
 
 export const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const getFeature = new GetFeatures(Model, req.query)
-      .filter()
-      .sort()
-      .select()
-      .paginate()
-      .pop();
+    // Get Data from DB
+    const getDataFromDB = async () => {
+      const getFeature = new GetFeatures(Model, req.query)
+        .filter()
+        .sort()
+        .select()
+        .paginate()
+        .pop();
 
-    const data = await getFeature.findAll({ raw: true });
+      return getFeature.findAll({ raw: true });
+    };
+
+    // Get Data from DB or Cache
+    const data = await cache.getOrSetCache(req.originalUrl, getDataFromDB);
 
     res.status(200).json({
       status: "success",
