@@ -1,6 +1,8 @@
 import express from "express";
+import Post from "../module/post.js";
 import { check } from "express-validator";
 import commentsRouters from "../routes/comment-routes.js";
+import * as factory from "../controllers/handle-factory.js";
 import * as postController from "../controllers/post-controller.js";
 import * as authController from "../controllers/auth-controller.js";
 import * as shareController from "../controllers/share-controller.js";
@@ -44,7 +46,7 @@ router.post(
 router
   .route("/:id")
   .patch(postController.checkPermission, postController.updateOne)
-  .delete(postController.checkPermission, postController.deleteOne);
+  .delete(postController.checkPermission, factory.deleteOne(Post));
 
 router.patch("/:id/category/:CategoryId", postController.updateCategory);
 

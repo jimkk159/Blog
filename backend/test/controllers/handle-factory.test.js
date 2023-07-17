@@ -280,7 +280,7 @@ describe("updateOne()", () => {
 });
 
 describe("deleteOne()", () => {
-  let req = { params: { id: "test" } };
+  let req = { params: { id: "test" }, originalUrl: "testOriginalUrl" };
   let res;
   let next;
 
@@ -351,6 +351,19 @@ describe("deleteOne()", () => {
     expect(TestModel.destroy).toHaveBeenLastCalledWith({
       where: { id: req.params.id },
     });
+  });
+
+  test("should delete remain cache", async () => {
+    const testData = "testData";
+    const TestModel = {
+      destroy: vi.fn().mockResolvedValueOnce(),
+      findByPk: vi.fn().mockResolvedValueOnce(testData),
+    };
+
+    const deleteOneFunc = handleFactory.deleteOne(TestModel);
+    await deleteOneFunc(req, res, next);
+
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
   });
 
   test("should response when delete data is complete", async () => {

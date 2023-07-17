@@ -713,50 +713,6 @@ describe("updateCategory()", () => {
   });
 });
 
-describe("deleteOne()", () => {
-  let req, res, next;
-  beforeAll(() => {
-    req = {};
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
-    vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(Post, "destroy").mockImplementation(async () => {});
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should delete post", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.destroy).toHaveBeenLastCalledWith({
-      where: { id: req.params.id },
-    });
-  });
-
-  test("should response the updated category post", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(res.status).toHaveBeenLastCalledWith(204);
-    expect(res.json).toHaveBeenCalled();
-  });
-});
-
 describe("getMe()", () => {
   let req, res, next;
   beforeAll(() => {

@@ -4,6 +4,7 @@ import sequelize from "../config/db-init.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 import * as categoryHelper from "../utils/helper/category-helper.js";
 
 export const createOne = catchAsync(async (req, res, next) => {
@@ -90,5 +91,8 @@ export const deleteOne = catchAsync(async (req, res, next) => {
 
     await Category.destroy({ where: { id: req.params.id }, transaction: t });
   });
+
+  await cacheHelper.delCache(req.originalUrl);
+
   res.status(204).json();
 });

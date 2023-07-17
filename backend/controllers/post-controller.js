@@ -259,11 +259,6 @@ export const updateCategory = catchAsync(async (req, res, next) => {
   });
 });
 
-export const deleteOne = catchAsync(async (req, res, next) => {
-  await Post.destroy({ where: { id: req.params.id } });
-  res.status(204).json();
-});
-
 export const search = catchAsync(async (req, res, next) => {
   let initQuery = {};
   let forceQuery = {};
