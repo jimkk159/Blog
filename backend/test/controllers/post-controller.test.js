@@ -1,13 +1,13 @@
+import Post from "../../module/post";
+import User from "../../module/user";
+import Category from "../../module/category";
 import * as helper from "../../utils/helper/helper";
 import * as errorTable from "../../utils/error/error-table";
 import * as postHelper from "../../utils/helper/post-helper";
+import * as cacheHelper from "../../utils/helper/cache-helper";
 import * as postController from "../../controllers/post-controller";
-import Category from "../../module/category";
-import User from "../../module/user";
-import { describe, expect } from "vitest";
-import Post from "../../module/post";
-import { GetFeatures } from "../../utils/api-features";
 
+vi.mock("redis");
 vi.mock("sequelize");
 vi.mock("../../utils/api-features");
 describe("getOne()", () => {
@@ -16,6 +16,9 @@ describe("getOne()", () => {
     req = {};
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
     vi.spyOn(postHelper, "getFullPost").mockImplementation(async () => {});
   });
 
@@ -25,6 +28,19 @@ describe("getOne()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    let error;
+    req = {
+      originalUrl: "testOriginalUrl",
+      params: { id: "testID" },
+      query: "testQuery",
+    };
+
+    await postController.getOne(req, res, next).catch((err) => (error = err));
+
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by parameter Id", async () => {
@@ -63,7 +79,8 @@ describe("getOne()", () => {
 
   test("should response post", async () => {
     let error;
-    const post = { increment: vi.fn().mockImplementationOnce(async () => {}) };
+    const increment = vi.fn().mockImplementationOnce(async () => {});
+    const post = { title: "testTitle", increment };
     req = { params: { id: "testID" } };
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
@@ -72,7 +89,7 @@ describe("getOne()", () => {
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
-      data: post,
+      data: { title: "testTitle" },
     });
   });
 });
@@ -84,6 +101,9 @@ describe("getAll()", () => {
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     next = vi.fn();
     vi.spyOn(postHelper, "getFullPosts").mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "getOrSetCache").mockImplementation(async (key, cb) =>
+      cb()
+    );
     vi.spyOn(Post, "count").mockImplementation(async () => {});
   });
 
@@ -93,6 +113,18 @@ describe("getAll()", () => {
 
   afterAll(() => {
     vi.restoreAllMocks();
+  });
+
+  test("should get data from cache or database", async () => {
+    let error;
+    req = {
+      originalUrl: "testOriginalUrl",
+      query: "testQuery",
+    };
+
+    await postController.getAll(req, res, next).catch((err) => (error = err));
+
+    expect(cacheHelper.getOrSetCache.mock.calls[0][0]).toBe(req.originalUrl);
   });
 
   test("should find post by query", async () => {
@@ -165,6 +197,7 @@ describe("createOne()", () => {
     vi.spyOn(postHelper, "createPostWithTags").mockImplementation(
       async () => {}
     );
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -356,8 +389,41 @@ describe("createOne()", () => {
       .catch((err) => (error = err));
 
     expect(helper.removeKeys).toHaveBeenLastCalledWith("testPost", [
-      "createdAt", "updatedAt"
+      "createdAt",
+      "updatedAt",
     ]);
+  });
+
+  test("should remove remain cache", async () => {
+    let error;
+    const category = { id: "CategoryId" };
+    const tags = { tags: "testTags" };
+    const post = {
+      AuthorId: "AuthorId",
+      toJSON: vi.fn().mockReturnValueOnce("testPost"),
+    };
+    const author = { author: "testAuthor" };
+    const data = { data: "testData" };
+    req = {
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
+      user: { id: "testUserId" },
+      originalUrl: "testOriginalUrl",
+    };
+    Category.findByPk.mockResolvedValueOnce(category);
+    postHelper.checkAndFindPostTags.mockResolvedValueOnce(tags);
+    postHelper.createPostWithTags.mockResolvedValueOnce(post);
+    User.findByPk.mockResolvedValueOnce(author);
+    helper.removeKeys.mockReturnValueOnce(data);
+
+    await postController
+      .createOne(req, res, next)
+      .catch((err) => (error = err));
+
+    expect(cacheHelper.delKey).toHaveBeenLastCalledWith(req.originalUrl);
   });
 
   test("should response created post", async () => {
@@ -474,6 +540,7 @@ describe("updateOne()", () => {
       async () => {}
     );
     vi.spyOn(postHelper, "getFullPost").mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -562,8 +629,7 @@ describe("updateOne()", () => {
     );
   });
 
-  test("should response post", async () => {
-    let error;
+  test("should remove remain cache", async () => {
     const post = "testPost";
     req = {
       params: { id: "testId" },
@@ -578,9 +644,27 @@ describe("updateOne()", () => {
     ]);
     postHelper.getFullPost.mockResolvedValueOnce(post);
 
-    await postController
-      .updateOne(req, res, next)
-      .catch((err) => (error = err));
+    await postController.updateOne(req, res, next).catch((err) => {});
+
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
+  test("should response post", async () => {
+    const post = "testPost";
+    req = {
+      params: { id: "testId" },
+      body: {
+        title: "testTitle",
+        content: "testContent",
+        tagIds: "testTagIds",
+      },
+    };
+    postHelper.checkAndFindPostTags.mockImplementationOnce(async () => [
+      "testTag",
+    ]);
+    postHelper.getFullPost.mockResolvedValueOnce(post);
+
+    await postController.updateOne(req, res, next).catch((err) => {});
 
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
@@ -677,50 +761,6 @@ describe("updateCategory()", () => {
       status: "success",
       data: post,
     });
-  });
-});
-
-describe("deleteOne()", () => {
-  let req, res, next;
-  beforeAll(() => {
-    req = {};
-    res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
-    next = vi.fn();
-    vi.spyOn(Post, "findByPk").mockImplementation(async () => {});
-    vi.spyOn(Post, "destroy").mockImplementation(async () => {});
-  });
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterAll(() => {
-    vi.restoreAllMocks();
-  });
-
-  test("should delete post", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(Post.destroy).toHaveBeenLastCalledWith({
-      where: { id: req.params.id },
-    });
-  });
-
-  test("should response the updated category post", async () => {
-    let error;
-    req = { params: { id: "testId" } };
-
-    await postController
-      .deleteOne(req, res, next)
-      .catch((err) => (error = err));
-
-    expect(res.status).toHaveBeenLastCalledWith(204);
-    expect(res.json).toHaveBeenCalled();
   });
 });
 

@@ -1,11 +1,12 @@
 import gravatar from "gravatar";
 import normalize from "normalize-path";
 import * as s3 from "../../utils/aws/s3";
-import * as helper from "../../utils/helper/helper"
+import * as helper from "../../utils/helper/helper";
 import { validationResult } from "express-validator";
 import * as errorTable from "../../utils/error/error-table";
 import * as shareController from "../../controllers/share-controller";
 
+vi.mock("redis");
 vi.mock("gravatar");
 vi.mock("sequelize");
 vi.mock("normalize-path");

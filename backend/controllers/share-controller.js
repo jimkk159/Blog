@@ -9,8 +9,9 @@ import * as helper from "../utils/helper/helper.js";
 import { validationResult } from "express-validator";
 import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
-import * as errorTable from "../utils/error/error-table.js";
 import * as shareController from "./share-controller.js";
+import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 
 // Validate the req
 export const validation = (req, res, next) => {
@@ -57,31 +58,36 @@ export const createAbout = catchAsync(async (req, res) => {
 });
 
 export const getRelation = catchAsync(async (req, res, next) => {
-  // Posts just title
-  const query = {
-    fields: "-content,-AuthorId,-previewImg,-summary,-thumbs,-views,-editedAt",
-    sort: "-editedAt",
-  };
-  const getPosts = new GetFeatures(Post, query).filter().select();
-  const posts = await getPosts.findAll({ raw: true });
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    // Short posts info
+    const query = {
+      fields:
+        "-content,-AuthorId,-previewImg,-summary,-thumbs,-views,-editedAt",
+      sort: "-editedAt",
+    };
+    const getPosts = new GetFeatures(Post, query).filter().select();
+    const posts = await getPosts.findAll({ raw: true });
 
-  // Categories
-  const getCategory = new GetFeatures(Category, {})
-    .filter()
-    .sort()
-    .select()
-    .paginate();
+    // Categories
+    const getCategory = new GetFeatures(Category, {})
+      .filter()
+      .sort()
+      .select()
+      .paginate();
 
-  const categories = await getCategory.findAll({ raw: true });
+    const categories = await getCategory.findAll({ raw: true });
 
-  // Tags
-  const getTags = new GetFeatures(Tag, {}).filter().sort().select().paginate();
+    // Tags
+    const getTags = new GetFeatures(Tag, {})
+      .filter()
+      .sort()
+      .select()
+      .paginate();
 
-  const tags = await getTags.findAll({ raw: true });
+    const tags = await getTags.findAll({ raw: true });
 
-  res.status(200).json({
-    status: "success",
-    data: {
+    return JSON.stringify({
       tags: {
         count: tags.length,
         data: tags,
@@ -94,7 +100,19 @@ export const getRelation = catchAsync(async (req, res, next) => {
         count: categories.length,
         data: categories,
       },
-    },
+    });
+  };
+
+  // Get Data from DB or Cache
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
+  const data = JSON.parse(result);
+
+  res.status(200).json({
+    status: "success",
+    data,
   });
 });
 

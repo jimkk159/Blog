@@ -24,6 +24,7 @@ const testHashPassword = "testHashPassword";
 const testWrongPassword = "testWrongPassword";
 const testRandomPassword = "testRandomPassword";
 
+vi.mock("redis");
 vi.mock("sequelize");
 vi.mock("jsonwebtoken");
 vi.mock("../../utils/email");

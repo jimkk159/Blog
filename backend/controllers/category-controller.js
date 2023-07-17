@@ -4,6 +4,7 @@ import sequelize from "../config/db-init.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as helper from "../utils/helper/helper.js";
 import * as errorTable from "../utils/error/error-table.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 import * as categoryHelper from "../utils/helper/category-helper.js";
 
 export const createOne = catchAsync(async (req, res, next) => {
@@ -19,6 +20,9 @@ export const createOne = catchAsync(async (req, res, next) => {
   });
   if (!data) throw errorTable.categoryAlreadyExistError();
   data = helper.removeKeys(data.toJSON(), ["updatedAt", "createdAt"]);
+
+  // 3) remove remain cache
+  await cacheHelper.delKey(req.originalUrl);
 
   res.status(200).json({
     status: "success",
@@ -57,6 +61,9 @@ export const updateOne = catchAsync(async (req, res, next) => {
   // 5) return new categories list to user
   const categorires = await Category.findAll();
 
+  // 6) remove remain cache
+  await cacheHelper.delCache(req.originalUrl);
+
   res.status(200).json({
     status: "success",
     data: categorires,
@@ -90,5 +97,8 @@ export const deleteOne = catchAsync(async (req, res, next) => {
 
     await Category.destroy({ where: { id: req.params.id }, transaction: t });
   });
+
+  await cacheHelper.delCache(req.originalUrl);
+
   res.status(204).json();
 });

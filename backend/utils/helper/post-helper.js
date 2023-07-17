@@ -7,6 +7,7 @@ import sequelize from "../../config/db-init.js";
 import * as errorTable from "../error/error-table.js";
 import { GetFeatures } from "../api-features.js";
 import * as helper from "../helper/helper.js";
+import * as cacheHelper from "./cache-helper.js";
 import * as tagHelper from "../helper/tag-helper.js";
 import * as postHelper from "../helper/post-helper.js";
 import * as categoryHelper from "../helper/category-helper.js";
@@ -346,4 +347,11 @@ export const orderByComments = (query, target) => {
       ...output,
     };
   return output;
+};
+
+export const removeUpdatedThumbCache = async (url) => {
+  const postURL = url.replace("/thumb", "");
+
+  await cacheHelper.delKey(process.env.APP_BASE_ROUTE + "/posts/thumbs");
+  await cacheHelper.delCache(postURL); // also update post cache
 };

@@ -2,10 +2,12 @@ import Post from "../../module/post";
 import sequelize from "../../config/db-init";
 import Category from "../../module/category";
 import * as helper from "../../utils/helper/helper";
-import * as categoryHelper from "../../utils/helper/category-helper";
 import * as errorTable from "../../utils/error/error-table";
+import * as cacheHelper from "../../utils/helper/cache-helper";
+import * as categoryHelper from "../../utils/helper/category-helper";
 import * as categoryController from "../../controllers/category-controller";
 
+vi.mock("redis");
 vi.mock("sequelize");
 
 // describe("init", () => {
@@ -53,6 +55,7 @@ describe("createOne()", () => {
     vi.spyOn(categoryHelper, "checkParentIsExist").mockImplementation(
       async () => {}
     );
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -129,6 +132,29 @@ describe("createOne()", () => {
     ]);
   });
 
+  test("should remove remain cache", async () => {
+    req = {
+      body: { name: "testName", ParentId: testParentID },
+      originalUrl: "testOriginalUrl",
+    };
+    const resCategory = {
+      id: "testID",
+      name: "testName",
+      ParentId: testParentID,
+    };
+    const category = {
+      ...resCategory,
+      updatedAt: "updatedAt",
+      createdAt: "createdAt",
+      toJSON: () => resCategory,
+    };
+    Category.create.mockResolvedValueOnce(category);
+
+    await categoryController.createOne(req, res, next);
+
+    expect(cacheHelper.delKey).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
   test("should response created category", async () => {
     req = { body: { name: "testName", ParentId: testParentID } };
     const resCategory = {
@@ -173,6 +199,7 @@ describe("updateOne()", () => {
       categoryHelper,
       "checkCategoryCircularReference"
     ).mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -297,6 +324,23 @@ describe("updateOne()", () => {
     );
   });
 
+  test("should remove remain cache", async () => {
+    req = {
+      params: { id: "testID" },
+      body: { name: "testCategory", ParentId: testParentID },
+      originalUrl: "testOriginalUrl",
+    };
+    const category = {
+      id: "testID",
+      name: "testCategory",
+    };
+    Category.findByPk.mockResolvedValueOnce(category);
+
+    await categoryController.updateOne(req, res, next);
+
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
   test("should response if update successfully", async () => {
     req = {
       params: { id: "testID" },
@@ -351,14 +395,15 @@ describe("deleteOne()", () => {
     vi.spyOn(sequelize, "transaction").mockImplementation(async (fn) =>
       fn(session)
     );
+    vi.spyOn(Post, "update").mockImplementation(async () => {});
     vi.spyOn(Category, "findByPk").mockImplementation(async () => {});
     vi.spyOn(Category, "update").mockImplementation(async () => {});
-    vi.spyOn(Post, "update").mockImplementation(async () => {});
     vi.spyOn(Category, "destroy").mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
-    req = {};
+    req = { params: { id: "testID" }, originalUrl: "testOriginalUrl" };
     vi.clearAllMocks();
   });
 
@@ -367,8 +412,6 @@ describe("deleteOne()", () => {
   });
 
   test("should find category by id", async () => {
-    req = { params: { id: "testID" } };
-
     await categoryController.deleteOne(req, res, next);
 
     expect(Category.findByPk).toHaveBeenLastCalledWith(req.params.id);
@@ -376,7 +419,6 @@ describe("deleteOne()", () => {
 
   test("should throw error if category not found", async () => {
     let error;
-    req = { params: { id: "testID" } };
 
     await categoryController.deleteOne(req, res, next);
     error = next.mock.calls[0][0];
@@ -386,7 +428,6 @@ describe("deleteOne()", () => {
 
   test("should throw error if deleted category is root", async () => {
     let error;
-    req = { params: { id: "testID" } };
     const category = { name: "root" };
     Category.findByPk.mockResolvedValueOnce(category);
 
@@ -397,7 +438,6 @@ describe("deleteOne()", () => {
   });
 
   test("should update the category children to its parent", async () => {
-    req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
 
@@ -413,7 +453,6 @@ describe("deleteOne()", () => {
   });
 
   test("should update the category children to its parent", async () => {
-    req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
 
@@ -429,7 +468,6 @@ describe("deleteOne()", () => {
   });
 
   test("should update the post to its origin category parent", async () => {
-    req = { params: { id: "testID" } };
     const category = { name: "testName", ParentId: "testParentId" };
     Category.findByPk.mockResolvedValueOnce(category);
 
@@ -445,7 +483,6 @@ describe("deleteOne()", () => {
   });
 
   test("should delete category by id", async () => {
-    req = { params: { id: "testID" } };
     const category = { name: "testName" };
     Category.findByPk.mockResolvedValueOnce(category);
 
@@ -457,8 +494,16 @@ describe("deleteOne()", () => {
     });
   });
 
+  test("should delete remain cache", async () => {
+    const category = { name: "testName" };
+    Category.findByPk.mockResolvedValueOnce(category);
+
+    await categoryController.deleteOne(req, res, next);
+
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
   test("should response if delete successfully!", async () => {
-    req = { params: { id: "testID" } };
     const category = { name: "testName" };
     Category.findByPk.mockResolvedValueOnce(category);
 
