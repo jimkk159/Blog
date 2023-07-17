@@ -76,6 +76,18 @@ export const getAll = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getAllWithoutCache = catchAsync(async (req, res, next) => {
+  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  const total = await Post.count({ where: req.count });
+
+  res.status(200).json({
+    status: "success",
+    total,
+    count: data.length,
+    data,
+  });
+});
+
 export const getHome = catchAsync(async (req, res, next) => {
   // Get Data from DB
   const getDataFromDB = async () => {

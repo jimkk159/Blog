@@ -14,7 +14,7 @@ router
   .get(
     authController.authUserByToken,
     userController.getMe,
-    factory.getOne(User)
+    factory.getOneWithoutCache(User)
   )
   .patch(
     authController.authUserByToken,

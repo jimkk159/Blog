@@ -112,3 +112,20 @@ export const deleteOne = (Model) =>
 
     res.status(204).json();
   });
+
+// ------------------- Without Cache ----------------------------
+
+export const getOneWithoutCache = (Model) =>
+  catchAsync(async (req, res, next) => {
+    // 1) Create populate
+    const sqlQuery = apiFeatureHelper.createPopulateObjs(req.query.pop);
+
+    // 2) Get data
+    const data = await Model.findByPk(req.params.id, sqlQuery);
+    if (!data) throw errorTable.idNotFoundError();
+
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  });

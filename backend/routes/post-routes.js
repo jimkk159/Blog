@@ -24,7 +24,7 @@ router.get(
   authController.authUserByToken,
   postController.getMe,
   postController.search,
-  postController.getAll
+  postController.getAllWithoutCache
 );
 
 router.get("/:id", postController.getOne);
