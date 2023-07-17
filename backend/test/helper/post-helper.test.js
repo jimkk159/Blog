@@ -15,6 +15,7 @@ import * as categoryHelper from "../../utils/helper/category-helper";
 const date = new Date(1998, 11, 19);
 vi.useFakeTimers();
 vi.setSystemTime(date);
+vi.mock("redis");
 vi.mock("sequelize");
 describe("isValidSearch()", () => {
   let query, allowType, allowMode;

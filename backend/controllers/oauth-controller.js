@@ -20,6 +20,7 @@ export const oauthGoogle = catchAsyncFunc(
     // 2) Check user is existed by email
     user = await User.findOne({
       where: { email: profile.emails[0].value },
+      attributes: { include: ["role"] },
     });
 
     // 3) Create User if not exist,
@@ -27,14 +28,14 @@ export const oauthGoogle = catchAsyncFunc(
       const userInfo = {
         name: profile.displayName,
         email: profile.emails[0].value,
+        role: user.toJSON().role,
         avatar: shareController.createAvatar(profile.emails[0].value),
       };
       user = await authHelper.createUserAndAuth(userInfo, authInfo);
       return cb(null, user.toJSON());
     }
 
-    // 4) Get the oauth information from user]
-
+    // 4) Get the oauth information from user
     oauth = await user.getAuths({ where: { provider: "google" }, raw: true });
 
     // 5) User doesn't have oauth information
