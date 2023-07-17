@@ -27,7 +27,7 @@ export const getOrSetCache = async (key, cb) => {
   }
 };
 
-export const deleteKey = async (key) => {
+export const delKey = async (key) => {
   try {
     // Delete the matching keys
     console.log(`Cache Delete ${key}`);
@@ -38,7 +38,7 @@ export const deleteKey = async (key) => {
   }
 };
 
-export const deleteKeysWithPrefix = async (prefix) => {
+export const delKeysWithPrefix = async (prefix) => {
   try {
     // Find the matching keys
     const keys = await cacheClient.keys(prefix + "*");
@@ -53,11 +53,12 @@ export const deleteKeysWithPrefix = async (prefix) => {
   }
 };
 
+// TODO: should not delete key with prefix
 export const delCache = async (url) => {
   try {
     const urlWithoutId = url.replace(/\/(\d+)(\/)?$/, "");
-    await deleteKey(urlWithoutId);
-    await deleteKeysWithPrefix(url);
+    await delKey(urlWithoutId);
+    await delKeysWithPrefix(url);
   } catch (err) {
     console.log(`Cache Error`);
     throw err;

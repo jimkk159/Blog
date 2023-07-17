@@ -21,6 +21,9 @@ export const createOne = catchAsync(async (req, res, next) => {
   if (!data) throw errorTable.categoryAlreadyExistError();
   data = helper.removeKeys(data.toJSON(), ["updatedAt", "createdAt"]);
 
+  // 3) remove remain cache
+  await cacheHelper.delKey(req.originalUrl);
+
   res.status(200).json({
     status: "success",
     data,
@@ -57,6 +60,9 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 5) return new categories list to user
   const categorires = await Category.findAll();
+
+  // 6) remove remain cache
+  await cacheHelper.delCache(req.originalUrl);
 
   res.status(200).json({
     status: "success",

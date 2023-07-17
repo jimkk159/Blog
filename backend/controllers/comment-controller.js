@@ -74,8 +74,11 @@ export const createOne = catchAsync(async (req, res, next) => {
     editedAt: Date.now(),
   });
 
-  // 4) get Post (Lazy Loading)
+  // 3) get Post (Lazy Loading)
   const data = helper.removeKeys(comment.toJSON(), ["createdAt", "updatedAt"]);
+
+  // 4) remove remain cache
+  await commentHelper.removeCreatedCommentCache(req.originalUrl);
 
   res.status(200).json({
     status: "success",
@@ -84,15 +87,26 @@ export const createOne = catchAsync(async (req, res, next) => {
 });
 
 export const updateOne = catchAsync(async (req, res, next) => {
+  // 1) check if update id
   if (helper.isIncludeID(req.body)) throw errorTable.notAllowUpdateIDError();
+
+  // 2) update data
   await Comment.update(
     { content: helper.modeifiedSyntax(req.body.content), editedAt: Date.now() },
     { where: { id: req.params.id } }
   );
-  const data = await Comment.findByPk(req.params.id, { raw: true });
+
+  // 3) get updated data
+  const comment = await Comment.findByPk(req.params.id);
+
+  // 4) remove remain cache
+  const post = await comment.getPost();
+  const postId = post?.toJSON()?.id;
+  const commentId = comment?.toJSON()?.id;
+  await commentHelper.removeUpdatedCommentCache(postId, commentId);
 
   res.status(200).json({
     status: "success",
-    data,
+    data: comment,
   });
 });

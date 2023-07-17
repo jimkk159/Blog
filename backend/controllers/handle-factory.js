@@ -58,8 +58,14 @@ export const getAll = (Model) =>
 
 export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // 1) create data
     let data = await Model.create(req.body);
+
+    // 2) remove data information
     data = helper.removeKeys(data.toJSON(), ["updatedAt", "createdAt"]);
+
+    // 3) remove remain cache
+    await cacheHelper.delKey(req.originalUrl);
 
     res.status(200).json({
       status: "success",
@@ -69,11 +75,18 @@ export const createOne = (Model) =>
 
 export const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // 1) check if update id
     if (helper.isIncludeID(req.body)) throw errorTable.notAllowUpdateIDError();
+
+    // 2) update data
     await Model.update(req.body, { where: { id: req.params.id } });
 
+    // 3) get updated data
     const data = await Model.findByPk(req.params.id, { raw: true });
     if (!data) throw errorTable.idNotFoundError();
+
+    // 4) remove remain cache
+    await cacheHelper.delCache(req.originalUrl);
 
     res.status(200).json({
       status: "success",
@@ -83,6 +96,7 @@ export const updateOne = (Model) =>
 
 export const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    // 1) get query data
     const data = await Model.findByPk(req.params.id);
     if (!data) return res.status(204).json();
 
@@ -90,8 +104,10 @@ export const deleteOne = (Model) =>
     if (data.avatar && !helper.isURL(data.avatar))
       await helper.deleteAvatarUrlFromS3(data.avatar);
 
+    // 2) delete data
     await Model.destroy({ where: { id: req.params.id } });
 
+    // 3) remove remain cache
     await cacheHelper.delCache(req.originalUrl);
 
     res.status(204).json();

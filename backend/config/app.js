@@ -31,9 +31,8 @@ import AppError from "../utils/error/app-error.js";
 import errorHandler from "../utils/error/handle-error.js";
 
 // Document
-import specs from "../docs/index.js"
+import specs from "../docs/index.js";
 import swaggerUi from "swagger-ui-express";
-
 
 export const app = express();
 
@@ -109,7 +108,7 @@ app.use(
 );
 
 //Route
-const host = "/api/v1";
+const host = process.env.APP_BASE_ROUTE;
 app.use(host + "/auth", authRouters);
 app.use(host + "/tags", tagsRouters);
 app.use(host + "/oauth", oauthRouters);

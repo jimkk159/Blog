@@ -138,11 +138,12 @@ describe("getAll()", () => {
 });
 
 describe("createOne()", () => {
-  let req = { body: { name: "Tom" } };
+  let req = { originalUrl: "testOriginalUrl", body: { name: "Tom" } };
   let res;
   let next;
   beforeAll(() => {
     vi.spyOn(helper, "removeKeys");
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -154,10 +155,8 @@ describe("createOne()", () => {
     vi.restoreAllMocks();
   });
 
-  test("should create data if req.body is provided", async () => {
-    const testdata = {
-      test: "TestData",
-    };
+  test("should response data by created data", async () => {
+    const testdata = { test: "TestData" };
     const TestModel = {
       create: vi.fn().mockResolvedValueOnce({
         toJSON() {
@@ -169,7 +168,6 @@ describe("createOne()", () => {
     const createOneFunc = handleFactory.createOne(TestModel);
     await createOneFunc(req, res, next);
 
-    expect(TestModel.create).toHaveBeenLastCalledWith(req.body);
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
@@ -177,7 +175,7 @@ describe("createOne()", () => {
     });
   });
 
-  test("should remove date information from the DATA", async () => {
+  test("should remove date information from the data", async () => {
     const testdata = {
       test: "TestData",
     };
@@ -201,6 +199,60 @@ describe("createOne()", () => {
       "updatedAt",
       "createdAt",
     ]);
+  });
+
+  test("should remove remain cache ", async () => {
+    const testdata = { test: "TestData" };
+    const TestModel = {
+      create: vi.fn().mockResolvedValueOnce({
+        toJSON() {
+          return testdata;
+        },
+      }),
+    };
+
+    const createOneFunc = handleFactory.createOne(TestModel);
+    await createOneFunc(req, res, next);
+
+    expect(cacheHelper.delKey).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
+  test("should create data by provided Model", async () => {
+    const testdata = { test: "TestData" };
+    const TestModel = {
+      create: vi.fn().mockResolvedValueOnce({
+        toJSON() {
+          return testdata;
+        },
+      }),
+    };
+
+    const createOneFunc = handleFactory.createOne(TestModel);
+    await createOneFunc(req, res, next);
+
+    expect(TestModel.create).toHaveBeenLastCalledWith(req.body);
+  });
+
+  test("should response data without date information", async () => {
+    const testdata = {
+      test: "TestData",
+    };
+    const dbTestData = {
+      ...testdata,
+      updatedAt: "testUpdatedAt",
+      createdAt: "testCreatedAt",
+    };
+    const TestModel = {
+      create: vi.fn().mockResolvedValueOnce({
+        toJSON() {
+          return dbTestData;
+        },
+      }),
+    };
+
+    const createOneFunc = handleFactory.createOne(TestModel);
+    await createOneFunc(req, res, next);
+
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
@@ -210,21 +262,32 @@ describe("createOne()", () => {
 });
 
 describe("updateOne()", () => {
-  let req, res, next, error;
+  const testUpdatedData = "TestData";
+  let req, res, next, error, TestModel;
   beforeAll(() => {
     next = vi.fn();
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
+    req = {
+      params: { id: "1" },
+      body: { name: "Tom" },
+      originalUrl: "testOriginalUrl",
+    };
     res = { status: vi.fn().mockReturnThis(), json: vi.fn().mockReturnThis() };
     error = undefined;
+    TestModel = {
+      findByPk: vi.fn().mockResolvedValueOnce(testUpdatedData),
+      update: vi.fn().mockResolvedValueOnce(),
+    };
     vi.clearAllMocks();
   });
 
   afterAll(() => {
     vi.restoreAllMocks();
   });
-  test("should throw error if updated itmes has id", async () => {
+  test("should throw error if user want to update id", async () => {
     req = { body: { id: "1" } };
 
     const TestModel = {
@@ -238,10 +301,26 @@ describe("updateOne()", () => {
     expect(error).toEqual(errorTable.notAllowUpdateIDError());
   });
 
-  test("should throw error if updated itmes has id", async () => {
-    req = { params: { id: "1" }, body: { name: "Tom" } };
+  test("should update the data", async () => {
+    const updateOneFunc = handleFactory.updateOne(TestModel);
+    await updateOneFunc(req, res, next).catch((err) => (error = err));
 
-    const TestModel = {
+    expect(TestModel.update).toHaveBeenLastCalledWith(req.body, {
+      where: { id: req.params.id },
+    });
+  });
+
+  test("should find updated data if exist", async () => {
+    const updateOneFunc = handleFactory.updateOne(TestModel);
+    await updateOneFunc(req, res, next).catch((err) => (error = err));
+
+    expect(TestModel.findByPk).toHaveBeenLastCalledWith(req.params.id, {
+      raw: true,
+    });
+  });
+
+  test("should throw error if updated data does not exist", async () => {
+    TestModel = {
       findByPk: vi.fn().mockResolvedValueOnce(),
       update: vi.fn().mockResolvedValueOnce(),
     };
@@ -253,28 +332,21 @@ describe("updateOne()", () => {
     expect(error).toEqual(errorTable.idNotFoundError());
   });
 
-  test("should response if request is correct", async () => {
-    req = { params: { id: "1" }, body: { name: "Tom" } };
-    const testdata = "TestData";
-
-    const TestModel = {
-      findByPk: vi.fn().mockResolvedValueOnce(testdata),
-      update: vi.fn().mockResolvedValueOnce(),
-    };
-
+  test("should remove remain cache", async () => {
     const updateOneFunc = handleFactory.updateOne(TestModel);
     await updateOneFunc(req, res, next).catch((err) => (error = err));
 
-    expect(TestModel.update).toHaveBeenLastCalledWith(req.body, {
-      where: { id: req.params.id },
-    });
-    expect(TestModel.findByPk).toHaveBeenLastCalledWith(req.params.id, {
-      raw: true,
-    });
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
+  test("should response if request is correct", async () => {
+    const updateOneFunc = handleFactory.updateOne(TestModel);
+    await updateOneFunc(req, res, next).catch((err) => (error = err));
+
     expect(res.status).toHaveBeenLastCalledWith(200);
     expect(res.json).toHaveBeenLastCalledWith({
       status: "success",
-      data: testdata,
+      data: testUpdatedData,
     });
   });
 });

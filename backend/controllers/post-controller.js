@@ -77,26 +77,38 @@ export const getAll = catchAsync(async (req, res, next) => {
 });
 
 export const getHome = catchAsync(async (req, res, next) => {
-  const comments = await postHelper.getFullPosts(
-    { limit: 5 },
-    postHelper.orderByComments({}, "-Comments")
-  );
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    const comments = await postHelper.getFullPosts(
+      { limit: 5 },
+      postHelper.orderByComments({}, "-Comments")
+    );
 
-  const thumbs = await postHelper.getFullPosts(
-    {
-      sort: helper.modifySort(null, "thumbs"),
-      limit: 10,
-    },
-    postHelper.defaultAttributeSetting
-  );
+    const thumbs = await postHelper.getFullPosts(
+      {
+        sort: helper.modifySort(null, "thumbs"),
+        limit: 10,
+      },
+      postHelper.defaultAttributeSetting
+    );
 
-  const views = await postHelper.getFullPosts(
-    {
-      sort: helper.modifySort(null, "views"),
-      limit: 10,
-    },
-    postHelper.defaultAttributeSetting
+    const views = await postHelper.getFullPosts(
+      {
+        sort: helper.modifySort(null, "views"),
+        limit: 10,
+      },
+      postHelper.defaultAttributeSetting
+    );
+
+    return JSON.stringify({ comments, thumbs, views });
+  };
+
+  // Get Data from DB or Cache
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
   );
+  const { comments, thumbs, views } = JSON.parse(result);
 
   res.status(200).json({
     status: "success",
@@ -118,8 +130,19 @@ export const getHome = catchAsync(async (req, res, next) => {
 });
 
 export const getView = catchAsync(async (req, res, next) => {
-  req.query.sort = helper.modifySort(req.query.sort, "views");
-  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    req.query.sort = helper.modifySort(req.query.sort, "views");
+    const data = await postHelper.getFullPosts(req.query, req.customQuery);
+    return JSON.stringify(data);
+  };
+
+  // Get Data from DB or Cache
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
+  const data = JSON.parse(result);
 
   res.status(200).json({
     status: "success",
@@ -129,8 +152,19 @@ export const getView = catchAsync(async (req, res, next) => {
 });
 
 export const getThumb = catchAsync(async (req, res, next) => {
-  req.query.sort = helper.modifySort(req.query.sort, "thumbs");
-  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    req.query.sort = helper.modifySort(req.query.sort, "thumbs");
+    const data = await postHelper.getFullPosts(req.query, req.customQuery);
+    return JSON.stringify(data);
+  };
+
+  // Get Data from DB or Cache
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
+  const data = JSON.parse(result);
 
   res.status(200).json({
     status: "success",
@@ -140,8 +174,19 @@ export const getThumb = catchAsync(async (req, res, next) => {
 });
 
 export const getComment = catchAsync(async (req, res, next) => {
-  req.customQuery = postHelper.orderByComments(req.customQuery, "-Comments");
-  const data = await postHelper.getFullPosts(req.query, req.customQuery);
+  // Get Data from DB
+  const getDataFromDB = async () => {
+    req.customQuery = postHelper.orderByComments(req.customQuery, "-Comments");
+    const data = await postHelper.getFullPosts(req.query, req.customQuery);
+    return JSON.stringify(data);
+  };
+
+  // Get Data from DB or Cache
+  const result = await cacheHelper.getOrSetCache(
+    req.originalUrl,
+    getDataFromDB
+  );
+  const data = JSON.parse(result);
 
   res.status(200).json({
     status: "success",
@@ -179,6 +224,9 @@ export const createOne = catchAsync(async (req, res, next) => {
   const data = helper.removeKeys(post.toJSON(), ["createdAt", "updatedAt"]);
   if (data.editedAt) data.editedAt = new Date(data.editedAt);
 
+  // 5) remove remain cache
+  await cacheHelper.delKey(req.originalUrl);
+
   res.status(200).json({
     status: "success",
     data: { ...data, Author: author, Category: category, Tags: tags },
@@ -203,8 +251,11 @@ export const updateOne = catchAsync(async (req, res, next) => {
     tags,
   });
 
-  // 4) get Post (Eager Loading)
+  // 3) get Post (Eager Loading)
   const post = await postHelper.getFullPost(req.params.id, req.query);
+
+  // 4) remove remain cache
+  await cacheHelper.delCache(req.originalUrl);
 
   res.status(200).json({
     status: "success",
@@ -231,6 +282,8 @@ export const updateThumb = catchAsync(async (req, res, next) => {
         thumbs: 1,
       });
   }
+  // 3) remove remain cache
+  await postHelper.removeUpdatedThumbCache(req.originalUrl);
 
   res.status(204).json({});
 });

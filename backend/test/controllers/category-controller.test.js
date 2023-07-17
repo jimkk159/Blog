@@ -55,6 +55,7 @@ describe("createOne()", () => {
     vi.spyOn(categoryHelper, "checkParentIsExist").mockImplementation(
       async () => {}
     );
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -131,6 +132,29 @@ describe("createOne()", () => {
     ]);
   });
 
+  test("should remove remain cache", async () => {
+    req = {
+      body: { name: "testName", ParentId: testParentID },
+      originalUrl: "testOriginalUrl",
+    };
+    const resCategory = {
+      id: "testID",
+      name: "testName",
+      ParentId: testParentID,
+    };
+    const category = {
+      ...resCategory,
+      updatedAt: "updatedAt",
+      createdAt: "createdAt",
+      toJSON: () => resCategory,
+    };
+    Category.create.mockResolvedValueOnce(category);
+
+    await categoryController.createOne(req, res, next);
+
+    expect(cacheHelper.delKey).toHaveBeenLastCalledWith(req.originalUrl);
+  });
+
   test("should response created category", async () => {
     req = { body: { name: "testName", ParentId: testParentID } };
     const resCategory = {
@@ -175,6 +199,7 @@ describe("updateOne()", () => {
       categoryHelper,
       "checkCategoryCircularReference"
     ).mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -297,6 +322,23 @@ describe("updateOne()", () => {
       { name: req.body.name, ParentId: req.body.ParentId },
       { where: { id: req.params.id } }
     );
+  });
+
+  test("should remove remain cache", async () => {
+    req = {
+      params: { id: "testID" },
+      body: { name: "testCategory", ParentId: testParentID },
+      originalUrl: "testOriginalUrl",
+    };
+    const category = {
+      id: "testID",
+      name: "testCategory",
+    };
+    Category.findByPk.mockResolvedValueOnce(category);
+
+    await categoryController.updateOne(req, res, next);
+
+    expect(cacheHelper.delCache).toHaveBeenLastCalledWith(req.originalUrl);
   });
 
   test("should response if update successfully", async () => {
