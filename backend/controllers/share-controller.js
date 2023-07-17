@@ -11,7 +11,7 @@ import { GetFeatures } from "../utils/api-features.js";
 import catchAsync from "../utils/error/catch-async.js";
 import * as shareController from "./share-controller.js";
 import * as errorTable from "../utils/error/error-table.js";
-import * as cacheHelper from "../utils/helper/category-helper.js";
+import * as cacheHelper from "../utils/helper/cache-helper.js";
 
 // Validate the req
 export const validation = (req, res, next) => {
