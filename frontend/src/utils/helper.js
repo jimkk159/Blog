@@ -56,18 +56,27 @@ export const formatDate = (date) =>
     day: "numeric",
   });
 
-export const slugify = (text) =>
-  text
-    .toLowerCase()
-    .replaceAll("(", "")
-    .replaceAll(")", "")
-    .replaceAll(" - ", "--")
-    .replaceAll(" ", "-")
-    .replaceAll("?", "")
-    .replace(
-      /([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g,
-      ""
-    );
+export const slugify = (text) => {
+  // trim
+  const trimedText = text.trim();
+
+  // Remove emojis from the title
+  const titleWithoutEmojis = trimedText.replace(
+    /[\uD800-\uDBFF][\uDC00-\uDFFF]/g,
+    ""
+  );
+
+  // Replace " - " with "--"
+  const replacedTitle = titleWithoutEmojis.replace(/\s-\s/g, "--");
+
+  // Replace white spaces with hyphens and keep only English words
+  const cleanedTitle = replacedTitle
+    .replace(/[^\w\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+
+  return cleanedTitle;
+};
 
 export const createChapterHashLink = (line) => {
   const tags = ["# ", "## ", "### ", "#### ", "##### ", "###### "];

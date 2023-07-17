@@ -9,7 +9,7 @@ import { tagActions } from "../../store/tag-slice";
 function TagList({
   post,
   isEditMode = false,
-  isEdit = false,
+  isEditting = false,
   onClose,
   onToggle,
 }) {
@@ -80,7 +80,7 @@ function TagList({
         {isEditMode && (
           <TagsToolTip
             isNew
-            isEdit={isEdit}
+            isEdit={isEditting}
             onClose={onClose}
             onToggle={onToggle}
           />
@@ -98,7 +98,7 @@ function TagList({
         <TagsToolTip
           postTags={post.Tags}
           category={post.Category}
-          isEdit={isEdit}
+          isEdit={isEditting}
           onClose={onClose}
           onToggle={onToggle}
         />

@@ -20,7 +20,9 @@ export default EditPost;
 export async function action({ request, params }) {
   const method = request.method;
   const data = await request.formData();
-  const token = authHelper.getAuthToken();
+  const token = data.get("token")
+    ? data.get("token")
+    : authHelper.getAuthToken();
   const tagIds = store?.getState()?.tag?.tags.map((el) => el.id);
 
   const postData = {
@@ -36,14 +38,14 @@ export async function action({ request, params }) {
   const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts/" + postId;
 
   const response = await fetch(url, {
-    method: method,
+    method,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
     },
     body: JSON.stringify(postData),
   });
-  
+
   if (!response.ok)
     return json(
       { message: "Something wrong happen when updating post..." },

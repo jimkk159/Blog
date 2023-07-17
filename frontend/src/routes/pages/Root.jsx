@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  defer,
-  Outlet,
-  useSubmit,
-  useLoaderData,
-} from "react-router-dom";
+import { defer, Outlet, useSubmit, useLoaderData } from "react-router-dom";
 
 // image
 import cubeImg from "../img/cube.png";
@@ -35,7 +30,9 @@ function Root() {
     if (authHelper.isTokenExpired(token))
       return submit(null, { action: "/logout", method: "post" });
 
-    const tokenDuration = authHelper.getTokenDuration(token);
+    const timePreservation = 60 * 1000;
+    const tokenDuration = authHelper.getTokenDuration(token) - timePreservation;
+
     setTimeout(() => {
       submit(null, { action: "/logout", method: "post" });
     }, tokenDuration);

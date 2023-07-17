@@ -2,6 +2,7 @@ import MDEditor from "@uiw/react-md-editor";
 // import rehypeSanitize from "rehype-sanitize";
 import { useRef, useEffect, useState, useCallback } from "react";
 import {
+  useSubmit,
   useNavigate,
   useActionData,
   useRouteLoaderData,
@@ -12,12 +13,14 @@ import Code from "./Plugins";
 import TagList from "../../Tag/List";
 import PostEditorBottom from "./PostBottom";
 import EditPostModal from "../Modal/EditPost";
+import * as authHelper from "../../../utils/auth";
 import * as editHelper from "../../../utils/edit";
 import PostWrapper from "../../Wrapper/PostWrapper";
 import SelectCategory from "../../Post/SelectCategory";
 
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
+  const textApiRef = useRef(null);
   const titleRef = useRef(null);
   const editorRef = useRef(null);
   const [title, setTitle] = useState("");
@@ -25,23 +28,28 @@ function PostEditor({ method, post }) {
   const [isDrop, setIsDrop] = useState(false);
   const [markdown, setMarkdown] = useState("");
   const [summary, setSummary] = useState("");
+  const [insertImg, setInsertImg] = useState("");
   const [previewImg, setPreviewImg] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [titleHeigh, setTitleHeigh] = useState(36);
   const [isEditTag, setIsEditTag] = useState(false);
   const [isTouched, setIsTouched] = useState(false);
   const [isShowModal, setIsShowModal] = useState(false);
+  const [preserveToken, setPreserveToken] = useState("");
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   // react-router
+  const submit = useSubmit();
   const data = useActionData();
   const navigate = useNavigate();
   const { relation } = useRouteLoaderData("relation");
 
   // custom functions
   const inputImageHandler = useCallback(async (event) => {
-    if (event.target.files && event.target.files.length === 1)
-      await editHelper.onImageUpload(event.target.files[0], setMarkdown);
+    if (event.target.files && event.target.files.length === 1) {
+      setInsertImg("");
+      await editHelper.onImageUpload(event.target.files[0], textApiRef.current);
+    }
   }, []);
 
   // Drag and drop
@@ -89,7 +97,13 @@ function PostEditor({ method, post }) {
   const postSummary = post?.summary ? post.summary : "";
   const postCategoryId = post?.CategoryId ? post.CategoryId : "";
   const postPreviewImg = post?.previewImg ? post.previewImg : "";
+
   useEffect(() => {
+    // set preserve token
+    const token = authHelper.getAuthToken();
+    if (!!token) setPreserveToken(token);
+
+    // set property
     setTitle(postTitle);
     setMarkdown(postContent);
     setSummary(postSummary);
@@ -100,9 +114,52 @@ function PostEditor({ method, post }) {
   useEffect(() => {
     if (data && data.message) {
       setIsTouched(false);
+      setIsShowModal(false);
       setSubmigErrorMessage(data.message);
     }
   }, [data]);
+
+  const isPostExist = !!post;
+  const postId = post?.id;
+
+  useEffect(() => {
+    return async () => {
+      const token = authHelper.getAuthToken();
+      if (!token && !!preserveToken && markdown) {
+        const relationData = await relation;
+        const categories = relationData?.categories?.data ?? [];
+        const notRootCategoryId = !!categoryId
+          ? categoryId
+          : editHelper.getNotRootCategoryId(categories);
+        submit(
+          {
+            title,
+            content: markdown,
+            summary,
+            CategoryId: notRootCategoryId,
+            previewImg,
+            token: preserveToken,
+          },
+          {
+            action: isPostExist ? `/posts/${postId}/edit` : "/posts/new",
+            method,
+          }
+        );
+      }
+    };
+  }, [
+    relation,
+    submit,
+    isPostExist,
+    postId,
+    method,
+    preserveToken,
+    title,
+    markdown,
+    summary,
+    categoryId,
+    previewImg,
+  ]);
 
   const selectCategory = (
     <SelectCategory
@@ -142,7 +199,7 @@ function PostEditor({ method, post }) {
         if (isDrop) setIsDrop(false);
         if (isEditTag) setIsEditTag(false);
       }}
-      className=""
+      className="my-8"
     >
       <input
         ref={inputRef}
@@ -150,6 +207,7 @@ function PostEditor({ method, post }) {
         type="file"
         accept=".jpg,.png,.jpeg,.jfif,.gif"
         name="avatar"
+        value={insertImg}
         onChange={inputImageHandler}
       />
       <div className="h-full min-h-screen rounded bg-white p-4 pt-8 md:p-8">
@@ -177,7 +235,7 @@ function PostEditor({ method, post }) {
             ref={editorRef}
             value={markdown}
             onChange={changeEditorHandler}
-            commands={editHelper.editChoice(inputRef)}
+            commands={editHelper.editChoice(inputRef, textApiRef)}
             preview="edit"
             textareaProps={{
               placeholder: "Tell about your story...",
@@ -205,7 +263,7 @@ function PostEditor({ method, post }) {
           <TagList
             post={post}
             isEditMode={true}
-            isEdit={isEditTag}
+            isEditting={isEditTag}
             onClose={() => setIsEditTag(false)}
             onToggle={() => setIsEditTag((prev) => !prev)}
           />

@@ -18,6 +18,7 @@ import * as authHelper from "../../utils/auth";
 
 // components
 import Avatar from "../UI/Avatar";
+import Code from "../UI/Editor/Plugins";
 import Button from "../../components/UI/Button";
 import TagList from "../../components/Tag/List";
 import PostWrapper from "../../components/Wrapper/PostWrapper";
@@ -26,7 +27,7 @@ function Detail({ post }) {
   const [submigErrorMessage, setSubmigErrorMessage] = useState("");
 
   // react-router
-  const data = useActionData;
+  const data = useActionData();
   const submit = useSubmit();
   const navigate = useNavigate();
 
@@ -127,7 +128,7 @@ function Detail({ post }) {
               onClick={() => navigate("edit")}
             >
               EDIT
-            </button>{" "}
+            </button>
             <Button
               type="button"
               disabled={isSubmitting}
@@ -154,7 +155,12 @@ function Detail({ post }) {
     <PostWrapper top={top} bottom={bottom}>
       <div className="flex h-full min-h-screen flex-col justify-between rounded bg-white p-4 pt-8 md:p-8">
         <div className="h-full rounded">
-          <MDEditor.Markdown source={post.content} />
+          <MDEditor.Markdown
+            source={post.content}
+            components={{
+              code: Code,
+            }}
+          />
         </div>
         <div className="mt-4">
           <TagList post={post} />

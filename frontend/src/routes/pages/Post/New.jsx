@@ -1,4 +1,4 @@
-import { redirect } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
 import store from "../../../store";
@@ -29,8 +29,13 @@ export default NewPost;
 export async function action({ request }) {
   const method = request.method;
   const data = await request.formData();
-  const token = authHelper.getAuthToken();
+  const token = data.get("token")
+    ? data.get("token")
+    : authHelper.getAuthToken();
   const tagIds = store?.getState()?.tag?.tags.map((el) => el.id);
+
+  if (!data.get("content"))
+    return json({ message: "Content should not be null..." }, { status: 400 });
 
   const postData = {
     title: data.get("title"),
@@ -43,7 +48,7 @@ export async function action({ request }) {
 
   const url = process.env.REACT_APP_BACKEND_URL + "/api/v1/posts";
   const response = await fetch(url, {
-    method: method,
+    method,
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
@@ -52,6 +57,7 @@ export async function action({ request }) {
   });
 
   const resJSON = await response.json();
+
   const postId = resJSON.data.id;
   return redirect("/posts/" + postId);
 }
