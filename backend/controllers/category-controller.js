@@ -23,6 +23,7 @@ export const createOne = catchAsync(async (req, res, next) => {
 
   // 3) remove remain cache
   await cacheHelper.delKey(req.originalUrl);
+  await cacheHelper.delKey(process.env.APP_BASE_ROUTE + "/relation");
 
   res.status(200).json({
     status: "success",
@@ -63,6 +64,7 @@ export const updateOne = catchAsync(async (req, res, next) => {
 
   // 6) remove remain cache
   await cacheHelper.delCache(req.originalUrl);
+  await cacheHelper.delKey(process.env.APP_BASE_ROUTE + "/relation");
 
   res.status(200).json({
     status: "success",
@@ -99,6 +101,7 @@ export const deleteOne = catchAsync(async (req, res, next) => {
   });
 
   await cacheHelper.delCache(req.originalUrl);
+  await cacheHelper.delKey(process.env.APP_BASE_ROUTE + "/relation");
 
   res.status(204).json();
 });

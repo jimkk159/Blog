@@ -4,11 +4,6 @@ dotenv.config();
 
 import * as cacheConfigHelpr from "./cache-config-helper.js";
 
-const isTLS = !!process.env.REDIS_SERVER_AUTH_TOKEN;
-const isLocal = !(
-  !!process.env.REDIS_SERVER_URL && !!process.env.REDIS_SERVER_PORT
-);
-
 export const createRedisLocal = () => {
   console.log(`Reis Server running locally `);
   return Redis.createClient();
@@ -54,6 +49,10 @@ export const createRedisRemoteTLS = () => {
   });
 };
 
+const isTLS = !!process.env.REDIS_SERVER_AUTH_TOKEN;
+const isLocal = !(
+  !!process.env.REDIS_SERVER_URL && !!process.env.REDIS_SERVER_PORT
+);
 export const creatRedisServerURL = () => {
   if (isLocal) return cacheConfigHelpr.createRedisLocal();
   if (isTLS) return cacheConfigHelpr.createRedisRemoteTLS();
