@@ -9,6 +9,7 @@ import * as categoryController from "../../controllers/category-controller";
 
 vi.mock("redis");
 vi.mock("sequelize");
+vi.stubEnv("APP_BASE_ROUTE", "test_app_base_route");
 
 // describe("init", () => {
 //   beforeAll(() => {
@@ -152,7 +153,10 @@ describe("createOne()", () => {
 
     await categoryController.createOne(req, res, next);
 
-    expect(cacheHelper.delKey).toHaveBeenLastCalledWith(req.originalUrl);
+    expect(cacheHelper.delKey.mock.calls[0][0]).toEqual(req.originalUrl);
+    expect(cacheHelper.delKey.mock.calls[1][0]).toEqual(
+      process.env.APP_BASE_ROUTE + "/relation"
+    );
   });
 
   test("should response created category", async () => {
@@ -200,6 +204,7 @@ describe("updateOne()", () => {
       "checkCategoryCircularReference"
     ).mockImplementation(async () => {});
     vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
@@ -400,6 +405,7 @@ describe("deleteOne()", () => {
     vi.spyOn(Category, "update").mockImplementation(async () => {});
     vi.spyOn(Category, "destroy").mockImplementation(async () => {});
     vi.spyOn(cacheHelper, "delCache").mockImplementation(async () => {});
+    vi.spyOn(cacheHelper, "delKey").mockImplementation(async () => {});
   });
 
   beforeEach(() => {
