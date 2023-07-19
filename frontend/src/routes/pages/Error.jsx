@@ -5,14 +5,14 @@ function Error() {
 
   let title = "An error occurred";
   let message = "Unknown Error";
-  console.log(error)
+  console.log(error);
   if (error.status === 500) {
-    message = error.data.message;
+    message = error?.data?.message;
   }
 
   if (error.status === 404) {
     title = "Not found";
-    message = error.data.message;
+    message = error?.data?.message;
   }
 
   return (
