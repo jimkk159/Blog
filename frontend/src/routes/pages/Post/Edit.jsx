@@ -9,9 +9,11 @@ function EditPost() {
   const { post } = useRouteLoaderData("post-detail");
 
   return (
-    <AwaitWrapper resolve={post}>
-      {(loadPost) => <PostEditor method="patch" post={loadPost} />}
-    </AwaitWrapper>
+    <div className="my-8">
+      <AwaitWrapper resolve={post}>
+        {(loadPost) => <PostEditor method="patch" post={loadPost} />}
+      </AwaitWrapper>
+    </div>
   );
 }
 
