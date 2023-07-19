@@ -58,7 +58,9 @@ function TagList({ post }) {
   return (
     <div className="flex space-x-0.5 overflow-hidden">
       <AiOutlineTag className="mr-1 h-[16px] w-[16px]" />
-      {tags}
+      <div className="flex w-full max-w-[300px] space-x-0.5 overflow-hidden">
+        {tags}
+      </div>
     </div>
   );
 }

@@ -52,7 +52,7 @@ function PostEditor({ method, post }) {
     }
   }, []);
 
-  // Drag and drop
+  // Drag and Drop
   const startDragHandler = (event) => {
     event.preventDefault();
     event.stopPropagation();
