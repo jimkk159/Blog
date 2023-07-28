@@ -21,6 +21,7 @@ import SelectCategory from "../../Post/SelectCategory";
 function PostEditor({ method, post }) {
   const inputRef = useRef(null);
   const textApiRef = useRef(null);
+  const setTextApiButtonRef = useRef(null);
   const titleRef = useRef(null);
   const editorRef = useRef(null);
   const [title, setTitle] = useState("");
@@ -71,7 +72,8 @@ function PostEditor({ method, post }) {
     event.preventDefault();
     event.stopPropagation();
     setIsDrag(false);
-    await editHelper.onImageDrop(event.dataTransfer, setMarkdown);
+    const textApi = textApiRef.current;
+    if (textApi) await editHelper.onImageDrop(event.dataTransfer, textApi);
   }, []);
 
   const titleChangeHandler = (e) => {
@@ -161,6 +163,12 @@ function PostEditor({ method, post }) {
     previewImg,
   ]);
 
+  useEffect(() => {
+    if (setTextApiButtonRef.current instanceof HTMLButtonElement) {
+      setTextApiButtonRef.current.click();
+    }
+  }, []);
+
   const selectCategory = (
     <SelectCategory
       className="h-8 w-full p-1 font-pt-serif text-base"
@@ -234,7 +242,11 @@ function PostEditor({ method, post }) {
             ref={editorRef}
             value={markdown}
             onChange={changeEditorHandler}
-            commands={editHelper.editChoice(inputRef, textApiRef)}
+            commands={editHelper.editChoice(
+              inputRef,
+              textApiRef,
+              setTextApiButtonRef
+            )}
             preview="edit"
             textareaProps={{
               placeholder: "Tell about your story...",

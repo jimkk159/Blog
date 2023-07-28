@@ -46,7 +46,7 @@ export const extractYouTubeId = (url) => {
 //   setMarkdown(insertedMarkdown);
 // };
 
-export const onImageDrop = async (dataTransfer, setMarkdown) => {
+export const onImageDrop = async (dataTransfer, api) => {
   const files = [];
 
   for (let index = 0; index < dataTransfer.items.length; index++) {
@@ -54,9 +54,7 @@ export const onImageDrop = async (dataTransfer, setMarkdown) => {
     if (file) files.push(file);
   }
 
-  await Promise.all(
-    files.map(async (file) => onImageUpload2(file, setMarkdown))
-  );
+  await Promise.all(files.map(async (file) => onImageUpload(file, api)));
 };
 
 export const imgBtn = (inputRef, textApiRef) => ({
@@ -203,7 +201,25 @@ export const videoBtn = () =>
     // },
   });
 
-export const editChoice = (inputRef, textApiRef) => [
+export const setTextApi = (textApiRef, setTextApiButtonRef) => ({
+  name: "Secrect set api",
+  keyCommand: "setTextApi",
+  render: (command, disabled, executeCommand) => {
+    return (
+      <button
+        ref={setTextApiButtonRef}
+        type="button"
+        className="hidden"
+        onClick={() => executeCommand(command, command.groupName)}
+      />
+    );
+  },
+  execute: (state, api) => {
+    textApiRef.current = api;
+  },
+});
+
+export const editChoice = (inputRef, textApiRef, setTextApiButtonRef) => [
   commands.bold,
   commands.italic,
   commands.strikethrough,
@@ -217,6 +233,7 @@ export const editChoice = (inputRef, textApiRef) => [
   commands.comment,
   imgBtn(inputRef, textApiRef),
   videoBtn(),
+  setTextApi(textApiRef, setTextApiButtonRef),
   commands.divider,
   commands.unorderedListCommand,
   commands.orderedListCommand,
