@@ -109,7 +109,7 @@ function EditCategory({ current, onClose }) {
               name="ParentId"
               defaultName="None"
               choices={choices}
-              choiceElement={<li />}
+              choiceElement={<li className="list-none" />}
               defaultValue="Blongs to..."
               current={current}
               isDrop={isDrop}

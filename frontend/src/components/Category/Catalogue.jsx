@@ -57,7 +57,7 @@ function Catalogue({ catalogue, isFirst }) {
               key={index}
               className={
                 `${index === 0 ? "border-t-2 border-t-gray-500" : ""}` +
-                ` cursor-pointer truncate py-1.5 text-base hover:text-gray-200 active:text-gray-200`
+                ` cursor-pointer list-none truncate py-1.5 text-base hover:text-gray-200 active:text-gray-200`
               }
               onClick={() => navigate(`/posts/${post.id}`)}
             >

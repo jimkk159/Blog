@@ -77,7 +77,7 @@ function MainNavigation() {
                 <NavItem text="About" to={"/about"} />
                 {!token && <NavItem text="Login" to={"/auth?mode=login"} />}
                 {token && (
-                  <li className="mx-2 flex items-end whitespace-nowrap text-sm md:py-1 lg:p-2 lg:text-sm">
+                  <li className="mx-2 flex list-none items-end whitespace-nowrap text-sm md:py-1 lg:p-2 lg:text-sm">
                     <Form method="post" action="/logout">
                       <button className="w-full">Logout</button>
                     </Form>

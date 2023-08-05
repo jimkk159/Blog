@@ -11,7 +11,7 @@ import { formatDate } from "../../utils/helper";
 
 function LiItem1({ title, content }) {
   return (
-    <li className="flex h-full flex-col items-start justify-start pt-8">
+    <li className="flex h-full list-none flex-col items-start justify-start pt-8">
       <h1 className="text-2xl font-bold text-white">{title}</h1>
       <p className="line-clamp-2 w-28 overflow-ellipsis text-xl">{content}</p>
     </li>
@@ -20,7 +20,7 @@ function LiItem1({ title, content }) {
 
 function LiItem2({ title, content }) {
   return (
-    <li className="flex h-full flex-col items-start justify-start pt-8">
+    <li className="flex h-full list-none flex-col items-start justify-start pt-8">
       <h1 className="text-2xl font-bold text-white">{title}</h1>
       <p className="line-clamp-2 w-28 whitespace-nowrap">{content}</p>
     </li>
@@ -29,7 +29,7 @@ function LiItem2({ title, content }) {
 
 function LiItem3({ title, content }) {
   return (
-    <li className="flex h-full flex-col items-start justify-center">
+    <li className="flex h-full list-none flex-col items-start justify-center">
       <h1 className="text-2xl font-bold text-white">{title}</h1>
       <p className="w-64 truncate text-xl">{content}</p>
     </li>
@@ -38,7 +38,7 @@ function LiItem3({ title, content }) {
 
 function LiItem4({ title, content }) {
   return (
-    <li className="flex h-full flex-col items-center justify-center">
+    <li className="flex h-full list-none flex-col items-center justify-center">
       <h1 className="font-bold text-white">{title}</h1>
       <p className="w-32 truncate text-center">{content}</p>
     </li>

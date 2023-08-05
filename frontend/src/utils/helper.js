@@ -90,7 +90,7 @@ export const createChapterHashLink = (line) => {
       return (
         <li
           key={uuid()}
-          className={`${padding[i]} truncate `}
+          className={`${padding[i]} list-none truncate`}
           title={`${chapter}`}
         >
           <HashLink

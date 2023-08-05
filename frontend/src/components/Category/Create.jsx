@@ -90,7 +90,7 @@ function CreateCategory({ onClose }) {
               name="ParentId"
               defaultName="Top"
               choices={choices}
-              choiceElement={<li />}
+              choiceElement={<li className="list-none" />}
               defaultValue="This category belongs to..."
               isDrop={isDrop}
               onDrop={setIsDrop}

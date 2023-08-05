@@ -1,6 +1,6 @@
 function HowToItem({ icon, title, content }) {
   return (
-    <li className="rounded-3xl border border-self-gray p-8">
+    <li className="list-none rounded-3xl border border-self-gray p-8">
       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white">
         {icon}
       </div>

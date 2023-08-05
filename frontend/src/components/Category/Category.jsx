@@ -19,7 +19,7 @@ function Category({ category, isOpen = false, setIsOpen = () => {} }) {
 
   if (!category) return null;
   return (
-    <li className="flex items-center py-1.5 ">
+    <li className="flex list-none items-center py-1.5">
       <div className="text-base">
         {!isOpen && (
           <BiChevronRight

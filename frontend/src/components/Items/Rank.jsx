@@ -39,7 +39,7 @@ function RankItem({ post }) {
   );
 
   return (
-    <li>
+    <li className="list-none">
       <div className="flex h-full w-full flex-col space-y-6 text-white">
         <div className="flex h-20 min-h-[80px] items-stretch justify-between space-x-4 md:h-32 md:space-x-6 lg:h-20 lg:space-x-3">
           <div

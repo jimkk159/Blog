@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 function NavItem({ text, to, end }) {
   return (
-    <li>
+    <li className="list-none">
       <NavLink
         to={to}
         end={end}
